@@ -1,9 +1,9 @@
 {
-  "name": "wow-classic-clone",
+  "name": "world-of-claudecraft",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Single-player WoW-Classic-style game + headless RL training environment",
+  "description": "World of Claudecraft — a WoW-Classic-style micro-MMO + headless RL training environment",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

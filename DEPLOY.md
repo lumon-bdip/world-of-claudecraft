@@ -1,4 +1,4 @@
-# Deploying Eastbrook Vale on AWS
+# Deploying World of Claudecraft on AWS
 
 > **Levy Street production** is deployed via Ansible, not this document:
 > the `eastbrook_game` role in the internal `ansible-scripts` repo runs

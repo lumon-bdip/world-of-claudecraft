@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Eastbrook Vale</title>
+<title>World of Claudecraft</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>⚔️</text></svg>" />
 <style>
   :root {
@@ -288,9 +288,8 @@
   /* ---------- start screen ---------- */
   #start-screen { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, #2a3a55, #0a0d14 75%);
     display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 100; }
-  #start-screen h1 { color: var(--gold); font-size: 52px; font-family: var(--title-font);
-    text-shadow: 0 0 28px #c9941a55, 2px 2px 5px #000; margin-bottom: 4px; letter-spacing: 2px; }
-  #start-screen .subtitle { color: #b9c4d8; font-size: 14px; margin-bottom: 26px; font-style: italic; font-family: Georgia, serif; }
+  #title-logo { width: min(540px, 86vw); height: auto; margin-bottom: 26px;
+    filter: drop-shadow(0 0 28px #c9941a55) drop-shadow(2px 2px 5px #000); }
   #name-row { margin-bottom: 26px; }
   #char-name { background: #0d0d14; color: #ffd100; border: 2px solid var(--border); outline: 1px solid #000;
     border-radius: 4px; padding: 8px 14px; font-size: 15px; width: 240px; text-align: center;
@@ -464,15 +463,14 @@
   <input id="chat-input" maxlength="200" placeholder="Say something… (Enter to send, Esc to cancel)" autocomplete="off" />
 
   <div id="start-screen">
-    <h1>Eastbrook Vale</h1>
-    <div class="subtitle">a vanilla-flavored micro-MMO &mdash; and a training ground for machines</div>
+    <img id="title-logo" src="/worldofclaudecraft-logo.png" alt="World of Claudecraft" />
     <div id="load-status" style="color:#b9c4d8;font-size:13px;min-height:18px;margin-bottom:8px;font-family:Georgia,serif"></div>
 
     <div id="mode-select">
       <div class="mode-row">
         <div class="mode-card panel" id="btn-online">
           <h2>Play Online</h2>
-          <p>Log in to the realm. Your characters live on the server and you share the vale with everyone else who's on.</p>
+          <p>Log in to the realm. Your characters live on the server and you share the world with everyone else who's on.</p>
         </div>
         <div class="mode-card panel" id="btn-offline">
           <h2>Play Offline</h2>

@@ -229,7 +229,7 @@ async function main(): Promise<void> {
 
   game.start();
   server.listen(PORT, () => {
-    console.log(`Eastbrook Vale server listening on http://localhost:${PORT}`);
+    console.log(`World of Claudecraft server listening on http://localhost:${PORT}`);
     console.log(`  REST: /api/register /api/login /api/characters /api/status`);
     console.log(`  WS:   /ws?token=...&character=...`);
   });

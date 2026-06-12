@@ -1,4 +1,4 @@
-# Eastbrook Vale — a WoW-Classic-style MMO + RL training environment
+# World of Claudecraft — a WoW-Classic-style MMO + RL training environment
 
 A vanilla-WoW-flavored micro-MMO built for three purposes:
 
@@ -282,5 +282,5 @@ scripts/      browser E2E + screenshot tour + multiplayer integration tests
 
 All art and audio are procedural — no copyrighted assets. Names, quests and
 the zone are original; formulas and mechanics follow vanilla. World seed is
-fixed in `src/main.ts` so the vale is the same place every visit; the RL env
+fixed in `src/main.ts` so the world is the same place every visit; the RL env
 takes a seed per episode.
