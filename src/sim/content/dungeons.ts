@@ -34,7 +34,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 1.2, color: 0x839192,
   },
   morthen: {
-    id: 'morthen', name: 'Morthen the Bonecaller', minLevel: 10, maxLevel: 10, family: 'undead',
+    id: 'morthen', name: 'Sarghul the Bonecaller', minLevel: 10, maxLevel: 10, family: 'undead',
     elite: true, boss: true,
     hpBase: 230, hpPerLevel: 32, dmgBase: 11, dmgPerLevel: 2.6, attackSpeed: 2.6,
     armorPerLevel: 26, moveSpeed: 7, aggroRadius: 16,
@@ -74,7 +74,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 0.95, color: 0x6fae9e,
   },
   knight_commander_olen: {
-    id: 'knight_commander_olen', name: 'Knight-Commander Olen', minLevel: 13, maxLevel: 13, family: 'undead', elite: true,
+    id: 'knight_commander_olen', name: 'Knight-Commander Theron', minLevel: 13, maxLevel: 13, family: 'undead', elite: true,
     hpBase: 120, hpPerLevel: 26, dmgBase: 11, dmgPerLevel: 2.6, attackSpeed: 2.2,
     armorPerLevel: 24, moveSpeed: 7, aggroRadius: 14,
     loot: [
@@ -90,7 +90,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     cleave: { radius: 8, mult: 0.6, name: 'Cleave' },
   },
   vael_the_mistcaller: {
-    id: 'vael_the_mistcaller', name: 'Vael the Fogcaller', minLevel: 13, maxLevel: 13, family: 'humanoid',
+    id: 'vael_the_mistcaller', name: 'Ysra the Fogcaller', minLevel: 13, maxLevel: 13, family: 'humanoid',
     elite: true, boss: true,
     hpBase: 240, hpPerLevel: 34, dmgBase: 12, dmgPerLevel: 2.6, attackSpeed: 2.4,
     armorPerLevel: 26, moveSpeed: 7, aggroRadius: 16,
@@ -124,7 +124,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     hpBase: 68, hpPerLevel: 24, dmgBase: 13, dmgPerLevel: 2.8, attackSpeed: 2.2,
     armorPerLevel: 26, moveSpeed: 7, aggroRadius: 13,
     loot: [{ copper: 350, chance: 1 }, { itemId: 'cracked_wyrm_scale', chance: 0.5 }],
-    scale: 1.45, color: 0x567d46, // Korzul's rig at 0.8x his bulk
+    scale: 1.45, color: 0x567d46, // Vorruth's rig at 0.8x his bulk
   },
   raised_bonewalker: {
     id: 'raised_bonewalker', name: 'Raised Bonewalker', minLevel: 18, maxLevel: 18, family: 'undead',
@@ -134,7 +134,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 1.0, color: 0xc8cfc8,
   },
   korgath_the_bound: {
-    id: 'korgath_the_bound', name: 'Korgath the Bound', minLevel: 20, maxLevel: 20, family: 'ogre', elite: true,
+    id: 'korgath_the_bound', name: 'Durgath the Bound', minLevel: 20, maxLevel: 20, family: 'ogre', elite: true,
     hpBase: 260, hpPerLevel: 36, dmgBase: 14, dmgPerLevel: 2.9, attackSpeed: 2.8,
     armorPerLevel: 30, moveSpeed: 7, aggroRadius: 15,
     enrage: { belowHpPct: 0.30, dmgMult: 1.5, hasteMult: 1.3 },
@@ -156,7 +156,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 1.5, color: 0x8f6f46,
   },
   grand_necromancer_velkhar: {
-    id: 'grand_necromancer_velkhar', name: 'Grand Necromancer Velkhar', minLevel: 20, maxLevel: 20, family: 'humanoid', elite: true,
+    id: 'grand_necromancer_velkhar', name: 'Grand Necromancer Nethanys', minLevel: 20, maxLevel: 20, family: 'humanoid', elite: true,
     hpBase: 230, hpPerLevel: 33, dmgBase: 13, dmgPerLevel: 2.8, attackSpeed: 2.0,
     armorPerLevel: 20, moveSpeed: 7, aggroRadius: 15,
     summonAdds: { mobId: 'raised_bonewalker', count: 3, atHpPct: [0.66, 0.33] },
@@ -177,7 +177,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 1.25, color: 0x512e5f,
   },
   korzul_the_gravewyrm: {
-    id: 'korzul_the_gravewyrm', name: 'Korzul the Wyrmbarrow', minLevel: 20, maxLevel: 20, family: 'dragonkin',
+    id: 'korzul_the_gravewyrm', name: 'Vorruth the Wyrmbarrow', minLevel: 20, maxLevel: 20, family: 'dragonkin',
     elite: true, boss: true,
     hpBase: 420, hpPerLevel: 48, dmgBase: 15, dmgPerLevel: 3.0, attackSpeed: 2.6,
     armorPerLevel: 34, moveSpeed: 7, aggroRadius: 18,
@@ -201,7 +201,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
 };
 
 // Trash packs of 2 elites (spaced beyond social-aggro range so groups can
-// pull them one pack at a time), a miniboss pair, then Morthen with guards.
+// pull them one pack at a time), a miniboss pair, then Sarghul with guards.
 const CRYPT_SPAWN_LIST: DungeonSpawn[] = [
   { mobId: 'crypt_shambler', x: -3, z: 18 },
   { mobId: 'crypt_shambler', x: 3, z: 19 },
@@ -219,7 +219,7 @@ const CRYPT_SPAWN_LIST: DungeonSpawn[] = [
 ];
 
 // Sunken Bastion: same 13-spawn pacing as the crypt — packs of 2 elites,
-// the Knight-Commander as miniboss, then Vael on the dais with two guards.
+// the Knight-Commander as miniboss, then Ysra on the dais with two guards.
 const BASTION_SPAWN_LIST: DungeonSpawn[] = [
   { mobId: 'bastion_revenant', x: -3, z: 18 },
   { mobId: 'bastion_revenant', x: 3, z: 19 },
@@ -237,8 +237,8 @@ const BASTION_SPAWN_LIST: DungeonSpawn[] = [
 ];
 
 // Wyrmbarrow Sanctum: three chambers — the Boneworks (z<60), the Ritual Vault
-// (75-115) and the Wyrm's Hollow (115+) — with Korgath holding the first
-// waist, Velkhar the second, and Korzul on the great dais at the end.
+// (75-115) and the Wyrm's Hollow (115+) — with Durgath holding the first
+// waist, Nethanys the second, and Vorruth on the great dais at the end.
 const SANCTUM_SPAWN_LIST: DungeonSpawn[] = [
   { mobId: 'sanctum_boneguard', x: -3, z: 16 },
   { mobId: 'sanctum_boneguard', x: 3, z: 17 },

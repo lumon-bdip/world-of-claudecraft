@@ -1,6 +1,6 @@
 // Zone 2 — Sablefen Marsh (levels 6-13). Brother Aldric follows the
 // Bonecaller trail north of the causeway: drowned dead rise from the fen,
-// trolls dig into barrow-mounds, and Vael the Fogcaller waits in the
+// trolls dig into barrow-mounds, and Ysra the Fogcaller waits in the
 // Sunken Bastion.
 
 import type {
@@ -146,7 +146,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     scale: 1.15, color: 0x229954,
   },
   grubjaw: {
-    id: 'grubjaw', name: 'Grubjaw the Glutton', minLevel: 12, maxLevel: 12, family: 'troll', rare: true,
+    id: 'grubjaw', name: 'Gnashmaw the Glutton', minLevel: 12, maxLevel: 12, family: 'troll', rare: true,
     hpBase: 130, hpPerLevel: 26, dmgBase: 10, dmgPerLevel: 2.5, attackSpeed: 2.2,
     armorPerLevel: 20, moveSpeed: 7.5, aggroRadius: 13,
     loot: [
@@ -200,7 +200,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     scale: 0.95, color: 0x332044,
   },
   deacon_voss: {
-    id: 'deacon_voss', name: 'Deacon Voss', minLevel: 12, maxLevel: 12, family: 'humanoid',
+    id: 'deacon_voss', name: 'Deacon Drennan', minLevel: 12, maxLevel: 12, family: 'humanoid',
     hpBase: 200, hpPerLevel: 30, dmgBase: 11, dmgPerLevel: 2.5, attackSpeed: 2.4,
     armorPerLevel: 26, moveSpeed: 7, aggroRadius: 14, boss: true,
     aoePulse: { min: 10, max: 14, radius: 10, every: 12, name: 'Drowning Hymn' },
@@ -266,7 +266,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_fenbridge_muster: {
     id: 'q_fenbridge_muster', name: 'Muster at Reedford',
     giverNpcId: 'brother_aldric', turnInNpcId: 'warden_fenwick',
-    text: "Morthen's writings named a master in the northern marsh — a 'Fogcaller.' Now Warden Fenwick has sounded the muster horn at Reedford, and I do not believe in coincidence, $N. Take the causeway north, pull the muster order from the gatepost, and present it to the Warden.",
+    text: "Sarghul's writings named a master in the northern marsh — a 'Fogcaller.' Now Warden Fenwick has sounded the muster horn at Reedford, and I do not believe in coincidence, $N. Take the causeway north, pull the muster order from the gatepost, and present it to the Warden.",
     completionText: "Aldric's seal, is it? Then you'll do. The fen has been swallowing my patrols whole, and I need every blade that floats.",
     objectives: [{ type: 'collect', itemId: 'fen_muster_order', count: 1, label: 'Reedford Muster Order' }],
     xpReward: 300, copperReward: 200, itemRewards: {},
@@ -310,7 +310,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
     id: 'q_idols', name: 'Idols of the Deep',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
     text: "Fenwick's wardens say the fish-men dredge idols from the lake bottom and clutch them like holy relics. If those idols are what I fear, I must see them with my own eyes. Take 5 from the Blackmere snappers — they will not part with them kindly.",
-    completionText: 'Bonecaller work — older than Morthen, older than me. The sect did not begin in Greywillow, $N. It began here, and the lake has been keeping its secrets.',
+    completionText: 'Bonecaller work — older than Sarghul, older than me. The sect did not begin in Greywillow, $N. It began here, and the lake has been keeping its secrets.',
     objectives: [{ type: 'collect', itemId: 'waterlogged_idol', count: 5, label: 'Waterlogged Idol' }],
     xpReward: 1050, copperReward: 400, itemRewards: {},
     requiresQuest: 'q_deepfen',
@@ -361,7 +361,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
     id: 'q_drowned_censers', name: 'Censers from the Deep',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
     text: 'North of the widow lake stands a chapel that drowned with its congregation when the marsh rose. The dead there carry rusted censers — funerary ones, the kind swung at a Bonecaller rite. Gather 4 from the chapel yard and I will read what rite was sung over that water.',
-    completionText: "As I feared. These censers burned grave-ash, not incense. Someone consecrated that chapel to the drowning — and the rite is signed 'Voss.'",
+    completionText: "As I feared. These censers burned grave-ash, not incense. Someone consecrated that chapel to the drowning — and the rite is signed 'Drennan.'",
     objectives: [{ type: 'collect', itemId: 'rusted_censer', count: 4, label: 'Rusted Censer' }],
     xpReward: 1300, copperReward: 500, itemRewards: {},
     requiresQuest: 'q_drowned',
@@ -398,9 +398,9 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_grubjaw: {
     id: 'q_grubjaw', name: 'The Glutton',
     giverNpcId: 'provisioner_hale', turnInNpcId: 'provisioner_hale',
-    text: "There's one troll the others won't dig beside — Grubjaw, the Glutton. He ate my last two pack-mules, harness and all, and my insurance man drowned years ago. He prowls the far eastern mounds, $N. Bring me his tusk and I will outfit you proper.",
+    text: "There's one troll the others won't dig beside — Gnashmaw, the Glutton. He ate my last two pack-mules, harness and all, and my insurance man drowned years ago. He prowls the far eastern mounds, $N. Bring me his tusk and I will outfit you proper.",
     completionText: "That tusk is long as my forearm! The mules are avenged, and Reedford owes you a round.",
-    objectives: [{ type: 'collect', itemId: 'grubjaw_tusk', count: 1, label: "Grubjaw's Tusk" }],
+    objectives: [{ type: 'collect', itemId: 'grubjaw_tusk', count: 1, label: "Gnashmaw's Tusk" }],
     xpReward: 1700, copperReward: 700,
     itemRewards: { warrior: 'marshstrider_boots', mage: 'marshstrider_boots', rogue: 'marshstrider_boots' },
     minLevel: 11,
@@ -418,7 +418,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
     id: 'q_summoners', name: 'Stopping the Summoning',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
     text: "Maren's reports name summoners among the cultists — voices that call the drowned up out of the water like hounds to a whistle. Their ciphers will spell out the chain of command. Silence 8 summoners and bring me 4 of their ciphers.",
-    completionText: "Every cipher is countersigned 'Deacon Voss' — and addressed onward to a 'Fogcaller' in the Bastion. Morthen's master, $N. We have found him.",
+    completionText: "Every cipher is countersigned 'Deacon Drennan' — and addressed onward to a 'Fogcaller' in the Bastion. Sarghul's master, $N. We have found him.",
     objectives: [
       { type: 'kill', targetMobId: 'gravecaller_summoner', count: 8, label: 'Bonecaller Summoner slain' },
       { type: 'collect', itemId: 'cult_cipher', count: 4, label: 'Bonecaller Cipher' },
@@ -429,9 +429,9 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_deacon: {
     id: 'q_deacon', name: 'The Deacon of the Mire',
     giverNpcId: 'warden_fenwick', turnInNpcId: 'warden_fenwick',
-    text: 'So a deacon of the Bonecallers stands at the heart of that camp, singing my drowned wardens up out of the lakes to serve him. His hymn ends today. Take the camp road north, $N, and put Deacon Voss in the ground — deep enough that nobody sings HIM back up.',
-    completionText: "Voss is dead and the mist over the camp is already thinning. You have broken their voice in the fen — now only the Bastion remains.",
-    objectives: [{ type: 'kill', targetMobId: 'deacon_voss', count: 1, label: 'Deacon Voss slain' }],
+    text: 'So a deacon of the Bonecallers stands at the heart of that camp, singing my drowned wardens up out of the lakes to serve him. His hymn ends today. Take the camp road north, $N, and put Deacon Drennan in the ground — deep enough that nobody sings HIM back up.',
+    completionText: "Drennan is dead and the mist over the camp is already thinning. You have broken their voice in the fen — now only the Bastion remains.",
+    objectives: [{ type: 'kill', targetMobId: 'deacon_voss', count: 1, label: 'Deacon Drennan slain' }],
     xpReward: 2200, copperReward: 1000,
     itemRewards: { warrior: 'deacons_cleaver', mage: 'staff_of_drowned_prayers', rogue: 'mistbinder_kris' },
     requiresQuest: 'q_summoners',
@@ -439,7 +439,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_bastion_door: {
     id: 'q_bastion_door', name: 'The Sunken Bastion',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
-    text: "The Sunken Bastion — a knight's hold that drowned in the fen a century ago — is where Voss's letters point, and where this Fogcaller sings his drowning hymns. The cult has warded its door with grave-stones. Bring me one of the ward stones, $N, and I will unweave the seal.",
+    text: "The Sunken Bastion — a knight's hold that drowned in the fen a century ago — is where Drennan's letters point, and where this Fogcaller sings his drowning hymns. The cult has warded its door with grave-stones. Bring me one of the ward stones, $N, and I will unweave the seal.",
     completionText: 'The ward parts like rotten rope. The door stands open... and the dark below it is listening.',
     objectives: [{ type: 'collect', itemId: 'bastion_ward_stone', count: 1, label: 'Bastion Ward Stone' }],
     xpReward: 1200, copperReward: 500, itemRewards: {},
@@ -449,9 +449,9 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_olen: {
     id: 'q_olen', name: "The Knight-Commander's Shame",
     giverNpcId: 'scout_maren', turnInNpcId: 'scout_maren',
-    text: 'Knight-Commander Olen held the Bastion when it sank — drowned at his post rather than abandon it. Every warden learns his name with pride. Now the Fogcaller has raised him as a puppet to guard the very door he died defending. That shame ends, $N. Take four companions below and grant Olen the rest he earned.',
+    text: 'Knight-Commander Theron held the Bastion when it sank — drowned at his post rather than abandon it. Every warden learns his name with pride. Now the Fogcaller has raised him as a puppet to guard the very door he died defending. That shame ends, $N. Take four companions below and grant Theron the rest he earned.',
     completionText: "Then his watch is finally over. I'll see his name cut into the gate myself. Thank you, $N.",
-    objectives: [{ type: 'kill', targetMobId: 'knight_commander_olen', count: 1, label: 'Knight-Commander Olen laid to rest' }],
+    objectives: [{ type: 'kill', targetMobId: 'knight_commander_olen', count: 1, label: 'Knight-Commander Theron laid to rest' }],
     xpReward: 1800, copperReward: 800,
     itemRewards: { warrior: 'knight_commanders_greaves', mage: 'knight_commanders_greaves', rogue: 'knight_commanders_greaves' },
     requiresQuest: 'q_bastion_door',
@@ -461,9 +461,9 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_mistcaller: {
     id: 'q_mistcaller', name: 'The Fogcaller',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
-    text: "At the bottom of the Bastion waits Vael the Fogcaller — Morthen's master, Voss's master, the voice that has drowned a hundred travelers to raise itself an army. He is far beyond any one hero: take four companions, no fewer. End him, $N, and the fen's dead may finally lie still.",
-    completionText: "Vael is dead, and the mist is lifting for the first time in years. But Maren heard his last words, and they freeze my blood: 'The Wyrm stirs beneath the peaks.' The sect serves something older than we ever guessed, $N. Rest while you can — the mountains are next.",
-    objectives: [{ type: 'kill', targetMobId: 'vael_the_mistcaller', count: 1, label: 'Vael the Fogcaller slain' }],
+    text: "At the bottom of the Bastion waits Ysra the Fogcaller — Sarghul's master, Drennan's master, the voice that has drowned a hundred travelers to raise itself an army. He is far beyond any one hero: take four companions, no fewer. End him, $N, and the fen's dead may finally lie still.",
+    completionText: "Ysra is dead, and the mist is lifting for the first time in years. But Maren heard his last words, and they freeze my blood: 'The Wyrm stirs beneath the peaks.' The sect serves something older than we ever guessed, $N. Rest while you can — the mountains are next.",
+    objectives: [{ type: 'kill', targetMobId: 'vael_the_mistcaller', count: 1, label: 'Ysra the Fogcaller slain' }],
     xpReward: 2800, copperReward: 2500,
     itemRewards: { warrior: 'mistcallers_edge', mage: 'vaels_mist_staff', rogue: 'riptide_dirk' },
     requiresQuest: 'q_bastion_door',
@@ -560,7 +560,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
   widow_venom_sac: { id: 'widow_venom_sac', name: 'Widow Venom Sac', kind: 'quest', sellValue: 0, questId: 'q_widows' },
   rusted_censer: { id: 'rusted_censer', name: 'Rusted Censer', kind: 'quest', sellValue: 0, questId: 'q_drowned_censers' },
   troll_fetish: { id: 'troll_fetish', name: 'Sablefen Troll Fetish', kind: 'quest', sellValue: 0, questId: 'q_troll_fetishes' },
-  grubjaw_tusk: { id: 'grubjaw_tusk', name: "Grubjaw's Tusk", kind: 'quest', sellValue: 0, questId: 'q_grubjaw' },
+  grubjaw_tusk: { id: 'grubjaw_tusk', name: "Gnashmaw's Tusk", kind: 'quest', sellValue: 0, questId: 'q_grubjaw' },
   cult_cipher: { id: 'cult_cipher', name: 'Bonecaller Cipher', kind: 'quest', sellValue: 0, questId: 'q_summoners' },
   bastion_ward_stone: { id: 'bastion_ward_stone', name: 'Bastion Ward Stone', kind: 'quest', sellValue: 0, questId: 'q_bastion_door' },
   // --- quest reward gear (uncommon) ---
@@ -601,7 +601,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     stats: { armor: 42, int: 4, spi: 2 }, sellValue: 300, requiredClass: MAG,
   },
   voss_sanctified_mace: {
-    id: 'voss_sanctified_mace', name: "Voss's Sanctified Mace", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    id: 'voss_sanctified_mace', name: "Drennan's Sanctified Mace", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
     weapon: { min: 12, max: 20, speed: 2.6 }, stats: { int: 3, spi: 2 }, sellValue: 420, requiredClass: MAG,
   },
   mirejaw_biteblade: {
@@ -634,7 +634,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 14, max: 23, speed: 2.3 }, stats: { str: 4, sta: 3 }, sellValue: 1200, requiredClass: WAR,
   },
   vaels_mist_staff: {
-    id: 'vaels_mist_staff', name: "Vael's Mist-Staff", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    id: 'vaels_mist_staff', name: "Ysra's Mist-Staff", kind: 'weapon', slot: 'mainhand', quality: 'rare',
     weapon: { min: 15, max: 26, speed: 3.0 }, stats: { int: 6, spi: 3 }, sellValue: 1200, requiredClass: MAG,
   },
   riptide_dirk: {

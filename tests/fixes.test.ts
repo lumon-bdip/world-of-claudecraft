@@ -493,7 +493,7 @@ describe('boss loot and encounter resets', () => {
       sim.countItem('greyjaw_hide_boots', a) +
       sim.countItem('greyjaw_hide_boots', b);
     expect(total).toBe(1);
-    expect(sim.events.some((e) => e.type === 'loot' && e.text.includes('wins Greyjaw Hide Boots'))).toBe(true);
+    expect(sim.events.some((e) => e.type === 'loot' && e.text.includes('wins Grimfang Hide Boots'))).toBe(true);
     expect(mob.loot).toBeNull();
   });
 

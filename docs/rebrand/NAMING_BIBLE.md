@@ -187,7 +187,12 @@ localization gap, tracked for a later pass).
   Gravecaller->Bonecaller, Mistcaller->Fogcaller, Sableweb->Duskweb,
   Bristleback->Thornhide. Rebrands the cult, the wyrm, their dungeon, items, and
   quests together. DONE, green.
+- Wave 4 (antagonist/elite first-names, Latin-script, word-boundary matched):
+  Korzul->Vorruth, Morthen->Sarghul, Vael->Ysra, Velkhar->Nethanys,
+  Gorrak->Brakka, Drogmar->Ghorbal, Kazzix->Vexnar, Korgath->Durgath,
+  Grubjaw->Gnashmaw, Greyjaw->Grimfang, Mogger->Brughol, Olen->Theron,
+  Voss->Drennan. Updated the Greyjaw loot spot-check. DONE, green.
 - Remaining: CJK/RU transliteration of all renamed proper nouns; dungeons
-  (descriptive names, per-locale); NPC personal names; individual boss first-names
-  (Korzul, Morthen, Vael, etc.); remaining generic mob names; item names; quest
+  (descriptive names, per-locale); friendly NPC personal names (Redbrook, Wilkes,
+  Lin, Aldric, ...); remaining generic mob names; remaining item names; quest
   titles; abilities; talents; class lore prose; then docs/wiki/logos.
