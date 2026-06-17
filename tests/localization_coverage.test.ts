@@ -713,7 +713,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("de_DE");
     resetEntityTranslationFallbackLog();
     expect(tEntity({ kind: "item", id: "worn_sword", field: "name" })).toBe("Abgenutztes Kurzschwert");
-    expect(tEntity({ kind: "item", id: "gravecaller_sigil", field: "name" })).toBe("Gravecallers Siegel");
+    expect(tEntity({ kind: "item", id: "gravecaller_sigil", field: "name" })).toBe("Bonecallers Siegel");
     expect(entityTranslationFallbackLog()).toHaveLength(0);
 
     setLanguage("en");

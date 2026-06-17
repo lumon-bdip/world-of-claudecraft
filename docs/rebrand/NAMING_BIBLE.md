@@ -182,6 +182,12 @@ localization gap, tracked for a later pass).
 - Wave 1 (class display names + aria, 14 locales + canonical): DONE, green.
 - Wave 2 (geography: zones, towns, POIs, realm name + Latin-script prose; brand
   stragglers Claudemoon/Claudecraft): DONE, green.
-- Remaining: CJK/RU geography transliteration; dungeons; NPC personal names;
-  remaining mob names; remaining item names; quest titles; abilities; talents;
-  class lore prose; then docs/wiki/logos.
+- Wave 2b (name re-skin to "Legends of Aldermoor" / realm "Aldermoon"): DONE, green.
+- Wave 3 (antagonist factions/creature-types, Latin-script): Gravewyrm->Wyrmbarrow,
+  Gravecaller->Bonecaller, Mistcaller->Fogcaller, Sableweb->Duskweb,
+  Bristleback->Thornhide. Rebrands the cult, the wyrm, their dungeon, items, and
+  quests together. DONE, green.
+- Remaining: CJK/RU transliteration of all renamed proper nouns; dungeons
+  (descriptive names, per-locale); NPC personal names; individual boss first-names
+  (Korzul, Morthen, Vael, etc.); remaining generic mob names; item names; quest
+  titles; abilities; talents; class lore prose; then docs/wiki/logos.

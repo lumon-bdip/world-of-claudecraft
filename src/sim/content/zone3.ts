@@ -1,7 +1,7 @@
-// Zone 3 — Thornfell Heights (levels 13-20). The Gravecallers serve Korzul
-// the Gravewyrm, an ancient dragon sealed beneath the peaks. Wardenwatch holds
+// Zone 3 — Thornfell Heights (levels 13-20). The Bonecallers serve Korzul
+// the Wyrmbarrow, an ancient dragon sealed beneath the peaks. Wardenwatch holds
 // the wall against ogres, waking elementals, and the open chanting of the
-// Wyrmcult at the Gravewyrm Sanctum gates.
+// Wyrmcult at the Wyrmbarrow Sanctum gates.
 
 import type {
   CampDef, GroundObjectDef, ItemDef, MobTemplate, NpcDef, QuestDef, ZoneDef, ZonePropsDef,
@@ -27,7 +27,7 @@ export const ZONE3_ZONE: ZoneDef = {
     { x: -70, z: 770, label: 'The Glistermere' },
     { x: 55, z: 820, label: 'Wyrmcult Tents' },
     { x: -40, z: 830, label: 'Revenant Fields' },
-    { x: 0, z: 880, label: 'Gravewyrm Sanctum' },
+    { x: 0, z: 880, label: 'Wyrmbarrow Sanctum' },
   ],
   welcome: 'Captain Thessaly holds the wall at Wardenwatch — barely.',
 };
@@ -41,7 +41,7 @@ export const ZONE3_ROADS: { x: number; z: number }[][] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Mobs (overworld only — the Gravewyrm Sanctum mobs live in content/dungeons)
+// Mobs (overworld only — the Wyrmbarrow Sanctum mobs live in content/dungeons)
 // ---------------------------------------------------------------------------
 
 export const ZONE3_MOBS: Record<string, MobTemplate> = {
@@ -402,7 +402,7 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
     id: 'q_necromancers', name: 'The Phylactery Ring',
     giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
     text: 'The orders speak of a "ring of phylacteries" — soul-vessels, $N, set about the Sanctum to feed it. The cult\'s necromancers carry them like holy relics. Kill eight necromancers and bring me three phylacteries unbroken. I must know what souls they hold.',
-    completionText: 'Light forgive us. These hold the dead of the Vale and the fen — every corpse the Gravecallers ever raised, harvested. They were never building an army, $N. They were gathering a tithe.',
+    completionText: 'Light forgive us. These hold the dead of the Vale and the fen — every corpse the Bonecallers ever raised, harvested. They were never building an army, $N. They were gathering a tithe.',
     objectives: [
       { type: 'kill', targetMobId: 'wyrmcult_necromancer', count: 8, label: 'Wyrmcult Necromancer slain' },
       { type: 'collect', itemId: 'ritual_phylactery', count: 3, label: 'Ritual Phylactery' },
@@ -432,9 +432,9 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
   q_wyrm_sigils: {
     id: 'q_wyrm_sigils', name: 'Sigils of the Wyrm',
     giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
-    text: 'It is time you knew the whole of it, $N. The Gravecallers serve Korzul the Gravewyrm — an ancient dragon sealed beneath this mountain — and every soul they have stolen since Greywillow is a tithe poured into its waking. On the Sanctum Approach the cult has laid sigils to thin the seal. Bring me three; I would read the rite they are working.',
+    text: 'It is time you knew the whole of it, $N. The Bonecallers serve Korzul the Wyrmbarrow — an ancient dragon sealed beneath this mountain — and every soul they have stolen since Greywillow is a tithe poured into its waking. On the Sanctum Approach the cult has laid sigils to thin the seal. Bring me three; I would read the rite they are working.',
     completionText: 'Yes... a waking-litany, generations in the writing. They are close, $N. Closer than I dared fear.',
-    objectives: [{ type: 'collect', itemId: 'gravewyrm_sigil', count: 3, label: 'Gravewyrm Sigil' }],
+    objectives: [{ type: 'collect', itemId: 'gravewyrm_sigil', count: 3, label: 'Wyrmbarrow Sigil' }],
     xpReward: 3600, copperReward: 2000, itemRewards: {},
     requiresQuest: 'q_necromancers', minLevel: 18,
   },
@@ -463,7 +463,7 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
   q_sanctum_gate: {
     id: 'q_sanctum_gate', name: 'The Sanctum Gate',
     giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
-    text: 'This is the last threshold, $N. The gate of the Gravewyrm Sanctum was locked with a keystone, and the cult shattered it into shards rather than see it turned against them. The shards lie scattered in the gate plaza, under the eyes of the boneclad dead. Bring me three, and I will open the way the Light intended — quietly.',
+    text: 'This is the last threshold, $N. The gate of the Wyrmbarrow Sanctum was locked with a keystone, and the cult shattered it into shards rather than see it turned against them. The shards lie scattered in the gate plaza, under the eyes of the boneclad dead. Bring me three, and I will open the way the Light intended — quietly.',
     completionText: 'The shards sit true... and the gate knows its key. The way below stands open, $N. Gather the strongest companions you can find — what comes next, no one should face alone.',
     objectives: [{ type: 'collect', itemId: 'sanctum_key_shard', count: 3, label: 'Sanctum Key Shard' }],
     xpReward: 4000, copperReward: 2000, itemRewards: {},
@@ -482,7 +482,7 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
   q_velkhar: {
     id: 'q_velkhar', name: 'The Grand Necromancer',
     giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
-    text: 'Every thread we have followed — Morthen, Vael, the phylacteries — was spun by one hand: Grand Necromancer Velkhar, first of the Gravecallers, keeper of the waking rite. He stands in the ritual vault below, pouring two lands\' worth of stolen souls into the Wyrm. End him, $N, and the tithe ends with him.',
+    text: 'Every thread we have followed — Morthen, Vael, the phylacteries — was spun by one hand: Grand Necromancer Velkhar, first of the Bonecallers, keeper of the waking rite. He stands in the ritual vault below, pouring two lands\' worth of stolen souls into the Wyrm. End him, $N, and the tithe ends with him.',
     completionText: 'Velkhar is dead, and the rite is headless. But you felt it down there, did you not? The souls are already spent — the Wyrm is no longer asleep.',
     objectives: [{ type: 'kill', targetMobId: 'grand_necromancer_velkhar', count: 1, label: 'Grand Necromancer Velkhar slain' }],
     xpReward: 4500, copperReward: 3000,
@@ -490,11 +490,11 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
     requiresQuest: 'q_sanctum_gate', minLevel: 18, suggestedPlayers: 5,
   },
   q_gravewyrm: {
-    id: 'q_gravewyrm', name: 'Korzul the Gravewyrm',
+    id: 'q_gravewyrm', name: 'Korzul the Wyrmbarrow',
     giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
     text: 'There is no rite left to stop, $N — only the Wyrm itself, half-woken in its hollow, gorged on the dead of the Vale and the fen. If it rises, the wall, the marsh, Greywillow — everything we have defended falls in a single night. Take your companions into the Wyrm\'s Hollow and finish what we began in a chapel yard so long ago. The Light has carried you this far; carry it the rest of the way.',
     completionText: 'It is over. The dead of three lands may rest, the mountain sleeps unhaunted — and it is your name, $N, that every bell from here to Greywillow rings tonight.',
-    objectives: [{ type: 'kill', targetMobId: 'korzul_the_gravewyrm', count: 1, label: 'Korzul the Gravewyrm slain' }],
+    objectives: [{ type: 'kill', targetMobId: 'korzul_the_gravewyrm', count: 1, label: 'Korzul the Wyrmbarrow slain' }],
     xpReward: 5300, copperReward: 25000,
     itemRewards: { warrior: 'gravewyrm_scale_hauberk', mage: 'wyrmcult_grand_robe', rogue: 'wyrmscale_jerkin' },
     requiresQuest: 'q_velkhar', minLevel: 18, suggestedPlayers: 5,
@@ -556,7 +556,7 @@ export const ZONE3_OBJECTS: GroundObjectDef[] = [
   },
   {
     itemId: 'gravewyrm_sigil',
-    name: 'Gravewyrm Sigil',
+    name: 'Wyrmbarrow Sigil',
     positions: [{ x: -8, z: 852 }, { x: -3, z: 857 }, { x: 3, z: 861 }, { x: 8, z: 866 }],
   },
   {
@@ -580,7 +580,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   kazzix_heartshard: { id: 'kazzix_heartshard', name: "Kazzix's Heartshard", kind: 'quest', sellValue: 0, questId: 'q_kazzix' },
   wyrmcult_orders: { id: 'wyrmcult_orders', name: 'Wyrmcult Orders', kind: 'quest', sellValue: 0, questId: 'q_cult_orders' },
   ritual_phylactery: { id: 'ritual_phylactery', name: 'Ritual Phylactery', kind: 'quest', sellValue: 0, questId: 'q_necromancers' },
-  gravewyrm_sigil: { id: 'gravewyrm_sigil', name: 'Gravewyrm Sigil', kind: 'quest', sellValue: 0, questId: 'q_wyrm_sigils' },
+  gravewyrm_sigil: { id: 'gravewyrm_sigil', name: 'Wyrmbarrow Sigil', kind: 'quest', sellValue: 0, questId: 'q_wyrm_sigils' },
   blessed_embers: { id: 'blessed_embers', name: 'Blessed Embers', kind: 'quest', sellValue: 0, questId: 'q_breaking_the_seal' },
   sanctum_key_shard: { id: 'sanctum_key_shard', name: 'Sanctum Key Shard', kind: 'quest', sellValue: 0, questId: 'q_sanctum_gate' },
   // --- quest greens (uncommon) ---
@@ -662,7 +662,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     stats: { armor: 130, agi: 9, sta: 4 }, sellValue: 2500, requiredClass: ['rogue', 'hunter'],
   },
   gravewyrm_scale_hauberk: {
-    id: 'gravewyrm_scale_hauberk', name: 'Gravewyrm Scale Hauberk', kind: 'armor', slot: 'chest', quality: 'rare',
+    id: 'gravewyrm_scale_hauberk', name: 'Wyrmbarrow Scale Hauberk', kind: 'armor', slot: 'chest', quality: 'rare',
     stats: { armor: 230, sta: 8, str: 5 }, sellValue: 3000, requiredClass: ['warrior', 'paladin', 'shaman'],
   },
   wyrmcult_grand_robe: {
@@ -674,11 +674,11 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     stats: { armor: 145, agi: 10, sta: 5 }, sellValue: 3000, requiredClass: ['rogue', 'hunter'],
   },
   gravewyrm_stalkers_treads: {
-    id: 'gravewyrm_stalkers_treads', name: "Gravewyrm Stalker's Treads", kind: 'armor', slot: 'feet', quality: 'rare',
+    id: 'gravewyrm_stalkers_treads', name: "Wyrmbarrow Stalker's Treads", kind: 'armor', slot: 'feet', quality: 'rare',
     stats: { armor: 105, agi: 10, sta: 5 }, sellValue: 3200, requiredClass: ['rogue', 'hunter'],
   },
   gravewyrm_sabatons: {
-    id: 'gravewyrm_sabatons', name: 'Gravewyrm Sabatons', kind: 'armor', slot: 'feet', quality: 'rare',
+    id: 'gravewyrm_sabatons', name: 'Wyrmbarrow Sabatons', kind: 'armor', slot: 'feet', quality: 'rare',
     stats: { armor: 145, str: 5, sta: 6 }, sellValue: 3200, requiredClass: ['warrior', 'paladin', 'shaman'],
   },
   wyrmcult_soulsteps: {
@@ -727,7 +727,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 30, max: 48, speed: 2.6 }, stats: { str: 10, sta: 6 }, sellValue: 8000, requiredClass: ['warrior', 'paladin', 'shaman'],
   },
   staff_of_the_gravewyrm: {
-    id: 'staff_of_the_gravewyrm', name: 'Staff of the Gravewyrm', kind: 'weapon', slot: 'mainhand', quality: 'epic',
+    id: 'staff_of_the_gravewyrm', name: 'Staff of the Wyrmbarrow', kind: 'weapon', slot: 'mainhand', quality: 'epic',
     weapon: { min: 32, max: 52, speed: 3.0 }, stats: { int: 12, spi: 6 }, sellValue: 8000, requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
   fang_of_korzul: {

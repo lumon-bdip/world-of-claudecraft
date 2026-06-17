@@ -34,7 +34,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 1.2, color: 0x839192,
   },
   morthen: {
-    id: 'morthen', name: 'Morthen the Gravecaller', minLevel: 10, maxLevel: 10, family: 'undead',
+    id: 'morthen', name: 'Morthen the Bonecaller', minLevel: 10, maxLevel: 10, family: 'undead',
     elite: true, boss: true,
     hpBase: 230, hpPerLevel: 32, dmgBase: 11, dmgPerLevel: 2.6, attackSpeed: 2.6,
     armorPerLevel: 26, moveSpeed: 7, aggroRadius: 16,
@@ -90,7 +90,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     cleave: { radius: 8, mult: 0.6, name: 'Cleave' },
   },
   vael_the_mistcaller: {
-    id: 'vael_the_mistcaller', name: 'Vael the Mistcaller', minLevel: 13, maxLevel: 13, family: 'humanoid',
+    id: 'vael_the_mistcaller', name: 'Vael the Fogcaller', minLevel: 13, maxLevel: 13, family: 'humanoid',
     elite: true, boss: true,
     hpBase: 240, hpPerLevel: 34, dmgBase: 12, dmgPerLevel: 2.6, attackSpeed: 2.4,
     armorPerLevel: 26, moveSpeed: 7, aggroRadius: 16,
@@ -111,7 +111,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 1.35, color: 0x48c9b0,
   },
 
-  // ---- Gravewyrm Sanctum (5-player elite instance, L20 finale) ----
+  // ---- Wyrmbarrow Sanctum (5-player elite instance, L20 finale) ----
   sanctum_boneguard: {
     id: 'sanctum_boneguard', name: 'Sanctum Boneguard', minLevel: 19, maxLevel: 19, family: 'undead', elite: true,
     hpBase: 64, hpPerLevel: 23, dmgBase: 12, dmgPerLevel: 2.7, attackSpeed: 2.3,
@@ -177,7 +177,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     scale: 1.25, color: 0x512e5f,
   },
   korzul_the_gravewyrm: {
-    id: 'korzul_the_gravewyrm', name: 'Korzul the Gravewyrm', minLevel: 20, maxLevel: 20, family: 'dragonkin',
+    id: 'korzul_the_gravewyrm', name: 'Korzul the Wyrmbarrow', minLevel: 20, maxLevel: 20, family: 'dragonkin',
     elite: true, boss: true,
     hpBase: 420, hpPerLevel: 48, dmgBase: 15, dmgPerLevel: 3.0, attackSpeed: 2.6,
     armorPerLevel: 34, moveSpeed: 7, aggroRadius: 18,
@@ -236,7 +236,7 @@ const BASTION_SPAWN_LIST: DungeonSpawn[] = [
   { mobId: 'bastion_revenant', x: 4, z: 96 },
 ];
 
-// Gravewyrm Sanctum: three chambers — the Boneworks (z<60), the Ritual Vault
+// Wyrmbarrow Sanctum: three chambers — the Boneworks (z<60), the Ritual Vault
 // (75-115) and the Wyrm's Hollow (115+) — with Korgath holding the first
 // waist, Velkhar the second, and Korzul on the great dais at the end.
 const SANCTUM_SPAWN_LIST: DungeonSpawn[] = [
@@ -281,7 +281,7 @@ export const DUNGEON_DEFS: Record<string, DungeonDef> = {
     id: 'sunken_bastion',
     name: 'The Sunken Bastion',
     index: 1,
-    doorPos: { x: 45, z: 515 }, // drowned keep south of the Gravecaller camp
+    doorPos: { x: 45, z: 515 }, // drowned keep south of the Bonecaller camp
     entry: { x: 0, z: 4 },
     exitOffset: { x: 0, z: -6 },
     spawns: BASTION_SPAWN_LIST,
@@ -292,7 +292,7 @@ export const DUNGEON_DEFS: Record<string, DungeonDef> = {
   },
   gravewyrm_sanctum: {
     id: 'gravewyrm_sanctum',
-    name: 'Gravewyrm Sanctum',
+    name: 'Wyrmbarrow Sanctum',
     index: 2,
     doorPos: { x: 0, z: 880 }, // sealed gate at the head of the Sanctum Approach
     entry: { x: 0, z: 4 },

@@ -1,5 +1,5 @@
 // Zone 1 — Greywillow Vale (levels 1-7). The starter zone: town of Greywillow,
-// wolves and boars, the bandit camp, and Brother Aldric's Gravecaller chain
+// wolves and boars, the bandit camp, and Brother Aldric's Bonecaller chain
 // leading to the Hollow Crypt.
 
 import type { CampDef, GroundObjectDef, MobTemplate, NpcDef, QuestDef, ZoneDef, ZonePropsDef } from '../types';
@@ -90,11 +90,11 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     scale: 0.85, color: 0x935116,
   },
   elder_bristleback: {
-    id: 'elder_bristleback', name: 'Elder Bristleback', minLevel: 5, maxLevel: 5, family: 'beast', rare: true,
+    id: 'elder_bristleback', name: 'Elder Thornhide', minLevel: 5, maxLevel: 5, family: 'beast', rare: true,
     elite: true, canSwim: true, ccImmune: true, respawnMult: 432,
     hpBase: 260, hpPerLevel: 52, dmgBase: 11, dmgPerLevel: 3.3, attackSpeed: 2.4,
     armorPerLevel: 30, moveSpeed: 7.2, aggroRadius: 12,
-    aoePulse: { min: 12, max: 18, radius: 8, every: 9, name: 'Bristleback Stomp', school: 'physical' },
+    aoePulse: { min: 12, max: 18, radius: 8, every: 9, name: 'Thornhide Stomp', school: 'physical' },
     enrage: { belowHpPct: 0.35, dmgMult: 1.4, hasteMult: 1.3 },
     loot: [
       { copper: 120, chance: 1 },
@@ -119,7 +119,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     scale: 0.9, color: 0x4a235a,
   },
   sableweb_matriarch: {
-    id: 'sableweb_matriarch', name: 'Sableweb Matriarch', minLevel: 6, maxLevel: 6, family: 'spider', rare: true,
+    id: 'sableweb_matriarch', name: 'Duskweb Matriarch', minLevel: 6, maxLevel: 6, family: 'spider', rare: true,
     elite: true, canSwim: true, ccImmune: true, respawnMult: 432,
     hpBase: 250, hpPerLevel: 50, dmgBase: 11, dmgPerLevel: 3.3, attackSpeed: 1.7,
     armorPerLevel: 20, moveSpeed: 8, aggroRadius: 12,
@@ -136,7 +136,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     scale: 1.15, color: 0x1b1025,
   },
   sableweb_hatchling: {
-    id: 'sableweb_hatchling', name: 'Sableweb Hatchling', minLevel: 5, maxLevel: 5, family: 'spider',
+    id: 'sableweb_hatchling', name: 'Duskweb Hatchling', minLevel: 5, maxLevel: 5, family: 'spider',
     hpBase: 34, hpPerLevel: 13, dmgBase: 5, dmgPerLevel: 1.8, attackSpeed: 1.6,
     armorPerLevel: 8, moveSpeed: 8.5, aggroRadius: 12,
     loot: [],
@@ -322,7 +322,7 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     requiresQuest: 'q_wolves',
   },
   q_boars: {
-    id: 'q_boars', name: 'Bristleback Hides',
+    id: 'q_boars', name: 'Thornhide Hides',
     giverNpcId: 'trader_wilkes', turnInNpcId: 'trader_wilkes',
     text: 'Boar hide makes the finest travel packs, and the meadows west of town are crawling with the beasts. Bring me 5 Bristly Boar Hides and I will make it worth your time.',
     completionText: 'Ah, fine bristly hides! These will fetch a good price.',
@@ -381,15 +381,15 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     id: 'q_whispers', name: 'Whispers Below',
     giverNpcId: 'brother_aldric', turnInNpcId: 'brother_aldric',
     text: 'You have laid the dead to rest, but they will not stay resting — something calls them back. Search the chapel ruin for any trace of the one doing the calling. If you find a sigil or seal, bring it to me untouched.',
-    completionText: 'This sigil... it bears the mark of the Gravecallers, a sect I had prayed was extinct. This is worse than I feared, $N.',
-    objectives: [{ type: 'collect', itemId: 'gravecaller_sigil', count: 1, label: "Gravecaller's Sigil" }],
+    completionText: 'This sigil... it bears the mark of the Bonecallers, a sect I had prayed was extinct. This is worse than I feared, $N.',
+    objectives: [{ type: 'collect', itemId: 'gravecaller_sigil', count: 1, label: "Bonecaller's Sigil" }],
     xpReward: 400, copperReward: 150, itemRewards: {},
     requiresQuest: 'q_bones',
   },
   q_names_of_the_dead: {
     id: 'q_names_of_the_dead', name: 'The Names of the Dead',
     giverNpcId: 'brother_aldric', turnInNpcId: 'brother_aldric',
-    text: 'If the Gravecallers raised our dead, I must know whose graves they robbed. The chapel sexton kept a burial ledger, and the wind has scattered its pages across the chapel yard. Gather 3 of them for me, $N — the dead deserve to be called by their names.',
+    text: 'If the Bonecallers raised our dead, I must know whose graves they robbed. The chapel sexton kept a burial ledger, and the wind has scattered its pages across the chapel yard. Gather 3 of them for me, $N — the dead deserve to be called by their names.',
     completionText: 'These poor souls... and look here. Sexton Marrow — the chapel\'s own living caretaker — his grave the first disturbed. Morthen began with the very man who buried Greywillow\'s dead.',
     objectives: [{ type: 'collect', itemId: 'weathered_ledger_page', count: 3, label: 'Weathered Ledger Page' }],
     xpReward: 600, copperReward: 250, itemRewards: {},
@@ -398,7 +398,7 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
   q_silence_the_call: {
     id: 'q_silence_the_call', name: 'Silence the Call',
     giverNpcId: 'brother_aldric', turnInNpcId: 'brother_aldric',
-    text: 'Every name in that ledger is a soul Morthen means to drag from the earth, and the chapel yard already crawls with those he has called. Return 12 Restless Bones to their graves, $N, before the Gravecaller\'s whisper swells into a chorus.',
+    text: 'Every name in that ledger is a soul Morthen means to drag from the earth, and the chapel yard already crawls with those he has called. Return 12 Restless Bones to their graves, $N, before the Bonecaller\'s whisper swells into a chorus.',
     completionText: 'The yard grows quieter — but the calling has not stopped. It rises from below now, $N. From the crypt itself.',
     objectives: [{ type: 'kill', targetMobId: 'restless_bones', count: 12, label: 'Restless Bones silenced' }],
     xpReward: 750, copperReward: 300, itemRewards: {},
@@ -407,7 +407,7 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
   q_rite: {
     id: 'q_rite', name: 'The Binding Rite',
     giverNpcId: 'brother_aldric', turnInNpcId: 'brother_aldric',
-    text: 'The crypt beneath the chapel must be unsealed if we are to stop the Gravecaller — but only a binding rite will let the living pass. I need 4 lumps of Blessed Tallow — the kobold diggers hoard candles by the crate — and 6 Ghostly Essences from the restless dead.',
+    text: 'The crypt beneath the chapel must be unsealed if we are to stop the Bonecaller — but only a binding rite will let the living pass. I need 4 lumps of Blessed Tallow — the kobold diggers hoard candles by the crate — and 6 Ghostly Essences from the restless dead.',
     completionText: 'It is done. The way below stands open... and may the Light forgive me for opening it. Gather your strongest companions before you descend, $N. No one should face the Hollow alone.',
     objectives: [
       { type: 'collect', itemId: 'blessed_wax', count: 4, label: 'Blessed Tallow' },
@@ -419,9 +419,9 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
   q_hollow: {
     id: 'q_hollow', name: 'Into the Hollow',
     giverNpcId: 'brother_aldric', turnInNpcId: 'brother_aldric',
-    text: 'Morthen the Gravecaller waits at the bottom of the Hollow Crypt, ringed by the elite dead he has raised. He is far beyond any one hero — take four companions, no fewer. End him, and the Vale\'s dead will finally sleep.',
+    text: 'Morthen the Bonecaller waits at the bottom of the Hollow Crypt, ringed by the elite dead he has raised. He is far beyond any one hero — take four companions, no fewer. End him, and the Vale\'s dead will finally sleep.',
     completionText: 'The whispering has stopped. You have done what the whole Vale could not, $N — the dead sleep, and Greywillow owes you everything it has.',
-    objectives: [{ type: 'kill', targetMobId: 'morthen', count: 1, label: 'Morthen the Gravecaller slain' }],
+    objectives: [{ type: 'kill', targetMobId: 'morthen', count: 1, label: 'Morthen the Bonecaller slain' }],
     xpReward: 1500, copperReward: 10000,
     itemRewards: { warrior: 'gravecaller_blade', rogue: 'widowfang_dirk', mage: 'gravecaller_staff' },
     requiresQuest: 'q_rite',
@@ -439,10 +439,10 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     suggestedPlayers: 5,
   },
   q_gravecallers_trail: {
-    id: 'q_gravecallers_trail', name: "The Gravecaller's Trail",
+    id: 'q_gravecallers_trail', name: "The Bonecaller's Trail",
     giverNpcId: 'brother_aldric', turnInNpcId: 'brother_aldric',
     text: 'Morthen is dead, yet a question gnaws at me: a sect that hid for a century does not spend itself on one village chapel. He kept a grimoire — his rites, his correspondence. If anything of it survives, it lies in the vestry of the ruined chapel above the crypt. Search the ruin and bring me whatever remains of his writings, $N.',
-    completionText: 'Morthen wrote to a \'Mistcaller\' in the northern fen. The sect is not dead, $N — it has merely been patient.',
+    completionText: 'Morthen wrote to a \'Fogcaller\' in the northern fen. The sect is not dead, $N — it has merely been patient.',
     objectives: [{ type: 'collect', itemId: 'morthen_grimoire', count: 1, label: "Morthen's Grimoire" }],
     xpReward: 900, copperReward: 400, itemRewards: {},
     requiresQuest: 'q_hollow',
@@ -542,7 +542,7 @@ export const ZONE1_OBJECTS: GroundObjectDef[] = [
   },
   {
     itemId: 'gravecaller_sigil',
-    name: "Gravecaller's Sigil",
+    name: "Bonecaller's Sigil",
     positions: [{ x: 84, z: 88 }, { x: 76, z: 92 }],
   },
   {

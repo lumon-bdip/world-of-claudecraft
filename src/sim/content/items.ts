@@ -86,11 +86,11 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     stats: { armor: 28, agi: 1, sta: 1 }, sellValue: 130,
   },
   bristleback_maul: {
-    id: 'bristleback_maul', name: 'Bristleback Maul', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    id: 'bristleback_maul', name: 'Thornhide Maul', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
     weapon: { min: 7, max: 12, speed: 2.8 }, stats: { str: 2, sta: 1 }, sellValue: 160, requiredClass: WAR,
   },
   sableweb_slippers: {
-    id: 'sableweb_slippers', name: 'Sableweb Slippers', kind: 'armor', slot: 'feet', quality: 'uncommon',
+    id: 'sableweb_slippers', name: 'Duskweb Slippers', kind: 'armor', slot: 'feet', quality: 'uncommon',
     stats: { armor: 18, int: 2, spi: 1 }, sellValue: 150, requiredClass: MAG,
   },
   gorraks_cruel_chopper: {
@@ -203,7 +203,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   // --- Hollow Crypt rewards (rare/blue) ---
   gravecaller_blade: {
-    id: 'gravecaller_blade', name: "Gravecaller's Broadblade", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    id: 'gravecaller_blade', name: "Bonecaller's Broadblade", kind: 'weapon', slot: 'mainhand', quality: 'rare',
     weapon: { min: 9, max: 16, speed: 2.4 }, stats: { str: 3, sta: 2 }, sellValue: 800,
   },
   widowfang_dirk: {
@@ -248,7 +248,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   // --- quest items ---
   boar_hide: { id: 'boar_hide', name: 'Bristly Boar Hide', kind: 'quest', sellValue: 0, questId: 'q_boars' },
-  gravecaller_sigil: { id: 'gravecaller_sigil', name: "Gravecaller's Sigil", kind: 'quest', sellValue: 0, questId: 'q_whispers' },
+  gravecaller_sigil: { id: 'gravecaller_sigil', name: "Bonecaller's Sigil", kind: 'quest', sellValue: 0, questId: 'q_whispers' },
   blessed_wax: { id: 'blessed_wax', name: 'Blessed Tallow', kind: 'quest', sellValue: 0, questId: 'q_rite' },
   ghostly_essence: { id: 'ghostly_essence', name: 'Ghostly Essence', kind: 'quest', sellValue: 0, questId: 'q_rite' },
   webwood_silk: { id: 'webwood_silk', name: 'Tanglemoor Silk Gland', kind: 'quest', sellValue: 0, questId: 'q_spiders' },

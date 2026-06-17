@@ -2,7 +2,7 @@
 // portal on the shore of the Glistermere, a glowing tarn high in Thornfell
 // Heights. Its own lore (the Pale Choir, who drowned worshipping Ysolei, the
 // Drowned Moon), its own mobs, quests, loot and instanced interior — nothing
-// here touches the Gravecaller storyline of zones 1-3.
+// here touches the Bonecaller storyline of zones 1-3.
 //
 // Everything is merged into the flat engine tables by sim/data.ts, exactly the
 // way the per-zone modules and content/dungeons.ts are. Levels ~15-18: a step
