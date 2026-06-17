@@ -777,7 +777,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("de_DE");
     expect(tEntity({ kind: "mob", id: "forest_wolf", field: "name" })).toBe("Waldwolf");
     expect(tEntity({ kind: "quest", id: "q_wolves", field: "title" })).toBe("Wölfe vor der Tür");
-    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("Eastbrook-Tal");
+    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("Greywillow-Tal");
 
     setLanguage("zh_CN");
     expect(tEntity({ kind: "quest", id: "q_gravewyrm", field: "title" })).toContain("科祖尔");
@@ -899,7 +899,7 @@ describe("i18n Localization Key Coverage", () => {
 
   it("should keep representative Phase 9 quest narratives translated with quest-specific content", () => {
     const expectations: Array<readonly [typeof supportedLanguages[number], string, "text" | "completion", string]> = [
-      ["es", "q_hollow", "completion", "Eastbrook te debe"],
+      ["es", "q_hollow", "completion", "Greywillow te debe"],
       ["fr_FR", "q_idols", "completion", "La secte a commencé ici"],
       ["it_IT", "q_bastion_door", "completion", "corda marcia"],
       ["de_DE", "q_wolves", "text", "Nordstraße"],

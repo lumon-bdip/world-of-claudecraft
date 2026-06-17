@@ -166,7 +166,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   // --- Smith Haldren's stock (common/white, levels 3-7) ---
   eastbrook_arming_sword: {
-    id: 'eastbrook_arming_sword', name: 'Eastbrook Arming Sword', kind: 'weapon', slot: 'mainhand', quality: 'common',
+    id: 'eastbrook_arming_sword', name: 'Greywillow Arming Sword', kind: 'weapon', slot: 'mainhand', quality: 'common',
     weapon: { min: 5, max: 9, speed: 2.2 }, sellValue: 140, buyValue: 1400,
   },
   bronzework_mace: {
@@ -182,7 +182,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 6, max: 11, speed: 3.0 }, stats: { int: 1 }, sellValue: 150, buyValue: 1500,
   },
   eastbrook_chain_vest: {
-    id: 'eastbrook_chain_vest', name: 'Eastbrook Chainmail Vest', kind: 'armor', slot: 'chest', quality: 'common',
+    id: 'eastbrook_chain_vest', name: 'Greywillow Chainmail Vest', kind: 'armor', slot: 'chest', quality: 'common',
     stats: { armor: 60 }, sellValue: 180, buyValue: 1800,
   },
   valespun_robe: {
@@ -198,7 +198,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     stats: { armor: 18 }, sellValue: 90, buyValue: 900,
   },
   eastbrook_wool_trousers: {
-    id: 'eastbrook_wool_trousers', name: 'Eastbrook Wool Trousers', kind: 'armor', slot: 'legs', quality: 'common',
+    id: 'eastbrook_wool_trousers', name: 'Greywillow Wool Trousers', kind: 'armor', slot: 'legs', quality: 'common',
     stats: { armor: 24 }, sellValue: 110, buyValue: 1100,
   },
   // --- Hollow Crypt rewards (rare/blue) ---
@@ -251,7 +251,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   gravecaller_sigil: { id: 'gravecaller_sigil', name: "Gravecaller's Sigil", kind: 'quest', sellValue: 0, questId: 'q_whispers' },
   blessed_wax: { id: 'blessed_wax', name: 'Blessed Tallow', kind: 'quest', sellValue: 0, questId: 'q_rite' },
   ghostly_essence: { id: 'ghostly_essence', name: 'Ghostly Essence', kind: 'quest', sellValue: 0, questId: 'q_rite' },
-  webwood_silk: { id: 'webwood_silk', name: 'Webwood Silk Gland', kind: 'quest', sellValue: 0, questId: 'q_spiders' },
+  webwood_silk: { id: 'webwood_silk', name: 'Tanglemoor Silk Gland', kind: 'quest', sellValue: 0, questId: 'q_spiders' },
   supply_crate: { id: 'supply_crate', name: 'Stolen Supply Crate', kind: 'quest', sellValue: 0, questId: 'q_supplies' },
   greyjaw_fang: { id: 'greyjaw_fang', name: "Old Greyjaw's Fang", kind: 'quest', sellValue: 0, questId: 'q_greyjaw' },
   weathered_ledger_page: { id: 'weathered_ledger_page', name: 'Weathered Ledger Page', kind: 'quest', sellValue: 0, questId: 'q_names_of_the_dead' },

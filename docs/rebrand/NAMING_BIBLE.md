@@ -126,21 +126,36 @@ not be swept in with the cosmetic rename:
 
 IDs in parentheses never change.
 
-### Zones
+### Realm
+- Default realm `Claudemoon` -> `Eldermoon` (server/realm.ts DEFAULT_REALM_NAME).
+
+### Zones (SHIPPED, Latin-script locales)
 | id | Old display | New display | Levels |
 |---|---|---|---|
 | eastbrook_vale | Eastbrook Vale | Greywillow Vale | 1-7 |
-| (zone2) Mirefen Marsh | Mirefen Marsh | Sablefen Mire | 6-13 |
-| (zone3) Thornpeak Heights | Thornpeak Heights | Thornfell Reaches | 13-20 |
-| temple | Drowned Temple | The Sunken Hallow | 15-18 |
+| mirefen_marsh | Mirefen Marsh | Sablefen Marsh | 6-13 |
+| thornpeak_heights | Thornpeak Heights | Thornfell Heights | 13-20 |
+| temple | Drowned Temple | (Wave 4, with dungeons) | 15-18 |
 
-### Dungeons
-| id | Old display | New display |
-|---|---|---|
-| hollow_crypt | Hollow Crypt | The Barrow Hollow |
-| sunken_bastion | Sunken Bastion | Drownhold Bastion |
-| gravewyrm_sanctum | Gravewyrm Sanctum | Wyrmbarrow Sanctum |
-| (temple dungeon) | Drowned Temple | The Sunken Hallow |
+### Towns / POIs (SHIPPED, Latin-script): proper-noun token map
+Eastbrook->Greywillow, Fenbridge->Reedford, Highwatch->Wardenwatch,
+Webwood->Tanglemoor, Deepfen->Blackmere, Deeprock->Stonereach,
+Stormcrag->Tempestcrag, Glimmermere->Glistermere. Applied as a global
+case-sensitive token replace so names, towns, POIs, quest prose, NPC greetings,
+and geography-derived mob/item names all rebrand consistently in en + es/es_ES/
+fr_FR/fr_CA/en_CA/it_IT/de_DE/pt_BR. Lowercase code IDs are untouched.
+
+CJK + Russian transliterate place names (e.g. zh "东溪" = Eastbrook, ko
+"이스트브룩"), so those locales still show the OLD geography and need a separate
+transliteration pass. They remain test-green (each locale is internally
+consistent and not an English copy).
+
+### Dungeons (NOT yet renamed)
+Descriptive names translated per locale (es "La Cripta Hueca", fr "Bastion
+englouti"), so they need per-locale edits, not a token map. Planned:
+Hollow Crypt -> Barrow Hollow, Sunken Bastion -> Drownhold Bastion,
+Gravewyrm Sanctum -> Wyrmbarrow Sanctum (the Gravewyrm/Gravecaller/Korzul
+creature cluster renames together in the creature wave for consistency).
 
 ### Classes (display only; ability kits unchanged)
 | id | Old display | New display |
@@ -165,5 +180,8 @@ localization gap, tracked for a later pass).
 
 - Wave 0 (brand): DONE, green.
 - Wave 1 (class display names + aria, 14 locales + canonical): DONE, green.
-- Remaining: zones/dungeons, NPCs, mobs, items, quests, abilities, talents,
-  class lore prose, then docs/wiki/logos.
+- Wave 2 (geography: zones, towns, POIs, realm name + Latin-script prose; brand
+  stragglers Claudemoon/Claudecraft): DONE, green.
+- Remaining: CJK/RU geography transliteration; dungeons; NPC personal names;
+  remaining mob names; remaining item names; quest titles; abilities; talents;
+  class lore prose; then docs/wiki/logos.
