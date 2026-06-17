@@ -787,7 +787,7 @@ describe("i18n Localization Key Coverage", () => {
 
     setLanguage("ko_KR");
     expect(tEntity({ kind: "mob", id: "forest_wolf", field: "name" })).toBe("숲늑대");
-    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("이스트브룩 골짜기");
+    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("그레이윌로우 골짜기");
 
     setLanguage("it_IT");
     expect(tEntity({ kind: "mob", id: "forest_wolf", field: "name" })).toBe("Lupo della foresta");
@@ -903,7 +903,7 @@ describe("i18n Localization Key Coverage", () => {
       ["fr_FR", "q_idols", "completion", "La secte a commencé ici"],
       ["it_IT", "q_bastion_door", "completion", "corda marcia"],
       ["de_DE", "q_wolves", "text", "Nordstraße"],
-      ["zh_CN", "q_wyrm_sigils", "text", "墓龙沃鲁斯"],
+      ["zh_CN", "q_wyrm_sigils", "text", "龙冢沃鲁斯"],
       ["zh_TW", "q_gravewyrm", "completion", "三地死者"],
       ["ko_KR", "q_necromancers", "completion", "십일조"],
       ["ja_JP", "q_mistcaller", "text", "百人"],
