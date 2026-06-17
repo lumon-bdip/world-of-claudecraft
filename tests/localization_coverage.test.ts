@@ -780,7 +780,7 @@ describe("i18n Localization Key Coverage", () => {
     expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("Greywillow-Tal");
 
     setLanguage("zh_CN");
-    expect(tEntity({ kind: "quest", id: "q_gravewyrm", field: "title" })).toContain("科祖尔");
+    expect(tEntity({ kind: "quest", id: "q_gravewyrm", field: "title" })).toContain("沃鲁斯");
 
     setLanguage("ja_JP");
     expect(tEntity({ kind: "dungeon", id: "hollow_crypt", field: "name" })).toBe("虚ろの墓所");
@@ -903,7 +903,7 @@ describe("i18n Localization Key Coverage", () => {
       ["fr_FR", "q_idols", "completion", "La secte a commencé ici"],
       ["it_IT", "q_bastion_door", "completion", "corda marcia"],
       ["de_DE", "q_wolves", "text", "Nordstraße"],
-      ["zh_CN", "q_wyrm_sigils", "text", "墓龙科祖尔"],
+      ["zh_CN", "q_wyrm_sigils", "text", "墓龙沃鲁斯"],
       ["zh_TW", "q_gravewyrm", "completion", "三地死者"],
       ["ko_KR", "q_necromancers", "completion", "십일조"],
       ["ja_JP", "q_mistcaller", "text", "百人"],
