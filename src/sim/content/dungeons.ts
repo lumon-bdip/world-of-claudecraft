@@ -85,7 +85,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
       { itemId: 'tideguard_greaves', chance: 0.10, rollGroup: 'olen_bonus' },
       { itemId: 'tideguard_sabatons', chance: 0.10, rollGroup: 'olen_bonus' },
       { itemId: 'eelscale_leggings', chance: 0.10, rollGroup: 'olen_bonus' },
-    ], // his greaves are Maren's quest reward, not a drop
+    ], // his greaves are Brisa's quest reward, not a drop
     scale: 1.2, color: 0x95a5a6,
     cleave: { radius: 8, mult: 0.6, name: 'Cleave' },
   },

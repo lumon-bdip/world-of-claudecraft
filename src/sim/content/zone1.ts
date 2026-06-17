@@ -1,5 +1,5 @@
 // Zone 1 — Greywillow Vale (levels 1-7). The starter zone: town of Greywillow,
-// wolves and boars, the bandit camp, and Brother Aldric's Bonecaller chain
+// wolves and boars, the bandit camp, and Brother Cassian's Bonecaller chain
 // leading to the Hollow Crypt.
 
 import type { CampDef, GroundObjectDef, MobTemplate, NpcDef, QuestDef, ZoneDef, ZonePropsDef } from '../types';
@@ -30,7 +30,7 @@ export const ZONE1_ZONE: ZoneDef = {
     { x: 76, z: -76, label: 'Bandit Camp' },
     { x: 80, z: 80, label: 'Fallen Chapel' },
   ],
-  welcome: 'Find Marshal Redbrook in town — he has work for you.',
+  welcome: 'Find Marshal Thornwell in town — he has work for you.',
   welcomeQuestId: 'q_wolves',
 };
 
@@ -240,26 +240,26 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     greeting: 'Welcome to the World Market, $C. Buy from every adventurer in the realm — or set out your own wares and let coin find you.',
   },
   marshal_redbrook: {
-    id: 'marshal_redbrook', name: 'Marshal Redbrook', title: 'Town Marshal',
+    id: 'marshal_redbrook', name: 'Marshal Thornwell', title: 'Town Marshal',
     pos: { x: 4, z: 6 }, facing: Math.PI, color: 0xb7950b,
     questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger_tracks', 'q_mogger'],
     greeting: 'Keep your blade close, $C. The Vale is not what it was.',
   },
   trader_wilkes: {
-    id: 'trader_wilkes', name: 'Trader Wilkes', title: 'Provisioner',
+    id: 'trader_wilkes', name: 'Trader Garrow', title: 'Provisioner',
     pos: { x: -7, z: 3 }, facing: Math.PI / 2, color: 0x1e8449,
     questIds: ['q_boars', 'q_supplies'],
     vendorItems: ['baked_bread', 'spring_water', 'roasted_boar', 'tough_jerky', 'minor_healing_potion', 'minor_mana_potion'],
     greeting: 'Fresh bread, clean water, fair prices. What can I get you?',
   },
   apothecary_lin: {
-    id: 'apothecary_lin', name: 'Apothecary Lin', title: 'Herbalist',
+    id: 'apothecary_lin', name: 'Apothecary Verra', title: 'Herbalist',
     pos: { x: 11, z: -3 }, facing: -Math.PI / 2, color: 0x7d3c98,
     questIds: ['q_spiders'],
     greeting: 'Careful where you step in the eastern woods, friend.',
   },
   brother_aldric: {
-    id: 'brother_aldric', name: 'Brother Aldric', title: 'Priest of the Vale',
+    id: 'brother_aldric', name: 'Brother Cassian', title: 'Priest of the Vale',
     pos: { x: -14, z: -10 }, facing: 0.8, color: 0xf7f9f9,
     questIds: [
       'q_bones', 'q_whispers', 'q_names_of_the_dead', 'q_silence_the_call',
@@ -268,7 +268,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     greeting: 'The Light keep you. Even the dead find no rest here of late.',
   },
   smith_haldren: {
-    id: 'smith_haldren', name: 'Smith Haldren', title: 'Armorer & Weaponsmith',
+    id: 'smith_haldren', name: 'Smith Dunmere', title: 'Armorer & Weaponsmith',
     pos: { x: 7, z: 16.5 }, facing: -2.7, color: 0x707b7c,
     questIds: [],
     vendorItems: [
@@ -279,7 +279,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     greeting: 'Mind the sparks, $C. Good steel is the difference between a scar and a grave.',
   },
   fisherman_brandt: {
-    id: 'fisherman_brandt', name: 'Fisherman Brandt', title: 'Old Salt',
+    id: 'fisherman_brandt', name: 'Fisherman Coble', title: 'Old Salt',
     // in town (east edge, glaring out at Mirror Lake) — his old spot by the
     // dock sat inside the Mudfin spawn radius and new players got ambushed
     // walking up to a quest giver
@@ -289,7 +289,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     greeting: 'Grlmurlgrl— sorry, been listening to those fish-men too long.',
   },
   foreman_odell: {
-    id: 'foreman_odell', name: 'Foreman Odell', title: 'Mine Foreman',
+    id: 'foreman_odell', name: 'Foreman Brackett', title: 'Mine Foreman',
     // in town (south edge, scowling toward his overrun dig) — his old spot
     // sat inside the Tunnel Rat spawn radius
     pos: { x: -4, z: -14 }, facing: -2.14, color: 0xa04000,
@@ -582,7 +582,7 @@ export const ZONE1_PROPS: ZonePropsDef = {
   wells: [{ x: 0, z: 2, r: 1.5 }],
   stalls: [
     { x: -8.5, z: 3, rot: Math.PI / 2, r: 1.7 },
-    { x: 9.5, z: 17.5, rot: -2.7, r: 1.7 }, // Smith Haldren's smithy stall
+    { x: 9.5, z: 17.5, rot: -2.7, r: 1.7 }, // Smith Dunmere's smithy stall
     { x: 0, z: 11.5, rot: Math.PI, r: 1.8 }, // The Merchant's World Market stall
   ],
   mines: [{ x: -88, z: -68, rot: 0.8 }],

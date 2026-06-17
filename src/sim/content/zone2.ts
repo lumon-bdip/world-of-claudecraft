@@ -1,4 +1,4 @@
-// Zone 2 — Sablefen Marsh (levels 6-13). Brother Aldric follows the
+// Zone 2 — Sablefen Marsh (levels 6-13). Brother Cassian follows the
 // Bonecaller trail north of the causeway: drowned dead rise from the fen,
 // trolls dig into barrow-mounds, and Ysra the Fogcaller waits in the
 // Sunken Bastion.
@@ -31,7 +31,7 @@ export const ZONE2_ZONE: ZoneDef = {
     { x: 0, z: 485, label: 'Bonecaller Encampment' },
     { x: 45, z: 515, label: 'The Sunken Bastion' },
   ],
-  welcome: 'Report to Warden Fenwick at the Reedford gate.',
+  welcome: 'Report to Warden Ashford at the Reedford gate.',
 };
 
 // Causeway north from Greywillow to Reedford, then spokes to each hub.
@@ -219,13 +219,13 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
 
 export const ZONE2_NPCS: Record<string, NpcDef> = {
   warden_fenwick: {
-    id: 'warden_fenwick', name: 'Warden Fenwick', title: 'Warden of Reedford',
+    id: 'warden_fenwick', name: 'Warden Ashford', title: 'Warden of Reedford',
     pos: { x: 3, z: 304 }, facing: Math.PI, color: 0x7e5109,
     questIds: ['q_fenbridge_muster', 'q_prowlers', 'q_deepfen', 'q_deepfen_purge', 'q_trolls', 'q_deacon'],
     greeting: 'Hold at the gate, $C. Past those reeds, the fen does the killing for us.',
   },
   brother_aldric_fen: {
-    id: 'brother_aldric_fen', name: 'Brother Aldric', title: 'Priest of the Vale',
+    id: 'brother_aldric_fen', name: 'Brother Cassian', title: 'Priest of the Vale',
     pos: { x: -8, z: 296 }, facing: 0.8, color: 0xf7f9f9,
     questIds: [
       'q_idols', 'q_drowned', 'q_drowned_censers', 'q_no_rest', 'q_summoners',
@@ -234,7 +234,7 @@ export const ZONE2_NPCS: Record<string, NpcDef> = {
     greeting: 'The Light keep you above the water, $N. The dead in this fen do not sleep — they wade.',
   },
   provisioner_hale: {
-    id: 'provisioner_hale', name: 'Provisioner Hale', title: 'Provisioner',
+    id: 'provisioner_hale', name: 'Provisioner Pell', title: 'Provisioner',
     pos: { x: -4, z: 308 }, facing: Math.PI / 2, color: 0x1e8449,
     questIds: ['q_prowler_pelts', 'q_fen_supplies', 'q_grubjaw'],
     vendorItems: [
@@ -245,13 +245,13 @@ export const ZONE2_NPCS: Record<string, NpcDef> = {
     greeting: 'Dry boots, dry bread, dry powder — at Reedford you get two of the three on a good day.',
   },
   herbalist_yara: {
-    id: 'herbalist_yara', name: 'Herbalist Yara', title: 'Herbalist',
+    id: 'herbalist_yara', name: 'Herbalist Mirel', title: 'Herbalist',
     pos: { x: 10, z: 295 }, facing: -Math.PI / 2, color: 0x7d3c98,
     questIds: ['q_widows', 'q_broodmother'],
     greeting: 'Mind the thicket west of the road. The webs are thick as sailcloth this season.',
   },
   scout_maren: {
-    id: 'scout_maren', name: 'Scout Maren', title: "Marshal's Scout",
+    id: 'scout_maren', name: 'Scout Brisa', title: "Marshal's Scout",
     pos: { x: 6, z: 312 }, facing: -0.6, color: 0x7d6608,
     questIds: ['q_troll_fetishes', 'q_cult_camp', 'q_olen'],
     greeting: 'Quiet feet and a short blade keep you breathing out here. Speak quick — I am due back in the reeds.',
@@ -266,8 +266,8 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_fenbridge_muster: {
     id: 'q_fenbridge_muster', name: 'Muster at Reedford',
     giverNpcId: 'brother_aldric', turnInNpcId: 'warden_fenwick',
-    text: "Sarghul's writings named a master in the northern marsh — a 'Fogcaller.' Now Warden Fenwick has sounded the muster horn at Reedford, and I do not believe in coincidence, $N. Take the causeway north, pull the muster order from the gatepost, and present it to the Warden.",
-    completionText: "Aldric's seal, is it? Then you'll do. The fen has been swallowing my patrols whole, and I need every blade that floats.",
+    text: "Sarghul's writings named a master in the northern marsh — a 'Fogcaller.' Now Warden Ashford has sounded the muster horn at Reedford, and I do not believe in coincidence, $N. Take the causeway north, pull the muster order from the gatepost, and present it to the Warden.",
+    completionText: "Cassian's seal, is it? Then you'll do. The fen has been swallowing my patrols whole, and I need every blade that floats.",
     objectives: [{ type: 'collect', itemId: 'fen_muster_order', count: 1, label: 'Reedford Muster Order' }],
     xpReward: 300, copperReward: 200, itemRewards: {},
     minLevel: 6,
@@ -309,7 +309,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_idols: {
     id: 'q_idols', name: 'Idols of the Deep',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
-    text: "Fenwick's wardens say the fish-men dredge idols from the lake bottom and clutch them like holy relics. If those idols are what I fear, I must see them with my own eyes. Take 5 from the Blackmere snappers — they will not part with them kindly.",
+    text: "Ashford's wardens say the fish-men dredge idols from the lake bottom and clutch them like holy relics. If those idols are what I fear, I must see them with my own eyes. Take 5 from the Blackmere snappers — they will not part with them kindly.",
     completionText: 'Bonecaller work — older than Sarghul, older than me. The sect did not begin in Greywillow, $N. It began here, and the lake has been keeping its secrets.',
     objectives: [{ type: 'collect', itemId: 'waterlogged_idol', count: 5, label: 'Waterlogged Idol' }],
     xpReward: 1050, copperReward: 400, itemRewards: {},
@@ -318,7 +318,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_deepfen_purge: {
     id: 'q_deepfen_purge', name: 'Back to the Shallows',
     giverNpcId: 'warden_fenwick', turnInNpcId: 'warden_fenwick',
-    text: "Aldric says those idols are cult-make — which means the murlocs are hauling the marsh's old evil up one armful at a time. I will not have it washing onto my causeway. Go back to the shallows and break the dredging for good: 14 more snappers.",
+    text: "Cassian says those idols are cult-make — which means the murlocs are hauling the marsh's old evil up one armful at a time. I will not have it washing onto my causeway. Go back to the shallows and break the dredging for good: 14 more snappers.",
     completionText: "Ruthless and thorough. If this marsh ever dries out, there's warden's work waiting for you.",
     objectives: [{ type: 'kill', targetMobId: 'deepfen_murloc', count: 14, label: 'Blackmere Snapper slain' }],
     xpReward: 1100, copperReward: 450, itemRewards: {},
@@ -388,7 +388,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_troll_fetishes: {
     id: 'q_troll_fetishes', name: 'Fetish and Bone',
     giverNpcId: 'scout_maren', turnInNpcId: 'scout_maren',
-    text: "I crawled the troll mounds two nights past. Those fetishes they plant are not troll-craft — the knots are wrong, the bones are man-bones, and every one points at the open barrows like a signpost. Bring me 8 of them and I will prove to Fenwick who is really paying for this dig.",
+    text: "I crawled the troll mounds two nights past. Those fetishes they plant are not troll-craft — the knots are wrong, the bones are man-bones, and every one points at the open barrows like a signpost. Bring me 8 of them and I will prove to Ashford who is really paying for this dig.",
     completionText: 'Same maker as the banners in the cult camp. The trolls are hired shovels, nothing more. Good work, $N.',
     objectives: [{ type: 'collect', itemId: 'troll_fetish', count: 8, label: 'Sablefen Troll Fetish' }],
     xpReward: 1650, copperReward: 600,
@@ -417,7 +417,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
   q_summoners: {
     id: 'q_summoners', name: 'Stopping the Summoning',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
-    text: "Maren's reports name summoners among the cultists — voices that call the drowned up out of the water like hounds to a whistle. Their ciphers will spell out the chain of command. Silence 8 summoners and bring me 4 of their ciphers.",
+    text: "Brisa's reports name summoners among the cultists — voices that call the drowned up out of the water like hounds to a whistle. Their ciphers will spell out the chain of command. Silence 8 summoners and bring me 4 of their ciphers.",
     completionText: "Every cipher is countersigned 'Deacon Drennan' — and addressed onward to a 'Fogcaller' in the Bastion. Sarghul's master, $N. We have found him.",
     objectives: [
       { type: 'kill', targetMobId: 'gravecaller_summoner', count: 8, label: 'Bonecaller Summoner slain' },
@@ -462,7 +462,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
     id: 'q_mistcaller', name: 'The Fogcaller',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
     text: "At the bottom of the Bastion waits Ysra the Fogcaller — Sarghul's master, Drennan's master, the voice that has drowned a hundred travelers to raise itself an army. He is far beyond any one hero: take four companions, no fewer. End him, $N, and the fen's dead may finally lie still.",
-    completionText: "Ysra is dead, and the mist is lifting for the first time in years. But Maren heard his last words, and they freeze my blood: 'The Wyrm stirs beneath the peaks.' The sect serves something older than we ever guessed, $N. Rest while you can — the mountains are next.",
+    completionText: "Ysra is dead, and the mist is lifting for the first time in years. But Brisa heard his last words, and they freeze my blood: 'The Wyrm stirs beneath the peaks.' The sect serves something older than we ever guessed, $N. Rest while you can — the mountains are next.",
     objectives: [{ type: 'kill', targetMobId: 'vael_the_mistcaller', count: 1, label: 'Ysra the Fogcaller slain' }],
     xpReward: 2800, copperReward: 2500,
     itemRewards: { warrior: 'mistcallers_edge', mage: 'vaels_mist_staff', rogue: 'riptide_dirk' },
@@ -673,7 +673,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     id: 'eelscale_treads', name: 'Eelscale Treads', kind: 'armor', slot: 'feet', quality: 'rare',
     stats: { armor: 72, agi: 5, sta: 3 }, sellValue: 1100, requiredClass: ROG,
   },
-  // --- vendor food & drink (Provisioner Hale) ---
+  // --- vendor food & drink (Provisioner Pell) ---
   fenbridge_rye: {
     id: 'fenbridge_rye', name: 'Reedford Rye Loaf', kind: 'food', quality: 'common',
     foodHp: 243, sellValue: 25, buyValue: 400,
@@ -690,7 +690,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     id: 'silvermist_cordial', name: 'Silvermist Cordial', kind: 'drink', quality: 'common',
     drinkMana: 436, sellValue: 60, buyValue: 1000,
   },
-  // --- vendor white gear (Provisioner Hale) ---
+  // --- vendor white gear (Provisioner Pell) ---
   bogiron_mace: {
     id: 'bogiron_mace', name: 'Bogiron Mace', kind: 'weapon', slot: 'mainhand', quality: 'common',
     weapon: { min: 8, max: 14, speed: 2.6 }, sellValue: 250, buyValue: 2500,

@@ -29,7 +29,7 @@ export const ZONE3_ZONE: ZoneDef = {
     { x: -40, z: 830, label: 'Revenant Fields' },
     { x: 0, z: 880, label: 'Wyrmbarrow Sanctum' },
   ],
-  welcome: 'Captain Thessaly holds the wall at Wardenwatch — barely.',
+  welcome: 'Captain Valeria holds the wall at Wardenwatch — barely.',
 };
 
 // Mountain road from Reedford up to Wardenwatch, then spokes.
@@ -209,13 +209,13 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
 
 export const ZONE3_NPCS: Record<string, NpcDef> = {
   captain_thessaly: {
-    id: 'captain_thessaly', name: 'Captain Thessaly', title: 'Wardenwatch Captain',
+    id: 'captain_thessaly', name: 'Captain Valeria', title: 'Wardenwatch Captain',
     pos: { x: 4, z: 664 }, facing: -2.0, color: 0x85929e,
     questIds: ['q_highwatch_summons', 'q_stalkers', 'q_ogre_bounty', 'q_crushers', 'q_drogmar', 'q_revenants', 'q_revenant_vanguard'],
     greeting: 'Two hundred years this wall has held, $C. It will not break on my watch — but it groans.',
   },
   brother_aldric_highwatch: {
-    id: 'brother_aldric_highwatch', name: 'Brother Aldric', title: 'Priest of the Vale',
+    id: 'brother_aldric_highwatch', name: 'Brother Cassian', title: 'Priest of the Vale',
     pos: { x: -10, z: 656 }, facing: 0.8, color: 0xf7f9f9,
     questIds: [
       'q_zealots', 'q_cult_orders', 'q_necromancers', 'q_wyrm_sigils', 'q_breaking_the_seal',
@@ -224,13 +224,13 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     greeting: 'From a chapel yard in the Vale to the roof of the world... the trail we have followed ends here. I can feel the mountain listening.',
   },
   scout_maren_highwatch: {
-    id: 'scout_maren_highwatch', name: 'Scout Maren', title: "Marshal's Scout",
+    id: 'scout_maren_highwatch', name: 'Scout Brisa', title: "Marshal's Scout",
     pos: { x: 7, z: 670 }, facing: -2.4, color: 0x6e8b3d,
     questIds: ['q_ogre_edges', 'q_ogre_totems', 'q_korgath'],
     greeting: 'I tracked cultists through the fen at your side, and the trail led here. The peaks are worse, $C. Stay sharp.',
   },
   quartermaster_bree: {
-    id: 'quartermaster_bree', name: 'Quartermaster Bree', title: 'Wardenwatch Quartermaster',
+    id: 'quartermaster_bree', name: 'Quartermaster Wenna', title: 'Wardenwatch Quartermaster',
     pos: { x: -5, z: 668 }, facing: 1.6, color: 0xca8a2a,
     questIds: ['q_stalker_pelts', 'q_glowing_wax'],
     vendorItems: [
@@ -240,14 +240,14 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     greeting: 'Wool, hardtack, and steel-shod boots — Wardenwatch runs on all three, and I am short of everything.',
   },
   armorer_hode: {
-    id: 'armorer_hode', name: 'Armorer Hode', title: 'Master Armorer',
+    id: 'armorer_hode', name: 'Armorer Dorn', title: 'Master Armorer',
     pos: { x: -2, z: 672 }, facing: 2.8, color: 0x717d7e,
     questIds: [],
     vendorItems: ['highwatch_warblade', 'craghorn_staff', 'icevein_dirk'],
     greeting: 'Forge is hot and the grindstone is turning. If it cuts, I sell it.',
   },
   loremaster_caddis: {
-    id: 'loremaster_caddis', name: 'Loremaster Caddis', title: 'Loremaster',
+    id: 'loremaster_caddis', name: 'Loremaster Orrin', title: 'Loremaster',
     pos: { x: 12, z: 655 }, facing: -1.2, color: 0x3b6ea5,
     questIds: ['q_kobold_tunnels', 'q_elementals', 'q_shard_cores', 'q_kazzix'],
     greeting: 'Mind the loose shale, $C. The mountain has been... restless of late. I intend to learn why.',
@@ -262,8 +262,8 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
   q_highwatch_summons: {
     id: 'q_highwatch_summons', name: 'The Watch on the Peaks',
     giverNpcId: 'brother_aldric_fen', turnInNpcId: 'captain_thessaly',
-    text: "Ysra's last words have not left me, $N: the Wyrm stirs beneath the peaks. Captain Thessaly commands the wall at Wardenwatch, at the head of the mountain road north. A summons stands posted at her gate — take it up, and tell her Brother Aldric is climbing the mountain behind you.",
-    completionText: "Aldric's word reaches far. If the priest of the Vale is climbing the mountain himself, then it is as bad as I feared. Welcome to Wardenwatch, $N.",
+    text: "Ysra's last words have not left me, $N: the Wyrm stirs beneath the peaks. Captain Valeria commands the wall at Wardenwatch, at the head of the mountain road north. A summons stands posted at her gate — take it up, and tell her Brother Cassian is climbing the mountain behind you.",
+    completionText: "Cassian's word reaches far. If the priest of the Vale is climbing the mountain himself, then it is as bad as I feared. Welcome to Wardenwatch, $N.",
     objectives: [{ type: 'collect', itemId: 'highwatch_summons', count: 1, label: 'Wardenwatch Summons' }],
     xpReward: 500, copperReward: 500, itemRewards: {},
     minLevel: 12,
@@ -297,7 +297,7 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
   q_glowing_wax: {
     id: 'q_glowing_wax', name: 'Strange Wax',
     giverNpcId: 'quartermaster_bree', turnInNpcId: 'quartermaster_bree',
-    text: 'Caddis showed me a candle taken off one of those tunnelers — the wax glows, $N, and it is warm as a heartbeat. He wants more for study, and I want it off my requisition list. Bring back six lumps of the glowing wax.',
+    text: 'Orrin showed me a candle taken off one of those tunnelers — the wax glows, $N, and it is warm as a heartbeat. He wants more for study, and I want it off my requisition list. Bring back six lumps of the glowing wax.',
     completionText: 'Still warm. The Loremaster says the glow matches no flame he knows of. I say it is mountain trouble, and I say it kindly.',
     objectives: [{ type: 'collect', itemId: 'glowing_wax', count: 6, label: 'Glowing Wax' }],
     xpReward: 2500, copperReward: 1200, itemRewards: {},
@@ -324,7 +324,7 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
   q_ogre_bounty: {
     id: 'q_ogre_bounty', name: "The Captain's Bounty",
     giverNpcId: 'captain_thessaly', turnInNpcId: 'captain_thessaly',
-    text: "Maren's totems tell me all I need to know: the clans are bought, and my wall is their first errand. I will not wait for them to muster. Fourteen more Thornfell Ogres, $N — and I will pay bounty on every one.",
+    text: "Brisa's totems tell me all I need to know: the clans are bought, and my wall is their first errand. I will not wait for them to muster. Fourteen more Thornfell Ogres, $N — and I will pay bounty on every one.",
     completionText: 'Bounty paid in full. The foothills are quieter — now we deal with the ones doing the buying.',
     objectives: [{ type: 'kill', targetMobId: 'thornpeak_ogre', count: 14, label: 'Thornfell Ogre slain' }],
     xpReward: 3000, copperReward: 1500, itemRewards: {},
@@ -734,7 +734,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'fang_of_korzul', name: 'Fang of Vorruth', kind: 'weapon', slot: 'mainhand', quality: 'epic',
     weapon: { min: 19, max: 30, speed: 1.7, dagger: true }, stats: { agi: 11, sta: 5 }, sellValue: 8000, requiredClass: ['rogue', 'hunter'],
   },
-  // --- vendor food & drink (Quartermaster Bree) ---
+  // --- vendor food & drink (Quartermaster Wenna) ---
   trail_hardtack: {
     id: 'trail_hardtack', name: 'Wardenwatch Trail Hardtack', kind: 'food', quality: 'common',
     foodHp: 552, sellValue: 75, buyValue: 1200,
@@ -751,7 +751,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'glacier_melt', name: 'Glacier Melt', kind: 'drink', quality: 'common',
     drinkMana: 900, sellValue: 150, buyValue: 2500,
   },
-  // --- vendor whites (Armorer Hode + Quartermaster Bree) ---
+  // --- vendor whites (Armorer Dorn + Quartermaster Wenna) ---
   highwatch_warblade: {
     id: 'highwatch_warblade', name: 'Wardenwatch Warblade', kind: 'weapon', slot: 'mainhand', quality: 'common',
     weapon: { min: 15, max: 24, speed: 2.3 }, sellValue: 600, buyValue: 6000,
@@ -806,8 +806,8 @@ export const ZONE3_PROPS: ZonePropsDef = {
   ],
   wells: [{ x: 0, z: 662, r: 1.5 }],
   stalls: [
-    { x: -7.5, z: 667, rot: Math.PI / 2, r: 1.7 },   // Quartermaster Bree
-    { x: -4.5, z: 673.5, rot: -0.6, r: 1.7 },        // Armorer Hode
+    { x: -7.5, z: 667, rot: Math.PI / 2, r: 1.7 },   // Quartermaster Wenna
+    { x: -4.5, z: 673.5, rot: -0.6, r: 1.7 },        // Armorer Dorn
   ],
   mines: [{ x: 88, z: 612, rot: -2.0 }],             // Stonereach Burrows
   docks: [],

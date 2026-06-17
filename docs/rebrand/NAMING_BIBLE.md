@@ -192,6 +192,10 @@ localization gap, tracked for a later pass).
   Gorrak->Brakka, Drogmar->Ghorbal, Kazzix->Vexnar, Korgath->Durgath,
   Grubjaw->Gnashmaw, Greyjaw->Grimfang, Mogger->Brughol, Olen->Theron,
   Voss->Drennan. Updated the Greyjaw loot spot-check. DONE, green.
+- Wave 5 (friendly NPC personal names, word-boundary, Latin locales): Redbrook->Thornwell,
+  Wilkes->Garrow, Haldren->Dunmere, Brandt->Coble, Odell->Brackett, Fenwick->Ashford,
+  Maren->Brisa, Thessaly->Valeria, Caddis->Orrin, Aldric->Cassian, Hale->Pell, Bree->Wenna,
+  Hode->Dorn, Yara->Mirel, Lin->Verra. Updated Redbrook welcome/bag spot-checks. DONE, green.
 - Remaining: CJK/RU transliteration of all renamed proper nouns; dungeons
   (descriptive names, per-locale); friendly NPC personal names (Redbrook, Wilkes,
   Lin, Aldric, ...); remaining generic mob names; remaining item names; quest

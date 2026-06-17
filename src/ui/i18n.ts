@@ -7156,7 +7156,7 @@ const phase8En = {
     ...phase7En.entities,
     items: itemTranslations([
       "Worn Shortsword", "Gnarled Staff", "Rusty Dagger", "Training Mace", "Rusty Hatchet", "Recruit's Tunic", "Apprentice's Robe", "Footpad's Jerkin",
-      "Redbrook Militia Blade", "Vale Apprentice Staff", "Keen Dirk", "Militia Chainvest", "Valewoven Robe", "Shadowstitch Jerkin", "Oiled Leather Boots", "Quilted Trousers",
+      "Thornwell Militia Blade", "Vale Apprentice Staff", "Keen Dirk", "Militia Chainvest", "Valewoven Robe", "Shadowstitch Jerkin", "Oiled Leather Boots", "Quilted Trousers",
       "Grimfang's Pelt Leggings", "Freshly Baked Bread", "Refreshing Spring Water", "Roasted Boar Meat", "Conjured Spring Water", "Conjured Mineral Water", "Conjured Sparkling Water",
       "Greywillow Arming Sword", "Bronzework Mace", "Vale Carving Knife", "Hickory Shortstaff", "Greywillow Chainmail Vest", "Valespun Robe", "Tanned Leather Jerkin",
       "Hobnailed Boots", "Greywillow Wool Trousers", "Bonecaller's Broadblade", "Widowfang Dirk", "Staff of the Hollow", "Marrowtread Boots", "Sexton's Slippers",
@@ -7189,7 +7189,7 @@ const phase8 = {
       ...phase7.es.entities,
       items: itemTranslations([
         "Espada corta desgastada", "Bastón nudoso", "Daga oxidada", "Maza de entrenamiento", "Hachuela oxidada", "Túnica de recluta", "Toga de aprendiz", "Jubón de salteador",
-        "Hoja de la milicia de Redbrook", "Bastón de aprendiz del Valle", "Puñal afilado", "Coselete de malla de la milicia", "Toga Tejevalle", "Jubón Puntada Sombría", "Botas de cuero aceitado", "Pantalones acolchados",
+        "Hoja de la milicia de Thornwell", "Bastón de aprendiz del Valle", "Puñal afilado", "Coselete de malla de la milicia", "Toga Tejevalle", "Jubón Puntada Sombría", "Botas de cuero aceitado", "Pantalones acolchados",
         "Leotardos de piel de Grimfang", "Pan recién horneado", "Agua de manantial refrescante", "Carne de jabalí asada", "Agua de manantial conjurada", "Agua mineral conjurada", "Agua con gas conjurada",
         "Espada de armar de Greywillow", "Maza de broncista", "Cuchillo de trinchar del Valle", "Bastón corto de nogal", "Chaleco de cota de Greywillow", "Toga Hilavalle", "Jubón de cuero curtido",
         "Botas claveteadas", "Pantalones de lana de Greywillow", "Mandoble de Bonecaller", "Puñal Colmillo de Viuda", "Bastón del Hueco", "Botas Pisatuétanos", "Zapatillas del sacristán",
@@ -7220,7 +7220,7 @@ const phase8 = {
       ...phase7.fr_FR.entities,
       items: itemTranslations([
         "Épée courte usée", "Bâton noueux", "Dague rouillée", "Masse d'entraînement", "Hachette rouillée", "Tunique de recrue", "Robe d'apprenti", "Pourpoint de coupe-jarret",
-        "Lame de milice de Redbrook", "Bâton d'apprenti du Val", "Dague acérée", "Cotte de mailles de milice", "Robe tissée du Val", "Pourpoint cousu d'ombre", "Bottes en cuir huilé", "Pantalon matelassé",
+        "Lame de milice de Thornwell", "Bâton d'apprenti du Val", "Dague acérée", "Cotte de mailles de milice", "Robe tissée du Val", "Pourpoint cousu d'ombre", "Bottes en cuir huilé", "Pantalon matelassé",
         "Jambières de la peau de Grimfang", "Pain fraîchement cuit", "Eau de source rafraîchissante", "Viande de sanglier rôtie", "Eau de source invoquée", "Eau minérale invoquée", "Eau pétillante invoquée",
         "Épée d'armes de Greywillow", "Masse ouvragée en bronze", "Couteau à découper du Val", "Bâton court en hickory", "Gilet de mailles de Greywillow", "Robe filée du Val", "Pourpoint en cuir tanné",
         "Bottes cloutées", "Pantalon de laine de Greywillow", "Grande lame de Bonecaller", "Dague Croc-de-veuve", "Bâton du Creux", "Bottes Fouletombe", "Mules du sacristain",
@@ -7252,7 +7252,7 @@ const phase8 = {
       ...phase7.it_IT.entities,
       items: itemTranslations([
         "Spada corta logora", "Bastone nodoso", "Pugnale arrugginito", "Mazza da addestramento", "Accetta arrugginita", "Tunica da recluta", "Veste dell'apprendista", "Giaco del tagliaborse",
-        "Lama della milizia di Redbrook", "Bastone dell'apprendista della Valle", "Pugnale affilato", "Corpetto di maglia della milizia", "Veste Tessivalle", "Giaco Cucitura d'Ombra", "Stivali di cuoio oliato", "Pantaloni imbottiti",
+        "Lama della milizia di Thornwell", "Bastone dell'apprendista della Valle", "Pugnale affilato", "Corpetto di maglia della milizia", "Veste Tessivalle", "Giaco Cucitura d'Ombra", "Stivali di cuoio oliato", "Pantaloni imbottiti",
         "Gambiere di pelliccia di Grimfang", "Pane appena sfornato", "Acqua di sorgente rinfrescante", "Carne di cinghiale arrosto", "Acqua di sorgente evocata", "Acqua minerale evocata", "Acqua frizzante evocata",
         "Spada d'arme di Greywillow", "Mazza bronzata", "Coltello da intaglio della Valle", "Bastone corto di noce americano", "Gilet di maglia di Greywillow", "Veste Filovalle", "Giaco di cuoio conciato",
         "Stivali chiodati", "Pantaloni di lana di Greywillow", "Lama larga di Bonecaller", "Pugnale Zanna di Vedova", "Bastone del Vuoto", "Stivali Passomidollo", "Pantofole del sagrestano",
@@ -7282,7 +7282,7 @@ const phase8 = {
       ...phase7.de_DE.entities,
       items: itemTranslations([
         "Abgenutztes Kurzschwert", "Knorriger Stab", "Rostiger Dolch", "Übungsstreitkolben", "Rostiges Beil", "Rekrutentunika", "Lehrlingsrobe", "Wams des Wegelagerers",
-        "Milizklinge von Redbrook", "Lehrlingsstab des Tals", "Scharfer Dolch", "Kettenweste der Miliz", "Talgewebte Robe", "Schattenstichwams", "Geölte Lederstiefel", "Gesteppte Hose",
+        "Milizklinge von Thornwell", "Lehrlingsstab des Tals", "Scharfer Dolch", "Kettenweste der Miliz", "Talgewebte Robe", "Schattenstichwams", "Geölte Lederstiefel", "Gesteppte Hose",
         "Gamaschen aus Greyjaws Pelz", "Frisch gebackenes Brot", "Erfrischendes Quellwasser", "Gebratenes Eberfleisch", "Herbeigezaubertes Quellwasser", "Herbeigezaubertes Mineralwasser", "Herbeigezaubertes Sprudelwasser",
         "Greywillow-Wehrschwert", "Bronzewerkstreitkolben", "Talschnitzmesser", "Hickory-Kurzstab", "Greywillow-Kettenweste", "Talgesponnene Robe", "Gegerbtes Lederwams",
         "Nagelstiefel", "Greywillow-Wollhose", "Bonecallers Breitschwert", "Witwenzahn-Dolch", "Stab der Höhlung", "Markschrittstiefel", "Pantoffeln des Küsters",
@@ -7432,7 +7432,7 @@ const phase8 = {
       ...phase7.pt_BR.entities,
       items: itemTranslations([
         "Espada curta gasta", "Cajado nodoso", "Adaga enferrujada", "Maça de treino", "Machadinha enferrujada", "Túnica de recruta", "Veste de aprendiz", "Gibão de salteador",
-        "Lâmina da milícia de Redbrook", "Cajado de aprendiz do Vale", "Punhal afiado", "Colete de malha da milícia", "Veste Tecivale", "Gibão Costurasombra", "Botas de couro oleado", "Calças acolchoadas",
+        "Lâmina da milícia de Thornwell", "Cajado de aprendiz do Vale", "Punhal afiado", "Colete de malha da milícia", "Veste Tecivale", "Gibão Costurasombra", "Botas de couro oleado", "Calças acolchoadas",
         "Perneiras de pele de Grimfang", "Pão recém-assado", "Água de nascente refrescante", "Carne de javali assada", "Água de nascente conjurada", "Água mineral conjurada", "Água com gás conjurada",
         "Espada de armas de Greywillow", "Maça de bronzeiro", "Faca de entalhe do Vale", "Cajado curto de nogueira", "Colete de cota de Greywillow", "Veste Fiavale", "Gibão de couro curtido",
         "Botas cravejadas", "Calças de lã de Greywillow", "Lâmina larga de Bonecaller", "Punhal Presa-de-viúva", "Cajado do Vazio", "Botas Pisamedula", "Pantufas do sacristão",

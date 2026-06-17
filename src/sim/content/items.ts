@@ -46,7 +46,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   // --- quest reward gear ---
   redbrook_blade: {
-    id: 'redbrook_blade', name: 'Redbrook Militia Blade', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    id: 'redbrook_blade', name: 'Thornwell Militia Blade', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
     weapon: { min: 6, max: 11, speed: 2.2 }, stats: { str: 2 }, sellValue: 120, requiredClass: WAR,
   },
   apprentice_staff: {
@@ -164,7 +164,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'conjured_water3', name: 'Conjured Sparkling Water', kind: 'drink', quality: 'common',
     drinkMana: 672, sellValue: 0,
   },
-  // --- Smith Haldren's stock (common/white, levels 3-7) ---
+  // --- Smith Dunmere's stock (common/white, levels 3-7) ---
   eastbrook_arming_sword: {
     id: 'eastbrook_arming_sword', name: 'Greywillow Arming Sword', kind: 'weapon', slot: 'mainhand', quality: 'common',
     weapon: { min: 5, max: 9, speed: 2.2 }, sellValue: 140, buyValue: 1400,
