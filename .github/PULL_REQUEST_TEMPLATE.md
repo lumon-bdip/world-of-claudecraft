@@ -1,5 +1,5 @@
 <!--
-Thanks for contributing to Realms of Eldermere!
+Thanks for contributing to Legends of Aldermoor!
 
 New here? The contributing guide is available in your language:
 https://github.com/levy-street/world-of-claudecraft/blob/main/CONTRIBUTING.md
@@ -98,5 +98,5 @@ or strike them through (`~like this~`) when they don't.
 A complete checklist and a green CI run (tests, typecheck, and builds) are what
 we look for before merging. Smaller, focused PRs land faster than large ones, and
 reviewers may suggest changes, which is a normal and friendly part of the
-process. Thank you for helping build Realms of Eldermere. Questions? Join us on
+process. Thank you for helping build Legends of Aldermoor. Questions? Join us on
 [Discord](https://discord.gg/GjhnUsBtw).

@@ -302,7 +302,7 @@ export class PerfMonitor {
   copyReport(): void {
     const text = JSON.stringify(this.report(), null, 2);
     void navigator.clipboard?.writeText(text).catch(() => {
-      console.info('Realms of Eldermere perf report:', text);
+      console.info('Legends of Aldermoor perf report:', text);
     });
   }
 

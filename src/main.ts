@@ -27,7 +27,7 @@ import { createPerfMonitor } from './game/perf';
 import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 
 
-const WORLD_SEED = 20061; // fixed: Realms of Eldermere is a persistent place
+const WORLD_SEED = 20061; // fixed: Legends of Aldermoor is a persistent place
 const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camera stays decoupled from click spam
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
@@ -1894,7 +1894,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
     jsonLd.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'VideoGame',
-      name: 'Realms of Eldermere',
+      name: 'Legends of Aldermoor',
       genre: t('seo.genre'),
       playMode: t('seo.playMode'),
       applicationCategory: t('seo.applicationCategory'),

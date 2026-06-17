@@ -14,11 +14,11 @@
 
 </div>
 
-# Realms of Eldermere —— 一款经典风格 MMO
+# Legends of Aldermoor —— 一款经典风格 MMO
 
 [加入社区 Discord](https://discord.gg/GjhnUsBtw)
 
-![Realms of Eldermere 标题画面](../../docs/screenshots/title-screen.jpg)
+![Legends of Aldermoor 标题画面](../../docs/screenshots/title-screen.jpg)
 
 一款带有经典时代 MMO 风味、可以自行托管并游玩的微型 MMO：
 
@@ -41,7 +41,7 @@
 
 ![World of Claude](../../worldofclaude.png)
 
-![Realms of Eldermere 社区](../../woc_community.png)
+![Legends of Aldermoor 社区](../../woc_community.png)
 
 ---
 

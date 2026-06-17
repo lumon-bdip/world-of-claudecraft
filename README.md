@@ -14,11 +14,11 @@
 
 </div>
 
-# Realms of Eldermere — a classic-style MMO
+# Legends of Aldermoor — a classic-style MMO
 
 [Join the community Discord](https://discord.gg/GjhnUsBtw)
 
-![Realms of Eldermere title screen](docs/screenshots/title-screen.jpg)
+![Legends of Aldermoor title screen](docs/screenshots/title-screen.jpg)
 
 A classic-era-MMO-flavored micro-MMO you can host and play:
 
@@ -43,7 +43,7 @@ runs for everyone online.
 
 ![World of Claude](worldofclaude.png)
 
-![Realms of Eldermere community](woc_community.png)
+![Legends of Aldermoor community](woc_community.png)
 
 ---
 

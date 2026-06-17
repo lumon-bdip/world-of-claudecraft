@@ -14,11 +14,11 @@
 
 </div>
 
-# Realms of Eldermere — 클래식 스타일 MMO
+# Legends of Aldermoor — 클래식 스타일 MMO
 
 [커뮤니티 Discord 참여하기](https://discord.gg/GjhnUsBtw)
 
-![Realms of Eldermere 타이틀 화면](../../docs/screenshots/title-screen.jpg)
+![Legends of Aldermoor 타이틀 화면](../../docs/screenshots/title-screen.jpg)
 
 직접 호스팅하고 플레이할 수 있는, 클래식 시대 MMO 풍의 마이크로 MMO입니다:
 
@@ -39,7 +39,7 @@
 
 ![World of Claude](../../worldofclaude.png)
 
-![Realms of Eldermere 커뮤니티](../../woc_community.png)
+![Legends of Aldermoor 커뮤니티](../../woc_community.png)
 
 ---
 

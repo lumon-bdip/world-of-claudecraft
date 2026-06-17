@@ -14,11 +14,11 @@
 
 </div>
 
-# Realms of Eldermere — クラシックスタイルのMMO
+# Legends of Aldermoor — クラシックスタイルのMMO
 
 [コミュニティ Discord に参加する](https://discord.gg/GjhnUsBtw)
 
-![Realms of Eldermere タイトル画面](../../docs/screenshots/title-screen.jpg)
+![Legends of Aldermoor タイトル画面](../../docs/screenshots/title-screen.jpg)
 
 ホストしてプレイできる、クラシック時代のMMOの雰囲気を持つマイクロMMOです。
 
@@ -39,7 +39,7 @@
 
 ![World of Claude](../../worldofclaude.png)
 
-![Realms of Eldermere コミュニティ](../../woc_community.png)
+![Legends of Aldermoor コミュニティ](../../woc_community.png)
 
 ---
 

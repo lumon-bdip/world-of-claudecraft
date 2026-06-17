@@ -1,4 +1,4 @@
-# Rebrand Naming Bible — "Realms of Eldermere"
+# Rebrand Naming Bible — "Legends of Aldermoor"
 
 Working document for the total rebrand of the game formerly named *World of
 ClaudeCraft*. This is the single source of truth for the new identity, the
@@ -22,9 +22,9 @@ breaking the simulation.
 
 | Field | Old | New |
 |---|---|---|
-| Game title | World of ClaudeCraft | Realms of Eldermere |
-| Short name (PWA) | ClaudeCraft | Eldermere |
-| World name | (implicit) | Eldermere |
+| Game title | World of ClaudeCraft | Legends of Aldermoor |
+| Short name (PWA) | ClaudeCraft | Aldermoor |
+| World name | (implicit) | Aldermoor |
 | Tone | classic-style web MMO | classic-style web MMO (unchanged) |
 
 Design language: Old-English and Norse root words, weathered and lyrical.
@@ -127,7 +127,7 @@ not be swept in with the cosmetic rename:
 IDs in parentheses never change.
 
 ### Realm
-- Default realm `Claudemoon` -> `Eldermoon` (server/realm.ts DEFAULT_REALM_NAME).
+- Default realm `Claudemoon` -> `Aldermoon` (server/realm.ts DEFAULT_REALM_NAME).
 
 ### Zones (SHIPPED, Latin-script locales)
 | id | Old display | New display | Levels |

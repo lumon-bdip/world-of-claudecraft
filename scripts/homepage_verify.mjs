@@ -61,7 +61,7 @@ async function main() {
     // Verify Title and Meta Description
     const pageTitle = await page.title();
     console.log(`Page Title: "${pageTitle}"`);
-    if (pageTitle !== 'Realms of Eldermere: Classic-Style Web MMO') {
+    if (pageTitle !== 'Legends of Aldermoor: Classic-Style Web MMO') {
       throw new Error(`Unexpected page title: "${pageTitle}"`);
     }
 
@@ -70,7 +70,7 @@ async function main() {
       return meta ? meta.getAttribute('content') : null;
     });
     console.log(`Meta Description: "${metaDescription}"`);
-    if (!metaDescription || !metaDescription.includes('Realms of Eldermere')) {
+    if (!metaDescription || !metaDescription.includes('Legends of Aldermoor')) {
       throw new Error(`Unexpected or missing meta description: "${metaDescription}"`);
     }
 

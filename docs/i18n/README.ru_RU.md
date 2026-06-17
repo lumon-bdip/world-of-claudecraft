@@ -14,11 +14,11 @@
 
 </div>
 
-# Realms of Eldermere — MMO в классическом стиле
+# Legends of Aldermoor — MMO в классическом стиле
 
 [Присоединяйтесь к сообществу в Discord](https://discord.gg/GjhnUsBtw)
 
-![Заставка Realms of Eldermere](../../docs/screenshots/title-screen.jpg)
+![Заставка Legends of Aldermoor](../../docs/screenshots/title-screen.jpg)
 
 Микро-MMO в духе классических MMO эпохи, которую вы можете хостить и в которую можете играть:
 
@@ -42,7 +42,7 @@
 
 ![World of Claude](../../worldofclaude.png)
 
-![Сообщество Realms of Eldermere](../../woc_community.png)
+![Сообщество Legends of Aldermoor](../../woc_community.png)
 
 ---
 

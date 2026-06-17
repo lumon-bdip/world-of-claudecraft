@@ -4,9 +4,9 @@
 
 </div>
 
-# Contribuindo com o Realms of Eldermere
+# Contribuindo com o Legends of Aldermoor
 
-Antes de tudo, obrigado por estar aqui. O Realms of Eldermere é construído por
+Antes de tudo, obrigado por estar aqui. O Legends of Aldermoor é construído por
 uma comunidade de pessoas que amam MMOs clássicos, e cada contribuição, grande ou
 pequena, deixa o jogo melhor. Corrigir um erro de digitação, traduzir o jogo,
 relatar um bug, criar uma masmorra inteira: tudo conta, e você é muito bem-vindo
@@ -146,7 +146,7 @@ revisão, e pedimos o mesmo de você.
 
 ## Localização
 
-O Realms of Eldermere está disponível em vários idiomas, e nós mantemos as coisas
+O Legends of Aldermoor está disponível em vários idiomas, e nós mantemos as coisas
 assim conforme o jogo cresce. Cada string visível ao jogador é traduzida para
 todos os locales suportados.
 
@@ -209,5 +209,5 @@ Ao contribuir, você concorda que suas contribuições serão licenciadas sob a
 
 ---
 
-Obrigado por contribuir com o Realms of Eldermere. Mal podemos esperar para ver o
+Obrigado por contribuir com o Legends of Aldermoor. Mal podemos esperar para ver o
 que você vai construir com a gente.

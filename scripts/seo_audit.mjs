@@ -25,7 +25,7 @@ const expectedAlternates = [
 ];
 
 function audit() {
-  console.log('--- Realms of Eldermere: Local SEO & A11y Audit ---');
+  console.log('--- Legends of Aldermoor: Local SEO & A11y Audit ---');
   if (!fs.existsSync(indexPath)) {
     console.error(`Error: index.html not found at ${indexPath}`);
     process.exit(1);

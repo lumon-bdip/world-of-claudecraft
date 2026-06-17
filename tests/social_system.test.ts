@@ -19,7 +19,7 @@ class FakeDb implements SocialDb {
   private members = new Map<number, { guildId: number; rank: GuildRank }>();
   private nextGuildId = 1;
 
-  addChar(id: number, name: string, cls = 'warrior', level = 10, realm = 'Eldermoon'): void {
+  addChar(id: number, name: string, cls = 'warrior', level = 10, realm = 'Aldermoon'): void {
     this.chars.set(id, { id, name, cls, level, realm });
   }
 
@@ -131,7 +131,7 @@ function setup() {
   const actors = new Map<number, { characterId: number; name: string }>();
   const add = (id: number, name: string, opts: { cls?: string; level?: number } = {}) => {
     db.addChar(id, name, opts.cls, opts.level);
-    tx.charCache.set(id, { id, name, cls: opts.cls ?? 'warrior', level: opts.level ?? 10, realm: 'Eldermoon' });
+    tx.charCache.set(id, { id, name, cls: opts.cls ?? 'warrior', level: opts.level ?? 10, realm: 'Aldermoon' });
     actors.set(id, { characterId: id, name });
   };
   return {
@@ -143,16 +143,16 @@ function setup() {
 
 describe('resolveRealm', () => {
   it('accepts realm-style display names', () => {
-    expect(resolveRealm('Eldermoon')).toBe('Eldermoon');
+    expect(resolveRealm('Aldermoon')).toBe('Aldermoon');
     expect(resolveRealm('Area 52')).toBe('Area 52');
     expect(resolveRealm("Mal'Ganis")).toBe("Mal'Ganis");
     expect(resolveRealm('  Ironforge  ')).toBe('Ironforge');
   });
   it('falls back to the default for empty or invalid names', () => {
-    expect(resolveRealm(undefined)).toBe('Eldermoon');
-    expect(resolveRealm('')).toBe('Eldermoon');
-    expect(resolveRealm('x'.repeat(25))).toBe('Eldermoon');
-    expect(resolveRealm('drop;table')).toBe('Eldermoon');
+    expect(resolveRealm(undefined)).toBe('Aldermoon');
+    expect(resolveRealm('')).toBe('Aldermoon');
+    expect(resolveRealm('x'.repeat(25))).toBe('Aldermoon');
+    expect(resolveRealm('drop;table')).toBe('Aldermoon');
   });
 });
 

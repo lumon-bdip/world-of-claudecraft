@@ -4,9 +4,9 @@
 
 </div>
 
-# Mitwirken an Realms of Eldermere
+# Mitwirken an Legends of Aldermoor
 
-Zuallererst: Danke, dass du hier bist. Realms of Eldermere wird von einer
+Zuallererst: Danke, dass du hier bist. Legends of Aldermoor wird von einer
 Gemeinschaft von Menschen gebaut, die klassische MMOs lieben, und jeder Beitrag,
 ob groß oder klein, macht das Spiel besser. Einen Tippfehler beheben, das Spiel
 übersetzen, einen Fehler melden, einen ganz neuen Dungeon bauen: Alles zählt, und
@@ -152,7 +152,7 @@ bitten dich um dasselbe.
 
 ## Lokalisierung
 
-Realms of Eldermere erscheint in vielen Sprachen, und wir halten das so, während
+Legends of Aldermoor erscheint in vielen Sprachen, und wir halten das so, während
 das Spiel wächst. Jede spielersichtbare Zeichenkette wird in jede unterstützte
 Sprache übersetzt.
 
@@ -221,5 +221,5 @@ auch das Projekt abdeckt.
 
 ---
 
-Danke, dass du an Realms of Eldermere mitwirkst. Wir können es kaum erwarten, zu
+Danke, dass du an Legends of Aldermoor mitwirkst. Wir können es kaum erwarten, zu
 sehen, was du gemeinsam mit uns baust.

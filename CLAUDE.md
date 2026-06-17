@@ -1,10 +1,10 @@
-<!-- Realms of Eldermere — project-root CLAUDE.md.
+<!-- Legends of Aldermoor — project-root CLAUDE.md.
      Keep this under ~150 lines and strictly repo-wide. Area-specific guidance
      lives in each subdirectory's own CLAUDE.md (src/sim/, src/render/, server/,
      ...), which load on demand when you open files there — do NOT duplicate
      them here. HTML comments like this are stripped before load (zero tokens). -->
 
-# Realms of Eldermere
+# Legends of Aldermoor
 
 A classic-style micro-MMO **and** a headless reinforcement-learning
 environment, both driven by one deterministic TypeScript simulation core.
