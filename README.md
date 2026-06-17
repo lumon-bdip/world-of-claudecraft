@@ -14,11 +14,11 @@
 
 </div>
 
-# World of ClaudeCraft — a classic-style MMO
+# Realms of Eldermere — a classic-style MMO
 
 [Join the community Discord](https://discord.gg/GjhnUsBtw)
 
-![World of ClaudeCraft title screen](docs/screenshots/title-screen.jpg)
+![Realms of Eldermere title screen](docs/screenshots/title-screen.jpg)
 
 A classic-era-MMO-flavored micro-MMO you can host and play:
 
@@ -43,7 +43,7 @@ runs for everyone online.
 
 ![World of Claude](worldofclaude.png)
 
-![World of ClaudeCraft community](woc_community.png)
+![Realms of Eldermere community](woc_community.png)
 
 ---
 

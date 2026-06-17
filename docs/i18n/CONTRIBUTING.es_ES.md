@@ -4,9 +4,9 @@
 
 </div>
 
-# Cómo contribuir a World of ClaudeCraft
+# Cómo contribuir a Realms of Eldermere
 
-Antes de nada, gracias por estar aquí. World of ClaudeCraft lo construye una
+Antes de nada, gracias por estar aquí. Realms of Eldermere lo construye una
 comunidad de personas a las que nos encantan los MMO clásicos, y cada aportación,
 grande o pequeña, lo mejora. Corregir una errata, traducir el juego, informar de un
 fallo, crear una mazmorra entera: todo cuenta, y aquí eres bienvenido.
@@ -147,7 +147,7 @@ ti.
 
 ## Localización
 
-World of ClaudeCraft se distribuye en muchos idiomas, y lo mantenemos así a medida
+Realms of Eldermere se distribuye en muchos idiomas, y lo mantenemos así a medida
 que el juego crece. Cada cadena visible para el jugador se traduce a todos los
 idiomas admitidos.
 
@@ -211,5 +211,5 @@ Al contribuir, aceptas que tus contribuciones se licencien bajo la
 
 ---
 
-Gracias por contribuir a World of ClaudeCraft. Estamos deseando ver lo que
+Gracias por contribuir a Realms of Eldermere. Estamos deseando ver lo que
 construyes con nosotros.

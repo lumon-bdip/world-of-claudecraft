@@ -1,6 +1,6 @@
 # Security Policy
 
-We take the security of World of ClaudeCraft seriously, and we appreciate the work
+We take the security of Realms of Eldermere seriously, and we appreciate the work
 of everyone who helps keep players and self-hosters safe.
 
 ## Reporting a vulnerability
@@ -41,7 +41,7 @@ without permission.
 
 ## Supported versions
 
-World of ClaudeCraft is under active development and is currently pre-1.0. Security
+Realms of Eldermere is under active development and is currently pre-1.0. Security
 fixes land on the `main` branch and ship in the next release, so the most recent
 release and the current `main` are the supported targets. If you run a self-hosted
 server, please keep it up to date.

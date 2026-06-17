@@ -4,9 +4,9 @@
 
 </div>
 
-# Contributing to World of ClaudeCraft
+# Contributing to Realms of Eldermere
 
-First off, thank you for being here. World of ClaudeCraft is built by a community
+First off, thank you for being here. Realms of Eldermere is built by a community
 of people who love classic MMOs, and every contribution, big or small, makes it
 better. Fixing a typo, translating the game, reporting a bug, building a whole new
 dungeon: it all counts, and you're welcome here.
@@ -135,7 +135,7 @@ the same of you.
 
 ## Localization
 
-World of ClaudeCraft ships in many languages, and we keep it that way as the game
+Realms of Eldermere ships in many languages, and we keep it that way as the game
 grows. Every player-visible string is translated into every supported locale.
 
 - All user-facing text is a `t()` key defined in [`src/ui/i18n.ts`](src/ui/i18n.ts).
@@ -195,5 +195,5 @@ project's [MIT License](LICENSE), the same license that covers the project.
 
 ---
 
-Thank you for contributing to World of ClaudeCraft. We can't wait to see what you
+Thank you for contributing to Realms of Eldermere. We can't wait to see what you
 build with us.

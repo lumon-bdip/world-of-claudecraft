@@ -4,9 +4,9 @@
 
 </div>
 
-# Contribuer à World of ClaudeCraft
+# Contribuer à Realms of Eldermere
 
-Tout d'abord, merci d'être ici. World of ClaudeCraft est bâti par une communauté
+Tout d'abord, merci d'être ici. Realms of Eldermere est bâti par une communauté
 de gens qui adorent les MMO classiques, et chaque contribution, grande ou petite,
 le rend meilleur. Corriger une coquille, traduire le jeu, signaler un bogue,
 bâtir un tout nouveau donjon : tout compte, et vous êtes le bienvenu ici.
@@ -151,7 +151,7 @@ demandons la même chose.
 
 ## Localisation
 
-World of ClaudeCraft est offert en plusieurs langues, et nous le gardons ainsi à
+Realms of Eldermere est offert en plusieurs langues, et nous le gardons ainsi à
 mesure que le jeu grandit. Chaque chaîne visible par les joueurs est traduite
 dans chaque locale prise en charge.
 
@@ -219,5 +219,5 @@ En contribuant, vous acceptez que vos contributions soient placées sous la
 
 ---
 
-Merci de contribuer à World of ClaudeCraft. Nous avons hâte de voir ce que vous
+Merci de contribuer à Realms of Eldermere. Nous avons hâte de voir ce que vous
 bâtirez avec nous.

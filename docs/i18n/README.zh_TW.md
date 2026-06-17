@@ -14,11 +14,11 @@
 
 </div>
 
-# World of ClaudeCraft —— 經典風格 MMO
+# Realms of Eldermere —— 經典風格 MMO
 
 [加入社群 Discord](https://discord.gg/GjhnUsBtw)
 
-![World of ClaudeCraft 標題畫面](../../docs/screenshots/title-screen.jpg)
+![Realms of Eldermere 標題畫面](../../docs/screenshots/title-screen.jpg)
 
 一款帶有經典時代 MMO 風味、可自行架設與遊玩的微型 MMO：
 
@@ -39,7 +39,7 @@
 
 ![World of Claude](../../worldofclaude.png)
 
-![World of ClaudeCraft 社群](../../woc_community.png)
+![Realms of Eldermere 社群](../../woc_community.png)
 
 ---
 

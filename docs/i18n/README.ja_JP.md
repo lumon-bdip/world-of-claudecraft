@@ -14,11 +14,11 @@
 
 </div>
 
-# World of ClaudeCraft — クラシックスタイルのMMO
+# Realms of Eldermere — クラシックスタイルのMMO
 
 [コミュニティ Discord に参加する](https://discord.gg/GjhnUsBtw)
 
-![World of ClaudeCraft タイトル画面](../../docs/screenshots/title-screen.jpg)
+![Realms of Eldermere タイトル画面](../../docs/screenshots/title-screen.jpg)
 
 ホストしてプレイできる、クラシック時代のMMOの雰囲気を持つマイクロMMOです。
 
@@ -39,7 +39,7 @@
 
 ![World of Claude](../../worldofclaude.png)
 
-![World of ClaudeCraft コミュニティ](../../woc_community.png)
+![Realms of Eldermere コミュニティ](../../woc_community.png)
 
 ---
 

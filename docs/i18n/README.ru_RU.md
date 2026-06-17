@@ -14,11 +14,11 @@
 
 </div>
 
-# World of ClaudeCraft — MMO в классическом стиле
+# Realms of Eldermere — MMO в классическом стиле
 
 [Присоединяйтесь к сообществу в Discord](https://discord.gg/GjhnUsBtw)
 
-![Заставка World of ClaudeCraft](../../docs/screenshots/title-screen.jpg)
+![Заставка Realms of Eldermere](../../docs/screenshots/title-screen.jpg)
 
 Микро-MMO в духе классических MMO эпохи, которую вы можете хостить и в которую можете играть:
 
@@ -42,7 +42,7 @@
 
 ![World of Claude](../../worldofclaude.png)
 
-![Сообщество World of ClaudeCraft](../../woc_community.png)
+![Сообщество Realms of Eldermere](../../woc_community.png)
 
 ---
 
