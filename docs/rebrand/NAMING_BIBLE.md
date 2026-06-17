@@ -152,9 +152,18 @@ IDs in parentheses never change.
 | priest | Priest | Cleric |
 | shaman | Shaman | Spiritcaller |
 | mage | Mage | Arcanist |
-| warlock | Warlock | Witchbane |
+| warlock | Warlock | Doomweaver |
 | druid | Druid | Wildshaper |
 
-These are proposals to confirm before Waves 1 to 5 commit thousands of locale
-edits. The brand (Wave 0) ships first so the chosen identity can be reviewed at
-low cost.
+Class display names are SHIPPED (Wave 1) in all 14 locales. Engine class IDs
+unchanged. The `/inspect` and `/stats` server readouts build from the canonical
+English class name, so their tests were updated to the new names; those two
+command strings remain English-only at the sim boundary (a pre-existing
+localization gap, tracked for a later pass).
+
+## 8. Progress log
+
+- Wave 0 (brand): DONE, green.
+- Wave 1 (class display names + aria, 14 locales + canonical): DONE, green.
+- Remaining: zones/dungeons, NPCs, mobs, items, quests, abilities, talents,
+  class lore prose, then docs/wiki/logos.

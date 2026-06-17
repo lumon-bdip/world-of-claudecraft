@@ -22,7 +22,7 @@ describe('/inspect command', () => {
     const e = sim.entities.get(b)!;
     e.level = 8;
 
-    expect(inspectReply(sim, a, '/inspect Bet')).toBe('Bet: Level 8 Mage — HP 100%.');
+    expect(inspectReply(sim, a, '/inspect Bet')).toBe('Bet: Level 8 Arcanist — HP 100%.');
   });
 
   it('shows a partial-health percentage and "dead" for a corpse', () => {
@@ -31,17 +31,17 @@ describe('/inspect command', () => {
     const b = sim.addPlayer('rogue', 'Gimel');
     const e = sim.entities.get(b)!;
     e.hp = Math.round(e.maxHp * 0.4);
-    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Rogue — HP 40%.`);
+    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Shadowblade — HP 40%.`);
 
     e.hp = 0;
-    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Rogue — HP dead.`);
+    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Shadowblade — HP dead.`);
   });
 
   it('matches names case-insensitively when unambiguous', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     sim.addPlayer('mage', 'Bet');
-    expect(inspectReply(sim, a, '/inspect bet')).toMatch(/^Bet: Level \d+ Mage/);
+    expect(inspectReply(sim, a, '/inspect bet')).toMatch(/^Bet: Level \d+ Arcanist/);
   });
 
   it('rejects an ambiguous case-insensitive match', () => {
@@ -68,7 +68,7 @@ describe('/inspect command', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     sim.addPlayer('mage', 'Bet');
-    expect(inspectReply(sim, a, '/ins Bet')).toMatch(/^Bet: Level \d+ Mage/);
-    expect(inspectReply(sim, a, '/examine Bet')).toMatch(/^Bet: Level \d+ Mage/);
+    expect(inspectReply(sim, a, '/ins Bet')).toMatch(/^Bet: Level \d+ Arcanist/);
+    expect(inspectReply(sim, a, '/examine Bet')).toMatch(/^Bet: Level \d+ Arcanist/);
   });
 });
