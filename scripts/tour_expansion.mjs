@@ -88,7 +88,7 @@ const consume = await page.evaluate(() => {
 console.log('eat+drink simultaneously:', JSON.stringify(consume), consume.eating && consume.drinking ? 'OK' : 'FAIL');
 await shot('03_eating_and_drinking');
 
-// 4) smith vendor in Eastbrook
+// 4) smith vendor in Greywillow
 await tp(7, 14, Math.PI);
 const smith = await page.evaluate(() => {
   const g = window.__game;
@@ -102,14 +102,14 @@ await sleep(400);
 await shot('04_smith_vendor');
 await page.keyboard.press('Escape');
 
-// 5) the causeway north: zone transition into Mirefen Marsh
+// 5) the causeway north: zone transition into Sablefen Marsh
 await tp(0, 175, 0);
 await sleep(300);
 await tp(0, 210, 0);
 await sleep(1200);
 await shot('05_entering_mirefen');
 
-// 6) Fenbridge hub
+// 6) Reedford hub
 await tp(0, 295, 0.5);
 await shot('06_fenbridge_hub');
 const fenNpcs = await page.evaluate(() => {
@@ -140,7 +140,7 @@ await shot('09_inside_bastion');
 await page.evaluate(() => window.__game.sim.leaveDungeon());
 await sleep(600);
 
-// 9) Highwatch hub (peaks)
+// 9) Wardenwatch hub (peaks)
 await tp(0, 650, 0.4);
 await shot('10_highwatch_hub');
 
@@ -165,7 +165,7 @@ const inSanctum = await page.evaluate(() => {
 await sleep(1200);
 console.log('sanctum entry x:', Math.round(inSanctum), inSanctum > 600 ? 'OK' : 'FAIL');
 await shot('14_inside_sanctum');
-// walk to Korzul's chamber
+// walk to Vorruth's chamber
 await page.evaluate(() => {
   const g = window.__game;
   const p = g.sim.player;

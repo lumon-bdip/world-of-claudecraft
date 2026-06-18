@@ -65,7 +65,7 @@ const scene = await page.evaluate(() => {
 
   return { merchant: !!merchant, name: me.name, buyerId: ids.Brena, listings: sim.marketListings.length };
 });
-check(scene.merchant, 'the Merchant exists in Eastbrook');
+check(scene.merchant, 'the Merchant exists in Greywillow');
 check(scene.listings >= 8, `market has stock (${scene.listings} listings: house + adventurers)`);
 
 // 1) the Merchant standing at his World Market stall in the square

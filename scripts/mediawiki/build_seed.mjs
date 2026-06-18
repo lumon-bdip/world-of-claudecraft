@@ -95,9 +95,9 @@ for (const [id, item] of Object.entries(ITEMS)) titleBy.item.set(id, unique(item
 function zoneForQuest(id) {
   const index = QUEST_ORDER.indexOf(id);
   if (index < 0) return 'Unknown';
-  if (index < 12) return 'Eastbrook Vale';
-  if (index < 24) return 'Mirefen Marsh';
-  return 'Thornpeak Heights';
+  if (index < 12) return 'Greywillow Vale';
+  if (index < 24) return 'Sablefen Marsh';
+  return 'Thornfell Heights';
 }
 
 add('MediaWiki:Common.css', css, []);
@@ -116,29 +116,29 @@ World of Claudecraft is a browser-playable, WoW-Classic-flavored micro-MMO with 
 </div>
 </div>
 \` + section('Featured portals', bullets([
-  link('Zones') + ' — Eastbrook Vale, Mirefen Marsh, Thornpeak Heights.',
+  link('Zones') + ' — Greywillow Vale, Sablefen Marsh, Thornfell Heights.',
   link('Classes') + ' — all nine playable class kits.',
   link('Quests') + ' — the full source-defined quest chain.',
-  link('Dungeons') + ' — Hollow Crypt, Sunken Bastion, and Gravewyrm Sanctum.',
+  link('Dungeons') + ' — Hollow Crypt, Sunken Bastion, and Wyrmbarrow Sanctum.',
   link('Community Lore') + ' — launch-week player culture from Discord, Reddit, and X.',
   link('Development Timeline') + ' — issue, PR, and release themes.',
 ])), ['Wiki']);
 
 add('Quick Start', section('First hour route', bullets([
   'Create an online character for persistence, or use offline play for a quick solo test.',
-  'Speak to ' + link(titleBy.npc.get('marshal_redbrook'), 'Marshal Redbrook') + ' for ' + link(titleBy.quest.get('q_wolves'), 'Wolves at the Door') + '.',
-  'Collect nearby Eastbrook quests before leaving town so wolf, boar, spider, lake, mine, bandit, and chapel objectives overlap.',
+  'Speak to ' + link(titleBy.npc.get('marshal_redbrook'), 'Marshal Thornwell') + ' for ' + link(titleBy.quest.get('q_wolves'), 'Wolves at the Door') + '.',
+  'Collect nearby Greywillow quests before leaving town so wolf, boar, spider, lake, mine, bandit, and chapel objectives overlap.',
   'Sell poor-quality junk, buy food and water, and keep your action bar filled.',
-  'Follow ' + link(titleBy.npc.get('brother_aldric'), 'Brother Aldric') + ' into the Gravecaller story once the Fallen Chapel quests open.',
+  'Follow ' + link(titleBy.npc.get('brother_aldric'), 'Brother Cassian') + ' into the Bonecaller story once the Fallen Chapel quests open.',
 ])) + section('Controls', table([
   ['WASD', 'Move and turn'], ['Q / E', 'Strafe'], ['Space', 'Jump'], ['Tab', 'Target nearest enemy'],
   ['F', 'Interact, loot, talk'], ['1-0, -, =', 'Action bar'], ['C / P / L / M / B / G', 'Character, spellbook, quest log, map, bags, arena'], ['Enter', 'Open chat'],
 ])), ['Guides']);
 
-add('The Gravecaller Saga', section('Overview', 'The main story follows Brother Aldric from restless bones outside Eastbrook to Korzul the Gravewyrm beneath Thornpeak.') + section('Acts', bullets([
-  link(titleBy.zone.get('eastbrook_vale'), 'Eastbrook Vale') + ' — Morthen the Gravecaller and ' + link(titleBy.dungeon.get('hollow_crypt'), 'The Hollow Crypt') + '.',
-  link(titleBy.zone.get('mirefen_marsh'), 'Mirefen Marsh') + ' — Vael the Fogcaller and ' + link(titleBy.dungeon.get('sunken_bastion'), 'The Sunken Bastion') + '.',
-  link(titleBy.zone.get('thornpeak_heights'), 'Thornpeak Heights') + ' — Wyrmcult zealots, Highwatch, and ' + link(titleBy.dungeon.get('gravewyrm_sanctum'), 'Gravewyrm Sanctum') + '.',
+add('The Bonecaller Saga', section('Overview', 'The main story follows Brother Cassian from restless bones outside Greywillow to Vorruth the Wyrmbarrow beneath Thornfell.') + section('Acts', bullets([
+  link(titleBy.zone.get('eastbrook_vale'), 'Greywillow Vale') + ' — Sarghul the Bonecaller and ' + link(titleBy.dungeon.get('hollow_crypt'), 'The Hollow Crypt') + '.',
+  link(titleBy.zone.get('mirefen_marsh'), 'Sablefen Marsh') + ' — Ysra the Fogcaller and ' + link(titleBy.dungeon.get('sunken_bastion'), 'The Sunken Bastion') + '.',
+  link(titleBy.zone.get('thornpeak_heights'), 'Thornfell Heights') + ' — Wyrmcult zealots, Wardenwatch, and ' + link(titleBy.dungeon.get('gravewyrm_sanctum'), 'Wyrmbarrow Sanctum') + '.',
 ])), ['Lore', 'Quests']);
 
 add('Community Lore', section('Launch-week myths', bullets([

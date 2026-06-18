@@ -200,3 +200,37 @@ localization gap, tracked for a later pass).
   (descriptive names, per-locale); friendly NPC personal names (Redbrook, Wilkes,
   Lin, Aldric, ...); remaining generic mob names; remaining item names; quest
   titles; abilities; talents; class lore prose; then docs/wiki/logos.
+
+## 8. Completion record (autonomous finish)
+
+Decisions made under "finish it" autonomy:
+
+- **Production domain:** `worldofclaudecraft.com` -> **`aldermoor.com`** (matches the
+  PWA short name / world name). Swept through canonical + hreflang, `SITE_URL`,
+  og/twitter image host, the WebSocket host, SEO-audit + e2e scripts, and DEPLOY.
+  Easily re-pointed if a different domain is registered.
+- **Brand art:** old images (`worldofclaudecraft-logo.png`, `woc_logo_square.webp`,
+  `worldofclaude.png`) regenerated as clean "Legends of Aldermoor" wordmarks
+  (`aldermoor-logo.png`, `aldermoor_logo_square.webp`, `aldermoor-banner.png`) and
+  rewired everywhere. These are placeholder-quality wordmarks; a designer can drop
+  final art into the same filenames. PWA/favicon icons were left (brand-neutral
+  symbols) for design review.
+- **Class names (shipped):** Warrior->Warden, Mage->Arcanist, Rogue->Shadowblade,
+  Paladin->Lightsworn, Hunter->Ranger, Priest->Cleric, Shaman->Spiritcaller,
+  Warlock->Doomweaver, Druid->Wildshaper.
+- **Mistcaller -> Fogcaller** completed (English shipped it; non-Latin titles
+  雾/霧/안개/Туман already mean fog-caller and are correct unchanged).
+
+Docs rebranded: README, all 12 localized READMEs, and the design/PRD docs.
+
+**Intentionally left (not user-facing), treated like engine ids:**
+- localStorage key prefix `woc_*` (renaming would wipe players' saved settings).
+- Code comments and internal function names tied to engine ids (e.g.
+  `composeTownEastbrook`, the `town_eastbrook` music-theme key, dungeon-layout
+  comments).
+- Vitest `describe`/`it` titles and name fixtures (dev-facing; suite stays green).
+- Third-party asset-pack model names and real-MMO reference notes in the design docs.
+
+The user-facing rebrand (game in all 14 locales, admin dashboard, error pages,
+SEO/meta, PWA manifest, docs, brand art, domain) is complete; the full vitest
+suite (1237 tests) and tsc stay green.

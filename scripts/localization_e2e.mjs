@@ -865,10 +865,10 @@ async function runSocialAndTradeSurfaces(page, locale, viewport) {
   await page.evaluate(() => {
     const g = window.__game;
     const player = g.sim.player;
-    g.sim.realm = 'Eastbrook';
+    g.sim.realm = 'Greywillow';
     g.sim.socialInfo = {
       friends: [
-        { id: 801, name: 'Boro', cls: 'warrior', level: 12, realm: 'Eastbrook', online: true, zone: 'Eastbrook Vale', status: 'online' },
+        { id: 801, name: 'Boro', cls: 'warrior', level: 12, realm: 'Greywillow', online: true, zone: 'Greywillow Vale', status: 'online' },
       ],
       blocks: [{ id: 802, name: 'Rook' }],
       guild: {
@@ -876,8 +876,8 @@ async function runSocialAndTradeSurfaces(page, locale, viewport) {
         name: 'Dawn Wardens',
         rank: 'leader',
         members: [
-          { id: player.id, name: player.name, cls: 'mage', level: player.level, realm: 'Eastbrook', online: true, zone: 'Eastbrook Vale', status: 'online', rank: 'leader' },
-          { id: 803, name: 'Ilyra', cls: 'priest', level: 14, realm: 'Eastbrook', online: true, zone: 'Mirefen Marsh', status: 'dungeon', rank: 'officer' },
+          { id: player.id, name: player.name, cls: 'mage', level: player.level, realm: 'Greywillow', online: true, zone: 'Greywillow Vale', status: 'online', rank: 'leader' },
+          { id: 803, name: 'Ilyra', cls: 'priest', level: 14, realm: 'Greywillow', online: true, zone: 'Sablefen Marsh', status: 'dungeon', rank: 'officer' },
         ],
       },
     };
@@ -887,10 +887,10 @@ async function runSocialAndTradeSurfaces(page, locale, viewport) {
   await page.waitForSelector('#social-window.open .soc-tab', { timeout: WAIT_TIMEOUT });
   await assertNonEnglishNotFallback(page, locale, '#social-window .panel-title span', 'Social', `social ${locale} ${viewport.name}`);
   await assertAuditBasics(page, `social friends ${locale} ${viewport.name}`, { mobile: viewport.isMobile });
-  await assertSocialZonesLocalized(page, locale, ['Eastbrook Vale'], `social friends ${locale} ${viewport.name}`);
+  await assertSocialZonesLocalized(page, locale, ['Greywillow Vale'], `social friends ${locale} ${viewport.name}`);
   await page.click('#social-window .soc-tab[data-tab="guild"]');
   await assertAuditBasics(page, `social guild ${locale} ${viewport.name}`, { mobile: viewport.isMobile });
-  await assertSocialZonesLocalized(page, locale, ['Eastbrook Vale', 'Mirefen Marsh'], `social guild ${locale} ${viewport.name}`);
+  await assertSocialZonesLocalized(page, locale, ['Greywillow Vale', 'Sablefen Marsh'], `social guild ${locale} ${viewport.name}`);
   await page.click('#social-window .soc-tab[data-tab="ignore"]');
   await assertAuditBasics(page, `social ignore ${locale} ${viewport.name}`, { mobile: viewport.isMobile });
 
