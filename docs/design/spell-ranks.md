@@ -1,4 +1,4 @@
-# World of Claudecraft — Ability Rank Progressions, Levels 1–20 (all nine classes)
+# Legends of Aldermoor — Ability Rank Progressions, Levels 1–20 (all nine classes)
 
 **Tuning anchors used throughout** (from `src/sim/data.ts` / `types.ts`): typical mob hp = 40 + 18·L → L10 ≈ 220, **L14 ≈ 292**, **L20 ≈ 400** (elites ×2.3). A rank‑3 nuke at L14 should average ~40–50 dmg (6–8 casts); R4 at L20 ~70–80 (5–6 casts, fresh-rank spike). Mana costs follow the Lightning Bolt curve given in the brief (15/25/40/60). Rage/energy costs stay flat per rank (vanilla behavior). All DoT/HoT totals divide evenly by tick count. Rank rows reuse the existing `ranks: AbilityRank[]` schema — **ids unchanged**; new ability ids are snake_case and must be appended to each `CLASSES[*].abilities` array in learn order.
 
@@ -11,7 +11,7 @@
 
 ---
 
-## WARRIOR (rage — costs flat)
+## WARDEN (rage — costs flat)
 
 | Ability | Rank | Learn | Cost | Cast | Effect values |
 |---|---|---|---|---|---|
@@ -46,7 +46,7 @@
 
 ---
 
-## MAGE
+## ARCANIST
 
 | Ability | Rank | Learn | Cost | Cast | Effect values |
 |---|---|---|---|---|---|
@@ -89,7 +89,7 @@
 
 ---
 
-## ROGUE (energy — costs flat)
+## SHADOWBLADE (energy — costs flat)
 
 | Ability | Rank | Learn | Cost | Effect values |
 |---|---|---|---|---|
@@ -119,7 +119,7 @@
 
 ---
 
-## PALADIN
+## LIGHTSWORN
 
 | Ability | Rank | Learn | Cost | Cast | Effect values |
 |---|---|---|---|---|---|
@@ -156,7 +156,7 @@
 
 ---
 
-## HUNTER
+## RANGER
 
 | Ability | Rank | Learn | Cost | Effect values |
 |---|---|---|---|---|
@@ -189,7 +189,7 @@
 
 ---
 
-## PRIEST
+## CLERIC
 
 | Ability | Rank | Learn | Cost | Cast | Effect values |
 |---|---|---|---|---|---|
@@ -228,7 +228,7 @@
 
 ---
 
-## SHAMAN
+## SPIRITCALLER
 
 | Ability | Rank | Learn | Cost | Cast | Effect values |
 |---|---|---|---|---|---|
@@ -264,7 +264,7 @@
 
 ---
 
-## WARLOCK
+## DOOMWEAVER
 
 | Ability | Rank | Learn | Cost | Cast | Effect values |
 |---|---|---|---|---|---|
@@ -303,7 +303,7 @@
 
 ---
 
-## DRUID
+## WILDSHAPER
 
 | Ability | Rank | Learn | Cost | Cast | Effect values |
 |---|---|---|---|---|---|
@@ -348,14 +348,14 @@
 
 | Class | New abilities (id @ level) | New sim work |
 |---|---|---|
-| Warrior | execute@14, slam@16, cleave@18 | wire existing `requiresTargetHpBelow` |
-| Mage | arcane_explosion@14, scorch@16, ice_barrier@20 | none |
-| Rogue | kidney_shot@14, ambush@16, adrenaline_rush@20 | **finisherStun effect (the only new effect type)** |
-| Paladin | flash_of_light@12, exorcism@14, consecration@18 | none |
-| Hunter | aspect_of_the_cheetah@14, aimed_shot@16, rapid_fire@20 | none |
-| Priest | heal@14 (R2@20), mind_flay@16, flash_heal@20 | none (drainTick healFrac 0) |
-| Shaman | frost_shock@14, ghost_wolf@16, stormstrike@20 | none |
-| Warlock | fear@14, searing_pain@16, shadowburn@20 | none (incapacitate reuse) |
-| Druid | regrowth@14, barkskin@16, starfire@18 | none |
+| Warden | execute@14, slam@16, cleave@18 | wire existing `requiresTargetHpBelow` |
+| Arcanist | arcane_explosion@14, scorch@16, ice_barrier@20 | none |
+| Shadowblade | kidney_shot@14, ambush@16, adrenaline_rush@20 | **finisherStun effect (the only new effect type)** |
+| Lightsworn | flash_of_light@12, exorcism@14, consecration@18 | none |
+| Ranger | aspect_of_the_cheetah@14, aimed_shot@16, rapid_fire@20 | none |
+| Cleric | heal@14 (R2@20), mind_flay@16, flash_heal@20 | none (drainTick healFrac 0) |
+| Spiritcaller | frost_shock@14, ghost_wolf@16, stormstrike@20 | none |
+| Doomweaver | fear@14, searing_pain@16, shadowburn@20 | none (incapacitate reuse) |
+| Wildshaper | regrowth@14, barkskin@16, starfire@18 | none |
 
 Files to touch when implementing: `/Users/reubenhorne/Documents/code/levy-street/world-of-claudecraft/src/sim/data.ts` (ABILITIES ranks + new entries, CLASSES.abilities arrays, 2 conjured-water items), `/Users/reubenhorne/Documents/code/levy-street/world-of-claudecraft/src/sim/types.ts` (one new AbilityEffect variant `finisherStun`, XP_TABLE/MAX_LEVEL extension per the brief).
