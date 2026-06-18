@@ -32,16 +32,16 @@ runs for everyone online.
 
 ## Screenshots
 
-![A party gathers outside the apothecary in Eastbrook](docs/screenshots/party-questing.jpg)
+![A party gathers outside the apothecary in Greywillow](docs/screenshots/party-questing.jpg)
 
 | | |
 |:---:|:---:|
-| ![Dusk at the Eastbrook campfire](docs/screenshots/eastbrook-dusk.jpg)<br>*Dusk at the Eastbrook campfire* | ![Elite pulls in the Hollow Crypt](docs/screenshots/hollow-crypt.jpg)<br>*Torch-lit elite pulls in the Hollow Crypt* |
+| ![Dusk at the Greywillow campfire](docs/screenshots/eastbrook-dusk.jpg)<br>*Dusk at the Greywillow campfire* | ![Elite pulls in the Hollow Crypt](docs/screenshots/hollow-crypt.jpg)<br>*Torch-lit elite pulls in the Hollow Crypt* |
 | ![The restless dead at the ruined chapel](docs/screenshots/restless-dead.jpg)<br>*The restless dead at the ruined chapel* | ![A brawl with Vale Bandits](docs/screenshots/vale-bandits.jpg)<br>*Outnumbered at the bandit camp* |
-| ![Old Greyjaw hunted down on the north road](docs/screenshots/old-greyjaw.jpg)<br>*Old Greyjaw, the rare spawn, run down on the north road* | ![Vendor and bags UI](docs/screenshots/vendor-and-bags.jpg)<br>*Gearing up at Smith Haldren's — tooltips, bags, coin* |
-| ![The moongate on the Glimmermere shore](docs/screenshots/glimmermere-moongate.jpg)<br>*The drowned climb out at the Glimmermere moongate* | ![Ysolei on the altar of the Drowned Temple](docs/screenshots/drowned-temple-altar.jpg)<br>*Moonfire and the altar of the Drowned Temple* |
+| ![Old Grimfang hunted down on the north road](docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, the rare spawn, run down on the north road* | ![Vendor and bags UI](docs/screenshots/vendor-and-bags.jpg)<br>*Gearing up at Smith Dunmere's — tooltips, bags, coin* |
+| ![The moongate on the Glistermere shore](docs/screenshots/glimmermere-moongate.jpg)<br>*The drowned climb out at the Glistermere moongate* | ![Ysolei on the altar of the Drowned Temple](docs/screenshots/drowned-temple-altar.jpg)<br>*Moonfire and the altar of the Drowned Temple* |
 
-![World of Claude](worldofclaude.png)
+![Legends of Aldermoor](aldermoor-banner.png)
 
 ![Legends of Aldermoor community](woc_community.png)
 
@@ -124,17 +124,17 @@ current game content and community research with `npm run wiki:seed`.
 
 ## The Hollow Crypt — 5-player elite instance
 
-Brother Aldric's storyline continues past *The Restless Dead*: **Whispers
-Below** (find the Gravecaller's sigil at the ruined chapel) → **The Binding
+Brother Cassian's storyline continues past *The Restless Dead*: **Whispers
+Below** (find the Bonecaller's sigil at the ruined chapel) → **The Binding
 Rite** (gather Blessed Tallow from the kobold dig and Ghostly Essence from
 the restless dead) → **Into the Hollow** (*suggested players: 5*) — kill
-Morthen the Gravecaller at the bottom of the crypt beneath the chapel.
+Sarghul the Bonecaller at the bottom of the crypt beneath the chapel.
 
 - The crypt door at the Fallen Chapel teleports your **party into its own
   private instance copy** (6 slots; instances reset after 5 minutes empty).
 - Inside: torch-lit halls, paired **elite** trash packs (vanilla elite
   scaling: ~2.3× health, ~1.5× damage, double XP), the miniboss Sexton
-  Marrow, and Morthen — a level-10 elite boss with a **Shadow Pulse** AoE
+  Marrow, and Sarghul — a level-10 elite boss with a **Shadow Pulse** AoE
   every 10 seconds. Dungeon trash does not respawn until the instance resets.
 - Rewards: rare (blue) weapons per class archetype, 1 gold, 1500 XP.
 - It is genuinely tuned for 5: our automated 5-bot raid (warrior, paladin,
@@ -147,24 +147,24 @@ node scripts/mp_integration.mjs   # 26-check API/WS/persistence suite
 node scripts/mp_browser.mjs       # two real browser clients see each other
 ```
 
-## The Sunken Bastion & Gravewyrm Sanctum
+## The Sunken Bastion & Wyrmbarrow Sanctum
 
-The conspiracy doesn't end with Morthen. **The Sunken Bastion** (5-player,
-~level 13, southeast Mirefen) holds Vael the Mistcaller — he summons waves of
-Drowned Thralls at 60% and 30% health. The finale is the **Gravewyrm
-Sanctum** (5-player, level 20, beneath Thornpeak): three chambers of elite
-boneguard and drakonid, Korgath the Bound (enrages below 30%), Grand
-Necromancer Velkhar (more add waves), and **Korzul the Gravewyrm** — epic
+The conspiracy doesn't end with Sarghul. **The Sunken Bastion** (5-player,
+~level 13, southeast Sablefen) holds Ysra the Fogcaller — he summons waves of
+Drowned Thralls at 60% and 30% health. The finale is the **Wyrmbarrow
+Sanctum** (5-player, level 20, beneath Thornfell): three chambers of elite
+boneguard and drakonid, Durgath the Bound (enrages below 30%), Grand
+Necromancer Nethanys (more add waves), and **Vorruth the Wyrmbarrow** — epic
 weapons drop here, and the lead-up quest chain is soloable so nobody is
 locked out of the story.
 
 ## The Drowned Temple — a portal to a sunken moon-cult (5-player)
 
-A separate story from the Gravecaller conspiracy. High in Thornpeak Heights,
-the **Glimmermere** — a still mountain tarn — has begun to glow and give up its
+A separate story from the Bonecaller conspiracy. High in Thornfell Heights,
+the **Glistermere** — a still mountain tarn — has begun to glow and give up its
 dead, and a **moongate** has reopened on its shore. **Ondrel Vane, Tidewatcher**
 keeps a lonely watch there and sets you on a self-contained, soloable lead-up:
-cull the **Glimmermere Waders** that climb from the water, silence the **Drowned
+cull the **Glistermere Waders** that climb from the water, silence the **Drowned
 Votaries** of the Pale Choir, and slay **Sethrael the Palecoil**, the moon-serpent
 guarding the deep shelf.
 
@@ -177,10 +177,10 @@ holding the threshold, and finally **Ysolei, Avatar of the Drowned Moon**
 (level 18) coiled on the great altar: she pulses **Lunar Tide** AoE every 9s,
 summons **Moonspawn** at 60% and 30% health, and enrages below 30%. Blue (rare)
 gear drops here — a class-split set of weapons and the **Moonshroud** chestpieces
-— bridging the gap between the Sunken Bastion (13) and the Gravewyrm Sanctum (20).
+— bridging the gap between the Sunken Bastion (13) and the Wyrmbarrow Sanctum (20).
 
 ```
-node scripts/tour_temple.mjs   # screenshot tour of the Glimmermere + Drowned Temple (needs `npm run dev`)
+node scripts/tour_temple.mjs   # screenshot tour of the Glistermere + Drowned Temple (needs `npm run dev`)
 ```
 
 
@@ -191,15 +191,15 @@ node scripts/tour_temple.mjs   # screenshot tour of the Glimmermere + Drowned Te
 npm run dev        # open http://localhost:5173 -> Play Offline
 ```
 
-Name your character, pick any of the nine classes, and you're in **Eastbrook
+Name your character, pick any of the nine classes, and you're in **Greywillow
 Vale** (levels 1-7): a market town ringed by six hubs — wolf runs north, boar
-meadows east, the Webwood west, Mirror Lake northwest, a kobold copper dig
-southwest, a ruined chapel with restless dead northeast, and Gorrak's bandit
-camp southeast. The road north climbs through a mountain pass into **Mirefen
-Marsh** (6-13, hub: Fenbridge) and on up to **Thornpeak Heights** (13-20,
-hub: Highwatch) — three zones, ~60 quests, and one storyline: the Gravecaller
-conspiracy, from the first restless bones outside Eastbrook to **Korzul the
-Gravewyrm** beneath the peaks. Each hub has vendors (including weapon- and
+meadows east, the Tanglemoor west, Mirror Lake northwest, a kobold copper dig
+southwest, a ruined chapel with restless dead northeast, and Brakka's bandit
+camp southeast. The road north climbs through a mountain pass into **Sablefen
+Marsh** (6-13, hub: Reedford) and on up to **Thornfell Heights** (13-20,
+hub: Wardenwatch) — three zones, ~60 quests, and one storyline: the Bonecaller
+conspiracy, from the first restless bones outside Greywillow to **Vorruth the
+Wyrmbarrow** beneath the peaks. Each hub has vendors (including weapon- and
 armorsmiths selling honest white gear), a graveyard, its own music, and a
 zone map.
 
@@ -260,7 +260,7 @@ Stormstrike, and Starfire)**
 - Ground quest objects with sparkles (steal the bandits' supply crates back)
 - Mob AI: wander, proximity aggro by level difference, social pulls (murlocs
   pull from farther — bring friends), chase, leash-evade-reset, corpse loot,
-  respawns; a rare spawn (Old Greyjaw) on a long timer
+  respawns; a rare spawn (Old Grimfang) on a long timer
 - Death → release spirit → graveyard; falling damage; swimming slows you
 - Quest log with abandon, gossip dialogs with greetings, per-class rewards
 
@@ -292,7 +292,7 @@ node scripts/smoke_browser.mjs  # warrior E2E (needs `npm run dev` running)
 node scripts/smoke_mage.mjs     # mage: casting, polymorph, conjure+drink, death/release
 node scripts/smoke_rogue.mjs    # rogue: combo points, eviscerate, vendor, eating
 node scripts/visual_tour.mjs    # screenshot tour of the zone + UI into tmp/
-node scripts/tour_temple.mjs    # screenshot tour of the Glimmermere + Drowned Temple into tmp/
+node scripts/tour_temple.mjs    # screenshot tour of the Glistermere + Drowned Temple into tmp/
 node scripts/mp_integration.mjs # 26-check API/WS/persistence suite (server running)
 node scripts/social_e2e.mjs     # trade + duel over the wire (ALLOW_DEV_COMMANDS=1)
 node scripts/arena_visual.mjs   # two clients queue + fight a ranked 1v1 in the Ashen Coliseum

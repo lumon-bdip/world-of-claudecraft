@@ -32,15 +32,15 @@ multijugador autoritativo ejecuta para todos en línea.
 
 ## Capturas de pantalla
 
-![Un grupo se reúne afuera de la botica en Eastbrook](../../docs/screenshots/party-questing.jpg)
+![Un grupo se reúne afuera de la botica en Greywillow](../../docs/screenshots/party-questing.jpg)
 
 | | |
 |:---:|:---:|
-| ![Atardecer en la fogata de Eastbrook](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Atardecer en la fogata de Eastbrook* | ![Pulls de élites en the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de élites a la luz de las antorchas en the Hollow Crypt* |
+| ![Atardecer en la fogata de Greywillow](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Atardecer en la fogata de Greywillow* | ![Pulls de élites en the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de élites a la luz de las antorchas en the Hollow Crypt* |
 | ![Los muertos inquietos en la capilla en ruinas](../../docs/screenshots/restless-dead.jpg)<br>*Los muertos inquietos en la capilla en ruinas* | ![Una refriega con los Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*Superados en número en el campamento de bandidos* |
-| ![Old Greyjaw cazado en el camino del norte](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Greyjaw, el spawn raro, abatido en el camino del norte* | ![Interfaz de vendedor y bolsas](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipándose donde Smith Haldren: tooltips, bolsas, monedas* |
+| ![Old Grimfang cazado en el camino del norte](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, el spawn raro, abatido en el camino del norte* | ![Interfaz de vendedor y bolsas](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipándose donde Smith Dunmere: tooltips, bolsas, monedas* |
 
-![World of Claude](../../worldofclaude.png)
+![Legends of Aldermoor](../../aldermoor-banner.png)
 
 ![Comunidad de Legends of Aldermoor](../../woc_community.png)
 
@@ -118,18 +118,18 @@ vez: se verán mutuamente en el pueblo. `Enter` abre el chat.
 
 ## The Hollow Crypt — instancia de élite para 5 jugadores
 
-La historia de Brother Aldric continúa más allá de *The Restless Dead*: **Whispers
-Below** (encuentra el sigilo del Gravecaller en la capilla en ruinas) → **The Binding
+La historia de Brother Cassian continúa más allá de *The Restless Dead*: **Whispers
+Below** (encuentra el sigilo del Bonecaller en la capilla en ruinas) → **The Binding
 Rite** (reúne Blessed Tallow de la excavación de kobolds y Ghostly Essence de los
 muertos inquietos) → **Into the Hollow** (*jugadores sugeridos: 5*) — mata a
-Morthen the Gravecaller en el fondo de la cripta bajo la capilla.
+Sarghul the Bonecaller en el fondo de la cripta bajo la capilla.
 
 - La puerta de la cripta en the Fallen Chapel teletransporta a tu **grupo a su
   propia copia de instancia privada** (6 espacios; las instancias se reinician tras
   5 minutos vacías).
 - Adentro: salones iluminados por antorchas, paquetes de basura **élite** en parejas
   (escalado de élite clásico: ~2.3× de vida, ~1.5× de daño, doble XP), el minijefe
-  Sexton Marrow, y Morthen — un jefe élite de nivel 10 con un AoE de **Shadow Pulse**
+  Sexton Marrow, y Sarghul — un jefe élite de nivel 10 con un AoE de **Shadow Pulse**
   cada 10 segundos. La basura de la mazmorra no reaparece hasta que la instancia se
   reinicia.
 - Recompensas: armas raras (azules) por arquetipo de clase, 1 de oro, 1500 XP.
@@ -144,14 +144,14 @@ node scripts/mp_integration.mjs   # suite de 26 comprobaciones de API/WS/persist
 node scripts/mp_browser.mjs       # dos clientes de navegador reales se ven entre sí
 ```
 
-## The Sunken Bastion y Gravewyrm Sanctum
+## The Sunken Bastion y Wyrmbarrow Sanctum
 
-La conspiración no termina con Morthen. **The Sunken Bastion** (5 jugadores,
-~nivel 13, sureste de Mirefen) alberga a Vael the Mistcaller — invoca oleadas de
-Drowned Thralls al 60% y 30% de vida. El final es el **Gravewyrm
-Sanctum** (5 jugadores, nivel 20, bajo Thornpeak): tres cámaras de boneguard y
-drakonid élite, Korgath the Bound (entra en frenesí por debajo del 30%), Grand
-Necromancer Velkhar (más oleadas de adds), y **Korzul the Gravewyrm** — aquí caen
+La conspiración no termina con Sarghul. **The Sunken Bastion** (5 jugadores,
+~nivel 13, sureste de Sablefen) alberga a Ysra the Fogcaller — invoca oleadas de
+Drowned Thralls al 60% y 30% de vida. El final es el **Wyrmbarrow
+Sanctum** (5 jugadores, nivel 20, bajo Thornfell): tres cámaras de boneguard y
+drakonid élite, Durgath the Bound (entra en frenesí por debajo del 30%), Grand
+Necromancer Nethanys (más oleadas de adds), y **Vorruth the Wyrmbarrow** — aquí caen
 armas épicas, y la cadena de misiones previa se puede hacer en solitario para que
 nadie quede excluido de la historia.
 
@@ -164,15 +164,15 @@ npm run dev        # abre http://localhost:5173 -> Play Offline
 ```
 
 Nombra a tu personaje, elige cualquiera de las nueve clases, y estarás en
-**Eastbrook Vale** (niveles 1-7): un pueblo de mercado rodeado por seis enclaves —
-sendas de lobos al norte, prados de jabalíes al este, the Webwood al oeste, Mirror
+**Greywillow Vale** (niveles 1-7): un pueblo de mercado rodeado por seis enclaves —
+sendas de lobos al norte, prados de jabalíes al este, the Tanglemoor al oeste, Mirror
 Lake al noroeste, una excavación de cobre de kobolds al suroeste, una capilla en
-ruinas con muertos inquietos al noreste, y el campamento de bandidos de Gorrak al
-sureste. El camino al norte asciende por un paso de montaña hacia **Mirefen Marsh**
-(6-13, enclave: Fenbridge) y sigue hasta **Thornpeak Heights** (13-20, enclave:
-Highwatch) — tres zonas, ~60 misiones y una sola historia: la conspiración del
-Gravecaller, desde los primeros huesos inquietos a las afueras de Eastbrook hasta
-**Korzul the Gravewyrm** bajo los picos. Cada enclave tiene vendedores (incluidos
+ruinas con muertos inquietos al noreste, y el campamento de bandidos de Brakka al
+sureste. El camino al norte asciende por un paso de montaña hacia **Sablefen Marsh**
+(6-13, enclave: Reedford) y sigue hasta **Thornfell Heights** (13-20, enclave:
+Wardenwatch) — tres zonas, ~60 misiones y una sola historia: la conspiración del
+Bonecaller, desde los primeros huesos inquietos a las afueras de Greywillow hasta
+**Vorruth the Wyrmbarrow** bajo los picos. Cada enclave tiene vendedores (incluidos
 herreros de armas y armaduras que venden equipo blanco honesto), un cementerio, su
 propia música y un mapa de zona.
 
@@ -235,7 +235,7 @@ Stormstrike y Starfire)**
 - IA de mobs: deambular, aggro por proximidad según la diferencia de nivel, pulls
   sociales (los murlocs jalan desde más lejos — trae amigos), persecución,
   leash-evade-reset, saqueo de cadáveres, reapariciones; un spawn raro (Old
-  Greyjaw) con un temporizador largo
+  Grimfang) con un temporizador largo
 - Muerte → liberar el espíritu → cementerio; daño por caída; nadar te ralentiza
 - Registro de misiones con abandono, diálogos de charla con saludos, recompensas
   por clase

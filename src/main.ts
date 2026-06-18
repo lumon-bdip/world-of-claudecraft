@@ -33,7 +33,7 @@ const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camer
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 let pendingDeleteCharacter: CharacterSummary | null = null;
 
-const SITE_URL = 'https://worldofclaudecraft.com/';
+const SITE_URL = 'https://aldermoor.com/';
 
 const RESOURCE_KEYS = {
   mana: 'classDetails.resources.mana',
@@ -1900,7 +1900,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
       applicationCategory: t('seo.applicationCategory'),
       operatingSystem: t('seo.operatingSystem'),
       url: canonicalHref,
-      image: 'https://worldofclaudecraft.com/woc_logo_square.webp',
+      image: 'https://aldermoor.com/aldermoor_logo_square.webp',
       description: t('seo.description'),
       inLanguage: languageTag(lang),
     }, null, 2);
