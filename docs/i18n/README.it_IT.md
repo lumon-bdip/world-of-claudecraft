@@ -36,9 +36,9 @@ server multigiocatore autoritativo esegue per tutti online.
 
 | | |
 |:---:|:---:|
-| ![Crepuscolo al fuoco da campo di Greywillow](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Crepuscolo al fuoco da campo di Greywillow* | ![Pull di elite nella Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pull di elite a lume di torcia nella Hollow Crypt* |
+| ![Crepuscolo al fuoco da campo di Greywillow](../../docs/screenshots/greywillow-dusk.jpg)<br>*Crepuscolo al fuoco da campo di Greywillow* | ![Pull di elite nella Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pull di elite a lume di torcia nella Hollow Crypt* |
 | ![I morti irrequieti presso la cappella in rovina](../../docs/screenshots/restless-dead.jpg)<br>*I morti irrequieti presso la cappella in rovina* | ![Una rissa con i Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*In inferiorità numerica all'accampamento dei banditi* |
-| ![Old Grimfang braccato sulla strada a nord](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, lo spawn raro, braccato sulla strada a nord* | ![Interfaccia del venditore e delle borse](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipaggiamento dal fabbro Smith Dunmere — tooltip, borse, monete* |
+| ![Old Grimfang braccato sulla strada a nord](../../docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, lo spawn raro, braccato sulla strada a nord* | ![Interfaccia del venditore e delle borse](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipaggiamento dal fabbro Smith Dunmere — tooltip, borse, monete* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

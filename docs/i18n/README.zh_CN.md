@@ -35,9 +35,9 @@
 
 | | |
 |:---:|:---:|
-| ![Greywillow 营火旁的黄昏](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Greywillow 营火旁的黄昏* | ![Hollow Crypt 中的精英拉怪](../../docs/screenshots/hollow-crypt.jpg)<br>*Hollow Crypt 中火把映照下的精英拉怪* |
+| ![Greywillow 营火旁的黄昏](../../docs/screenshots/greywillow-dusk.jpg)<br>*Greywillow 营火旁的黄昏* | ![Hollow Crypt 中的精英拉怪](../../docs/screenshots/hollow-crypt.jpg)<br>*Hollow Crypt 中火把映照下的精英拉怪* |
 | ![废弃教堂处不安的亡者](../../docs/screenshots/restless-dead.jpg)<br>*废弃教堂处不安的亡者* | ![与 Vale Bandits 的混战](../../docs/screenshots/vale-bandits.jpg)<br>*在强盗营地以寡敌众* |
-| ![Old Grimfang 在北方道路上被追杀](../../docs/screenshots/old-greyjaw.jpg)<br>*稀有刷新怪 Old Grimfang 在北方道路上被追猎* | ![商人与背包界面](../../docs/screenshots/vendor-and-bags.jpg)<br>*在 Smith Dunmere 处置装 —— 工具提示、背包、钱币* |
+| ![Old Grimfang 在北方道路上被追杀](../../docs/screenshots/old-grimfang.jpg)<br>*稀有刷新怪 Old Grimfang 在北方道路上被追猎* | ![商人与背包界面](../../docs/screenshots/vendor-and-bags.jpg)<br>*在 Smith Dunmere 处置装 —— 工具提示、背包、钱币* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

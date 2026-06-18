@@ -36,10 +36,10 @@ runs for everyone online.
 
 | | |
 |:---:|:---:|
-| ![Dusk at the Greywillow campfire](docs/screenshots/eastbrook-dusk.jpg)<br>*Dusk at the Greywillow campfire* | ![Elite pulls in the Hollow Crypt](docs/screenshots/hollow-crypt.jpg)<br>*Torch-lit elite pulls in the Hollow Crypt* |
+| ![Dusk at the Greywillow campfire](docs/screenshots/greywillow-dusk.jpg)<br>*Dusk at the Greywillow campfire* | ![Elite pulls in the Hollow Crypt](docs/screenshots/hollow-crypt.jpg)<br>*Torch-lit elite pulls in the Hollow Crypt* |
 | ![The restless dead at the ruined chapel](docs/screenshots/restless-dead.jpg)<br>*The restless dead at the ruined chapel* | ![A brawl with Vale Bandits](docs/screenshots/vale-bandits.jpg)<br>*Outnumbered at the bandit camp* |
-| ![Old Grimfang hunted down on the north road](docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, the rare spawn, run down on the north road* | ![Vendor and bags UI](docs/screenshots/vendor-and-bags.jpg)<br>*Gearing up at Smith Dunmere's — tooltips, bags, coin* |
-| ![The moongate on the Glistermere shore](docs/screenshots/glimmermere-moongate.jpg)<br>*The drowned climb out at the Glistermere moongate* | ![Ysolei on the altar of the Drowned Temple](docs/screenshots/drowned-temple-altar.jpg)<br>*Moonfire and the altar of the Drowned Temple* |
+| ![Old Grimfang hunted down on the north road](docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, the rare spawn, run down on the north road* | ![Vendor and bags UI](docs/screenshots/vendor-and-bags.jpg)<br>*Gearing up at Smith Dunmere's — tooltips, bags, coin* |
+| ![The moongate on the Glistermere shore](docs/screenshots/glistermere-moongate.jpg)<br>*The drowned climb out at the Glistermere moongate* | ![Ysolei on the altar of the Drowned Temple](docs/screenshots/drowned-temple-altar.jpg)<br>*Moonfire and the altar of the Drowned Temple* |
 
 ![Legends of Aldermoor](aldermoor-banner.png)
 

@@ -36,9 +36,9 @@
 
 | | |
 |:---:|:---:|
-| ![Сумерки у костра в Greywillow](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Сумерки у костра в Greywillow* | ![Пуллы элитных мобов в Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Пуллы элитных мобов при свете факелов в The Hollow Crypt* |
+| ![Сумерки у костра в Greywillow](../../docs/screenshots/greywillow-dusk.jpg)<br>*Сумерки у костра в Greywillow* | ![Пуллы элитных мобов в Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Пуллы элитных мобов при свете факелов в The Hollow Crypt* |
 | ![Беспокойные мертвецы у разрушенной часовни](../../docs/screenshots/restless-dead.jpg)<br>*Беспокойные мертвецы у разрушенной часовни* | ![Стычка с Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*В меньшинстве у лагеря бандитов* |
-| ![Old Grimfang, загнанный на северной дороге](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, редкий спавн, загнан на северной дороге* | ![Интерфейс торговца и сумок](../../docs/screenshots/vendor-and-bags.jpg)<br>*Экипировка у Smith Dunmere — подсказки, сумки, монеты* |
+| ![Old Grimfang, загнанный на северной дороге](../../docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, редкий спавн, загнан на северной дороге* | ![Интерфейс торговца и сумок](../../docs/screenshots/vendor-and-bags.jpg)<br>*Экипировка у Smith Dunmere — подсказки, сумки, монеты* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

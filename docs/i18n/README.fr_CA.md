@@ -37,9 +37,9 @@ multijoueur faisant autorité exécute pour tout le monde en ligne.
 
 | | |
 |:---:|:---:|
-| ![Crépuscule au feu de camp d'Greywillow](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Crépuscule au feu de camp d'Greywillow* | ![Pulls de mobs élites dans the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de mobs élites à la lueur des torches dans the Hollow Crypt* |
+| ![Crépuscule au feu de camp d'Greywillow](../../docs/screenshots/greywillow-dusk.jpg)<br>*Crépuscule au feu de camp d'Greywillow* | ![Pulls de mobs élites dans the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de mobs élites à la lueur des torches dans the Hollow Crypt* |
 | ![Les morts agités à la chapelle en ruines](../../docs/screenshots/restless-dead.jpg)<br>*Les morts agités à la chapelle en ruines* | ![Une bagarre avec les Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*En infériorité numérique au camp des bandits* |
-| ![Old Grimfang traqué sur la route du nord](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, le spawn rare, rattrapé sur la route du nord* | ![Interface du marchand et des sacs](../../docs/screenshots/vendor-and-bags.jpg)<br>*On s'équipe chez Smith Dunmere — infobulles, sacs, pièces* |
+| ![Old Grimfang traqué sur la route du nord](../../docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, le spawn rare, rattrapé sur la route du nord* | ![Interface du marchand et des sacs](../../docs/screenshots/vendor-and-bags.jpg)<br>*On s'équipe chez Smith Dunmere — infobulles, sacs, pièces* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

@@ -36,9 +36,9 @@ autoritativo roda para todos online.
 
 | | |
 |:---:|:---:|
-| ![Anoitecer na fogueira de Greywillow](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Anoitecer na fogueira de Greywillow* | ![Pulls de elites na The Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de elites à luz de tochas na The Hollow Crypt* |
+| ![Anoitecer na fogueira de Greywillow](../../docs/screenshots/greywillow-dusk.jpg)<br>*Anoitecer na fogueira de Greywillow* | ![Pulls de elites na The Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de elites à luz de tochas na The Hollow Crypt* |
 | ![Os mortos inquietos na capela em ruínas](../../docs/screenshots/restless-dead.jpg)<br>*Os mortos inquietos na capela em ruínas* | ![Uma briga com os Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*Em menor número no acampamento dos bandidos* |
-| ![Old Grimfang encurralado na estrada do norte](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, o spawn raro, encurralado na estrada do norte* | ![Interface de vendedor e bolsas](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipando-se na ferraria de Smith Dunmere — tooltips, bolsas, moedas* |
+| ![Old Grimfang encurralado na estrada do norte](../../docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, o spawn raro, encurralado na estrada do norte* | ![Interface de vendedor e bolsas](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipando-se na ferraria de Smith Dunmere — tooltips, bolsas, moedas* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

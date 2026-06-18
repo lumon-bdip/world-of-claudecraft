@@ -33,9 +33,9 @@
 
 | | |
 |:---:|:---:|
-| ![Greywillow 營火旁的黃昏](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Greywillow 營火旁的黃昏* | ![在 Hollow Crypt 拉怪打菁英](../../docs/screenshots/hollow-crypt.jpg)<br>*在 The Hollow Crypt 火炬照明下拉怪打菁英* |
+| ![Greywillow 營火旁的黃昏](../../docs/screenshots/greywillow-dusk.jpg)<br>*Greywillow 營火旁的黃昏* | ![在 Hollow Crypt 拉怪打菁英](../../docs/screenshots/hollow-crypt.jpg)<br>*在 The Hollow Crypt 火炬照明下拉怪打菁英* |
 | ![殘破禮拜堂中不得安息的亡者](../../docs/screenshots/restless-dead.jpg)<br>*殘破禮拜堂中不得安息的亡者* | ![與 Vale Bandits 的混戰](../../docs/screenshots/vale-bandits.jpg)<br>*在盜賊營地寡不敵眾* |
-| ![Old Grimfang 在北方道路上被追擊獵殺](../../docs/screenshots/old-greyjaw.jpg)<br>*稀有生怪 Old Grimfang 在北方道路上被追擊獵殺* | ![商人與背包介面](../../docs/screenshots/vendor-and-bags.jpg)<br>*在 Smith Dunmere 處整裝——提示框、背包、金幣* |
+| ![Old Grimfang 在北方道路上被追擊獵殺](../../docs/screenshots/old-grimfang.jpg)<br>*稀有生怪 Old Grimfang 在北方道路上被追擊獵殺* | ![商人與背包介面](../../docs/screenshots/vendor-and-bags.jpg)<br>*在 Smith Dunmere 處整裝——提示框、背包、金幣* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

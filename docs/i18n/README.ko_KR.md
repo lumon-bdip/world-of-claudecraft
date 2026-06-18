@@ -33,9 +33,9 @@
 
 | | |
 |:---:|:---:|
-| ![Greywillow 모닥불가의 황혼](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Greywillow 모닥불가의 황혼* | ![Hollow Crypt에서의 정예 풀링](../../docs/screenshots/hollow-crypt.jpg)<br>*The Hollow Crypt에서 횃불에 비친 정예 풀링* |
+| ![Greywillow 모닥불가의 황혼](../../docs/screenshots/greywillow-dusk.jpg)<br>*Greywillow 모닥불가의 황혼* | ![Hollow Crypt에서의 정예 풀링](../../docs/screenshots/hollow-crypt.jpg)<br>*The Hollow Crypt에서 횃불에 비친 정예 풀링* |
 | ![폐허가 된 예배당의 안식 없는 망자들](../../docs/screenshots/restless-dead.jpg)<br>*폐허가 된 예배당의 안식 없는 망자들* | ![Vale Bandits와의 난투](../../docs/screenshots/vale-bandits.jpg)<br>*도적 야영지에서 수적 열세에 몰리다* |
-| ![북쪽 길에서 추격당한 Old Grimfang](../../docs/screenshots/old-greyjaw.jpg)<br>*북쪽 길에서 추격당한 희귀 출현 몹 Old Grimfang* | ![상인 및 가방 UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Smith Dunmere에게서 장비 갖추기 — 툴팁, 가방, 동전* |
+| ![북쪽 길에서 추격당한 Old Grimfang](../../docs/screenshots/old-grimfang.jpg)<br>*북쪽 길에서 추격당한 희귀 출현 몹 Old Grimfang* | ![상인 및 가방 UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Smith Dunmere에게서 장비 갖추기 — 툴팁, 가방, 동전* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

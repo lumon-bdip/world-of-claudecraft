@@ -36,9 +36,9 @@ für alle online ausführt.
 
 | | |
 |:---:|:---:|
-| ![Abenddämmerung am Lagerfeuer von Greywillow](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Abenddämmerung am Lagerfeuer von Greywillow* | ![Elite-Pulls in The Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Fackelbeleuchtete Elite-Pulls in The Hollow Crypt* |
+| ![Abenddämmerung am Lagerfeuer von Greywillow](../../docs/screenshots/greywillow-dusk.jpg)<br>*Abenddämmerung am Lagerfeuer von Greywillow* | ![Elite-Pulls in The Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Fackelbeleuchtete Elite-Pulls in The Hollow Crypt* |
 | ![Die ruhelosen Toten an der zerfallenen Kapelle](../../docs/screenshots/restless-dead.jpg)<br>*Die ruhelosen Toten an der zerfallenen Kapelle* | ![Eine Schlägerei mit Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*In der Unterzahl am Banditenlager* |
-| ![Old Grimfang auf der Nordstraße gestellt](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, der seltene Spawn, auf der Nordstraße gestellt* | ![Händler- und Taschen-UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Ausrüsten bei Smith Dunmere — Tooltips, Taschen, Münzen* |
+| ![Old Grimfang auf der Nordstraße gestellt](../../docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, der seltene Spawn, auf der Nordstraße gestellt* | ![Händler- und Taschen-UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Ausrüsten bei Smith Dunmere — Tooltips, Taschen, Münzen* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

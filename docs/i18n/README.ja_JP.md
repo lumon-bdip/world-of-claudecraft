@@ -33,9 +33,9 @@
 
 | | |
 |:---:|:---:|
-| ![Greywillow のキャンプファイアの夕暮れ](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Greywillow のキャンプファイアの夕暮れ* | ![Hollow Crypt でのエリート敵の引き寄せ](../../docs/screenshots/hollow-crypt.jpg)<br>*Hollow Crypt で松明に照らされたエリート敵の引き寄せ* |
+| ![Greywillow のキャンプファイアの夕暮れ](../../docs/screenshots/greywillow-dusk.jpg)<br>*Greywillow のキャンプファイアの夕暮れ* | ![Hollow Crypt でのエリート敵の引き寄せ](../../docs/screenshots/hollow-crypt.jpg)<br>*Hollow Crypt で松明に照らされたエリート敵の引き寄せ* |
 | ![廃墟の礼拝堂にいる不浄な死者たち](../../docs/screenshots/restless-dead.jpg)<br>*廃墟の礼拝堂にいる不浄な死者たち* | ![Vale Bandits との乱戦](../../docs/screenshots/vale-bandits.jpg)<br>*盗賊の野営地で数で圧倒される* |
-| ![北の道で討ち取られる Old Grimfang](../../docs/screenshots/old-greyjaw.jpg)<br>*レアスポーンの Old Grimfang を北の道で討ち取る* | ![ベンダーとバッグの UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Smith Dunmere の店で装備を整える — ツールチップ、バッグ、コイン* |
+| ![北の道で討ち取られる Old Grimfang](../../docs/screenshots/old-grimfang.jpg)<br>*レアスポーンの Old Grimfang を北の道で討ち取る* | ![ベンダーとバッグの UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Smith Dunmere の店で装備を整える — ツールチップ、バッグ、コイン* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 

@@ -36,9 +36,9 @@ ejecuta para todos en línea.
 
 | | |
 |:---:|:---:|
-| ![Anochecer en la hoguera de Greywillow](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Anochecer en la hoguera de Greywillow* | ![Pulls de élite en the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de élite a la luz de las antorchas en the Hollow Crypt* |
+| ![Anochecer en la hoguera de Greywillow](../../docs/screenshots/greywillow-dusk.jpg)<br>*Anochecer en la hoguera de Greywillow* | ![Pulls de élite en the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de élite a la luz de las antorchas en the Hollow Crypt* |
 | ![Los muertos inquietos en la capilla en ruinas](../../docs/screenshots/restless-dead.jpg)<br>*Los muertos inquietos en la capilla en ruinas* | ![Una refriega con los Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*Superados en número en el campamento de bandidos* |
-| ![Old Grimfang acorralado en el camino del norte](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Grimfang, el rare spawn, abatido en el camino del norte* | ![Interfaz del vendedor y las bolsas](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipándose en la fragua de Smith Dunmere: tooltips, bolsas y monedas* |
+| ![Old Grimfang acorralado en el camino del norte](../../docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, el rare spawn, abatido en el camino del norte* | ![Interfaz del vendedor y las bolsas](../../docs/screenshots/vendor-and-bags.jpg)<br>*Equipándose en la fragua de Smith Dunmere: tooltips, bolsas y monedas* |
 
 ![Legends of Aldermoor](../../aldermoor-banner.png)
 
