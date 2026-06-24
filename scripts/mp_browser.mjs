@@ -122,7 +122,7 @@ await new Promise((r) => setTimeout(r, 600));
 await pageA.evaluate(() => {
   window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', key: 'Enter' }));
   const input = document.querySelector('#chat-input');
-  input.value = 'For Eastbrook!';
+  input.value = 'For Greywillow!';
   input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', key: 'Enter', bubbles: true }));
 });
 // Allow WebSocket frame to flush before bringing B to front
@@ -131,7 +131,7 @@ await new Promise((r) => setTimeout(r, 800));
 await pageB.bringToFront();
 await new Promise((r) => setTimeout(r, 1200));
 const bGotChat = await pageB.evaluate(() =>
-  [...document.querySelectorAll('#chatlog div, #combatlog div')].some((d) => d.textContent.includes('For Eastbrook!')),
+  [...document.querySelectorAll('#chatlog div, #combatlog div')].some((d) => d.textContent.includes('For Greywillow!')),
 );
 console.log('chat A -> B:', bGotChat ? 'OK' : 'FAIL');
 

@@ -1,4 +1,4 @@
-# Gemini Developer Guide - World of Claudecraft
+# Gemini Developer Guide - Legends of Aldermoor
 
 This guide provides project-specific context and instructions optimized for **Gemini 3.5 Flash (High)**. Use this file as a persistent reference to align development style, workflows, and commands.
 

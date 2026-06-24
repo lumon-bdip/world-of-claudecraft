@@ -34,12 +34,12 @@ function faceTarget(actor: Entity, target: Entity) {
 }
 
 describe('quest lifecycle', () => {
-  it('stops showing the Redbrook starter hint after the first quest is accepted', () => {
+  it('stops showing the Thornwell starter hint after the first quest is accepted', () => {
     const sim = makeSim();
     const starterZone = zoneAt(sim.player.pos.z);
 
     expect(zoneWelcomeText(starterZone, (questId) => sim.questState(questId)))
-      .toBe('Find Marshal Redbrook in town — he has work for you.');
+      .toBe('Find Marshal Thornwell in town — he has work for you.');
 
     const redbrook = [...sim.entities.values()].find((e) => e.templateId === 'marshal_redbrook')!;
     teleportTo(sim, redbrook.pos.x + 2, redbrook.pos.z + 2);
@@ -493,7 +493,7 @@ describe('boss loot and encounter resets', () => {
       sim.countItem('greyjaw_hide_boots', a) +
       sim.countItem('greyjaw_hide_boots', b);
     expect(total).toBe(1);
-    expect(sim.events.some((e) => e.type === 'loot' && e.text.includes('wins Greyjaw Hide Boots'))).toBe(true);
+    expect(sim.events.some((e) => e.type === 'loot' && e.text.includes('wins Grimfang Hide Boots'))).toBe(true);
     expect(mob.loot).toBeNull();
   });
 

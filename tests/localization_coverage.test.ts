@@ -713,7 +713,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("de_DE");
     resetEntityTranslationFallbackLog();
     expect(tEntity({ kind: "item", id: "worn_sword", field: "name" })).toBe("Abgenutztes Kurzschwert");
-    expect(tEntity({ kind: "item", id: "gravecaller_sigil", field: "name" })).toBe("Gravecallers Siegel");
+    expect(tEntity({ kind: "item", id: "gravecaller_sigil", field: "name" })).toBe("Bonecallers Siegel");
     expect(entityTranslationFallbackLog()).toHaveLength(0);
 
     setLanguage("en");
@@ -777,17 +777,17 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("de_DE");
     expect(tEntity({ kind: "mob", id: "forest_wolf", field: "name" })).toBe("Waldwolf");
     expect(tEntity({ kind: "quest", id: "q_wolves", field: "title" })).toBe("Wölfe vor der Tür");
-    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("Eastbrook-Tal");
+    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("Greywillow-Tal");
 
     setLanguage("zh_CN");
-    expect(tEntity({ kind: "quest", id: "q_gravewyrm", field: "title" })).toContain("科祖尔");
+    expect(tEntity({ kind: "quest", id: "q_gravewyrm", field: "title" })).toContain("沃鲁斯");
 
     setLanguage("ja_JP");
     expect(tEntity({ kind: "dungeon", id: "hollow_crypt", field: "name" })).toBe("虚ろの墓所");
 
     setLanguage("ko_KR");
     expect(tEntity({ kind: "mob", id: "forest_wolf", field: "name" })).toBe("숲늑대");
-    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("이스트브룩 골짜기");
+    expect(tEntity({ kind: "zone", id: "eastbrook_vale", field: "name" })).toBe("그레이윌로우 골짜기");
 
     setLanguage("it_IT");
     expect(tEntity({ kind: "mob", id: "forest_wolf", field: "name" })).toBe("Lupo della foresta");
@@ -899,11 +899,11 @@ describe("i18n Localization Key Coverage", () => {
 
   it("should keep representative Phase 9 quest narratives translated with quest-specific content", () => {
     const expectations: Array<readonly [typeof supportedLanguages[number], string, "text" | "completion", string]> = [
-      ["es", "q_hollow", "completion", "Eastbrook te debe"],
+      ["es", "q_hollow", "completion", "Greywillow te debe"],
       ["fr_FR", "q_idols", "completion", "La secte a commencé ici"],
       ["it_IT", "q_bastion_door", "completion", "corda marcia"],
       ["de_DE", "q_wolves", "text", "Nordstraße"],
-      ["zh_CN", "q_wyrm_sigils", "text", "墓龙科祖尔"],
+      ["zh_CN", "q_wyrm_sigils", "text", "龙冢沃鲁斯"],
       ["zh_TW", "q_gravewyrm", "completion", "三地死者"],
       ["ko_KR", "q_necromancers", "completion", "십일조"],
       ["ja_JP", "q_mistcaller", "text", "百人"],

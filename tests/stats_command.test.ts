@@ -24,7 +24,7 @@ describe('/stats command', () => {
 
     const events = sim.tick();
     const text = errorText(events, a)!;
-    expect(text).toMatch(/^Level \d+ Warrior — HP \d+\/\d+, Rage \d+\/\d+\. AP \d+, Crit \d+\.\d%, Armor \d+\.$/);
+    expect(text).toMatch(/^Level \d+ Warden — HP \d+\/\d+, Rage \d+\/\d+\. AP \d+, Crit \d+\.\d%, Armor \d+\.$/);
     // self-only: no other player receives the readout
     expect(events.some((e) => e.type === 'error' && e.pid !== a)).toBe(false);
   });
@@ -36,7 +36,7 @@ describe('/stats command', () => {
 
     sim.chat('/stats', a);
     const text = errorText(sim.tick(), a)!;
-    expect(text).toContain('Rogue');
+    expect(text).toContain('Shadowblade');
     expect(text).toMatch(/Energy \d+\/\d+/);
   });
 

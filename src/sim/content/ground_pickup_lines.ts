@@ -15,7 +15,7 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
   },
   gravecaller_sigil: {
     deny: 'The sigil repels your touch.',
-    enough: "You already carry a Gravecaller's Sigil.",
+    enough: "You already carry a Bonecaller's Sigil.",
   },
   weathered_ledger_page: {
     deny: 'The ledger pages are bound too tightly to take.',
@@ -23,11 +23,11 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
   },
   morthen_grimoire: {
     deny: "The grimoire's clasp is magically sealed.",
-    enough: "You already have Morthen's Grimoire.",
+    enough: "You already have Sarghul's Grimoire.",
   },
   fen_muster_order: {
     deny: 'The wax seal holds until the order is yours to claim.',
-    enough: 'You already have the Fenbridge muster order.',
+    enough: 'You already have the Reedford muster order.',
   },
   lost_caravan_goods: {
     deny: "You aren't authorized to salvage these goods yet.",
@@ -42,8 +42,8 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     enough: 'You already have the Bastion ward stone.',
   },
   highwatch_summons: {
-    deny: 'The summons are sealed with Highwatch wax.',
-    enough: 'You already have the Highwatch summons.',
+    deny: 'The summons are sealed with Wardenwatch wax.',
+    enough: 'You already have the Wardenwatch summons.',
   },
   ogre_war_totem: {
     deny: 'The totem is planted too firmly to uproot.',
@@ -51,7 +51,7 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
   },
   gravewyrm_sigil: {
     deny: 'Dark magic keeps the sigil rooted.',
-    enough: 'You already have enough Gravewyrm sigils.',
+    enough: 'You already have enough Wyrmbarrow sigils.',
   },
   sanctum_key_shard: {
     deny: 'The shard is dormant and locked in place.',

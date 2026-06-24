@@ -27,13 +27,13 @@ import { createPerfMonitor } from './game/perf';
 import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 
 
-const WORLD_SEED = 20061; // fixed: World of ClaudeCraft is a persistent place
+const WORLD_SEED = 20061; // fixed: Legends of Aldermoor is a persistent place
 const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camera stays decoupled from click spam
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 let pendingDeleteCharacter: CharacterSummary | null = null;
 
-const SITE_URL = 'https://worldofclaudecraft.com/';
+const SITE_URL = 'https://aldermoor.com/';
 
 const RESOURCE_KEYS = {
   mana: 'classDetails.resources.mana',
@@ -1894,13 +1894,13 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
     jsonLd.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'VideoGame',
-      name: 'World of ClaudeCraft',
+      name: 'Legends of Aldermoor',
       genre: t('seo.genre'),
       playMode: t('seo.playMode'),
       applicationCategory: t('seo.applicationCategory'),
       operatingSystem: t('seo.operatingSystem'),
       url: canonicalHref,
-      image: 'https://worldofclaudecraft.com/woc_logo_square.webp',
+      image: 'https://aldermoor.com/aldermoor_logo_square.webp',
       description: t('seo.description'),
       inLanguage: languageTag(lang),
     }, null, 2);

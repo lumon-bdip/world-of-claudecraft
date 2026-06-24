@@ -1,4 +1,4 @@
-# Procedural Icon System — Design Spec for World of Claudecraft
+# Procedural Icon System — Design Spec for Legends of Aldermoor
 
 Everything below is implementable without further design decisions. Sources read: `/Users/reubenhorne/Documents/code/levy-street/world-of-claudecraft/src/sim/data.ts`, `src/sim/types.ts`, `src/ui/hud.ts`, `index.html`.
 
@@ -223,7 +223,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 
 ### 4.1 Abilities (all 67) — `iconId` = ability id; recipe columns: bg · prims · pal · fx
 
-**Warrior**
+**Warden**
 | ability | bg | prims | pal | fx |
 |---|---|---|---|---|
 | heroic_strike | fury | sword | steel | glow |
@@ -235,7 +235,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | bloodrage | blood | heart | blood | drips, glow |
 | overpower | fury | sword, sunburst@tl | gold | — |
 
-**Mage**
+**Arcanist**
 | fireball | fire | bolt, flame@br | ember | glow |
 |---|---|---|---|---|
 | frost_armor | frost | chestplate, snowflake@tr | ice | — |
@@ -247,7 +247,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | polymorph | arcane | sheep_head | pink | sparkle |
 | frost_nova | frost | snowflake | ice | arcs, glow |
 
-**Rogue**
+**Shadowblade**
 | sinister_strike | steel | dagger | steel | glow |
 |---|---|---|---|---|
 | eviscerate | blood | claw_slash | blood | drips |
@@ -257,7 +257,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | slice_and_dice | blood | dagger(−7,0,0.85,rot −0.5), dagger(7,0,0.85,rot 0.5) | steel | motion |
 | sprint | earth | boot | leather | motion |
 
-**Paladin**
+**Lightsworn**
 | seal_of_righteousness | holy | sigil_rune, sunburst@big | holyGold | glow |
 |---|---|---|---|---|
 | holy_light | holy | sunburst | holyGold | glow, sparkle |
@@ -268,7 +268,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | hammer_of_justice | holy | mace | gold | arcs |
 | lay_on_hands | holy | hand, sunburst@big | holyGold | sparkle, glow |
 
-**Hunter**
+**Ranger**
 | raptor_strike | earth | claw_slash | blood | — |
 |---|---|---|---|---|
 | aspect_of_the_hawk | storm | wing | sky | glow |
@@ -278,7 +278,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | mongoose_bite | earth | fang, claw_slash@br | steel | motion |
 | wing_clip | earth | wing, claw_slash@br | blood | — |
 
-**Priest**
+**Cleric**
 | smite | holy | bolt, sunburst@tl | holyGold | glow |
 |---|---|---|---|---|
 | lesser_heal | holy | cross | silverWhite | glow |
@@ -288,7 +288,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | renew | holy | heart(pal leafGreen) | leafGreen | sparkle |
 | mind_blast | shadow | eye | shadowPurple | arcs, glow |
 
-**Shaman**
+**Spiritcaller**
 | lightning_bolt | storm | lightning | sky | glow |
 |---|---|---|---|---|
 | rockbiter_weapon | earth | fist | earthBrown | crack |
@@ -297,7 +297,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | lightning_shield | storm | shield, lightning@c(0,0,0.6) | sky | glow |
 | flame_shock | fire | flame | ember | arcs |
 
-**Warlock**
+**Doomweaver**
 | shadow_bolt | shadow | bolt | shadowPurple | glow |
 |---|---|---|---|---|
 | demon_skin | shadow | chestplate(pal venom) | venom | — |
@@ -307,7 +307,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 | curse_of_agony | shadow | skull | shadowPurple | arcs |
 | drain_life | shadow | droplet(pal blood) | blood | motion, drips |
 
-**Druid**
+**Wildshaper**
 | wrath | nature | bolt, leaf@br | leafGreen | glow |
 |---|---|---|---|---|
 | healing_touch | nature | hand, leaf@tl | leafGreen | sparkle |

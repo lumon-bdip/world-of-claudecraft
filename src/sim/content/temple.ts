@@ -1,8 +1,8 @@
 // The Drowned Temple — a self-contained side-wing reached through a moongate
-// portal on the shore of the Glimmermere, a glowing tarn high in Thornpeak
+// portal on the shore of the Glistermere, a glowing tarn high in Thornfell
 // Heights. Its own lore (the Pale Choir, who drowned worshipping Ysolei, the
 // Drowned Moon), its own mobs, quests, loot and instanced interior — nothing
-// here touches the Gravecaller storyline of zones 1-3.
+// here touches the Bonecaller storyline of zones 1-3.
 //
 // Everything is merged into the flat engine tables by sim/data.ts, exactly the
 // way the per-zone modules and content/dungeons.ts are. Levels ~15-18: a step
@@ -19,17 +19,17 @@ const WAR: PlayerClass[] = ['warrior', 'paladin', 'shaman'];
 const MAG: PlayerClass[] = ['mage', 'priest', 'warlock', 'druid'];
 const ROG: PlayerClass[] = ['rogue', 'hunter'];
 
-// The moongate sits on the south shore of the Glimmermere tarn (-70, 760) in
-// Thornpeak Heights; the surface camp and Ondrel cluster just south of it.
+// The moongate sits on the south shore of the Glistermere tarn (-70, 760) in
+// Thornfell Heights; the surface camp and Ondrel cluster just south of it.
 export const MOONGATE_POS = { x: -70, z: 792 };
 
 // ---------------------------------------------------------------------------
-// Mobs — overworld (the Glimmermere shore)
+// Mobs — overworld (the Glistermere shore)
 // ---------------------------------------------------------------------------
 
 export const TEMPLE_MOBS: Record<string, MobTemplate> = {
   glimmermere_wader: {
-    id: 'glimmermere_wader', name: 'Glimmermere Wader', minLevel: 15, maxLevel: 16, family: 'murloc',
+    id: 'glimmermere_wader', name: 'Glistermere Wader', minLevel: 15, maxLevel: 16, family: 'murloc',
     hpBase: 70, hpPerLevel: 22, dmgBase: 10, dmgPerLevel: 2.5, attackSpeed: 1.9,
     armorPerLevel: 14, moveSpeed: 8, aggroRadius: 13, // waders swarm in from far, murloc-style
     loot: [
@@ -161,9 +161,9 @@ export const TEMPLE_QUESTS: Record<string, QuestDef> = {
   q_tarn_waders: {
     id: 'q_tarn_waders', name: 'What the Tarn Gives Up',
     giverNpcId: 'tidewatcher_ondrel', turnInNpcId: 'tidewatcher_ondrel',
-    text: 'Since the gate opened, things climb out of the mere at dusk — bloated, pale, finned where hands ought to be. Glimmermere Waders, the old rubbings name them. They drag anything living back down with them. Cull ten before they thin my watch to nothing.',
+    text: 'Since the gate opened, things climb out of the mere at dusk — bloated, pale, finned where hands ought to be. Glistermere Waders, the old rubbings name them. They drag anything living back down with them. Cull ten before they thin my watch to nothing.',
     completionText: 'Ten back in the water. They feel no cold, $N, and no fear — only the pull of that gate. Whatever sings to them, it sings loud.',
-    objectives: [{ type: 'kill', targetMobId: 'glimmermere_wader', count: 10, label: 'Glimmermere Wader slain' }],
+    objectives: [{ type: 'kill', targetMobId: 'glimmermere_wader', count: 10, label: 'Glistermere Wader slain' }],
     xpReward: 3400, copperReward: 1600, itemRewards: {},
     requiresQuest: 'q_glimmermere_light',
   },
@@ -218,7 +218,7 @@ export const TEMPLE_QUEST_ORDER = [
 ];
 
 // ---------------------------------------------------------------------------
-// World layout — the Glimmermere shore (south of the tarn at -70,760)
+// World layout — the Glistermere shore (south of the tarn at -70,760)
 // ---------------------------------------------------------------------------
 
 export const TEMPLE_CAMPS: CampDef[] = [
@@ -369,7 +369,7 @@ export const TEMPLE_DUNGEON_DEFS: Record<string, DungeonDef> = {
     id: 'drowned_temple',
     name: 'The Drowned Temple',
     index: 3, // instance origin x = 900 + 3*600 = 2700 (clear of the arena band)
-    doorPos: { ...MOONGATE_POS }, // the moongate on the Glimmermere shore
+    doorPos: { ...MOONGATE_POS }, // the moongate on the Glistermere shore
     entry: { x: 0, z: 4 },
     exitOffset: { x: 0, z: -6 },
     spawns: TEMPLE_SPAWN_LIST,

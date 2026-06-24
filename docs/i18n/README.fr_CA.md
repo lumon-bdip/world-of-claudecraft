@@ -14,11 +14,11 @@
 
 </div>
 
-# World of ClaudeCraft — un MMO de style classique
+# Legends of Aldermoor — un MMO de style classique
 
 [Rejoignez le Discord de la communauté](https://discord.gg/GjhnUsBtw)
 
-![Écran-titre de World of ClaudeCraft](../../docs/screenshots/title-screen.jpg)
+![Écran-titre de Legends of Aldermoor](../../docs/screenshots/title-screen.jpg)
 
 Un micro-MMO aux saveurs de MMO d'antan que vous pouvez héberger et jouer :
 
@@ -33,17 +33,17 @@ multijoueur faisant autorité exécute pour tout le monde en ligne.
 
 ## Captures d'écran
 
-![Un groupe se rassemble devant l'apothicaire à Eastbrook](../../docs/screenshots/party-questing.jpg)
+![Un groupe se rassemble devant l'apothicaire à Greywillow](../../docs/screenshots/party-questing.jpg)
 
 | | |
 |:---:|:---:|
-| ![Crépuscule au feu de camp d'Eastbrook](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Crépuscule au feu de camp d'Eastbrook* | ![Pulls de mobs élites dans the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de mobs élites à la lueur des torches dans the Hollow Crypt* |
+| ![Crépuscule au feu de camp d'Greywillow](../../docs/screenshots/greywillow-dusk.jpg)<br>*Crépuscule au feu de camp d'Greywillow* | ![Pulls de mobs élites dans the Hollow Crypt](../../docs/screenshots/hollow-crypt.jpg)<br>*Pulls de mobs élites à la lueur des torches dans the Hollow Crypt* |
 | ![Les morts agités à la chapelle en ruines](../../docs/screenshots/restless-dead.jpg)<br>*Les morts agités à la chapelle en ruines* | ![Une bagarre avec les Vale Bandits](../../docs/screenshots/vale-bandits.jpg)<br>*En infériorité numérique au camp des bandits* |
-| ![Old Greyjaw traqué sur la route du nord](../../docs/screenshots/old-greyjaw.jpg)<br>*Old Greyjaw, le spawn rare, rattrapé sur la route du nord* | ![Interface du marchand et des sacs](../../docs/screenshots/vendor-and-bags.jpg)<br>*On s'équipe chez Smith Haldren — infobulles, sacs, pièces* |
+| ![Old Grimfang traqué sur la route du nord](../../docs/screenshots/old-grimfang.jpg)<br>*Old Grimfang, le spawn rare, rattrapé sur la route du nord* | ![Interface du marchand et des sacs](../../docs/screenshots/vendor-and-bags.jpg)<br>*On s'équipe chez Smith Dunmere — infobulles, sacs, pièces* |
 
-![World of Claude](../../worldofclaude.png)
+![Legends of Aldermoor](../../aldermoor-banner.png)
 
-![La communauté de World of ClaudeCraft](../../woc_community.png)
+![La communauté de Legends of Aldermoor](../../woc_community.png)
 
 ---
 
@@ -125,18 +125,18 @@ personnage → Enter World. Ouvrez un deuxième fureteur/onglet et reconnectez-v
 
 ## The Hollow Crypt — instance élite à 5 joueurs
 
-L'intrigue de Brother Aldric se poursuit après *The Restless Dead* : **Whispers
-Below** (trouvez le sceau du Gravecaller à la chapelle en ruines) → **The
+L'intrigue de Brother Cassian se poursuit après *The Restless Dead* : **Whispers
+Below** (trouvez le sceau du Bonecaller à la chapelle en ruines) → **The
 Binding Rite** (récupérez du Blessed Tallow à la fouille des kobolds et de la
 Ghostly Essence sur les morts agités) → **Into the Hollow** (*joueurs suggérés :
-5*) — tuez Morthen the Gravecaller au fond de la crypte sous la chapelle.
+5*) — tuez Sarghul the Bonecaller au fond de la crypte sous la chapelle.
 
 - La porte de la crypte à la Fallen Chapel téléporte votre **groupe dans sa
   propre copie d'instance privée** (6 places ; les instances se réinitialisent
   après 5 minutes vides).
 - À l'intérieur : couloirs éclairés aux torches, paquets de trash **élites**
   appariés (échelonnement élite vanilla : ~2.3× la santé, ~1.5× les dégâts, XP
-  doublé), le miniboss Sexton Marrow et Morthen — un boss élite de niveau 10
+  doublé), le miniboss Sexton Marrow et Sarghul — un boss élite de niveau 10
   avec une zone d'effet **Shadow Pulse** toutes les 10 secondes. Le trash de
   donjon ne réapparaît pas tant que l'instance ne se réinitialise pas.
 - Récompenses : armes rares (bleues) par archétype de classe, 1 gold, 1500 XP.
@@ -151,15 +151,15 @@ node scripts/mp_integration.mjs   # suite de 26 vérifications API/WS/persistanc
 node scripts/mp_browser.mjs       # deux vrais clients fureteur se voient l'un l'autre
 ```
 
-## The Sunken Bastion & Gravewyrm Sanctum
+## The Sunken Bastion & Wyrmbarrow Sanctum
 
-La conspiration ne s'arrête pas avec Morthen. **The Sunken Bastion** (5 joueurs,
-~niveau 13, sud-est de Mirefen) abrite Vael the Mistcaller — il invoque des
+La conspiration ne s'arrête pas avec Sarghul. **The Sunken Bastion** (5 joueurs,
+~niveau 13, sud-est de Sablefen) abrite Ysra the Fogcaller — il invoque des
 vagues de Drowned Thralls à 60 % et à 30 % de santé. Le final, c'est le
-**Gravewyrm Sanctum** (5 joueurs, niveau 20, sous Thornpeak) : trois chambres de
-boneguard élites et de drakonid, Korgath the Bound (entre en rage sous les
-30 %), Grand Necromancer Velkhar (encore des vagues d'adds) et **Korzul the
-Gravewyrm** — des armes épiques tombent ici, et la chaîne de quêtes menant à lui
+**Wyrmbarrow Sanctum** (5 joueurs, niveau 20, sous Thornfell) : trois chambres de
+boneguard élites et de drakonid, Durgath the Bound (entre en rage sous les
+30 %), Grand Necromancer Nethanys (encore des vagues d'adds) et **Vorruth the
+Wyrmbarrow** — des armes épiques tombent ici, et la chaîne de quêtes menant à lui
 est faisable en solo pour que personne ne soit exclu de l'histoire.
 
 
@@ -171,15 +171,15 @@ npm run dev        # ouvrez http://localhost:5173 -> Play Offline
 ```
 
 Nommez votre personnage, choisissez l'une des neuf classes, et vous voilà dans
-**Eastbrook Vale** (niveaux 1-7) : un bourg marchand entouré de six pôles —
-chasses aux loups au nord, prairies à sangliers à l'est, the Webwood à l'ouest,
+**Greywillow Vale** (niveaux 1-7) : un bourg marchand entouré de six pôles —
+chasses aux loups au nord, prairies à sangliers à l'est, the Tanglemoor à l'ouest,
 Mirror Lake au nord-ouest, une fouille de cuivre des kobolds au sud-ouest, une
 chapelle en ruines avec ses morts agités au nord-est, et le camp de bandits de
-Gorrak au sud-est. La route du nord grimpe par un col de montagne jusqu'à
-**Mirefen Marsh** (6-13, pôle : Fenbridge) et plus haut jusqu'à **Thornpeak
-Heights** (13-20, pôle : Highwatch) — trois zones, ~60 quêtes et une seule
-intrigue : la conspiration du Gravecaller, des premiers os agités à l'extérieur
-d'Eastbrook jusqu'à **Korzul the Gravewyrm** sous les sommets. Chaque pôle a ses
+Brakka au sud-est. La route du nord grimpe par un col de montagne jusqu'à
+**Sablefen Marsh** (6-13, pôle : Reedford) et plus haut jusqu'à **Thornfell
+Heights** (13-20, pôle : Wardenwatch) — trois zones, ~60 quêtes et une seule
+intrigue : la conspiration du Bonecaller, des premiers os agités à l'extérieur
+d'Greywillow jusqu'à **Vorruth the Wyrmbarrow** sous les sommets. Chaque pôle a ses
 marchands (y compris des forgerons d'armes et d'armures qui vendent de l'honnête
 équipement blanc), un cimetière, sa propre musique et une carte de zone.
 
@@ -244,7 +244,7 @@ palier comme Execute, Kidney Shot, Flash Heal, Stormstrike et Starfire)**
 - IA des mobs : errance, aggro de proximité selon la différence de niveau, pulls
   sociaux (les murlocs s'appellent de plus loin — amenez des amis), poursuite,
   désengagement-leash-reset, butin sur cadavre, réapparitions ; un spawn rare
-  (Old Greyjaw) sur une longue minuterie
+  (Old Grimfang) sur une longue minuterie
 - Mort → libérez l'esprit → cimetière ; dégâts de chute ; nager vous ralentit
 - Journal de quêtes avec abandon, dialogues de bavardage avec salutations,
   récompenses par classe

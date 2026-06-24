@@ -1,7 +1,7 @@
 {
-  "name": "World of ClaudeCraft",
-  "short_name": "ClaudeCraft",
-  "description": "World of ClaudeCraft mobile realm",
+  "name": "Legends of Aldermoor",
+  "short_name": "Aldermoor",
+  "description": "Legends of Aldermoor mobile realm",
   "start_url": "/",
   "scope": "/",
   "display": "fullscreen",

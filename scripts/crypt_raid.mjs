@@ -1,5 +1,5 @@
 // The big one: five bots form a party, enter the Hollow Crypt together,
-// and fight their way to Morthen the Gravecaller with simple raid AI
+// and fight their way to Sarghul the Bonecaller with simple raid AI
 // (focus fire + two healers). Verifies party instancing, elite combat,
 // boss mechanics and group xp over the real server.
 // Requires the server running with ALLOW_DEV_COMMANDS=1.
@@ -270,7 +270,7 @@ async function main() {
   }
 
   check('fought elite mobs', sawElite);
-  check('Morthen the Gravecaller defeated by the party', bossDead, `wipes=${wipes} elapsed=${Math.round((Date.now() - start) / 1000)}s`);
+  check('Sarghul the Bonecaller defeated by the party', bossDead, `wipes=${wipes} elapsed=${Math.round((Date.now() - start) / 1000)}s`);
   check('boss pulse mechanic fired during the fight', sawPulse);
   console.log(`deaths during the run: ${wipes}`);
 

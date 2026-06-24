@@ -14,11 +14,11 @@
 
 </div>
 
-# World of ClaudeCraft — クラシックスタイルのMMO
+# Legends of Aldermoor — クラシックスタイルのMMO
 
 [コミュニティ Discord に参加する](https://discord.gg/GjhnUsBtw)
 
-![World of ClaudeCraft タイトル画面](../../docs/screenshots/title-screen.jpg)
+![Legends of Aldermoor タイトル画面](../../docs/screenshots/title-screen.jpg)
 
 ホストしてプレイできる、クラシック時代のMMOの雰囲気を持つマイクロMMOです。
 
@@ -29,17 +29,17 @@
 
 ## Screenshots
 
-![Eastbrook の薬屋の外に集まるパーティ](../../docs/screenshots/party-questing.jpg)
+![Greywillow の薬屋の外に集まるパーティ](../../docs/screenshots/party-questing.jpg)
 
 | | |
 |:---:|:---:|
-| ![Eastbrook のキャンプファイアの夕暮れ](../../docs/screenshots/eastbrook-dusk.jpg)<br>*Eastbrook のキャンプファイアの夕暮れ* | ![Hollow Crypt でのエリート敵の引き寄せ](../../docs/screenshots/hollow-crypt.jpg)<br>*Hollow Crypt で松明に照らされたエリート敵の引き寄せ* |
+| ![Greywillow のキャンプファイアの夕暮れ](../../docs/screenshots/greywillow-dusk.jpg)<br>*Greywillow のキャンプファイアの夕暮れ* | ![Hollow Crypt でのエリート敵の引き寄せ](../../docs/screenshots/hollow-crypt.jpg)<br>*Hollow Crypt で松明に照らされたエリート敵の引き寄せ* |
 | ![廃墟の礼拝堂にいる不浄な死者たち](../../docs/screenshots/restless-dead.jpg)<br>*廃墟の礼拝堂にいる不浄な死者たち* | ![Vale Bandits との乱戦](../../docs/screenshots/vale-bandits.jpg)<br>*盗賊の野営地で数で圧倒される* |
-| ![北の道で討ち取られる Old Greyjaw](../../docs/screenshots/old-greyjaw.jpg)<br>*レアスポーンの Old Greyjaw を北の道で討ち取る* | ![ベンダーとバッグの UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Smith Haldren の店で装備を整える — ツールチップ、バッグ、コイン* |
+| ![北の道で討ち取られる Old Grimfang](../../docs/screenshots/old-grimfang.jpg)<br>*レアスポーンの Old Grimfang を北の道で討ち取る* | ![ベンダーとバッグの UI](../../docs/screenshots/vendor-and-bags.jpg)<br>*Smith Dunmere の店で装備を整える — ツールチップ、バッグ、コイン* |
 
-![World of Claude](../../worldofclaude.png)
+![Legends of Aldermoor](../../aldermoor-banner.png)
 
-![World of ClaudeCraft コミュニティ](../../woc_community.png)
+![Legends of Aldermoor コミュニティ](../../woc_community.png)
 
 ---
 
@@ -78,10 +78,10 @@ http://localhost:5173 を開く → **Play Online** → アカウントを作成
 
 ## The Hollow Crypt — 5-player elite instance
 
-Brother Aldric のストーリーラインは *The Restless Dead* の先へと続きます：**Whispers Below**（廃墟の礼拝堂で Gravecaller の紋章を見つける）→ **The Binding Rite**（コボルトの採掘場から Blessed Tallow を、不浄な死者から Ghostly Essence を集める）→ **Into the Hollow**（*推奨プレイヤー数：5*）— 礼拝堂の地下にある地下墓地の最深部で Morthen the Gravecaller を倒します。
+Brother Cassian のストーリーラインは *The Restless Dead* の先へと続きます：**Whispers Below**（廃墟の礼拝堂で Bonecaller の紋章を見つける）→ **The Binding Rite**（コボルトの採掘場から Blessed Tallow を、不浄な死者から Ghostly Essence を集める）→ **Into the Hollow**（*推奨プレイヤー数：5*）— 礼拝堂の地下にある地下墓地の最深部で Sarghul the Bonecaller を倒します。
 
 - Fallen Chapel にある地下墓地の扉は、**あなたのパーティを専用のプライベートインスタンスのコピー**へとテレポートさせます（6 スロット。インスタンスは空になってから 5 分後にリセットされます）。
-- 内部：松明に照らされた回廊、ペアになった**エリート**雑魚の群れ（バニラのエリートスケーリング：体力 ~2.3 倍、ダメージ ~1.5 倍、XP 2 倍）、ミニボスの Sexton Marrow、そして 10 秒ごとに **Shadow Pulse** の AoE を使うレベル 10 のエリートボス Morthen。ダンジョンの雑魚はインスタンスがリセットされるまでリスポーンしません。
+- 内部：松明に照らされた回廊、ペアになった**エリート**雑魚の群れ（バニラのエリートスケーリング：体力 ~2.3 倍、ダメージ ~1.5 倍、XP 2 倍）、ミニボスの Sexton Marrow、そして 10 秒ごとに **Shadow Pulse** の AoE を使うレベル 10 のエリートボス Sarghul。ダンジョンの雑魚はインスタンスがリセットされるまでリスポーンしません。
 - 報酬：クラスのアーキタイプごとのレア（青）武器、1 ゴールド、1500 XP。
 - これは本当に 5 人向けに調整されています：私たちの自動 5 ボットレイド（warrior、paladin、priest、mage、hunter が集中砲火 + ヒーラー AI で）は、~10 回の死亡を伴って ~5 分でクリアします（`node scripts/crypt_raid.mjs`、ALLOW_DEV_COMMANDS=1 が必要）。
 
@@ -91,9 +91,9 @@ node scripts/mp_integration.mjs   # 26 項目の API/WS/永続化テストスイ
 node scripts/mp_browser.mjs       # 2 つの本物のブラウザクライアントがお互いを見る
 ```
 
-## The Sunken Bastion & Gravewyrm Sanctum
+## The Sunken Bastion & Wyrmbarrow Sanctum
 
-陰謀は Morthen で終わりません。**The Sunken Bastion**（5 人用、~レベル 13、Mirefen 南東）には Vael the Mistcaller がいて、体力 60% と 30% で Drowned Thralls の波を召喚します。フィナーレは **Gravewyrm Sanctum**（5 人用、レベル 20、Thornpeak の地下）：エリートの骨兵とドラコニッドが詰まった 3 つの間、Korgath the Bound（体力 30% 未満で激昂）、Grand Necromancer Velkhar（さらなる雑魚の波）、そして **Korzul the Gravewyrm** — ここではエピック武器がドロップし、前段のクエストチェーンはソロで進められるため、誰もストーリーから締め出されることはありません。
+陰謀は Sarghul で終わりません。**The Sunken Bastion**（5 人用、~レベル 13、Sablefen 南東）には Ysra the Fogcaller がいて、体力 60% と 30% で Drowned Thralls の波を召喚します。フィナーレは **Wyrmbarrow Sanctum**（5 人用、レベル 20、Thornfell の地下）：エリートの骨兵とドラコニッドが詰まった 3 つの間、Durgath the Bound（体力 30% 未満で激昂）、Grand Necromancer Nethanys（さらなる雑魚の波）、そして **Vorruth the Wyrmbarrow** — ここではエピック武器がドロップし、前段のクエストチェーンはソロで進められるため、誰もストーリーから締め出されることはありません。
 
 
 
@@ -103,7 +103,7 @@ node scripts/mp_browser.mjs       # 2 つの本物のブラウザクライアン
 npm run dev        # http://localhost:5173 を開く -> Play Offline
 ```
 
-キャラクターに名前を付け、9 つのクラスのいずれかを選ぶと、**Eastbrook Vale**（レベル 1～7）に入ります：6 つの拠点に囲まれた市場町で、北にはオオカミの生息地、東にはイノシシの草原、西には the Webwood、北西には Mirror Lake、南西にはコボルトの銅採掘場、北東には不浄な死者がいる廃墟の礼拝堂、南東には Gorrak の盗賊の野営地があります。北の道は山道を抜けて **Mirefen Marsh**（6～13、拠点：Fenbridge）へ登り、さらに **Thornpeak Heights**（13～20、拠点：Highwatch）へと続きます — 3 つのゾーン、~60 のクエスト、そして 1 つのストーリーライン：Gravecaller の陰謀が、Eastbrook の外にいる最初の不浄な骨から、峰々の地下にいる **Korzul the Gravewyrm** まで展開します。各拠点にはベンダー（誠実な白い装備を売る武器・防具の鍛冶屋を含む）、墓地、独自の音楽、そしてゾーンマップがあります。
+キャラクターに名前を付け、9 つのクラスのいずれかを選ぶと、**Greywillow Vale**（レベル 1～7）に入ります：6 つの拠点に囲まれた市場町で、北にはオオカミの生息地、東にはイノシシの草原、西には the Tanglemoor、北西には Mirror Lake、南西にはコボルトの銅採掘場、北東には不浄な死者がいる廃墟の礼拝堂、南東には Brakka の盗賊の野営地があります。北の道は山道を抜けて **Sablefen Marsh**（6～13、拠点：Reedford）へ登り、さらに **Thornfell Heights**（13～20、拠点：Wardenwatch）へと続きます — 3 つのゾーン、~60 のクエスト、そして 1 つのストーリーライン：Bonecaller の陰謀が、Greywillow の外にいる最初の不浄な骨から、峰々の地下にいる **Vorruth the Wyrmbarrow** まで展開します。各拠点にはベンダー（誠実な白い装備を売る武器・防具の鍛冶屋を含む）、墓地、独自の音楽、そしてゾーンマップがあります。
 
 ### Controls (classic layout)
 
@@ -143,7 +143,7 @@ npm run dev        # http://localhost:5173 を開く -> Play Offline
 - 飲食：座って 18 秒かけて回復、ダメージや立ち上がりで中断 — そして、はい、食べながら同時に飲むこともできます
 - ベンダー：食料／水の購入、グレー品の売却；所持金表示は g/s/c
 - きらめきを伴う地面のクエストオブジェクト（盗賊の補給品の箱を取り返す）
-- モブ AI：徘徊、レベル差による近接アグロ、ソーシャルプル（murloc はより遠くから引き寄せる — 仲間を連れて行こう）、追跡、リーシュ・回避・リセット、死体のルート、リスポーン；長いタイマーで出現するレアスポーン（Old Greyjaw）
+- モブ AI：徘徊、レベル差による近接アグロ、ソーシャルプル（murloc はより遠くから引き寄せる — 仲間を連れて行こう）、追跡、リーシュ・回避・リセット、死体のルート、リスポーン；長いタイマーで出現するレアスポーン（Old Grimfang）
 - 死亡 → 魂を解放 → 墓地；落下ダメージ；水泳は移動を遅くする
 - 放棄機能付きのクエストログ、挨拶を伴うゴシップダイアログ、クラスごとの報酬
 

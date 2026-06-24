@@ -95,10 +95,10 @@ if (PHASE === 'sell') {
   check(seen.count >= 2, `buyer sees the seller's ${seen.count} listings across the wire`);
   await buyer.screenshot({ path: 'tmp/market_mp_buyer_sees.png' });
 
-  // buyer earns coin at Trader Wilkes, then buys the boots
+  // buyer earns coin at Trader Garrow, then buys the boots
   await buyer.evaluate(() => window.__game.online.cmd({ cmd: 'dev_give', item: 'militia_vest', count: 5 }));
   await sleep(400);
-  await buyer.evaluate(() => window.__game.online.cmd({ cmd: 'dev_teleport', x: -7, z: 3 })); // Trader Wilkes
+  await buyer.evaluate(() => window.__game.online.cmd({ cmd: 'dev_teleport', x: -7, z: 3 })); // Trader Garrow
   await sleep(600);
   await buyer.evaluate(() => { for (let i = 0; i < 5; i++) window.__game.world.sellItem('militia_vest'); });
   await sleep(600);

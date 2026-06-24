@@ -1,5 +1,5 @@
 // Screenshot tour of The Drowned Temple: boots offline, levels up, walks the
-// Glimmermere moongate site (portal + Ondrel + the drowned shore), then steps
+// Glistermere moongate site (portal + Ondrel + the drowned shore), then steps
 // through the gate to tour the flooded temple, the choir-sanctum and Ysolei's
 // altar. Saves tmp/temple_*.png. Needs `npm run dev` running and a browser
 // (set BROWSER_PATH or rely on scripts/browser_path.mjs autodetect).
@@ -53,7 +53,7 @@ const tp = async (x, z, facing = 0) => {
   await sleep(900);
 };
 
-// 1) the Glimmermere shore: the moongate portal, Ondrel, the drowned camp
+// 1) the Glistermere shore: the moongate portal, Ondrel, the drowned camp
 await tp(-70, 802, 0);
 await shot('01_glimmermere_shore');
 await tp(-66, 800, -2.4); // look back at Ondrel + the gate
@@ -131,7 +131,7 @@ const boss = await page.evaluate(() => {
 });
 console.log('Ysolei present:', JSON.stringify(boss), boss ? 'OK' : 'FAIL');
 
-// 7) the world map — the moongate + Glimmermere now sit on the Thornpeak map
+// 7) the world map — the moongate + Glistermere now sit on the Thornfell map
 await page.evaluate(() => window.__game.sim.leaveDungeon());
 await sleep(500);
 await tp(-70, 770, 0);
