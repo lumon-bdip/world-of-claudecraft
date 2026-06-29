@@ -36,6 +36,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          # Full history so the diff against the PR base drives change-aware capture.
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -70,10 +73,21 @@ jobs:
             sleep 2
           done
 
+      # Change-aware capture: map the diff to the screens it implies (inventory, world
+      # map, ...). Only on pull_request; otherwise pr_screenshots falls back to the fixed
+      # tour. pr.diff is gitignored.
+      - name: Compute PR diff (for change-aware capture)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: git diff --no-color "$BASE_SHA" "$HEAD_SHA" > pr.diff || true
+
       - name: Capture screenshots
         env:
           GAME_URL: http://127.0.0.1:5173
           SHOTS_DIR: pr-shots
+          DIFF_FILE: pr.diff
         run: node scripts/pr_screenshots.mjs
 
       - name: Stop the dev client

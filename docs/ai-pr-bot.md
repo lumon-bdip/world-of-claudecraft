@@ -7,11 +7,17 @@ neither is a required check.
 ## What it does
 
 1. **Screenshots of changes** (`screenshots` job). Boots the Vite dev client headless on
-   a runner (software GL via SwiftShader, no GPU needed), runs a fixed offline tour, and
-   captures PNGs: character select, the desktop HUD in-world, and the mobile-viewport HUD.
-   The frames are uploaded as the `pr-screenshots` artifact and linked from a sticky PR
-   comment. The tour lives in `scripts/pr_screenshots.mjs`; extend it as the canonical set
-   grows (keep it offline and quick).
+   a runner (software GL via SwiftShader, no GPU needed) and captures PNGs of the relevant
+   screens. The frames are uploaded as the `pr-screenshots` artifact and linked from a
+   sticky PR comment. Two modes (`scripts/pr_screenshots.mjs`):
+   - **Change-aware** (when a diff is available): it maps the changed paths to the screens
+     they imply and shoots exactly those, cropped to the relevant region. A change under
+     `src/ui/bags*` captures the inventory window; a change under `src/sim/content/zones*`
+     (or the map/terrain renderer) teleports to a landmark and captures the world map. The
+     target registry (which paths imply which screen, and how to bring it up + clip it)
+     lives in `scripts/pr_shot_targets.mjs`; add coverage with one entry there.
+   - **Fixed tour** (no diff or no matched target): a consistent baseline, character
+     select, desktop HUD, mobile HUD. Keep all recipes offline and quick.
 2. **AI review** (`ai-review` job). Sends the PR diff to an OpenRouter model and posts a
    short review as a sticky PR comment, grouped into Correctness / Invariants / Tests /
    Nits with severity tags. The reviewer is `scripts/ai_review.mjs`; the GitHub comment
