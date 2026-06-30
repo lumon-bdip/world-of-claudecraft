@@ -19,7 +19,7 @@ Mark a row's Status as "In progress" or "Done" and fill Started / Completed
 | Phase 03 | Done | 2026-06-30 | 2026-06-30 |
 | Phase 03 QA | Done | 2026-06-30 | 2026-06-30 |
 | Phase 04 | Done | 2026-06-30 | 2026-06-30 |
-| Phase 04 QA | Not started |  |  |
+| Phase 04 QA | Done | 2026-06-30 | 2026-06-30 |
 | Phase 05 | Not started |  |  |
 | Phase 05 QA | Not started |  |  |
 | Phase 06 | Not started |  |  |
@@ -182,6 +182,36 @@ Notes:
   em/en dashes, no emojis). Reviewers (privacy-security-review, qa-checklist, fresh coverage
   subagent): 0 BLOCKING; all SHOULD-FIX + NIT findings applied (per the apply-all-findings rule).
   Forward/cross-seam notes recorded in state.md for Phase 9. Next: Phase 04 QA (phase-04-qa.md).
+
+QA (phase-04-qa.md) verdict: PASS. 0 BLOCKING. Audited by a context Explore agent + 4 parallel
+reviewers (correctness, test-coverage, dead-code, privacy-security-review): correctness 0 findings
+(all 21 acceptance criteria verified against the real code), dead-code 0 findings, privacy-security
+PASS (routing-bypass safe-by-contract, 405+Allow Phase 9-overridable, ReDoS-safe by construction,
+no prototype-pollution path), test-coverage found 1 SHOULD-FIX + 3 NIT coverage gaps (no code
+defects). All applied (apply-all-findings rule):
+- SHOULD-FIX (coverage): a 405 reached through a dynamic/param route under a wrong real method was
+  asserted nowhere (every methodNotAllowed test used a static path). Added the canonical
+  wrong-method-on-a-resource test (`POST /api/characters/42` with GET+DELETE `:id` -> 405 Allow
+  `[GET, HEAD, DELETE, OPTIONS]`).
+- NIT (coverage): multi-param capture (`/a/:foo/b/:bar` -> `{foo,bar}`); PUT and PATCH positions in
+  METHOD_ORDER (never exercised before) pinned via a GET/PUT/PATCH/DELETE Allow assertion; a
+  structural server-only PURITY test (criterion 16) over both source files asserting they import
+  nothing parent-relative (`../`) or `node:` (the no-req/res half is tsc-guaranteed by the
+  signatures).
+- HARDENING (privacy NIT, defense-in-depth): `matchPattern` now builds the captured-params bag with
+  `Object.create(null)` so the returned params object has no inherited `Object.prototype` keys (the
+  real prototype-pollution path was already closed by the compile-time reserved-name guard). Pinned
+  by a null-prototype assertion. `toEqual` is prototype-insensitive, so existing capture assertions
+  are unaffected.
+- DEFERRED to Phase 9 (privacy NIT, not a router defect): a catch-all leading-`:param` dynamic route
+  registered before a specific route could shadow a route carrying a `requireOwned` BOLA loader
+  (cross-shape dynamic overlaps resolve first-registered, by design). Recorded as a Phase 9 registry
+  obligation in state.md (order specific dynamic routes first; add an introspection check that no
+  overlapping dynamic shape leaves a `requireOwned` route shadowed by a non-owned one).
+- Re-validation after the 5 added tests + the 1-line hardening: tsc clean; the two http files 60
+  tests pass; full `npm test` 611 files / 6420 pass / 11 skip; build:env/build:server/build all exit
+  0; Biome on the 3 changed files clean; ASCII-clean. Next: Phase 05 (onion compose + request
+  context, phase-05-onion-context.md).
 
 ## Phase 05: Onion compose + request context (compose.ts + context.ts)
 
