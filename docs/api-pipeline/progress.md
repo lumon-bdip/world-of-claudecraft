@@ -15,7 +15,7 @@ Mark a row's Status as "In progress" or "Done" and fill Started / Completed
 | Phase 01 | Done | 2026-06-30 | 2026-06-30 |
 | Phase 01 QA | Done | 2026-06-30 | 2026-06-30 |
 | Phase 02 | Done | 2026-06-30 | 2026-06-30 |
-| Phase 02 QA | Not started |  |  |
+| Phase 02 QA | Done | 2026-06-30 | 2026-06-30 |
 | Phase 03 | Not started |  |  |
 | Phase 03 QA | Not started |  |  |
 | Phase 04 | Not started |  |  |
@@ -97,16 +97,17 @@ Deliverables:
 - [x] Create the tests/server/ + tests/server/helpers/ + tests/server/http/ dirs and an index barrel; standardize tests/server/<domain>.test.ts (existing suites NOT converted)
 
 QA:
-- [ ] Fixes applied
-- [ ] Tests added
-- [ ] Dead code removed
-- [ ] Reviews clean
+- [x] Fixes applied
+- [x] Tests added
+- [x] Dead code removed
+- [x] Reviews clean
 
 Notes:
 - Shipped server/http/types.ts (TYPE-ONLY, zero runtime emit: RouteDef/RouteMeta/RequireOwned/OwnerScope/Ctx/CtxAccount/Method/Surface/EnvelopeKind/Middleware/Next/RateLimitStore + the Standard-Schema-v1 slot), server/http/config.ts (pure loadConfig), the server/ratelimit.ts clock seam, and tests/server/helpers/{fake_http,fake_ctx,fake_db,fake_ratelimit_store,normalizer,golden,parity,registry_introspect,index}.ts with self-tests, plus tests/server/ratelimit_clock.test.ts and tests/server/http/config.test.ts.
 - Orchestration: lead wrote the frozen types.ts, then three parallel Agents (clock+store; fake-http+ctx; FakeDb+config) on disjoint files, then one Agent for golden/normalizer/parity/registry. All against the one frozen contract.
 - In-phase reviewers (the two the phase doc requires): privacy-security-review 0 BLOCKING / 0 SHOULD-FIX (3 nits), qa-checklist READY 0 BLOCKING / 2 SHOULD-FIX. Per the standing "apply every finding" directive, ALL were applied: production guard on setRateLimitClock; a meta.publicRead marker so public :id reads are not false-flagged (the Phase 10 exemption); resetAuthFailures added to the parity per-pass isolation (the failed-login bucket was bleeding); normalizer no longer over-masks the generic key 'state'; makeReq lower-cases header names. The golden mkdir/write nit was reviewed as intentional (test-only, author-controlled path), no change.
 - Validation: tsc clean; tests/server 15 files / 120 tests; behavior-preservation (woc_balance/wallet_server/discord_server/security/ip_block + ratelimit_clock) 156 tests unchanged; full npm test 582 files / 6115 passed / 11 skipped; build:server/build:env/build green; ci:changed green (only pre-existing ws_auth noExplicitAny warnings). NO DDL, NO ensureSchema change, NO WS wire change, NO src/sim touch.
+- QA pass (phase-02-qa.md, 2026-06-30): brief (Explore) + 8-way audit fan-out (4 correctness slices, test-coverage, dead-code, privacy-security-review, qa-checklist) + adversarial verify, then two gap re-runs (the clock-correctness slice degenerated to a stub and the privacy-security agent hit the StructuredOutput retry cap, so both were re-dispatched fresh). All 11 acceptance criteria verified PASS: types.ts type-only (compiles to just `export {};`), the clock seam threads all 5 former Date.now sites with a Date.now default + production guard and changes no return shape, FakeDb drift guard is a real compile-time `satisfies` over the live db.ts/moderation_db.ts signatures, the normalizer masks exactly the 7-token set (look-alike numerics untouched, generic `state` preserved), the parity driver isolates every limiter bucket + clock per pass, registry-introspect excludes operator/admin/publicRead :id routes, and loadConfig is pure/frozen/fail-fast/unwired. Security CONFIRMED: the clock cannot weaken a window in prod (NODE_ENV guard; Dockerfile sets NODE_ENV=production) and loadConfig never logs/leaks DATABASE_URL/TURNSTILE_SECRET/GITHUB_TOKEN and fails closed. 0 BLOCKING, 0 SHOULD-FIX. Per the standing "apply every finding" directive, all 3 in-scope NICE-TO-HAVEs were fixed (commits 54df58b0 named DEFAULT_SITEMAP_LIMIT in fake_db.ts; 6707ee2d dropped the dead updated.length>0 branches in FakeRateLimitStore.hit; 0d08e73b added a dedicated default-clock no-op assertion to ratelimit_clock.test.ts, taking it 6 -> 8 cases). Two security NICE-TO-HAVEs are deferred to their wiring phase (Config returns secrets as plain fields: when a later phase calls loadConfig(process.env) at boot, guard against console.log(config)/error-serialization dumping them, e.g. a redacting toJSON; resetRateLimitClock has no NODE_ENV guard, which is correct since it only restores Date.now). Re-validated: tsc clean; full npm test 582 files / 6117 passed / 11 skipped; build:server/build:env/build green; ci:changed clean (pre-existing ws_auth warnings only).
 
 ## Phase 03: Surface re-inventory, content-type classification + characterization/golden corpus
 

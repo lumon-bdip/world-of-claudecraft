@@ -11,7 +11,7 @@ workstream), NOT a gameplay change, NOT a WS wire change.
 
 ## Current phase
 
-Phase 02 (test-harness) DONE (2026-06-30: frozen contracts + self-tested harness + behavior-preserving clock seam, ZERO runtime behavior change; in-phase reviewers privacy-security-review + qa-checklist clean with ALL findings applied; full mirror gate green). Phase 01 + Phase 01 QA DONE. Next: Phase 02 QA (docs/api-pipeline/phase-02-qa.md), then Phase 03 (surface inventory + characterization/golden corpus, which CONSUMES the Phase 2 normalizer placeholder set + golden generator).
+Phase 02 (test-harness) DONE (2026-06-30: frozen contracts + self-tested harness + behavior-preserving clock seam, ZERO runtime behavior change; in-phase reviewers privacy-security-review + qa-checklist clean with ALL findings applied; full mirror gate green). Phase 02 QA DONE (2026-06-30: all 11 acceptance criteria PASS, 0 BLOCKING / 0 SHOULD-FIX; 3 in-scope NICE-TO-HAVEs fixed: DEFAULT_SITEMAP_LIMIT const, dropped dead branch in FakeRateLimitStore.hit, added a default-clock no-op assertion; security re-confirmed the prod NODE_ENV clock guard + no-secret-leak in loadConfig). Phase 01 + Phase 01 QA DONE. Next: Phase 03 (surface inventory + characterization/golden corpus, which CONSUMES the Phase 2 normalizer placeholder set + golden generator).
 
 ## Phase 2 frozen contracts (Phases 4 to 9 IMPORT these, never redefine)
 
@@ -356,6 +356,12 @@ the X-ms constant; X is TBD, see open items.)
   (HSTS-in-prod, REQUIRE_WEB_LOGIN, realm/native-app origins, limiter DSN, the dispatch
   flag), replacing scattered `process.env` reads; log the active dispatch path at boot and
   alert if the old path is active in prod.
+  - SECRET-LEAK GUARD (Phase 2 QA security note): `Config` returns secrets as plain readonly
+    string fields (`databaseUrl`, `turnstileSecret`, `githubToken`). `loadConfig` itself never
+    logs them, but the moment this is wired into boot, guard against a casual `console.log(config)`
+    or error-serialization dumping the whole object: give `Config` a redacting `toJSON` (and/or a
+    `util.inspect.custom`), or never hand the config object to a logger. Log only the dispatch
+    path, never the config.
 - Server timeouts in `startServer()`: `requestTimeout`, `headersTimeout`,
   `keepAliveTimeout`, `maxHeaderSize` as named constants (mindful of the WS upgrade
   handshake and the 1 MB card upload).
