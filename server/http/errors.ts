@@ -75,6 +75,10 @@ const defaultOnUnexpected = (err: unknown): void => {
   console.error('[http] unhandled error', err);
 };
 
+/** Content-Type constants shared by the per-surface serializers. */
+const CT_JSON = 'application/json';
+const CT_HTML = 'text/html; charset=utf-8';
+
 /** Standard HTTP reason phrases for the statuses this model emits. */
 const STATUS_REASON: Record<number, string> = {
   400: 'Bad Request',
@@ -94,7 +98,7 @@ const STATUS_REASON: Record<number, string> = {
  * source of truth: the client localizes by `code`, never by parsing this text. Fallback is the
  * status reason. The 500 detail is intentionally generic so nothing internal leaks.
  */
-const DETAILS: Record<string, string> = {
+const DETAILS: Partial<Record<ErrorCode, string>> = {
   'validation.failed': 'One or more fields failed validation.',
   'json.malformed': 'The request body is not valid JSON.',
   'auth.token_missing': 'Authentication credentials are required.',
@@ -107,7 +111,7 @@ const DETAILS: Record<string, string> = {
 };
 
 /** RFC 6749 token error codes for the /oauth surface, keyed by stable code. */
-const OAUTH_ERROR: Record<string, string> = {
+const OAUTH_ERROR: Partial<Record<ErrorCode, string>> = {
   'json.malformed': 'invalid_request',
   'validation.failed': 'invalid_request',
   'body.too_large': 'invalid_request',
@@ -259,8 +263,13 @@ export function normalizeSurface(tag?: EnvelopeKind | ErrorSurface): ErrorSurfac
   }
 }
 
-/** Escape the five HTML-significant characters for safe interpolation into the HTML page. */
-function escapeHtml(text: string): string {
+/**
+ * Escape the five HTML-significant characters for safe interpolation into the HTML page.
+ * Exported so the escaping is pinned by a direct unit test: today serializeHtml only
+ * interpolates the static reason/detail phrases, but this is the defense-in-depth guard for
+ * any later phase that renders dynamic content into the HTML error surface.
+ */
+export function escapeHtml(text: string): string {
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -304,7 +313,7 @@ function serializeOauth(app: AppError, ctx: Ctx): SerializedError {
   return {
     status: app.status,
     headers: baseHeaders(app, ctx),
-    contentType: 'application/json',
+    contentType: CT_JSON,
     body: JSON.stringify(body),
   };
 }
@@ -313,7 +322,7 @@ function serializeAdmin(app: AppError, ctx: Ctx): SerializedError {
   return {
     status: app.status,
     headers: baseHeaders(app, ctx),
-    contentType: 'application/json',
+    contentType: CT_JSON,
     body: JSON.stringify({ success: false, data: null, error: app.code }),
   };
 }
@@ -330,7 +339,7 @@ function serializeHtml(app: AppError, ctx: Ctx): SerializedError {
   return {
     status: app.status,
     headers,
-    contentType: 'text/html; charset=utf-8',
+    contentType: CT_HTML,
     body,
   };
 }
@@ -342,7 +351,7 @@ function serializeRedirect(app: AppError, ctx: Ctx): SerializedError {
   return {
     status,
     headers,
-    contentType: 'text/html; charset=utf-8',
+    contentType: CT_HTML,
     body: '',
   };
 }
@@ -360,7 +369,7 @@ function serializeOkFalse(app: AppError, ctx: Ctx): SerializedError {
   return {
     status: app.status,
     headers: baseHeaders(app, ctx),
-    contentType: 'application/json',
+    contentType: CT_JSON,
     body: JSON.stringify({ ok: false }),
   };
 }
