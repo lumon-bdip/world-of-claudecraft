@@ -1,10 +1,15 @@
-// Account self-service portal handlers (home-page account portal).
+// Account self-service portal: the exported handleAccount* domain handlers plus the
+// Phase 13 RouteDef layer that serves them (see the block above `export const routes`).
 //
-// Mirrors server/wallet.ts: each REST route is an exported, account-scoped
-// handler with a real http (req, res) signature, so tests/account_server.test.ts
-// can drive every branch through the mock-pg harness with no live database and
-// no module-private seam. main.ts resolves the bearer account once and then
-// delegates here. All four routes are bearer-auth + account-scoped.
+// The domain handlers mirror server/wallet.ts: each is an exported, account-scoped
+// function with a real http (req, res) signature, so tests/account_server.test.ts can
+// drive every branch through the mock-pg harness with no live database. Phase 13
+// (docs/api-pipeline/) appended a thin RouteDef layer of 16 routes served by the new
+// server/http/ pipeline under API_DISPATCH 'new'; each self-resolves its bearer via a
+// per-route guard (activeGuard/logoutGuard), except the two token-in-query link routes
+// (email/verify, email/unsubscribe) which carry no auth. main.ts resolves the bearer
+// only on the KEPT legacy rollback arms, and the route layer adds module-private
+// test/runtime seams (setAccountDbForTests, configureAccountRuntime).
 import type http from 'node:http';
 import {
   hashPassword,
