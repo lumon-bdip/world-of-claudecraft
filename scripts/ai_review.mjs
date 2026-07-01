@@ -19,7 +19,7 @@
 //   DIFF_FILE           path to a unified diff to review
 //   OPENROUTER_MODEL    model id (default openrouter/owl-alpha)
 //   MAX_DIFF_CHARS      cap on diff chars sent to the model (default 60000)
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import { upsertStickyComment } from './gh_sticky_comment.mjs';
 
@@ -73,7 +73,7 @@ function listTouchedDirs(d) {
   ];
   if (!dirs.length) return '';
   try {
-    const out = execSync(`git ls-files -- ${dirs.map((x) => `'${x}'`).join(' ')}`, {
+    const out = execFileSync('git', ['ls-files', '--', ...dirs], {
       encoding: 'utf8',
       maxBuffer: 8 * 1024 * 1024,
     }).trim();
