@@ -94,7 +94,7 @@ export type {
 export type { RaidLockout } from './world_api/dungeons';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { PartyInfo, PartyMemberInfo } from './world_api/party';
-export type { PlayerProfessionsView } from './world_api/professions';
+export type { CraftResultView, PlayerProfessionsView, RecipeDef } from './world_api/professions';
 export type { GuildLeaderboardEntry, LeaderboardEntry } from './world_api/progression_xp';
 export type {
   CharacterSearchResult,
@@ -179,6 +179,7 @@ export const COMMAND_NAMES = [
   'buyback',
   'sell_all_junk',
   'harvest_node',
+  'craft_item',
   'change_skin',
   'unequip_mech_chroma',
   'claim_event_skin',

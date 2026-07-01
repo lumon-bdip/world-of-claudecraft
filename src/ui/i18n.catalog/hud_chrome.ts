@@ -944,4 +944,18 @@ export const hudChromeStrings = {
       help: { label: 'Need Help', hint: 'Ask the community for help' },
     },
   },
+  // Crafting window (#1127): the minimal common-tier crafting action, one row
+  // per known recipe, a Craft button enabled only when every reagent is held.
+  crafting: {
+    title: 'Crafting',
+    close: 'Close crafting',
+    craft: 'Craft',
+    reagentsNeeded: 'Requires:',
+    reagentLine: '{name} x{have}/{required}',
+    empty: 'No recipes known yet.',
+    resultAria: 'Craft {name}',
+    craftedToast: 'Crafted: {name}',
+    insufficientMaterials: 'You do not have the materials for that.',
+    unknownRecipe: 'That recipe does not exist.',
+  },
 };
