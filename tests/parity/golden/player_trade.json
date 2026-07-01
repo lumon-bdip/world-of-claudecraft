@@ -30,7 +30,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "e634d23d",
+      "state": "b3112d07",
       "events": "7809c15c",
       "rng": {
         "draws": 0,
@@ -54,12 +54,14 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 3,
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -81,12 +83,14 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 2,
               "itemId": "baked_bread"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -196,7 +200,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "84855d49",
+      "state": "fb7736fd",
       "events": "aac17815",
       "rng": {
         "draws": 0,
@@ -220,6 +224,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -230,6 +235,7 @@
               "itemId": "baked_bread"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -251,6 +257,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -261,6 +268,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -370,7 +378,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "84855d49",
+      "state": "fb7736fd",
       "events": "3ba696ae",
       "rng": {
         "draws": 0,
@@ -394,6 +402,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -404,6 +413,7 @@
               "itemId": "baked_bread"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -425,6 +435,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -435,6 +446,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -544,7 +556,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "84855d49",
+      "state": "fb7736fd",
       "events": "c47dd59f",
       "rng": {
         "draws": 0,
@@ -568,6 +580,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -578,6 +591,7 @@
               "itemId": "baked_bread"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -599,6 +613,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -609,6 +624,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -718,7 +734,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 390,
-      "state": "7707f08a",
+      "state": "516ebcc6",
       "events": "3bc625b4",
       "rng": {
         "draws": 0,
@@ -742,6 +758,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -752,6 +769,7 @@
               "itemId": "baked_bread"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -773,6 +791,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -783,6 +802,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -892,7 +912,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 390,
-      "state": "7707f08a",
+      "state": "516ebcc6",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -916,6 +936,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -926,6 +947,7 @@
               "itemId": "baked_bread"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -947,6 +969,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 1,
@@ -957,6 +980,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

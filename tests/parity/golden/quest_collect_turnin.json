@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "4b55784a",
+      "state": "613276db",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -39,6 +39,8 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -100,7 +102,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "75ee7d6e",
+      "state": "9a361269",
       "events": "379787c3",
       "rng": {
         "draws": 0,
@@ -123,6 +125,8 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -196,7 +200,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "798d3b91",
+      "state": "4beae260",
       "events": "3eac661a",
       "rng": {
         "draws": 0,
@@ -221,12 +225,14 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 5,
               "itemId": "boar_hide"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -300,7 +306,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "a6131040",
+      "state": "53a9800b",
       "events": "9620ffe4",
       "rng": {
         "draws": 0,
@@ -325,12 +331,14 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 4,
               "itemId": "boar_hide"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -404,7 +412,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "21c72524",
+      "state": "a8054d55",
       "events": "b61b379e",
       "rng": {
         "draws": 0,
@@ -429,12 +437,14 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "inventory": [
             {
               "count": 5,
               "itemId": "boar_hide"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -508,7 +518,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "07719dbd",
+      "state": "76ab6698",
       "events": "2bc8669d",
       "rng": {
         "draws": 0,
@@ -536,7 +546,9 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 350,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],
@@ -602,7 +614,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 389,
-      "state": "be8120ab",
+      "state": "786a46ce",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -630,7 +642,9 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 350,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],

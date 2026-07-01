@@ -53,6 +53,7 @@ import {
   type MarketInfo,
   type OverheadEmoteId,
   type PartyInfo,
+  type PlayerProfessionsView,
   type PresenceStatus,
   type RaidLockout,
   type SocialInfo,
@@ -847,10 +848,27 @@ export class ClientWorld implements IWorld {
   // all-zero default until the wheel/mass-conservation follow-up wires a self-snap
   // field the way `dmarks`/`dcomp` do for delveMarks/companionUpgrades above.
   craftSkills: Record<string, number> = {};
+  // Gathering profession proficiency (#1119). Same not-yet-wired-on-the-wire status
+  // as craftSkills above; reconcile both once the professions self-snap field lands.
+  gatheringProficiency: Record<string, number> = {};
   // Per-delve clears (key `${delveId}:${tierId}`), mirrored from the self-wire so
   // delveShopOffers can resolve the shop lock badge client-side.
   delveClears: Record<string, number> = {};
   delveDaily: DelveDailyInfo = { date: '', firstClearXp: [], markClears: 0 };
+  // Stub read surface for #1164: professions skill tracking + recipes land in
+  // later issues (#1119/#1120). Always empty until then; not wired on the
+  // snapshot yet, see src/sim/professions/CLAUDE.md for the settled key names.
+  professionsState: PlayerProfessionsView = { skills: [] };
+  // Stub for #1121: per-node respawn state is server-authoritative and not yet
+  // wired onto the snapshot (see src/sim/professions/CLAUDE.md), so the client
+  // cannot know another player's, or even its own, real per-node timer yet.
+  // Always reports harvestable; the server re-validates and denies via a
+  // normal error event on an actual attempt, same as every other authoritative
+  // action (see src/net/CLAUDE.md "Never predict an outcome"). Wiring the real
+  // per-player timer is future work once the snapshot carries it.
+  nodeHarvestableByMe(_nodeId: string): boolean {
+    return true;
+  }
   // --- IWorldParty: raid-target marker mirror, from the self-wire `marks` (markerFor
   // reads it, no send). ---
   markers: Record<number, number> = {}; // entityId -> markerId, mirrored from the self-wire
@@ -1460,6 +1478,7 @@ export class ClientWorld implements IWorld {
       if (s.dcomp !== undefined) this.companionUpgrades = s.dcomp ?? {};
       if (s.dclears !== undefined) this.delveClears = s.dclears ?? {};
       if (s.delveDaily !== undefined) this.delveDaily = s.delveDaily;
+      if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;
@@ -1661,6 +1680,9 @@ export class ClientWorld implements IWorld {
   }
   buyItem(npcId: number, itemId: string): void {
     this.cmd({ cmd: 'buy', npc: npcId, item: itemId });
+  }
+  harvestNode(nodeId: string): void {
+    this.cmd({ cmd: 'harvest_node', node: nodeId });
   }
   sellItem(itemId: string, count?: number): void {
     this.cmd({ cmd: 'sell', item: itemId, count });

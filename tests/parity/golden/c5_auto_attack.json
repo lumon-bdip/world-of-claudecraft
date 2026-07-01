@@ -35,7 +35,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 398,
-      "state": "bb6c89d3",
+      "state": "c06295c2",
       "events": "d38a5ccd",
       "rng": {
         "draws": 16,
@@ -46,7 +46,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 398,
-      "state": "8628c37c",
+      "state": "6dda0b8d",
       "events": "b8ca369d",
       "rng": {
         "draws": 19,
@@ -57,7 +57,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 398,
-      "state": "cc946163",
+      "state": "88069e4a",
       "events": "21391abc",
       "rng": {
         "draws": 19,
@@ -68,7 +68,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 398,
-      "state": "83025366",
+      "state": "ca577583",
       "events": "b32298be",
       "rng": {
         "draws": 22,
@@ -79,7 +79,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 398,
-      "state": "6b3daadc",
+      "state": "db0ef061",
       "events": "21391abc",
       "rng": {
         "draws": 22,
@@ -90,7 +90,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 398,
-      "state": "df08eeff",
+      "state": "eab93a7a",
       "events": "741638a5",
       "rng": {
         "draws": 22,
@@ -101,7 +101,7 @@
       "tick": 35,
       "time": 1.75,
       "nextId": 398,
-      "state": "aa5e2b07",
+      "state": "4f404dc2",
       "events": "21391abc",
       "rng": {
         "draws": 22,
@@ -112,7 +112,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 398,
-      "state": "a3247487",
+      "state": "c6007b5e",
       "events": "38879e8f",
       "rng": {
         "draws": 25,
@@ -123,7 +123,7 @@
       "tick": 45,
       "time": 2.25,
       "nextId": 398,
-      "state": "e6c25d2a",
+      "state": "8716d703",
       "events": "c2243470",
       "rng": {
         "draws": 66,
@@ -134,7 +134,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 398,
-      "state": "5844ffe5",
+      "state": "ed55e7dc",
       "events": "f0321c25",
       "rng": {
         "draws": 91,
@@ -145,7 +145,7 @@
       "tick": 55,
       "time": 2.75,
       "nextId": 398,
-      "state": "eda12120",
+      "state": "b98960e9",
       "events": "21391abc",
       "rng": {
         "draws": 103,
@@ -156,7 +156,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 398,
-      "state": "59afc8c5",
+      "state": "fdb94da4",
       "events": "7d3769c6",
       "rng": {
         "draws": 128,
@@ -167,7 +167,7 @@
       "tick": 65,
       "time": 3.25,
       "nextId": 398,
-      "state": "22d81dff",
+      "state": "b0a45066",
       "events": "21391abc",
       "rng": {
         "draws": 148,
@@ -178,7 +178,7 @@
       "tick": 70,
       "time": 3.5,
       "nextId": 398,
-      "state": "b2e46185",
+      "state": "9aa7c764",
       "events": "741638a5",
       "rng": {
         "draws": 169,
@@ -189,7 +189,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 398,
-      "state": "070e1316",
+      "state": "e02629a3",
       "events": "82678c01",
       "rng": {
         "draws": 193,
@@ -200,7 +200,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 398,
-      "state": "d1d58363",
+      "state": "b4ab4aa6",
       "events": "741638a5",
       "rng": {
         "draws": 216,
@@ -211,7 +211,7 @@
       "tick": 85,
       "time": 4.25,
       "nextId": 398,
-      "state": "fa6fd8aa",
+      "state": "acf14c33",
       "events": "386397fc",
       "rng": {
         "draws": 258,
@@ -222,7 +222,7 @@
       "tick": 90,
       "time": 4.5,
       "nextId": 398,
-      "state": "7f9c1401",
+      "state": "a8d90970",
       "events": "8d3b0320",
       "rng": {
         "draws": 289,
@@ -233,7 +233,7 @@
       "tick": 95,
       "time": 4.75,
       "nextId": 398,
-      "state": "2146b36b",
+      "state": "71abac72",
       "events": "7f3343c9",
       "rng": {
         "draws": 315,
@@ -244,7 +244,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 398,
-      "state": "726af38b",
+      "state": "e8c1d792",
       "events": "741638a5",
       "rng": {
         "draws": 342,
@@ -255,7 +255,7 @@
       "tick": 105,
       "time": 5.25,
       "nextId": 398,
-      "state": "a755a8d3",
+      "state": "853c09ba",
       "events": "21391abc",
       "rng": {
         "draws": 372,
@@ -266,7 +266,7 @@
       "tick": 110,
       "time": 5.5,
       "nextId": 398,
-      "state": "c5f42fd7",
+      "state": "7035f0d2",
       "events": "e74402e3",
       "rng": {
         "draws": 396,
@@ -277,7 +277,7 @@
       "tick": 115,
       "time": 5.75,
       "nextId": 398,
-      "state": "cfb9f617",
+      "state": "9bb34912",
       "events": "21391abc",
       "rng": {
         "draws": 418,
@@ -288,7 +288,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 398,
-      "state": "c6ab2e69",
+      "state": "9fa1e72c",
       "events": "a9c81340",
       "rng": {
         "draws": 473,
@@ -299,7 +299,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 398,
-      "state": "c6ab2e69",
+      "state": "9fa1e72c",
       "events": "741638a5",
       "rng": {
         "draws": 473,
@@ -325,7 +325,9 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -349,7 +351,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -373,7 +377,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -396,7 +402,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -419,7 +427,9 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -982,7 +992,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 398,
-      "state": "37b63045",
+      "state": "386b1862",
       "events": "ca191fda",
       "rng": {
         "draws": 518,
@@ -993,7 +1003,7 @@
       "tick": 126,
       "time": 6.3,
       "nextId": 398,
-      "state": "e7133781",
+      "state": "42922fd6",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1019,7 +1029,9 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1043,7 +1055,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1067,7 +1081,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1090,7 +1106,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1113,7 +1131,9 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1668,7 +1688,7 @@
       "tick": 126,
       "time": 6.3,
       "nextId": 398,
-      "state": "e7133781",
+      "state": "42922fd6",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1694,7 +1714,9 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1718,7 +1740,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1742,7 +1766,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1765,7 +1791,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1788,7 +1816,9 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

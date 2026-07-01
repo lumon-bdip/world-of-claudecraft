@@ -3,6 +3,7 @@ import type {
   DelveCompanionInfo,
   DelveRunInfo,
   LockpickView,
+  PlayerProfessionsView,
 } from '../world_api';
 import { lineOfSightClear, resolveMovement, resolvePosition } from './colliders';
 import { auraAffectsStats, removeCancelableAura } from './combat/aura_cancel';
@@ -49,6 +50,7 @@ import { isSpellResisted } from './combat/spell_resist';
 // moved to social/fiesta.ts with that logic; sim.ts keeps only the type used by
 // the PlayerMeta interface + the power-up catalog the fiestaMatchInfo accessor reads.
 import { type AugmentSpecial, type AugmentTier, POWERUPS_BY_ID } from './content/augments';
+import type { GatheringProfessionId } from './content/professions';
 import {
   classHasSkin,
   EVENT_SKIN_TOKEN_ID,
@@ -176,6 +178,14 @@ import {
   gainCraftSkill,
   normalizeCraftSkills,
 } from './professions/wheel';
+import {
+  drainGatheringGrants,
+  emptyGatheringProficiency,
+  gatherNodeById,
+  harvestNode as harvestNodeImpl,
+  isNodeHarvestableBy,
+  normalizeGatheringProficiency,
+} from './professions/gathering';
 import {
   applyTalentAllocation,
   deleteTalentLoadout,
@@ -645,6 +655,19 @@ export interface PlayerMeta {
   // Classic Rested XP pool (copper-less XP units). Accrues while resting in an
   // inn, spent to double kill XP. Persisted in CharacterState.
   restedXp: number;
+  // Gathering profession proficiency (Mining/Logging/Herbalism). Independent,
+  // additive counters, one per profession: granting one never changes another.
+  // Persisted in CharacterState. See src/sim/professions/gathering.ts.
+  gatheringProficiency: Record<GatheringProfessionId, number>;
+  // Grants queued by the `/dev gather` cheat, drained once per player per tick
+  // (see drainGatheringGrants). Session-only, never persisted.
+  pendingGatherGrants: { professionId: GatheringProfessionId; amount: number }[];
+  // Per-player, per-node gather-node respawn readiness (#1121): nodeId ->
+  // sim.time (seconds) at or after which THIS player may harvest that node
+  // again. Absent means never harvested (always ready). Session-only, never
+  // persisted, and never shared across players: see
+  // src/sim/professions/gathering.ts (isNodeHarvestableBy/resolveHarvest).
+  nodeHarvestReadyAt: Record<string, number>;
   known: ResolvedAbility[];
   questLog: Map<string, QuestProgress>;
   questsDone: Set<string>;
@@ -736,6 +759,9 @@ export interface CharacterState {
   unlockedMilestones?: string[];
   // Rested XP pool. Optional so pre-rested-XP saves load cleanly (defaults to 0).
   restedXp?: number;
+  // Gathering profession proficiency (JSONB; optional so pre-professions saves
+  // load cleanly, defaulting every profession to 0).
+  gatheringProficiency?: Partial<Record<string, number>>;
   copper: number;
   hp: number;
   resource: number;
@@ -1177,6 +1203,9 @@ export class Sim {
       prestigeRank: 0,
       unlockedMilestones: new Set(),
       restedXp: 0,
+      gatheringProficiency: emptyGatheringProficiency(),
+      pendingGatherGrants: [],
+      nodeHarvestReadyAt: {},
       known: [],
       questLog: new Map(),
       questsDone: new Set(),
@@ -1225,6 +1254,7 @@ export class Sim {
       meta.lifetimeXp = s.lifetimeXp ?? xpToReachLevel(player.level) + Math.max(0, s.xp);
       meta.prestigeRank = s.prestigeRank ?? 0;
       meta.restedXp = Math.max(0, s.restedXp ?? 0);
+      meta.gatheringProficiency = normalizeGatheringProficiency(s.gatheringProficiency);
       if (s.unlockedMilestones)
         for (const id of s.unlockedMilestones) meta.unlockedMilestones.add(id);
       meta.copper = s.copper;
@@ -1397,6 +1427,7 @@ export class Sim {
       prestigeRank: meta.prestigeRank,
       unlockedMilestones: [...meta.unlockedMilestones],
       restedXp: meta.restedXp,
+      gatheringProficiency: { ...meta.gatheringProficiency },
       copper: meta.copper,
       hp: e.hp,
       // A druid saved while shifted runs on rage/energy with its mana parked in
@@ -2379,6 +2410,7 @@ export class Sim {
         this.updatePlayerAutoAttack(p, meta);
         updateRegen(this.ctx, p, meta);
         updateRested(p, meta);
+        drainGatheringGrants(meta);
       }
       updateTimers(p);
       updateAuras(this.ctx, p);
@@ -4367,6 +4399,29 @@ export class Sim {
     items.buyBackItem(this.ctx, itemId, pid);
   }
 
+  // Gather-node harvest (#1121): a thin delegate onto
+  // src/sim/professions/gathering.ts, resolved on the deterministic tick the
+  // command arrives on, same as buyItem/useItem above.
+  harvestNode(nodeId: string, pid?: number): void {
+    harvestNodeImpl(this.ctx, nodeId, pid);
+  }
+
+  // IWorld read surface (IWorldProfessions): whether the given node is
+  // harvestable right now BY THIS PLAYER specifically (per-player respawn
+  // timer, #1121). Never reflects another player's cooldown for the same node.
+  // Takes an explicit pid (mirrors gatheringProficiencyFor) so both the
+  // local-viewer getter below and tests can check any player's own timer.
+  nodeHarvestableByMeFor(nodeId: string, pid: number): boolean {
+    const meta = this.players.get(pid);
+    if (!meta) return false;
+    if (!gatherNodeById(nodeId)) return false;
+    return isNodeHarvestableBy(meta, nodeId, this.time);
+  }
+
+  nodeHarvestableByMe(nodeId: string): boolean {
+    return this.nodeHarvestableByMeFor(nodeId, this.primaryId);
+  }
+
   private maybeAutoEquip(itemId: string, meta: PlayerMeta): void {
     const def = ITEMS[itemId];
     if (!def?.slot) return;
@@ -5714,12 +5769,29 @@ export class Sim {
     return this.craftSkillsFor(this.primaryId);
   }
 
+  // Read-only gathering-profession proficiency surface for IWorld. Stubbed
+  // directly on IWorld pending issue #1164 (a broader professions facet); see
+  // that issue for the eventual reconciliation.
+  gatheringProficiencyFor(pid: number): Record<string, number> {
+    return { ...(this.players.get(pid)?.gatheringProficiency ?? emptyGatheringProficiency()) };
+  }
+
+  get gatheringProficiency(): Record<string, number> {
+    return this.gatheringProficiencyFor(this.primaryId);
+  }
+
   delveShopOffers(delveId: string): DelveShopOffer[] {
     return this.delveShopOffersFor(delveId, this.primaryId);
   }
 
   get delveDaily(): { date: string; firstClearXp: string[]; markClears: number } {
     return this.delveDailyWire(this.primaryId);
+  }
+
+  // Stub read surface for #1164: professions skill tracking + recipes land in
+  // later issues (#1119/#1120). Always empty until then.
+  get professionsState(): PlayerProfessionsView {
+    return { skills: [] };
   }
 }
 

@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "2fc5ecdf",
+      "state": "efa9ae4e",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -41,6 +41,8 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -102,7 +104,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 395,
-      "state": "46bf359b",
+      "state": "98d935aa",
       "events": "886c2a18",
       "rng": {
         "draws": 54,
@@ -113,7 +115,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 395,
-      "state": "77ffe52d",
+      "state": "460728b4",
       "events": "56c8e558",
       "rng": {
         "draws": 95,
@@ -124,7 +126,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 395,
-      "state": "bd1feba8",
+      "state": "9435bed1",
       "events": "256426da",
       "rng": {
         "draws": 224,
@@ -135,7 +137,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 395,
-      "state": "65f0fc24",
+      "state": "71eba265",
       "events": "741638a5",
       "rng": {
         "draws": 224,
@@ -161,7 +163,9 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 92800,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -558,7 +562,7 @@
       "tick": 64,
       "time": 3.2,
       "nextId": 395,
-      "state": "cb743519",
+      "state": "c5297b98",
       "events": "741638a5",
       "rng": {
         "draws": 244,
@@ -584,7 +588,9 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 92800,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 389,
-      "state": "baf3860a",
+      "state": "2f9f0e9b",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -39,6 +39,8 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -102,7 +104,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 392,
-      "state": "bc5f5932",
+      "state": "b3277513",
       "events": "bf8da7fe",
       "rng": {
         "draws": 6,
@@ -113,7 +115,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 392,
-      "state": "dbdca72e",
+      "state": "0a410dd7",
       "events": "741638a5",
       "rng": {
         "draws": 6,
@@ -124,7 +126,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 392,
-      "state": "e0e8fc04",
+      "state": "b882d605",
       "events": "b98e45cd",
       "rng": {
         "draws": 96,
@@ -135,7 +137,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 392,
-      "state": "3fca9880",
+      "state": "cb6acd19",
       "events": "741638a5",
       "rng": {
         "draws": 195,
@@ -146,7 +148,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 392,
-      "state": "65603a0a",
+      "state": "a2dfdceb",
       "events": "6b3b0c7c",
       "rng": {
         "draws": 294,
@@ -157,7 +159,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 392,
-      "state": "1ab7fc32",
+      "state": "42869013",
       "events": "741638a5",
       "rng": {
         "draws": 398,
@@ -168,7 +170,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 392,
-      "state": "1ab7fc32",
+      "state": "42869013",
       "events": "741638a5",
       "rng": {
         "draws": 398,
@@ -192,7 +194,9 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "gatheringProficiency": {},
           "lifetimeXp": 44000,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
