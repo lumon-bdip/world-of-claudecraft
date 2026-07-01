@@ -3088,6 +3088,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_axe.name': '고목 도끼',
   'entities.items.goldleaf_sickle.name': '금엽 낫',
   'entities.items.sunpetal_sickle.name': '태양꽃잎 낫',
+  'entities.items.thorium_ore.name': '토륨 광석',
+  'entities.items.arcanite_bar.name': '비전 주괴',
+  'entities.items.ashwood_log.name': '잿빛나무 통나무',
+  'entities.items.elderwood_log.name': '고대 딱총나무 통나무',
+  'entities.items.goldleaf_herb.name': '금빛잎 약초',
+  'entities.items.sunpetal_herb.name': '태양꽃잎 약초',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': '채팅 채널 추가',
   'hud.core.chatChannels.addTitle': '채널 추가',

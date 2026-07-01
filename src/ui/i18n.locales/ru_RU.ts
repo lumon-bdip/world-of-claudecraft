@@ -3128,6 +3128,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_axe.name': 'Топор из древнего дерева',
   'entities.items.goldleaf_sickle.name': 'Золотолистный серп',
   'entities.items.sunpetal_sickle.name': 'Солнцелепестковый серп',
+  'entities.items.thorium_ore.name': 'Ториевая руда',
+  'entities.items.arcanite_bar.name': 'Слиток аркана',
+  'entities.items.ashwood_log.name': 'Бревно пепельного дерева',
+  'entities.items.elderwood_log.name': 'Бревно древней бузины',
+  'entities.items.goldleaf_herb.name': 'Трава золотолист',
+  'entities.items.sunpetal_herb.name': 'Трава солнцелепест',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Добавить канал чата',
   'hud.core.chatChannels.addTitle': 'Добавить канал',

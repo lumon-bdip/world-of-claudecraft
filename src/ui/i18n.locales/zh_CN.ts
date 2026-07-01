@@ -2962,6 +2962,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_axe.name': '古木斧',
   'entities.items.goldleaf_sickle.name': '金叶镰刀',
   'entities.items.sunpetal_sickle.name': '阳瓣镰刀',
+  'entities.items.thorium_ore.name': '瑟银矿石',
+  'entities.items.arcanite_bar.name': '秘银锭',
+  'entities.items.ashwood_log.name': '灰木原木',
+  'entities.items.elderwood_log.name': '古老接骨木原木',
+  'entities.items.goldleaf_herb.name': '金叶草',
+  'entities.items.sunpetal_herb.name': '阳瓣草',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': '添加聊天频道',
   'hud.core.chatChannels.addTitle': '添加频道',

@@ -4824,6 +4824,24 @@ export const sv_SE: EnTranslations = {
       "sunpetal_sickle": {
         "name": "Solkronbladsskära"
       },
+      "thorium_ore": {
+        "name": "Toriummalm"
+      },
+      "arcanite_bar": {
+        "name": "Arkanittacka"
+      },
+      "ashwood_log": {
+        "name": "Askvedstock"
+      },
+      "elderwood_log": {
+        "name": "Uråldrig Flädervedsstock"
+      },
+      "goldleaf_herb": {
+        "name": "Guldbladsört"
+      },
+      "sunpetal_herb": {
+        "name": "Solkronbladsört"
+      },
       "bristleback_maul": {
         "name": "Borstryggens klubba"
       },

@@ -3090,6 +3090,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_axe.name': '古木の斧',
   'entities.items.goldleaf_sickle.name': '金葉の鎌',
   'entities.items.sunpetal_sickle.name': '陽花弁の鎌',
+  'entities.items.thorium_ore.name': 'トリウム鉱石',
+  'entities.items.arcanite_bar.name': 'アーケナイトの延べ棒',
+  'entities.items.ashwood_log.name': 'アッシュウッドの丸太',
+  'entities.items.elderwood_log.name': 'エルダーウッドの丸太',
+  'entities.items.goldleaf_herb.name': 'ゴールドリーフ草',
+  'entities.items.sunpetal_herb.name': 'サンペタル草',
   'entities.mobs.nythraxis_skeleton_warrior.name': '蘇った王家の衛兵',
   'entities.mobs.nythraxis_scourge_of_thornpeak.name': 'ナイスラクシス、ソーンピークの災厄',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)

@@ -34,7 +34,10 @@ import {
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
 import { GATHER_NODES as GATHER_NODES_CONTENT } from './content/gather_nodes';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
-import { COMMON_RECIPES as COMMON_RECIPES_CONTENT } from './content/recipes';
+import {
+  COMMON_RECIPES as COMMON_RECIPES_CONTENT,
+  TOOL_RECIPES as TOOL_RECIPES_CONTENT,
+} from './content/recipes';
 import {
   TEMPLE_CAMPS,
   TEMPLE_DUNGEON_DEFS,
@@ -203,7 +206,7 @@ export const GROUND_OBJECTS: GroundObjectDef[] = [
 
 export const GATHER_NODES: GatherNodeDef[] = [...GATHER_NODES_CONTENT];
 
-export const COMMON_RECIPES = [...COMMON_RECIPES_CONTENT];
+export const COMMON_RECIPES = [...COMMON_RECIPES_CONTENT, ...TOOL_RECIPES_CONTENT];
 
 export const ROADS: { x: number; z: number }[][] = [...ZONE1_ROADS, ...ZONE2_ROADS, ...ZONE3_ROADS];
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { COMMON_RECIPES, recipeById } from '../src/sim/content/recipes';
+import { COMMON_RECIPES, recipeById, TOOL_RECIPES } from '../src/sim/content/recipes';
 import { hasRecipeMaterials, resolveCraft } from '../src/sim/professions/crafting';
 import { Sim } from '../src/sim/sim';
 
@@ -24,6 +24,39 @@ describe('recipe content (#1127)', () => {
   it('recipeById resolves a known id and returns undefined for an unknown one', () => {
     expect(recipeById(COMMON_RECIPES[0].id)?.id).toBe(COMMON_RECIPES[0].id);
     expect(recipeById('not_a_real_recipe')).toBeUndefined();
+  });
+});
+
+describe('TOOL_RECIPES (#1135 de-stub): tier 4/5 tool recipes', () => {
+  it('defines the six crafted base tools, each requiring skill', () => {
+    expect(TOOL_RECIPES.length).toBe(6);
+    for (const recipe of TOOL_RECIPES) {
+      expect(recipe.skillReq).toBeGreaterThan(0); // unlike common-tier, these gate on skill
+      expect(recipe.reagents.length).toBeGreaterThan(0);
+      expect(recipe.resultCount).toBeGreaterThan(0);
+      expect(recipe.professionId).toBe('engineering');
+    }
+  });
+
+  it('recipeById resolves tool recipes alongside common ones', () => {
+    for (const recipe of TOOL_RECIPES) {
+      expect(recipeById(recipe.id)?.id).toBe(recipe.id);
+    }
+  });
+
+  it('resolveCraft produces a tool from its recipe reagents', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const recipe = recipeById('recipe_thorium_mining_pick')!;
+    grantItem(sim, 'thorium_ore', 4, pid);
+    grantItem(sim, 'mithril_mining_pick', 1, pid);
+
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+
+    expect(result.ok).toBe(true);
+    expect(sim.countItem('thorium_ore', pid)).toBe(0);
+    expect(sim.countItem('mithril_mining_pick', pid)).toBe(0);
+    expect(sim.countItem('thorium_mining_pick', pid)).toBe(1);
   });
 });
 
@@ -138,10 +171,11 @@ describe('craftItem command (#1127)', () => {
     expect(sim.countItem('tough_jerky', pid)).toBe(1);
   });
 
-  it('the IWorld recipeList read surface exposes the common-tier recipe content', () => {
+  it('the IWorld recipeList read surface exposes the common-tier and tool recipe content', () => {
     const sim = makeSim();
-    expect(sim.recipeList.length).toBe(COMMON_RECIPES.length);
-    expect(sim.recipeList.map((r) => r.id).sort()).toEqual(COMMON_RECIPES.map((r) => r.id).sort());
+    const allRecipeIds = [...COMMON_RECIPES, ...TOOL_RECIPES].map((r) => r.id).sort();
+    expect(sim.recipeList.length).toBe(COMMON_RECIPES.length + TOOL_RECIPES.length);
+    expect(sim.recipeList.map((r) => r.id).sort()).toEqual(allRecipeIds);
   });
 
   it('denies a craft with an error event and leaves lastCraftResult reflecting the denial', () => {
