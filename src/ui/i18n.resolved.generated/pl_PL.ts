@@ -274,16 +274,16 @@ export const pl_PL: EnTranslations = {
       "tabsLabel": "Tablice wyników",
       "tabPlayers": "Gracze",
       "tabGuilds": "Gildie",
-      "tabDevs": "Developers",
+      "tabDevs": "Deweloperzy",
       "guildName": "Gildia",
       "members": "Członkowie",
       "topLevel": "Top",
       "guildXp": "Łączne XP",
       "guildEmpty": "Brak sklasyfikowanych gildii.",
-      "devName": "Contributor",
-      "devTierCol": "Badge",
-      "mergedPrs": "Merged PRs",
-      "devEmpty": "No ranked contributors yet."
+      "devName": "Kontrybutor",
+      "devTierCol": "Odznaka",
+      "mergedPrs": "Scalone PR-y",
+      "devEmpty": "Brak sklasyfikowanych kontrybutorów."
     },
     "raidLockout": {
       "title": "Blokady rajdów",
@@ -336,10 +336,10 @@ export const pl_PL: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Utrzymuje kursor myszy wewnątrz okna podczas przeciągania w celu obracania kamery, aby nie mógł dotrzeć do krawędzi ekranu ani przejść na inny monitor. Wyłącz, jeśli wolisz swobodny kursor.",
       "showWalletOnCharacterScreen": "Pokaż sakiewkę na ekranie postaci",
       "showWalletOnPlayerCard": "Pokaż sakiewkę na karcie gracza",
-      "showDevBadges": "Show Developer Badges",
+      "showDevBadges": "Pokaż odznaki deweloperów",
       "uiScale": "Skala interfejsu",
       "highContrastBackground": "Tło o wysokim kontraście",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Automatyczny atak przy użyciu umiejętności",
       "showItemLevel": "Pokaż poziom przedmiotu",
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",
@@ -437,7 +437,7 @@ export const pl_PL: EnTranslations = {
     "statInfo": {
       "fromYour": "Z twoich {value} pkt. cechy {stat}:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Moc zaklęć"
       },
       "desc": {
         "str": "Zwiększa twoją moc ataku, więc twoje ciosy bronią są mocniejsze.",
@@ -447,7 +447,7 @@ export const pl_PL: EnTranslations = {
         "spi": "Przyspiesza tempo regeneracji many rzucającego zaklęcia podczas odpoczynku, poza walką.",
         "armor": "Łagodzi nadchodzące ciosy fizyczne. Redukcja jest większa wobec atakujących o niższym poziomie i jest ograniczona do 75%.",
         "attackPower": "Zasila twoje ataki bronią. Każde 14 punktów mocy ataku dodaje 1 obrażenie na sekundę.",
-        "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
+        "spellPower": "Zwiększa obrażenia twoich zaklęć i siłę leczenia. Każdy punkt Intelektu zapewnia odrobinę Mocy zaklęć, dodatkowo do tej z ekwipunku lub wzmocnień.",
         "dps": "Twoje szacowane obrażenia bronią na sekundę, łączące obrażenia i szybkość twojej broni z mocą ataku.",
         "critChance": "Twoja szansa na zadanie ataku krytycznego, zadającego podwójne obrażenia.",
         "dodge": "Twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz, bez otrzymania obrażeń."
@@ -472,13 +472,13 @@ export const pl_PL: EnTranslations = {
         "dpsApprox": "To szacunek, pomija trafienia krytyczne i obrażenia zdolności."
       },
       "sources": {
-        "header": "Made up of:",
-        "base": "Base: {value}",
-        "attributes": "From your attributes: {value}",
-        "fromAttribute": "From {stat}: {value}",
-        "gear": "Equipped gear: {value}",
+        "header": "Składa się z:",
+        "base": "Bazowa: {value}",
+        "attributes": "Z twoich atrybutów: {value}",
+        "fromAttribute": "Z {stat}: {value}",
+        "gear": "Założony ekwipunek: {value}",
         "buff": "{name}: {value}",
-        "talents": "Talents and effects: {value}"
+        "talents": "Talenty i efekty: {value}"
       }
     },
     "talents": {
@@ -504,7 +504,7 @@ export const pl_PL: EnTranslations = {
       "linkTitle": "Kliknij z Shiftem, aby podlinkować to zadanie na czacie."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Kliknij z Shift, aby wstawić link do tego przedmiotu na czacie."
     },
     "plurals": {
       "guildMembers": {
@@ -532,10 +532,10 @@ export const pl_PL: EnTranslations = {
         "other": "Kto: {count} graczy online na realmie {realm}."
       },
       "playersMatching": {
-        "one": "Who: {count} player matching \"{query}\" on {realm}.",
-        "few": "Who: {count} players matching \"{query}\" on {realm}.",
-        "many": "Who: {count} players matching \"{query}\" on {realm}.",
-        "other": "Who: {count} players matching \"{query}\" on {realm}."
+        "one": "Kto: {count} gracz pasujący do \"{query}\" na {realm}.",
+        "few": "Kto: {count} graczy pasujących do \"{query}\" na {realm}.",
+        "many": "Kto: {count} graczy pasujących do \"{query}\" na {realm}.",
+        "other": "Kto: {count} gracza pasujących do \"{query}\" na {realm}."
       }
     },
     "bugReport": {
@@ -655,25 +655,25 @@ export const pl_PL: EnTranslations = {
       "assigned": "{looter} przydzielil {item} graczowi {target}.",
       "unassigned": "{item} nie zostal przydzielony i jest wolny dla wszystkich.",
       "leaderOnly": "Tylko przywodca grupy moze zmienic metode lupow.",
-      "rollingFor": "Rolling for {item}.",
-      "looterChanged": "Master Looter is now {name}.",
-      "thresholdSet": "Loot threshold set to {threshold}.",
-      "summaryMaster": "Loot Settings: Master Loot, Master Looter {name}, threshold {threshold}.",
-      "summaryGroup": "Loot Settings: Group Loot."
+      "rollingFor": "Losowanie o {item}.",
+      "looterChanged": "Głównym zbieraczem jest teraz {name}.",
+      "thresholdSet": "Próg łupów ustawiony na {threshold}.",
+      "summaryMaster": "Ustawienia łupów: Łup główny, główny zbieracz {name}, próg {threshold}.",
+      "summaryGroup": "Ustawienia łupów: Łup grupowy."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Mianuj przywódcą"
     },
     "lootSettings": {
-      "title": "Loot Settings",
-      "close": "Close loot settings",
-      "menuItem": "Loot Settings",
-      "method": "Loot Method",
-      "rollThreshold": "Roll Threshold",
-      "groupLoot": "Group Loot",
-      "valueMaster": "Master Loot",
-      "leaderOption": "Master Looter: Leader (You)",
-      "masterOption": "Master Looter: {name}"
+      "title": "Ustawienia łupów",
+      "close": "Zamknij ustawienia łupów",
+      "menuItem": "Ustawienia łupów",
+      "method": "Metoda podziału łupów",
+      "rollThreshold": "Próg losowania",
+      "groupLoot": "Łup grupowy",
+      "valueMaster": "Łup główny",
+      "leaderOption": "Główny zbieracz: Przywódca (Ty)",
+      "masterOption": "Główny zbieracz: {name}"
     },
     "bags": {
       "filterGroupAria": "Filtruj torby według kategorii",
@@ -783,7 +783,7 @@ export const pl_PL: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "itemTooltip": {
-      "requiresLevel": "Requires Level {level}"
+      "requiresLevel": "Wymaga poziomu {level}"
     },
     "discord": {
       "title": "Discord",
@@ -929,32 +929,32 @@ export const pl_PL: EnTranslations = {
       }
     },
     "devBadge": {
-      "title": "Developer",
+      "title": "Deweloper",
       "tiers": {
-        "tinkerer": "Tinkerer",
-        "artificer": "Artificer",
-        "runesmith": "Runesmith",
-        "architect": "Architect",
-        "worldwright": "Worldwright"
+        "tinkerer": "Majsterkowicz",
+        "artificer": "Mechanik",
+        "runesmith": "Runokowal",
+        "architect": "Architekt",
+        "worldwright": "Twórca światów"
       },
       "flavors": {
-        "tinkerer": "Your first pull request landed in the realm.",
-        "artificer": "Five pull requests in, and the world bends to your code.",
-        "runesmith": "Fifteen pull requests forged into the running game.",
-        "architect": "An architect of the realm: 30 pull requests merged.",
-        "worldwright": "A wright of worlds: 70 pull requests shape the game."
+        "tinkerer": "Twój pierwszy pull request trafił do królestwa.",
+        "artificer": "Pięć pull requestów i świat ugina się pod twoim kodem.",
+        "runesmith": "Piętnaście pull requestów wykutych w działającej grze.",
+        "architect": "Architekt królestwa: 30 scalonych pull requestów.",
+        "worldwright": "Twórca światów: 70 pull requestów kształtuje grę."
       },
-      "badgeTitle": "Developer: {tier}",
-      "prsLanded": "{count} pull requests merged",
-      "contributor": "Open-source contributor",
+      "badgeTitle": "Deweloper: {tier}",
+      "prsLanded": "{count} scalonych pull requestów",
+      "contributor": "Kontrybutor open source",
       "link": {
-        "cta": "Link GitHub",
-        "relink": "Relink GitHub",
-        "benefits": "Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.",
-        "error": "Could not link GitHub. Please try again."
+        "cta": "Połącz z GitHub",
+        "relink": "Połącz ponownie z GitHub",
+        "benefits": "Połącz swoje konto GitHub, aby zdobyć odznakę dewelopera za pull requesty scalone z repozytorium open source.",
+        "error": "Nie udało się połączyć z GitHub. Spróbuj ponownie."
       },
-      "linkedAs": "Linked as {login}",
-      "unlink": "Unlink GitHub"
+      "linkedAs": "Połączono jako {login}",
+      "unlink": "Odłącz GitHub"
     }
   },
   "guide": {
@@ -5713,9 +5713,9 @@ export const pl_PL: EnTranslations = {
         "greeting": "Uważaj na luźny łupek, {className}. Góra była ostatnio... niespokojna. Zamierzam dociec dlaczego."
       },
       "auctioneer_voss": {
-        "name": "Auctioneer Voss",
-        "title": "Keeper of the World Market",
-        "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+        "name": "Aukcjoner Voss",
+        "title": "Strażnik Rynku Świata",
+        "greeting": "Rynek Świata jest otwarty także tutaj, {className}. Kupuj od każdego poszukiwacza przygód w królestwie albo wystaw własne towary."
       },
       "brother_aldric_raid": {
         "name": "Brat Aldric",

@@ -274,16 +274,16 @@ export const id_ID: EnTranslations = {
       "tabsLabel": "Papan skor tertinggi",
       "tabPlayers": "Pemain",
       "tabGuilds": "Guild",
-      "tabDevs": "Developers",
+      "tabDevs": "Pengembang",
       "guildName": "Guild",
       "members": "Anggota",
       "topLevel": "Teratas",
       "guildXp": "Total XP",
       "guildEmpty": "Belum ada guild berperingkat.",
-      "devName": "Contributor",
-      "devTierCol": "Badge",
-      "mergedPrs": "Merged PRs",
-      "devEmpty": "No ranked contributors yet."
+      "devName": "Kontributor",
+      "devTierCol": "Lencana",
+      "mergedPrs": "PR Digabungkan",
+      "devEmpty": "Belum ada kontributor berperingkat."
     },
     "raidLockout": {
       "title": "Penguncian Raid",
@@ -336,10 +336,10 @@ export const id_ID: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Menjaga kursor mouse tetap di dalam jendela saat Anda menyeret untuk memutar kamera, sehingga tidak mencapai tepi layar atau berpindah ke monitor lain. Matikan jika Anda lebih suka kursor bebas.",
       "showWalletOnCharacterScreen": "Tampilkan Dompet di Layar Karakter",
       "showWalletOnPlayerCard": "Tampilkan Dompet di Kartu Pemain",
-      "showDevBadges": "Show Developer Badges",
+      "showDevBadges": "Tampilkan Lencana Pengembang",
       "uiScale": "Skala UI",
       "highContrastBackground": "Latar Kontras Tinggi",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Serangan Otomatis Saat Memakai Kemampuan",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
@@ -437,7 +437,7 @@ export const id_ID: EnTranslations = {
     "statInfo": {
       "fromYour": "Dari {value} {stat} Anda:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Kekuatan Mantra"
       },
       "desc": {
         "str": "Meningkatkan daya serang Anda, sehingga serangan senjata Anda menghantam lebih keras.",
@@ -447,7 +447,7 @@ export const id_ID: EnTranslations = {
         "spi": "Mempercepat pemulihan mana penyihir saat beristirahat, di luar pertempuran.",
         "armor": "Meredam pukulan fisik yang datang. Pengurangannya lebih besar terhadap penyerang berlevel lebih rendah dan dibatasi hingga 75%.",
         "attackPower": "Memberi tenaga pada serangan senjata Anda. Setiap 14 daya serang menambah 1 kerusakan per detik.",
-        "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
+        "spellPower": "Meningkatkan kerusakan mantra dan kekuatan penyembuhanmu. Setiap poin Kecerdasan memberi sedikit Kekuatan Mantra, di atas apa pun dari perlengkapan atau buff.",
         "dps": "Perkiraan kerusakan senjata Anda per detik, menggabungkan kerusakan dan kecepatan senjata dengan daya serang Anda.",
         "critChance": "Peluang serangan Anda menghantam secara kritis, memberikan kerusakan ganda.",
         "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan."
@@ -472,13 +472,13 @@ export const id_ID: EnTranslations = {
         "dpsApprox": "Sebuah perkiraan, tidak termasuk serangan kritis dan kerusakan kemampuan."
       },
       "sources": {
-        "header": "Made up of:",
-        "base": "Base: {value}",
-        "attributes": "From your attributes: {value}",
-        "fromAttribute": "From {stat}: {value}",
-        "gear": "Equipped gear: {value}",
+        "header": "Terdiri dari:",
+        "base": "Dasar: {value}",
+        "attributes": "Dari atributmu: {value}",
+        "fromAttribute": "Dari {stat}: {value}",
+        "gear": "Perlengkapan terpasang: {value}",
         "buff": "{name}: {value}",
-        "talents": "Talents and effects: {value}"
+        "talents": "Talenta dan efek: {value}"
       }
     },
     "talents": {
@@ -504,7 +504,7 @@ export const id_ID: EnTranslations = {
       "linkTitle": "Shift-klik untuk menautkan misi ini di obrolan."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Shift-klik untuk menautkan item ini di obrolan."
     },
     "plurals": {
       "guildMembers": {
@@ -532,10 +532,10 @@ export const id_ID: EnTranslations = {
         "other": "Who: {count} pemain daring di {realm}."
       },
       "playersMatching": {
-        "one": "Who: {count} player matching \"{query}\" on {realm}.",
-        "few": "Who: {count} players matching \"{query}\" on {realm}.",
-        "many": "Who: {count} players matching \"{query}\" on {realm}.",
-        "other": "Who: {count} players matching \"{query}\" on {realm}."
+        "one": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "few": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "many": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "other": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}."
       }
     },
     "bugReport": {
@@ -655,25 +655,25 @@ export const id_ID: EnTranslations = {
       "assigned": "{looter} memberikan {item} kepada {target}.",
       "unassigned": "{item} tidak diberikan dan bebas untuk semua.",
       "leaderOnly": "Hanya pemimpin grup yang dapat mengubah metode loot.",
-      "rollingFor": "Rolling for {item}.",
-      "looterChanged": "Master Looter is now {name}.",
-      "thresholdSet": "Loot threshold set to {threshold}.",
-      "summaryMaster": "Loot Settings: Master Loot, Master Looter {name}, threshold {threshold}.",
-      "summaryGroup": "Loot Settings: Group Loot."
+      "rollingFor": "Melempar dadu untuk {item}.",
+      "looterChanged": "Penjarah Utama kini adalah {name}.",
+      "thresholdSet": "Ambang jarahan diatur ke {threshold}.",
+      "summaryMaster": "Pengaturan Jarahan: Jarahan Utama, Penjarah Utama {name}, ambang {threshold}.",
+      "summaryGroup": "Pengaturan Jarahan: Jarahan Kelompok."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Angkat jadi Pemimpin"
     },
     "lootSettings": {
-      "title": "Loot Settings",
-      "close": "Close loot settings",
-      "menuItem": "Loot Settings",
-      "method": "Loot Method",
-      "rollThreshold": "Roll Threshold",
-      "groupLoot": "Group Loot",
-      "valueMaster": "Master Loot",
-      "leaderOption": "Master Looter: Leader (You)",
-      "masterOption": "Master Looter: {name}"
+      "title": "Pengaturan Jarahan",
+      "close": "Tutup pengaturan jarahan",
+      "menuItem": "Pengaturan Jarahan",
+      "method": "Metode Jarahan",
+      "rollThreshold": "Ambang Lempar Dadu",
+      "groupLoot": "Jarahan Kelompok",
+      "valueMaster": "Jarahan Utama",
+      "leaderOption": "Penjarah Utama: Pemimpin (Anda)",
+      "masterOption": "Penjarah Utama: {name}"
     },
     "bags": {
       "filterGroupAria": "Saring tas menurut kategori",
@@ -783,7 +783,7 @@ export const id_ID: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "itemTooltip": {
-      "requiresLevel": "Requires Level {level}"
+      "requiresLevel": "Membutuhkan Level {level}"
     },
     "discord": {
       "title": "Discord",
@@ -929,32 +929,32 @@ export const id_ID: EnTranslations = {
       }
     },
     "devBadge": {
-      "title": "Developer",
+      "title": "Pengembang",
       "tiers": {
-        "tinkerer": "Tinkerer",
-        "artificer": "Artificer",
-        "runesmith": "Runesmith",
-        "architect": "Architect",
-        "worldwright": "Worldwright"
+        "tinkerer": "Perakit",
+        "artificer": "Perekayasa",
+        "runesmith": "Pandai Rune",
+        "architect": "Arsitek",
+        "worldwright": "Perancang Dunia"
       },
       "flavors": {
-        "tinkerer": "Your first pull request landed in the realm.",
-        "artificer": "Five pull requests in, and the world bends to your code.",
-        "runesmith": "Fifteen pull requests forged into the running game.",
-        "architect": "An architect of the realm: 30 pull requests merged.",
-        "worldwright": "A wright of worlds: 70 pull requests shape the game."
+        "tinkerer": "Pull request pertamamu telah mendarat di alam ini.",
+        "artificer": "Lima pull request masuk, dan dunia pun tunduk pada kodemu.",
+        "runesmith": "Lima belas pull request ditempa ke dalam permainan yang berjalan.",
+        "architect": "Seorang arsitek alam ini: 30 pull request telah digabungkan.",
+        "worldwright": "Seorang perancang dunia: 70 pull request membentuk permainan ini."
       },
-      "badgeTitle": "Developer: {tier}",
-      "prsLanded": "{count} pull requests merged",
-      "contributor": "Open-source contributor",
+      "badgeTitle": "Pengembang: {tier}",
+      "prsLanded": "{count} pull request digabungkan",
+      "contributor": "Kontributor sumber terbuka",
       "link": {
-        "cta": "Link GitHub",
-        "relink": "Relink GitHub",
-        "benefits": "Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.",
-        "error": "Could not link GitHub. Please try again."
+        "cta": "Tautkan GitHub",
+        "relink": "Tautkan Ulang GitHub",
+        "benefits": "Tautkan GitHub-mu untuk mendapatkan lencana pengembang atas pull request yang telah digabungkan ke repositori sumber terbuka.",
+        "error": "Tidak dapat menautkan GitHub. Silakan coba lagi."
       },
-      "linkedAs": "Linked as {login}",
-      "unlink": "Unlink GitHub"
+      "linkedAs": "Tertaut sebagai {login}",
+      "unlink": "Putuskan Tautan GitHub"
     }
   },
   "guide": {
@@ -5713,9 +5713,9 @@ export const id_ID: EnTranslations = {
         "greeting": "Hati-hati dengan batu serpih yang longgar, {className}. Gunung ini... gelisah belakangan ini. Aku berniat mencari tahu sebabnya."
       },
       "auctioneer_voss": {
-        "name": "Auctioneer Voss",
-        "title": "Keeper of the World Market",
-        "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+        "name": "Pelelang Voss",
+        "title": "Penjaga World Market",
+        "greeting": "World Market juga buka di sini, {className}. Belilah dari setiap petualang di alam ini, atau gelarlah daganganmu sendiri."
       },
       "brother_aldric_raid": {
         "name": "Bruder Aldric",

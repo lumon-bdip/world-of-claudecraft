@@ -14,6 +14,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '正在觀察 {name}',
   'hudChrome.loot.chestTitle': '寶箱',
   'hudChrome.itemTooltip.requiresLevel': '需要等級 {level}',

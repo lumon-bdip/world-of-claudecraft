@@ -274,16 +274,16 @@ export const nl_NL: EnTranslations = {
       "tabsLabel": "Topscorelijsten",
       "tabPlayers": "Spelers",
       "tabGuilds": "Gildes",
-      "tabDevs": "Developers",
+      "tabDevs": "Ontwikkelaars",
       "guildName": "Gilde",
       "members": "Leden",
       "topLevel": "Top",
       "guildXp": "Totaal XP",
       "guildEmpty": "Nog geen gerangschikte gildes.",
-      "devName": "Contributor",
-      "devTierCol": "Badge",
-      "mergedPrs": "Merged PRs",
-      "devEmpty": "No ranked contributors yet."
+      "devName": "Bijdrager",
+      "devTierCol": "Insigne",
+      "mergedPrs": "Samengevoegde PR's",
+      "devEmpty": "Nog geen gerangschikte bijdragers."
     },
     "raidLockout": {
       "title": "Raidvergrendelingen",
@@ -336,10 +336,10 @@ export const nl_NL: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Houdt de muisaanwijzer binnen het venster terwijl je sleept om de camera te draaien, zodat deze de schermrand niet kan bereiken of naar een ander beeldscherm kan gaan. Schakel uit als je liever een vrije aanwijzer hebt.",
       "showWalletOnCharacterScreen": "Portemonnee tonen op personagescherm",
       "showWalletOnPlayerCard": "Portemonnee tonen op spelerskaart",
-      "showDevBadges": "Show Developer Badges",
+      "showDevBadges": "Ontwikkelaarsinsignes tonen",
       "uiScale": "UI-schaal",
       "highContrastBackground": "Hoog-contrastachtergrond",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Auto-aanval bij gebruik van vaardigheid",
       "showItemLevel": "Itemniveau tonen",
       "itemLevelLine": "Itemniveau {level}",
       "itemScoreLine": "Score {score}",
@@ -437,7 +437,7 @@ export const nl_NL: EnTranslations = {
     "statInfo": {
       "fromYour": "Van je {value} {stat}:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Spreukkracht"
       },
       "desc": {
         "str": "Verhoogt je aanvalskracht, zodat je wapenslagen harder aankomen.",
@@ -447,7 +447,7 @@ export const nl_NL: EnTranslations = {
         "spi": "Versnelt hoe snel de mana van een spreukenwever terugkeert tijdens het rusten, buiten gevecht.",
         "armor": "Verzacht inkomende fysieke klappen. De vermindering is groter tegen aanvallers van een lager niveau en is gemaximeerd op 75%.",
         "attackPower": "Voedt je wapenaanvallen. Elke 14 aanvalskracht voegt 1 schade per seconde toe.",
-        "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
+        "spellPower": "Verhoogt de schade van je spreuken en de kracht van je genezingen. Elk punt Intellect verleent een beetje Spreukkracht, bovenop wat je krijgt van uitrusting of buffs.",
         "dps": "Je geschatte wapenschade per seconde, een combinatie van de schade en snelheid van je wapen met je aanvalskracht.",
         "critChance": "Je kans dat een aanval kritiek raakt en dubbele schade aanricht.",
         "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen."
@@ -472,13 +472,13 @@ export const nl_NL: EnTranslations = {
         "dpsApprox": "Een schatting, het sluit kritieke treffers en vaardigheidsschade uit."
       },
       "sources": {
-        "header": "Made up of:",
-        "base": "Base: {value}",
-        "attributes": "From your attributes: {value}",
-        "fromAttribute": "From {stat}: {value}",
-        "gear": "Equipped gear: {value}",
+        "header": "Opgebouwd uit:",
+        "base": "Basis: {value}",
+        "attributes": "Van je attributen: {value}",
+        "fromAttribute": "Van {stat}: {value}",
+        "gear": "Uitgeruste uitrusting: {value}",
         "buff": "{name}: {value}",
-        "talents": "Talents and effects: {value}"
+        "talents": "Talenten en effecten: {value}"
       }
     },
     "talents": {
@@ -504,7 +504,7 @@ export const nl_NL: EnTranslations = {
       "linkTitle": "Shift-klik om deze queeste in de chat te koppelen."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Shift-klik om dit voorwerp in de chat te delen."
     },
     "plurals": {
       "guildMembers": {
@@ -532,10 +532,10 @@ export const nl_NL: EnTranslations = {
         "other": "Wie: {count} spelers online op {realm}."
       },
       "playersMatching": {
-        "one": "Who: {count} player matching \"{query}\" on {realm}.",
-        "few": "Who: {count} players matching \"{query}\" on {realm}.",
-        "many": "Who: {count} players matching \"{query}\" on {realm}.",
-        "other": "Who: {count} players matching \"{query}\" on {realm}."
+        "one": "Wie: {count} speler die overeenkomt met \"{query}\" op {realm}.",
+        "few": "Wie: {count} spelers die overeenkomen met \"{query}\" op {realm}.",
+        "many": "Wie: {count} spelers die overeenkomen met \"{query}\" op {realm}.",
+        "other": "Wie: {count} spelers die overeenkomen met \"{query}\" op {realm}."
       }
     },
     "bugReport": {
@@ -655,25 +655,25 @@ export const nl_NL: EnTranslations = {
       "assigned": "{looter} heeft {item} toegewezen aan {target}.",
       "unassigned": "{item} is niet toegewezen en is vrij voor iedereen.",
       "leaderOnly": "Alleen de groepsleider kan de buitmethode wijzigen.",
-      "rollingFor": "Rolling for {item}.",
-      "looterChanged": "Master Looter is now {name}.",
-      "thresholdSet": "Loot threshold set to {threshold}.",
-      "summaryMaster": "Loot Settings: Master Loot, Master Looter {name}, threshold {threshold}.",
-      "summaryGroup": "Loot Settings: Group Loot."
+      "rollingFor": "Werpen om {item}.",
+      "looterChanged": "Buitmeester is nu {name}.",
+      "thresholdSet": "Buitdrempel ingesteld op {threshold}.",
+      "summaryMaster": "Buitinstellingen: Buitmeester-buit, Buitmeester {name}, drempel {threshold}.",
+      "summaryGroup": "Buitinstellingen: Groepsbuit."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Bevorderen tot leider"
     },
     "lootSettings": {
-      "title": "Loot Settings",
-      "close": "Close loot settings",
-      "menuItem": "Loot Settings",
-      "method": "Loot Method",
-      "rollThreshold": "Roll Threshold",
-      "groupLoot": "Group Loot",
-      "valueMaster": "Master Loot",
-      "leaderOption": "Master Looter: Leader (You)",
-      "masterOption": "Master Looter: {name}"
+      "title": "Buitinstellingen",
+      "close": "Buitinstellingen sluiten",
+      "menuItem": "Buitinstellingen",
+      "method": "Buitmethode",
+      "rollThreshold": "Worpdrempel",
+      "groupLoot": "Groepsbuit",
+      "valueMaster": "Buitmeester-buit",
+      "leaderOption": "Buitmeester: Leider (jij)",
+      "masterOption": "Buitmeester: {name}"
     },
     "bags": {
       "filterGroupAria": "Tassen filteren op categorie",
@@ -783,7 +783,7 @@ export const nl_NL: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "itemTooltip": {
-      "requiresLevel": "Requires Level {level}"
+      "requiresLevel": "Vereist niveau {level}"
     },
     "discord": {
       "title": "Discord",
@@ -929,32 +929,32 @@ export const nl_NL: EnTranslations = {
       }
     },
     "devBadge": {
-      "title": "Developer",
+      "title": "Ontwikkelaar",
       "tiers": {
-        "tinkerer": "Tinkerer",
-        "artificer": "Artificer",
-        "runesmith": "Runesmith",
+        "tinkerer": "Knutselaar",
+        "artificer": "Vervaardiger",
+        "runesmith": "Runensmid",
         "architect": "Architect",
-        "worldwright": "Worldwright"
+        "worldwright": "Wereldbouwer"
       },
       "flavors": {
-        "tinkerer": "Your first pull request landed in the realm.",
-        "artificer": "Five pull requests in, and the world bends to your code.",
-        "runesmith": "Fifteen pull requests forged into the running game.",
-        "architect": "An architect of the realm: 30 pull requests merged.",
-        "worldwright": "A wright of worlds: 70 pull requests shape the game."
+        "tinkerer": "Je eerste pull request landde in het rijk.",
+        "artificer": "Vijf pull requests verder, en de wereld buigt naar je code.",
+        "runesmith": "Vijftien pull requests gesmeed in het draaiende spel.",
+        "architect": "Een architect van het rijk: 30 pull requests samengevoegd.",
+        "worldwright": "Een bouwer van werelden: 70 pull requests vormen het spel."
       },
-      "badgeTitle": "Developer: {tier}",
-      "prsLanded": "{count} pull requests merged",
-      "contributor": "Open-source contributor",
+      "badgeTitle": "Ontwikkelaar: {tier}",
+      "prsLanded": "{count} pull requests samengevoegd",
+      "contributor": "Opensource-bijdrager",
       "link": {
-        "cta": "Link GitHub",
-        "relink": "Relink GitHub",
-        "benefits": "Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.",
-        "error": "Could not link GitHub. Please try again."
+        "cta": "GitHub koppelen",
+        "relink": "GitHub opnieuw koppelen",
+        "benefits": "Koppel je GitHub om een ontwikkelaarsinsigne te verdienen voor de pull requests die je hebt laten samenvoegen in de opensource-repo.",
+        "error": "Kon GitHub niet koppelen. Probeer het opnieuw."
       },
-      "linkedAs": "Linked as {login}",
-      "unlink": "Unlink GitHub"
+      "linkedAs": "Gekoppeld als {login}",
+      "unlink": "GitHub ontkoppelen"
     }
   },
   "guide": {
@@ -5713,9 +5713,9 @@ export const nl_NL: EnTranslations = {
         "greeting": "Pas op voor de losse leisteen, {className}. De berg is... rusteloos geweest de laatste tijd. Ik ben van plan uit te zoeken waarom."
       },
       "auctioneer_voss": {
-        "name": "Auctioneer Voss",
-        "title": "Keeper of the World Market",
-        "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+        "name": "Veilingmeester Voss",
+        "title": "Hoeder van de Wereldmarkt",
+        "greeting": "De Wereldmarkt is hier ook geopend, {className}. Koop van elke avonturier in het rijk, of stal je eigen waren uit."
       },
       "brother_aldric_raid": {
         "name": "Broeder Aldric",

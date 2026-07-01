@@ -274,16 +274,16 @@ export const de_DE: EnTranslations = {
       "tabsLabel": "Bestenlisten",
       "tabPlayers": "Spieler",
       "tabGuilds": "Gilden",
-      "tabDevs": "Developers",
+      "tabDevs": "Entwickler",
       "guildName": "Gilde",
       "members": "Mitglieder",
       "topLevel": "Top",
       "guildXp": "Gesamt-XP",
       "guildEmpty": "Noch keine platzierten Gilden.",
-      "devName": "Contributor",
-      "devTierCol": "Badge",
-      "mergedPrs": "Merged PRs",
-      "devEmpty": "No ranked contributors yet."
+      "devName": "Mitwirkender",
+      "devTierCol": "Abzeichen",
+      "mergedPrs": "Zusammengeführte PRs",
+      "devEmpty": "Noch keine platzierten Mitwirkenden."
     },
     "raidLockout": {
       "title": "Schlachtzug-Sperren",
@@ -336,10 +336,10 @@ export const de_DE: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Hält den Mauszeiger im Fenster, während Ihr zum Drehen der Kamera zieht, damit er nicht den Bildschirmrand erreicht oder auf einen anderen Monitor wandert. Schaltet dies aus, wenn Ihr einen freien Cursor bevorzugt.",
       "showWalletOnCharacterScreen": "Wallet auf dem Charakterbildschirm anzeigen",
       "showWalletOnPlayerCard": "Wallet auf der Spielerkarte anzeigen",
-      "showDevBadges": "Show Developer Badges",
+      "showDevBadges": "Entwicklerabzeichen anzeigen",
       "uiScale": "UI-Skalierung",
       "highContrastBackground": "Hintergrund mit hohem Kontrast",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Auto-Angriff bei Fähigkeitseinsatz",
       "showItemLevel": "Gegenstandsstufe anzeigen",
       "itemLevelLine": "Gegenstandsstufe {level}",
       "itemScoreLine": "Wertung {score}",
@@ -437,7 +437,7 @@ export const de_DE: EnTranslations = {
     "statInfo": {
       "fromYour": "Von deinen {value} Punkten {stat}:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Zaubermacht"
       },
       "desc": {
         "str": "Erhöht deine Angriffskraft, sodass deine Waffenschläge härter treffen.",
@@ -447,7 +447,7 @@ export const de_DE: EnTranslations = {
         "spi": "Beschleunigt, wie schnell das Mana eines Zauberwirkers außerhalb des Kampfes beim Ausruhen zurückkehrt.",
         "armor": "Mildert eingehende physische Schläge ab. Die Verringerung fällt gegen Angreifer niedrigerer Stufe stärker aus und ist auf 75% begrenzt.",
         "attackPower": "Verstärkt deine Waffenangriffe. Je 14 Angriffskraft fügen 1 Schaden pro Sekunde hinzu.",
-        "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
+        "spellPower": "Erhöht den Schaden deiner Zauber und die Stärke deiner Heilungen. Jeder Punkt Intelligenz gewährt etwas Zaubermacht, zusätzlich zu der aus Ausrüstung oder Stärkungszaubern.",
         "dps": "Dein geschätzter Waffenschaden pro Sekunde, der Schaden und Geschwindigkeit deiner Waffe mit deiner Angriffskraft verbindet.",
         "critChance": "Deine Chance, dass ein Angriff kritisch trifft und doppelten Schaden verursacht.",
         "dodge": "Deine Chance, einem eingehenden Nahkampfangriff vollständig auszuweichen und keinen Schaden zu erleiden."
@@ -472,13 +472,13 @@ export const de_DE: EnTranslations = {
         "dpsApprox": "Ein Schätzwert, kritische Treffer und Fähigkeitsschaden sind ausgenommen."
       },
       "sources": {
-        "header": "Made up of:",
-        "base": "Base: {value}",
-        "attributes": "From your attributes: {value}",
-        "fromAttribute": "From {stat}: {value}",
-        "gear": "Equipped gear: {value}",
+        "header": "Zusammengesetzt aus:",
+        "base": "Basis: {value}",
+        "attributes": "Aus deinen Attributen: {value}",
+        "fromAttribute": "Aus {stat}: {value}",
+        "gear": "Angelegte Ausrüstung: {value}",
         "buff": "{name}: {value}",
-        "talents": "Talents and effects: {value}"
+        "talents": "Talente und Effekte: {value}"
       }
     },
     "talents": {
@@ -504,7 +504,7 @@ export const de_DE: EnTranslations = {
       "linkTitle": "Umschalt + Klick, um diese Quest im Chat zu verlinken."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Umschalt-Klick, um diesen Gegenstand im Chat zu verlinken."
     },
     "plurals": {
       "guildMembers": {
@@ -655,25 +655,25 @@ export const de_DE: EnTranslations = {
       "assigned": "{looter} hat {item} an {target} zugewiesen.",
       "unassigned": "{item} wurde nicht zugewiesen und ist fuer alle frei.",
       "leaderOnly": "Nur der Gruppenleiter kann die Beutemethode aendern.",
-      "rollingFor": "Rolling for {item}.",
-      "looterChanged": "Master Looter is now {name}.",
-      "thresholdSet": "Loot threshold set to {threshold}.",
-      "summaryMaster": "Loot Settings: Master Loot, Master Looter {name}, threshold {threshold}.",
-      "summaryGroup": "Loot Settings: Group Loot."
+      "rollingFor": "Es wird um {item} gewürfelt.",
+      "looterChanged": "Plündermeister ist jetzt {name}.",
+      "thresholdSet": "Beuteschwelle auf {threshold} gesetzt.",
+      "summaryMaster": "Beute-Einstellungen: Meisterbeute, Plündermeister {name}, Schwelle {threshold}.",
+      "summaryGroup": "Beute-Einstellungen: Gruppenbeute."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Zum Anführer befördern"
     },
     "lootSettings": {
-      "title": "Loot Settings",
-      "close": "Close loot settings",
-      "menuItem": "Loot Settings",
-      "method": "Loot Method",
-      "rollThreshold": "Roll Threshold",
-      "groupLoot": "Group Loot",
-      "valueMaster": "Master Loot",
-      "leaderOption": "Master Looter: Leader (You)",
-      "masterOption": "Master Looter: {name}"
+      "title": "Beute-Einstellungen",
+      "close": "Beute-Einstellungen schließen",
+      "menuItem": "Beute-Einstellungen",
+      "method": "Beuteverteilung",
+      "rollThreshold": "Würfelschwelle",
+      "groupLoot": "Gruppenbeute",
+      "valueMaster": "Meisterbeute",
+      "leaderOption": "Plündermeister: Anführer (Du)",
+      "masterOption": "Plündermeister: {name}"
     },
     "bags": {
       "filterGroupAria": "Taschen nach Kategorie filtern",
@@ -783,7 +783,7 @@ export const de_DE: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "itemTooltip": {
-      "requiresLevel": "Requires Level {level}"
+      "requiresLevel": "Benötigt Stufe {level}"
     },
     "discord": {
       "title": "Discord",
@@ -929,32 +929,32 @@ export const de_DE: EnTranslations = {
       }
     },
     "devBadge": {
-      "title": "Developer",
+      "title": "Entwickler",
       "tiers": {
-        "tinkerer": "Tinkerer",
-        "artificer": "Artificer",
-        "runesmith": "Runesmith",
-        "architect": "Architect",
-        "worldwright": "Worldwright"
+        "tinkerer": "Tüftler",
+        "artificer": "Artifex",
+        "runesmith": "Runenschmied",
+        "architect": "Architekt",
+        "worldwright": "Weltenbauer"
       },
       "flavors": {
-        "tinkerer": "Your first pull request landed in the realm.",
-        "artificer": "Five pull requests in, and the world bends to your code.",
-        "runesmith": "Fifteen pull requests forged into the running game.",
-        "architect": "An architect of the realm: 30 pull requests merged.",
-        "worldwright": "A wright of worlds: 70 pull requests shape the game."
+        "tinkerer": "Dein erster Pull Request ist im Reich gelandet.",
+        "artificer": "Fünf Pull Requests, und die Welt beugt sich deinem Code.",
+        "runesmith": "Fünfzehn Pull Requests, geschmiedet ins laufende Spiel.",
+        "architect": "Ein Architekt des Reiches: 30 zusammengeführte Pull Requests.",
+        "worldwright": "Ein Erschaffer von Welten: 70 Pull Requests formen das Spiel."
       },
-      "badgeTitle": "Developer: {tier}",
-      "prsLanded": "{count} pull requests merged",
-      "contributor": "Open-source contributor",
+      "badgeTitle": "Entwickler: {tier}",
+      "prsLanded": "{count} zusammengeführte Pull Requests",
+      "contributor": "Open-Source-Mitwirkender",
       "link": {
-        "cta": "Link GitHub",
-        "relink": "Relink GitHub",
-        "benefits": "Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.",
-        "error": "Could not link GitHub. Please try again."
+        "cta": "GitHub verknüpfen",
+        "relink": "GitHub neu verknüpfen",
+        "benefits": "Verknüpfe dein GitHub, um ein Entwicklerabzeichen für die Pull Requests zu erhalten, die in das Open-Source-Repository zusammengeführt wurden.",
+        "error": "GitHub konnte nicht verknüpft werden. Bitte versuche es erneut."
       },
-      "linkedAs": "Linked as {login}",
-      "unlink": "Unlink GitHub"
+      "linkedAs": "Verknüpft als {login}",
+      "unlink": "GitHub trennen"
     }
   },
   "guide": {
@@ -5713,9 +5713,9 @@ export const de_DE: EnTranslations = {
         "greeting": "Achte auf lockeren Schiefer, {className}. Der Berg ist unruhig geworden, und ich will wissen warum."
       },
       "auctioneer_voss": {
-        "name": "Auctioneer Voss",
-        "title": "Keeper of the World Market",
-        "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+        "name": "Auktionator Voss",
+        "title": "Hüter des Weltmarkts",
+        "greeting": "Der Weltmarkt ist auch hier geöffnet, {className}. Kauf bei jedem Abenteurer im Reich ein oder biete deine eigenen Waren feil."
       },
       "brother_aldric_raid": {
         "name": "Bruder Aldric",
