@@ -34,6 +34,7 @@ export const DEVIATION_ID = {
   realmsSearchAuthzGapClose: 'realms-search-authz-gap-close',
   newLimiterCharacterMutations: 'new-limiter-character-mutations',
   characterBodyValidationRemap: 'character-body-validation-remap',
+  characterIdParamDecode: 'character-id-param-decode-422',
   newLimiterReportsCreate: 'new-limiter-reports-create',
   newLimiterDiscord: 'new-limiter-discord',
   discordCallbackHtmlNotRedirect: 'discord-callback-html-not-redirect',
@@ -366,6 +367,46 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
       'first leaks nothing about name validity to a non-owner, the deny-by-default BOLA posture); ' +
       'no golden fixture exercises the non-owned + invalid-name shape, so it is documented here ' +
       'rather than harness-caught.',
+  },
+  {
+    id: DEVIATION_ID.characterIdParamDecode,
+    routes: [
+      '/api/characters/:id/sheet',
+      '/api/characters/:id/standing',
+      '/api/characters/:id/rename',
+      '/api/characters/:id/takeover',
+      '/api/characters/:id',
+    ],
+    currentBehavior:
+      'On the legacy handleApi ladder the owner :id arms gate on \\d+ route regexes ' +
+      '(ownerSheetMatch / standingMatch / renameMatch / takeoverMatch / delMatch), so a ' +
+      'non-numeric :id (e.g. "abc", "1.5") matches no character arm and falls through to ' +
+      'the 404 unknown-endpoint arm without the bearer ever being read; a numeric-but-non-' +
+      'positive :id ("0") matches \\d+, reaches the account-scoped getCharacter(accountId, ' +
+      '0) which misses, and answers the legacy 404 body ("character not found" for sheet / ' +
+      'standing / rename, "not found" for takeover / delete).',
+    intendedBehavior:
+      'Phase 12 serves these routes through the new pipeline, where requireOwned decodes ' +
+      ':id with num({ int: true, min: 1 }) BEFORE any DB call, so a non-numeric OR non-' +
+      'positive :id is rejected 422 (validation.failed, application/problem+json) for an ' +
+      'authenticated caller; because the auth guard (activeGuard / readGuard) runs before ' +
+      'the decode, an UNauthenticated bad-:id request short-circuits 401 ({ error: "not ' +
+      'authenticated" }) first. This is NaN-safe and strictly more correct (ids are 1-based ' +
+      'bigserial, so 0 / negative / non-numeric are never valid). The 422 / 401 (new) vs 404 ' +
+      '(legacy) shape is not exercised by the numeric-id parity corpus, so it is documented ' +
+      'here rather than caught by the harness; the client code-matcher for the 422 problem+' +
+      'json body is Phase 22, and the divergence becomes the real behavior at the Phase 25 ' +
+      'flag flip / ladder deletion.',
+    introducedInPhase: 12,
+    reason:
+      'The migrated :id routes reject a malformed or non-positive id at the num() decoder ' +
+      '(422), and an unauthenticated caller 401s at the auth guard first, instead of the ' +
+      'legacy 404 fall-through / account-scoped miss. A strictly more correct, NaN-safe ' +
+      'mapping for a degenerate input no real client sends (ids come from the server-issued ' +
+      'numeric character list); unit-tested in require_owned.test.ts (the badIds cases), not ' +
+      'in the numeric-only parity corpus, so documented here rather than harness-caught. ' +
+      'Sibling to characterBodyValidationRemap (same phase and routes, same harness-invisible ' +
+      'rationale).',
   },
   {
     id: DEVIATION_ID.newLimiterReportsCreate,
