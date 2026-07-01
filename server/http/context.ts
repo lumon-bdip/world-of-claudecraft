@@ -11,6 +11,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { randomUUID } from 'node:crypto';
 import type * as http from 'node:http';
 import { requestIp } from '../ratelimit';
+import { HttpError } from './errors';
 import type { MatchResult } from './router';
 import type { Ctx, Method, RouteDef } from './types';
 
@@ -44,6 +45,19 @@ export function runWithReqId<T>(reqId: string, fn: () => T): T {
 /** The ambient request id, or undefined when called outside any runWithReqId. */
 export function currentReqId(): string | undefined {
   return reqIdStorage.getStore();
+}
+
+/**
+ * The authenticated caller's account id off ctx. A missing ctx.account here is a
+ * COMPOSITION bug: an account-scoped middleware or handler was mounted ahead of the
+ * auth guard that populates it, never a client error, so it maps to a 500. Shared by
+ * requireOwned, the ip+account rate-limit policies, and the character handlers so the
+ * 500-vs-client-error contract lives in exactly one place.
+ */
+export function ctxAccountId(ctx: Ctx): number {
+  const id = ctx.account?.accountId;
+  if (id === undefined) throw new HttpError(500, 'internal.error');
+  return id;
 }
 
 /**

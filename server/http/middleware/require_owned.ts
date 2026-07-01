@@ -29,8 +29,7 @@
 // non-numeric id, so this is not a parity divergence the harness can observe).
 
 import { json } from '../../http_util';
-import { currentReqId } from '../context';
-import { HttpError } from '../errors';
+import { ctxAccountId, currentReqId } from '../context';
 import { num } from '../schema';
 import type { Ctx, Middleware, Next } from '../types';
 
@@ -95,13 +94,6 @@ export interface RequireOwnedConfig<T> {
   readonly denyLog?: BolaDenyLogger;
 }
 
-/** The account id off ctx, or a 500 (the loader was mounted ahead of auth). */
-function requireAccountId(ctx: Ctx): number {
-  const id = ctx.account?.accountId;
-  if (id === undefined) throw new HttpError(500, 'internal.error');
-  return id;
-}
-
 /**
  * Build the load-then-authorize middleware for `config`. On a hit it stores the row
  * at ctx.state[config.resource] and continues; on a non-numeric :id it throws the
@@ -114,7 +106,7 @@ export function requireOwned<T>(config: RequireOwnedConfig<T>): Middleware {
   // receives NaN. A positive safe integer is required (ids are 1-based bigserial).
   const idSchema = num({ int: true, min: 1 });
   return async (ctx: Ctx, next: Next) => {
-    const accountId = requireAccountId(ctx);
+    const accountId = ctxAccountId(ctx);
     const decoded = idSchema.decode(ctx.params[config.param], `/${config.param}`);
     // A raw { ok: false, issues } is what toAppError maps to 422 validation.failed.
     if (!decoded.ok) throw decoded;

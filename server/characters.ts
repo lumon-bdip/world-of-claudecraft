@@ -60,7 +60,7 @@ import {
   renameCharacter,
   scopeAllowsMutation,
 } from './db';
-import { HttpError } from './http/errors';
+import { ctxAccountId } from './http/context';
 import { withBody } from './http/middleware/body';
 import {
   CHARACTER_CREATE_POLICY,
@@ -195,13 +195,6 @@ export function resetCharactersDbForTests(): void {
 // Pure helpers (host-agnostic; no req/res, no DB).
 // ---------------------------------------------------------------------------
 
-/** The account id set by the auth guard; a missing one is a composition bug (500). */
-function accountIdOf(ctx: Ctx): number {
-  const id = ctx.account?.accountId;
-  if (id === undefined) throw new HttpError(500, 'internal.error');
-  return id;
-}
-
 /** The owned, authorized character row the requireOwnedCharacter loader stashed. */
 function ownedCharacter(ctx: Ctx): CharacterRow {
   return ctx.state.get(CHARACTER_RESOURCE) as CharacterRow;
@@ -317,21 +310,21 @@ function requireOwnedCharacter(notFoundBody: Record<string, unknown>): Middlewar
 /** GET /api/me/characters: read-scoped list (companion/OAuth read tokens). */
 async function meCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
-  const chars = await charactersDb.listCharacters(accountIdOf(ctx));
+  const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
   json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline));
 }
 
 /** GET /api/characters: full-session list (byte-identical body to me/characters). */
 async function listCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
-  const chars = await charactersDb.listCharacters(accountIdOf(ctx));
+  const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
   json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline));
 }
 
 /** POST /api/characters: validate, create the capped character, reclaim a freed name once. */
 async function createCharacterHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
-  const accountId = accountIdOf(ctx);
+  const accountId = ctxAccountId(ctx);
   const body = (ctx.body ?? {}) as Record<string, unknown>;
   const name = normalizeCharName(body.name);
   if (name === null) {
@@ -404,7 +397,7 @@ async function createCharacterHandler(ctx: Ctx): Promise<void> {
 /** GET /api/characters/:id/standing: the owner's realm lifetime-XP standing. */
 async function standingHandler(ctx: Ctx): Promise<void> {
   const character = ownedCharacter(ctx);
-  const standing = await charactersDb.lifetimeXpStanding(accountIdOf(ctx), character.id);
+  const standing = await charactersDb.lifetimeXpStanding(ctxAccountId(ctx), character.id);
   if (!standing) {
     json(ctx.res, 404, CHARACTER_NOT_FOUND);
     return;
@@ -437,7 +430,7 @@ async function ownerSheetHandler(ctx: Ctx): Promise<void> {
 /** POST /api/characters/:id/rename: moderator-sanctioned rename (force_rename gated). */
 async function renameHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
-  const accountId = accountIdOf(ctx);
+  const accountId = ctxAccountId(ctx);
   const character = ownedCharacter(ctx);
   const body = (ctx.body ?? {}) as Record<string, unknown>;
   const name = normalizeCharName(body.name);
@@ -499,14 +492,14 @@ async function renameHandler(ctx: Ctx): Promise<void> {
 async function takeoverHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const character = ownedCharacter(ctx);
-  const result = await rt.takeOverCharacter(accountIdOf(ctx), character.id);
+  const result = await rt.takeOverCharacter(ctxAccountId(ctx), character.id);
   json(ctx.res, 200, { ok: true, takenOver: result === 'taken-over' });
 }
 
 /** DELETE /api/characters/:id: delete after an offline + name-confirmation check. */
 async function deleteHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
-  const accountId = accountIdOf(ctx);
+  const accountId = ctxAccountId(ctx);
   const character = ownedCharacter(ctx);
   const body = (ctx.body ?? {}) as Record<string, unknown>;
   if (rt.isCharacterOnline(character.id)) {
