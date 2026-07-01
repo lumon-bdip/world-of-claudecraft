@@ -332,6 +332,7 @@ export const ja_JP: EnTranslations = {
       "showWalletOnPlayerCard": "プレイヤーカードにウォレットを表示",
       "uiScale": "UIスケール",
       "highContrastBackground": "高コントラスト背景",
+      "startAttackOnAbility": "アビリティ使用時に自動攻撃",
       "showItemLevel": "アイテムレベルを表示",
       "itemLevelLine": "アイテムレベル {level}",
       "itemScoreLine": "スコア {score}",
@@ -506,6 +507,12 @@ export const ja_JP: EnTranslations = {
         "few": "Who：{realm}に{count}人のプレイヤーがオンラインです。",
         "many": "Who：{realm}に{count}人のプレイヤーがオンラインです。",
         "other": "Who：{realm}に{count}人のプレイヤーがオンラインです。"
+      },
+      "playersMatching": {
+        "one": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。",
+        "few": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。",
+        "many": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。",
+        "other": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。"
       }
     },
     "bugReport": {

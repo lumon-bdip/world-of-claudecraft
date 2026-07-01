@@ -332,6 +332,7 @@ export const id_ID: EnTranslations = {
       "showWalletOnPlayerCard": "Tampilkan Dompet di Kartu Pemain",
       "uiScale": "Skala UI",
       "highContrastBackground": "Latar Kontras Tinggi",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
@@ -506,6 +507,12 @@ export const id_ID: EnTranslations = {
         "few": "Who: {count} pemain daring di {realm}.",
         "many": "Who: {count} pemain daring di {realm}.",
         "other": "Who: {count} pemain daring di {realm}."
+      },
+      "playersMatching": {
+        "one": "Who: {count} player matching \"{query}\" on {realm}.",
+        "few": "Who: {count} players matching \"{query}\" on {realm}.",
+        "many": "Who: {count} players matching \"{query}\" on {realm}.",
+        "other": "Who: {count} players matching \"{query}\" on {realm}."
       }
     },
     "bugReport": {

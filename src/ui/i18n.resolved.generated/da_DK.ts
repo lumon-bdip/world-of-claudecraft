@@ -332,6 +332,7 @@ export const da_DK: EnTranslations = {
       "showWalletOnPlayerCard": "Vis pengepung på spillerkort",
       "uiScale": "UI-skala",
       "highContrastBackground": "Baggrund med høj kontrast",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",
@@ -506,6 +507,12 @@ export const da_DK: EnTranslations = {
         "few": "Hvem: {count} spillere online på {realm}.",
         "many": "Hvem: {count} spillere online på {realm}.",
         "other": "Hvem: {count} spillere online på {realm}."
+      },
+      "playersMatching": {
+        "one": "Who: {count} player matching \"{query}\" on {realm}.",
+        "few": "Who: {count} players matching \"{query}\" on {realm}.",
+        "many": "Who: {count} players matching \"{query}\" on {realm}.",
+        "other": "Who: {count} players matching \"{query}\" on {realm}."
       }
     },
     "bugReport": {

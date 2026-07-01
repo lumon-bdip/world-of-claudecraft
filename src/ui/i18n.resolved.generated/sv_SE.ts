@@ -332,6 +332,7 @@ export const sv_SE: EnTranslations = {
       "showWalletOnPlayerCard": "Visa plånbok på spelarkortet",
       "uiScale": "Gränssnittsskala",
       "highContrastBackground": "Bakgrund med hög kontrast",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
@@ -506,6 +507,12 @@ export const sv_SE: EnTranslations = {
         "few": "Vilka: {count} spelare online på {realm}.",
         "many": "Vilka: {count} spelare online på {realm}.",
         "other": "Vilka: {count} spelare online på {realm}."
+      },
+      "playersMatching": {
+        "one": "Who: {count} player matching \"{query}\" on {realm}.",
+        "few": "Who: {count} players matching \"{query}\" on {realm}.",
+        "many": "Who: {count} players matching \"{query}\" on {realm}.",
+        "other": "Who: {count} players matching \"{query}\" on {realm}."
       }
     },
     "bugReport": {

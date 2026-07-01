@@ -10,22 +10,28 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "es_ES": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "fr_FR": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "fr_CA": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "en_CA": [],
   "it_IT": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "de_DE": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "zh_CN": [],
@@ -33,28 +39,64 @@ export const pending: Record<string, readonly string[]> = {
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "ru_RU": [],
   "nl_NL": [
-    "hudChrome.party.promoteLeader"
+    "hudChrome.options.startAttackOnAbility",
+    "hudChrome.party.promoteLeader",
+    "hudChrome.plurals.playersMatching.few",
+    "hudChrome.plurals.playersMatching.many",
+    "hudChrome.plurals.playersMatching.one",
+    "hudChrome.plurals.playersMatching.other"
   ],
   "pl_PL": [
-    "hudChrome.party.promoteLeader"
+    "hudChrome.options.startAttackOnAbility",
+    "hudChrome.party.promoteLeader",
+    "hudChrome.plurals.playersMatching.few",
+    "hudChrome.plurals.playersMatching.many",
+    "hudChrome.plurals.playersMatching.one",
+    "hudChrome.plurals.playersMatching.other"
   ],
   "id_ID": [
-    "hudChrome.party.promoteLeader"
+    "hudChrome.options.startAttackOnAbility",
+    "hudChrome.party.promoteLeader",
+    "hudChrome.plurals.playersMatching.few",
+    "hudChrome.plurals.playersMatching.many",
+    "hudChrome.plurals.playersMatching.one",
+    "hudChrome.plurals.playersMatching.other"
   ],
   "tr_TR": [
-    "hudChrome.party.promoteLeader"
+    "hudChrome.options.startAttackOnAbility",
+    "hudChrome.party.promoteLeader",
+    "hudChrome.plurals.playersMatching.few",
+    "hudChrome.plurals.playersMatching.many",
+    "hudChrome.plurals.playersMatching.one",
+    "hudChrome.plurals.playersMatching.other"
   ],
   "sv_SE": [
-    "hudChrome.party.promoteLeader"
+    "hudChrome.options.startAttackOnAbility",
+    "hudChrome.party.promoteLeader",
+    "hudChrome.plurals.playersMatching.few",
+    "hudChrome.plurals.playersMatching.many",
+    "hudChrome.plurals.playersMatching.one",
+    "hudChrome.plurals.playersMatching.other"
   ],
   "vi_VN": [
-    "hudChrome.party.promoteLeader"
+    "hudChrome.options.startAttackOnAbility",
+    "hudChrome.party.promoteLeader",
+    "hudChrome.plurals.playersMatching.few",
+    "hudChrome.plurals.playersMatching.many",
+    "hudChrome.plurals.playersMatching.one",
+    "hudChrome.plurals.playersMatching.other"
   ],
   "da_DK": [
-    "hudChrome.party.promoteLeader"
+    "hudChrome.options.startAttackOnAbility",
+    "hudChrome.party.promoteLeader",
+    "hudChrome.plurals.playersMatching.few",
+    "hudChrome.plurals.playersMatching.many",
+    "hudChrome.plurals.playersMatching.one",
+    "hudChrome.plurals.playersMatching.other"
   ]
 };

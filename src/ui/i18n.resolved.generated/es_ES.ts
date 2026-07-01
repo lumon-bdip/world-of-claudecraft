@@ -332,6 +332,7 @@ export const es_ES: EnTranslations = {
       "showWalletOnPlayerCard": "Mostrar cartera en la tarjeta de jugador",
       "uiScale": "Escala de la interfaz",
       "highContrastBackground": "Fondo de alto contraste",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Mostrar nivel de objeto",
       "itemLevelLine": "Nivel de objeto {level}",
       "itemScoreLine": "Puntuación {score}",
@@ -506,6 +507,12 @@ export const es_ES: EnTranslations = {
         "few": "Quién: {count} jugadores conectados en {realm}.",
         "many": "Quién: {count} jugadores conectados en {realm}.",
         "other": "Quién: {count} jugadores conectados en {realm}."
+      },
+      "playersMatching": {
+        "one": "Quién: {count} jugador que coincide con \"{query}\" en {realm}.",
+        "few": "Quién: {count} jugadores que coinciden con \"{query}\" en {realm}.",
+        "many": "Quién: {count} jugadores que coinciden con \"{query}\" en {realm}.",
+        "other": "Quién: {count} jugadores que coinciden con \"{query}\" en {realm}."
       }
     },
     "bugReport": {

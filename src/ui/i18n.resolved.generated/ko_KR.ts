@@ -332,6 +332,7 @@ export const ko_KR: EnTranslations = {
       "showWalletOnPlayerCard": "플레이어 카드에 지갑 표시",
       "uiScale": "UI 배율",
       "highContrastBackground": "고대비 배경",
+      "startAttackOnAbility": "스킬 사용 시 자동 공격",
       "showItemLevel": "아이템 레벨 표시",
       "itemLevelLine": "아이템 레벨 {level}",
       "itemScoreLine": "점수 {score}",
@@ -506,6 +507,12 @@ export const ko_KR: EnTranslations = {
         "few": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다.",
         "many": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다.",
         "other": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다."
+      },
+      "playersMatching": {
+        "one": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명.",
+        "few": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명.",
+        "many": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명.",
+        "other": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명."
       }
     },
     "bugReport": {

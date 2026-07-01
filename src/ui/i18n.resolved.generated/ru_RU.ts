@@ -332,6 +332,7 @@ export const ru_RU: EnTranslations = {
       "showWalletOnPlayerCard": "Показывать кошелек на карточке игрока",
       "uiScale": "Масштаб интерфейса",
       "highContrastBackground": "Фон высокой контрастности",
+      "startAttackOnAbility": "Автоатака при использовании способности",
       "showItemLevel": "Показывать уровень предмета",
       "itemLevelLine": "Уровень предмета {level}",
       "itemScoreLine": "Оценка {score}",
@@ -506,6 +507,12 @@ export const ru_RU: EnTranslations = {
         "few": "Список игроков: на {realm} в сети {count} игрока.",
         "many": "Список игроков: на {realm} в сети {count} игроков.",
         "other": "Список игроков: на {realm} в сети {count} игрока."
+      },
+      "playersMatching": {
+        "one": "Список игроков: на {realm} по запросу «{query}» найден {count} игрок.",
+        "few": "Список игроков: на {realm} по запросу «{query}» найдено {count} игрока.",
+        "many": "Список игроков: на {realm} по запросу «{query}» найдено {count} игроков.",
+        "other": "Список игроков: на {realm} по запросу «{query}» найдено {count} игроков."
       }
     },
     "bugReport": {

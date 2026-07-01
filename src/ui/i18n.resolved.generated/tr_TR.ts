@@ -332,6 +332,7 @@ export const tr_TR: EnTranslations = {
       "showWalletOnPlayerCard": "Cüzdanı Oyuncu Kartında Göster",
       "uiScale": "Arayüz Ölçeği",
       "highContrastBackground": "Yüksek Kontrastlı Arka Plan",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Eşya Seviyesini Göster",
       "itemLevelLine": "Eşya Seviyesi {level}",
       "itemScoreLine": "Puan {score}",
@@ -506,6 +507,12 @@ export const tr_TR: EnTranslations = {
         "few": "Kimler: {realm} sunucusunda {count} oyuncu çevrimiçi.",
         "many": "Kimler: {realm} sunucusunda {count} oyuncu çevrimiçi.",
         "other": "Kimler: {realm} sunucusunda {count} oyuncu çevrimiçi."
+      },
+      "playersMatching": {
+        "one": "Who: {count} player matching \"{query}\" on {realm}.",
+        "few": "Who: {count} players matching \"{query}\" on {realm}.",
+        "many": "Who: {count} players matching \"{query}\" on {realm}.",
+        "other": "Who: {count} players matching \"{query}\" on {realm}."
       }
     },
     "bugReport": {

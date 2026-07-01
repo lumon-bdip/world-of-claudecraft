@@ -332,6 +332,7 @@ export const pl_PL: EnTranslations = {
       "showWalletOnPlayerCard": "Pokaż sakiewkę na karcie gracza",
       "uiScale": "Skala interfejsu",
       "highContrastBackground": "Tło o wysokim kontraście",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Pokaż poziom przedmiotu",
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",
@@ -506,6 +507,12 @@ export const pl_PL: EnTranslations = {
         "few": "Kto: {count} graczy online na realmie {realm}.",
         "many": "Kto: {count} graczy online na realmie {realm}.",
         "other": "Kto: {count} graczy online na realmie {realm}."
+      },
+      "playersMatching": {
+        "one": "Who: {count} player matching \"{query}\" on {realm}.",
+        "few": "Who: {count} players matching \"{query}\" on {realm}.",
+        "many": "Who: {count} players matching \"{query}\" on {realm}.",
+        "other": "Who: {count} players matching \"{query}\" on {realm}."
       }
     },
     "bugReport": {

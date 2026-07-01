@@ -295,6 +295,9 @@ export const hudChromeStrings = {
     // page's high-contrast backdrop toggle.
     uiScale: 'UI Scale',
     highContrastBackground: 'High-Contrast Background',
+    // Interface panel toggle: also engage auto-attack when using an offensive
+    // ability, so white swings start without a separate Attack press (on by default).
+    startAttackOnAbility: 'Auto-Attack on Ability Use',
     // Interface panel toggle + the item-tooltip lines it reveals (off by default).
     showItemLevel: 'Show Item Level',
     itemLevelLine: 'Item Level {level}',
@@ -512,6 +515,12 @@ export const hudChromeStrings = {
       few: 'Who: {count} players online on {realm}.',
       many: 'Who: {count} players online on {realm}.',
       other: 'Who: {count} players online on {realm}.',
+    },
+    playersMatching: {
+      one: 'Who: {count} player matching "{query}" on {realm}.',
+      few: 'Who: {count} players matching "{query}" on {realm}.',
+      many: 'Who: {count} players matching "{query}" on {realm}.',
+      other: 'Who: {count} players matching "{query}" on {realm}.',
     },
   },
   // "Report a Bug" options sub-view (online only). Captures realm/character/

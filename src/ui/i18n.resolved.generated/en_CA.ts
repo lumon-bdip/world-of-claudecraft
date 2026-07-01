@@ -332,6 +332,7 @@ export const en_CA: EnTranslations = {
       "showWalletOnPlayerCard": "Show Wallet on Player Card",
       "uiScale": "UI Scale",
       "highContrastBackground": "High-Contrast Background",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Show Item Level",
       "itemLevelLine": "Item Level {level}",
       "itemScoreLine": "Score {score}",
@@ -506,6 +507,12 @@ export const en_CA: EnTranslations = {
         "few": "Who: {count} players online on {realm}.",
         "many": "Who: {count} players online on {realm}.",
         "other": "Who: {count} players online on {realm}."
+      },
+      "playersMatching": {
+        "one": "Who: {count} player matching \"{query}\" on {realm}.",
+        "few": "Who: {count} players matching \"{query}\" on {realm}.",
+        "many": "Who: {count} players matching \"{query}\" on {realm}.",
+        "other": "Who: {count} players matching \"{query}\" on {realm}."
       }
     },
     "bugReport": {
@@ -3470,8 +3477,8 @@ export const en_CA: EnTranslations = {
       "cannotVendor": "Cannot be sold to merchants",
       "clickDestroy": "Click to destroy",
       "useFishing": "Use: Fish in nearby waters.",
-      "useHealingPotion": "Use: Instantly restores {amount} health. Usable in combat. 1 min cooldown.",
-      "useManaPotion": "Use: Instantly restores {amount} mana. Usable in combat. 1 min cooldown.",
+      "useHealingPotion": "Use: Instantly restores {amount} health. Usable in combat. 2 min cooldown.",
+      "useManaPotion": "Use: Instantly restores {amount} mana. Usable in combat. 2 min cooldown.",
       "clickUseInstant": "Click to use instantly in combat",
       "clickUse": "Click to use",
       "clickBuyback": "Click to buy back"

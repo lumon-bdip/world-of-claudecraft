@@ -234,6 +234,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '自動はブラウザとデバイスに応じて、負荷の高い CSS エフェクト（ぼかし・グロー・背景アニメーション）を抑えます。動作が重い場合は手動で下げてください。',
   'hudChrome.options.footstepSounds': '足音',
   'hudChrome.options.clickFeedback': 'クリックマーカー',
+  'hudChrome.options.startAttackOnAbility': 'アビリティ使用時に自動攻撃',
   'hudChrome.options.lockCursorOnRotate': '回転中はカーソルを固定',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'ドラッグでカメラを回転させている間、マウスカーソルをウィンドウ内に固定し、画面の端や別のモニターに移動しないようにします。自由なカーソルを好む場合はオフにしてください。',
@@ -3294,6 +3295,14 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': '残り {count} 秒',
   'hudChrome.plurals.secondsRemaining.many': '残り {count} 秒',
   'hudChrome.plurals.secondsRemaining.other': '残り {count} 秒',
+  'hudChrome.plurals.playersMatching.one':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
+  'hudChrome.plurals.playersMatching.few':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
+  'hudChrome.plurals.playersMatching.many':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
+  'hudChrome.plurals.playersMatching.other':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
   'hudChrome.plurals.playersOnline.one': 'Who：{realm}に{count}人のプレイヤーがオンラインです。',
   'hudChrome.plurals.playersOnline.few': 'Who：{realm}に{count}人のプレイヤーがオンラインです。',
   'hudChrome.plurals.playersOnline.many': 'Who：{realm}に{count}人のプレイヤーがオンラインです。',

@@ -226,6 +226,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '自動模式會根據你的瀏覽器與裝置調低高負擔的 CSS 特效（模糊、光暈、背景動畫）。若介面感覺卡頓，可手動降低。',
   'hudChrome.options.footstepSounds': '腳步聲',
   'hudChrome.options.clickFeedback': '點擊標記',
+  'hudChrome.options.startAttackOnAbility': '使用技能時自動攻擊',
   'hudChrome.options.lockCursorOnRotate': '旋轉時鎖定游標',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     '拖曳旋轉鏡頭時將滑鼠游標保持在視窗內，使其無法到達螢幕邊緣或移動到另一台顯示器。若你偏好自由游標，請關閉此選項。',
@@ -3161,6 +3162,10 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': '剩餘 {count} 秒',
   'hudChrome.plurals.secondsRemaining.many': '剩餘 {count} 秒',
   'hudChrome.plurals.secondsRemaining.other': '剩餘 {count} 秒',
+  'hudChrome.plurals.playersMatching.one': '查詢：{realm} 上有 {count} 名玩家符合「{query}」。',
+  'hudChrome.plurals.playersMatching.few': '查詢：{realm} 上有 {count} 名玩家符合「{query}」。',
+  'hudChrome.plurals.playersMatching.many': '查詢：{realm} 上有 {count} 名玩家符合「{query}」。',
+  'hudChrome.plurals.playersMatching.other': '查詢：{realm} 上有 {count} 名玩家符合「{query}」。',
   'hudChrome.plurals.playersOnline.one': '查詢：{realm} 上有 {count} 名玩家在線上。',
   'hudChrome.plurals.playersOnline.few': '查詢：{realm} 上有 {count} 名玩家在線上。',
   'hudChrome.plurals.playersOnline.many': '查詢：{realm} 上有 {count} 名玩家在線上。',

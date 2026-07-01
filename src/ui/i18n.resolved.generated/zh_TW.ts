@@ -332,6 +332,7 @@ export const zh_TW: EnTranslations = {
       "showWalletOnPlayerCard": "在玩家卡片顯示錢包",
       "uiScale": "介面縮放",
       "highContrastBackground": "高對比度背景",
+      "startAttackOnAbility": "使用技能時自動攻擊",
       "showItemLevel": "顯示物品等級",
       "itemLevelLine": "物品等級 {level}",
       "itemScoreLine": "評分 {score}",
@@ -506,6 +507,12 @@ export const zh_TW: EnTranslations = {
         "few": "查詢：{realm} 上有 {count} 名玩家在線上。",
         "many": "查詢：{realm} 上有 {count} 名玩家在線上。",
         "other": "查詢：{realm} 上有 {count} 名玩家在線上。"
+      },
+      "playersMatching": {
+        "one": "查詢：{realm} 上有 {count} 名玩家符合「{query}」。",
+        "few": "查詢：{realm} 上有 {count} 名玩家符合「{query}」。",
+        "many": "查詢：{realm} 上有 {count} 名玩家符合「{query}」。",
+        "other": "查詢：{realm} 上有 {count} 名玩家符合「{query}」。"
       }
     },
     "bugReport": {
