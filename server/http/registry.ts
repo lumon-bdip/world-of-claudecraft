@@ -23,6 +23,7 @@
 // loader.
 
 import { routes as authRoutes } from '../auth_routes';
+import { routes as characterRoutes } from '../characters';
 import { routes as leaderboardRoutes } from '../leaderboard';
 import { type CompiledPattern, compilePattern } from './path_pattern';
 import { createRouter, type MatchResult } from './router';
@@ -53,10 +54,16 @@ export interface ApiRegistry {
  * the Phase 9 dispatcher delegates it to the legacy handleApi ladder unchanged.
  * A migrated route stays served by its legacy arm too (the flag-off rollback
  * path) until Phase 25 removes the ladder. Phase 10 added the public reads
- * (server/leaderboard.ts); Phase 11 adds the auth credential surface
- * (server/auth_routes.ts: register, login, native-attestation challenge).
+ * (server/leaderboard.ts); Phase 11 added the auth credential surface
+ * (server/auth_routes.ts: register, login, native-attestation challenge); Phase 12
+ * adds the owner-gated character surface (server/characters.ts: the character list
+ * pair, create, and the account-owned :id subroutes behind requireOwnedCharacter).
  */
-export const apiRoutes: readonly RouteDef[] = [...leaderboardRoutes, ...authRoutes];
+export const apiRoutes: readonly RouteDef[] = [
+  ...leaderboardRoutes,
+  ...authRoutes,
+  ...characterRoutes,
+];
 
 /**
  * Build a registry from a route list (defaults to apiRoutes). Ordering happens

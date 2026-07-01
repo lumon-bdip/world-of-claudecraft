@@ -43,6 +43,7 @@ import {
 import { configureAuthRuntime } from './auth_routes';
 import { BUG_DESCRIPTION_MAX, BugReportRateLimitError, createBugReport } from './bug_report_db';
 import { characterSheet, type SheetRank } from './character_sheet';
+import { configureCharactersRuntime } from './characters';
 import {
   accountAndScopeForToken,
   accountForToken,
@@ -1497,6 +1498,22 @@ configureAuthRuntime({
   isIpBlocked: (ip) => game.isIpBlocked(ip),
   passesTurnstile,
   requestMetadata,
+});
+
+// Inject the main.ts runtime the ported character handlers (server/characters.ts) need
+// but cannot import without a cycle: the live online-session check off the GameServer,
+// takeOverCharacter, the market rekey/save after a rename, initialCharacterState, and the
+// public share origin. Done at module load, before any request, mirroring the two calls
+// above. The legacy handleApi character arms stay intact as the flag-off rollback path.
+configureCharactersRuntime({
+  isCharacterOnline: (characterId) =>
+    [...game.clients.values()].some((s) => s.characterId === characterId),
+  takeOverCharacter: (accountId, characterId) => game.takeOverCharacter(accountId, characterId),
+  rekeyMarketSeller: (characterId, oldName, newName) =>
+    game.rekeyMarketSeller(characterId, oldName, newName),
+  saveMarket: () => game.saveMarket(),
+  initialCharacterState,
+  publicOrigin,
 });
 
 // The in-house dispatcher that fronts the legacy handleApi ladder via a per-path

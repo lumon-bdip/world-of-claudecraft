@@ -33,6 +33,7 @@ export const DEVIATION_ID = {
   statusNameListTrim: 'status-name-list-trim',
   realmsSearchAuthzGapClose: 'realms-search-authz-gap-close',
   newLimiterCharacterMutations: 'new-limiter-character-mutations',
+  characterBodyValidationRemap: 'character-body-validation-remap',
   newLimiterReportsCreate: 'new-limiter-reports-create',
   newLimiterDiscord: 'new-limiter-discord',
   discordCallbackHtmlNotRedirect: 'discord-callback-html-not-redirect',
@@ -329,6 +330,42 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
     reason:
       'NEW per-action limiters on character mutations (create, rename, delete, ' +
       'takeover) land in Phase 12; today these mutations have no dedicated limiter.',
+  },
+  {
+    id: DEVIATION_ID.characterBodyValidationRemap,
+    routes: ['/api/characters', '/api/characters/:id/rename', '/api/characters/:id'],
+    currentBehavior:
+      'On the legacy handleApi ladder, POST /api/characters, POST /api/characters/:id/rename, ' +
+      'and DELETE /api/characters/:id read the body with readBody, whose reject on malformed ' +
+      'JSON or an over-cap body falls to handleApi outer catch and answers 500 { error: ' +
+      '"internal error" }; a literal JSON null body (valid JSON, so readBody resolves it to ' +
+      'null) is dereferenced (null.name / null.class), throwing a TypeError that falls to the ' +
+      'same generic 500.',
+    intendedBehavior:
+      'Phase 12 serves these routes through the new pipeline, which parses the body with the ' +
+      'Phase 8 withBody middleware and surfaces framework errors through the Phase 7 RFC 9457 ' +
+      'boundary (withErrors): malformed JSON answers 400 (json.malformed), an over-cap body ' +
+      'answers 413 (body.too_large), both as application/problem+json; and a literal JSON null ' +
+      'body is coerced away with `ctx.body ?? {}` = {}, so create answers 400 (name invalid), ' +
+      'rename answers 400 (name invalid), and delete answers 400 (confirmation required). This ' +
+      'mirrors the Phase 11 authBodyValidationRemap + authNullBodyCoercion for the auth POST ' +
+      'routes; the client code-matcher for these problem+json bodies is Phase 22. Not exercised ' +
+      'by the valid-body parity corpus, so documented here rather than caught by the harness.',
+    introducedInPhase: 12,
+    reason:
+      'The migrated character write routes parse the body via withBody (400 malformed / 413 ' +
+      'over-cap) and coerce a null body, instead of the legacy readBody-reject / null-deref to a ' +
+      'generic 500, a strictly more correct and uniform mapping shared by every withBody POST ' +
+      'route (the systemic Phase 7/8 error-model boundary). These framework-error paths are not ' +
+      'in the db-free parity corpus (which replays valid bodies only), so the divergence is ' +
+      'documented, not harness-caught. A RELATED ordering divergence on POST /api/characters/:id/' +
+      'rename: the migrated route runs requireOwnedCharacter (ownership -> 404) as middleware ' +
+      'BEFORE the handler validates the name, whereas the legacy arm validates the name (-> 400) ' +
+      'before getCharacter. So a request with an INVALID name AND a non-owned/absent :id answers ' +
+      '404 on the new path vs 400 on the legacy path. Security-neutral-to-positive (ownership-' +
+      'first leaks nothing about name validity to a non-owner, the deny-by-default BOLA posture); ' +
+      'no golden fixture exercises the non-owned + invalid-name shape, so it is documented here ' +
+      'rather than harness-caught.',
   },
   {
     id: DEVIATION_ID.newLimiterReportsCreate,

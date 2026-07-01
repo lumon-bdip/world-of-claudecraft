@@ -13,6 +13,7 @@ import type * as http from 'node:http';
 import {
   resetAuthFailures,
   resetCardUploadRateLimits,
+  resetCharacterMutationRateLimits,
   resetDiscordRateLimits,
   resetPublicReadRateLimits,
   resetRateLimitClock,
@@ -66,6 +67,9 @@ async function isolatePass(extraReset?: () => Promise<void> | void): Promise<voi
   resetDiscordRateLimits();
   resetWocBalanceRateLimits();
   resetPublicReadRateLimits();
+  // The Phase 12 per-account character-mutation limiters are separate buckets, so a
+  // create/rename/delete/takeover 429 on one pass must not bleed into the next.
+  resetCharacterMutationRateLimits();
   // The per-account failed-login bucket is a SEPARATE limiter (authThrottled /
   // recordAuthFailure on the login/register path), so a pass-1 login failure
   // must not bleed into pass 2 and falsely trip the new pass on the error path.

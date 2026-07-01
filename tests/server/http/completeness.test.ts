@@ -168,12 +168,14 @@ describe('registry completeness: the legacy /api ladder is fully covered', () =>
   });
 });
 
-describe('registry completeness: migrated baseline (Phase 10 public reads + Phase 11 auth)', () => {
+describe('registry completeness: migrated baseline (Phase 10 public reads + Phase 11 auth + Phase 12 characters)', () => {
   // The exact routes migrated onto RouteDefs so far: Phase 10 moved the public
-  // reads (GET, server/leaderboard.ts) and Phase 11 the auth credential surface
-  // (POST, server/auth_routes.ts). The router owns each under flag 'new'; their
-  // legacy arms stay for rollback. Method-aware, because the auth routes are POST
-  // (a GET to them resolves methodNotAllowed, not matched).
+  // reads (GET, server/leaderboard.ts), Phase 11 the auth credential surface (POST,
+  // server/auth_routes.ts), and Phase 12 the owner-gated character surface
+  // (server/characters.ts: the list pair, create, and the account-owned :id
+  // subroutes behind requireOwnedCharacter). The router owns each under flag 'new';
+  // their legacy arms stay for rollback. Method-aware, because a route resolves per
+  // method (a POST to a GET-only path resolves methodNotAllowed, not matched).
   const MIGRATED_ROUTES: readonly LadderRoute[] = [
     { method: 'GET', path: '/api/leaderboard' },
     { method: 'GET', path: '/api/arena/leaderboard' },
@@ -187,6 +189,14 @@ describe('registry completeness: migrated baseline (Phase 10 public reads + Phas
     { method: 'POST', path: '/api/register' },
     { method: 'POST', path: '/api/login' },
     { method: 'POST', path: '/api/native-attestation/challenge' },
+    { method: 'GET', path: '/api/me/characters' },
+    { method: 'GET', path: '/api/characters' },
+    { method: 'POST', path: '/api/characters' },
+    { method: 'GET', path: '/api/characters/:id/standing' },
+    { method: 'GET', path: '/api/characters/:id/sheet' },
+    { method: 'POST', path: '/api/characters/:id/rename' },
+    { method: 'POST', path: '/api/characters/:id/takeover' },
+    { method: 'DELETE', path: '/api/characters/:id' },
   ];
   const MIGRATED_PATHS = MIGRATED_ROUTES.map((r) => r.path);
 
