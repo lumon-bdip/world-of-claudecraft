@@ -68,6 +68,17 @@ function setDb(overrides: DbOverrides): void {
   setAdminDbForTests(overrides as Parameters<typeof setAdminDbForTests>[0]);
 }
 
+// The one seam the loose bag must NOT blind: the limiter stub. Its return type
+// derives from the REAL bundle, so a RateLimitOutcome shape change fails here at
+// tsc time instead of surfacing as runtime-only spurious 429s (the Phase 19
+// gotcha: the loose Record cast hid the boolean-to-outcome flip from tsc).
+type AdminDbBundle = Parameters<typeof setAdminDbForTests>[0];
+const allowedRateLimit = (): ReturnType<NonNullable<AdminDbBundle['rateLimited']>> => ({
+  allowed: true,
+  remaining: 1,
+  resetSeconds: 0,
+});
+
 // Install the admin db seam so requireAdmin resolves the bearer to the admin caller.
 // isAdminAccount is caller-aware: true for the caller, false for any other id (so a
 // moderation target reads as a normal account). Extra reads are layered per test.
@@ -312,7 +323,7 @@ describe('POST /admin/api/login', () => {
 
   it('401s bad credentials db-free when the username is absent (anti-enumeration)', async () => {
     const findAccount = vi.fn(async () => null);
-    setDb({ findAccount, rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }) });
+    setDb({ findAccount, rateLimited: allowedRateLimit });
     const r = await runRoute('POST', '/admin/api/login', { body: {} });
     expect(r.status).toBe(401);
     expect(r.body).toEqual({ success: false, data: null, error: 'invalid username or password' });
@@ -322,7 +333,7 @@ describe('POST /admin/api/login', () => {
 
   it('403s a valid non-admin account (no admin access)', async () => {
     setDb({
-      rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }),
+      rateLimited: allowedRateLimit,
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword: async () => true,
       isAdminAccount: async () => false,
@@ -340,7 +351,7 @@ describe('POST /admin/api/login', () => {
 
   it('200s a valid admin login with the token + username', async () => {
     setDb({
-      rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }),
+      rateLimited: allowedRateLimit,
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword: async () => true,
       isAdminAccount: async () => true,
@@ -1444,7 +1455,7 @@ describe('remaining legacy guard negatives (re-verification audit)', () => {
   it('login 401s a wrong password for an EXISTING account (verifyPassword negative)', async () => {
     const verifyPassword = vi.fn(async () => false);
     setDb({
-      rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }),
+      rateLimited: allowedRateLimit,
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword,
       isAdminAccount: async () => true,
