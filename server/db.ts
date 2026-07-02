@@ -8,11 +8,29 @@ import type { ChatLogRow } from './chat_log';
 import { DISCORD_SCHEMA } from './discord_db';
 import { GITHUB_SCHEMA } from './github_db';
 import { isUniqueViolation } from './http_util';
+import {
+  LEGACY_MARKET_KEY,
+  MARKET_BACKFILL_MARKER_KEY,
+  MARKET_KEY_PREFIX,
+  marketStateKey,
+  runMarketBackfill,
+} from './market_backfill';
 import { OAUTH_SCHEMA } from './oauth_db';
 import { RATELIMIT_PRUNE_SQL, RATELIMIT_SCHEMA } from './ratelimit_db';
 import { REALM } from './realm';
 import { chooseArchiveName } from './reclaim_name';
 import { SOCIAL_SCHEMA } from './social_db';
+
+// The realm-market key helpers and the backfill marker key live in
+// server/market_backfill.ts (a *_db-style module with no db.ts dependency, so
+// db.ts can import it without a cycle). Re-export them so existing consumers
+// (server/game.ts, the market tests) keep importing them from ./db unchanged.
+export {
+  LEGACY_MARKET_KEY,
+  MARKET_BACKFILL_MARKER_KEY,
+  MARKET_KEY_PREFIX,
+  marketStateKey,
+} from './market_backfill';
 
 try {
   process.loadEnvFile?.();
@@ -505,7 +523,7 @@ ALTER TABLE player_cards ADD COLUMN IF NOT EXISTS locale TEXT NOT NULL DEFAULT '
 CREATE INDEX IF NOT EXISTS player_cards_account ON player_cards(account_id);
 -- Referral capture: when a new account registers via someone's card link
 -- (?ref=<slug>) we record who referred whom, once per referee. Reward payout is
--- intentionally out of scope here — this just captures the relationship so it
+-- intentionally out of scope here: this just captures the relationship so it
 -- can be synced to rewards later.
 CREATE TABLE IF NOT EXISTS referrals (
   referee_account_id INT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
@@ -562,7 +580,38 @@ export async function ensureSchema(): Promise<void> {
     // Seed the chat-filter word lists + config on first boot only (idempotent).
     // Runs under the same advisory lock so concurrent realm boots don't race.
     await seedChatFilterDefaults(client);
+    // Phase 20: partitioned World Market backfill. Runs inside this same
+    // advisory-lock transaction (so a concurrent realm boot cannot race it) and
+    // AFTER the schema modules exist. It splits any surviving pre-scoping
+    // 'market' blob per seller realm, RETAINS the legacy row as a rollback
+    // artifact, and records a marker row so every later boot is a no-op. See
+    // server/market_backfill.ts.
+    const marketBackfillDryRun = process.env.MARKET_BACKFILL_DRY_RUN === '1';
+    const backfill = await runMarketBackfill({
+      client,
+      realm: REALM,
+      dryRun: marketBackfillDryRun,
+      log: (line) => console.log(line),
+    });
+    if (marketBackfillDryRun) {
+      // Deliberate halt: the runner logged the per-realm plan and wrote nothing
+      // (no partitions, no marker). Stop the boot so an operator can inspect the
+      // plan before applying. The ROLLBACK in the catch is harmless: the DDL is
+      // idempotent and the dry run wrote nothing.
+      throw new Error(
+        'MARKET_BACKFILL_DRY_RUN halted boot after computing the market backfill plan: no changes were written and the boot was stopped deliberately, unset MARKET_BACKFILL_DRY_RUN to apply',
+      );
+    }
+    if (backfill.ran) {
+      console.log(
+        `[market-backfill] applied for realm ${REALM} (legacyRowFound=${backfill.legacyRowFound})`,
+      );
+    }
     await client.query('COMMIT');
+    // Open the market write gate only AFTER a successful COMMIT, so no market
+    // write can land before the marker is durable. Opens on the no-op path too
+    // (backfill.ran === false, i.e. the marker already existed).
+    openMarketWriteGate();
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});
     throw err;
@@ -798,7 +847,7 @@ export interface AccountInfoRow {
   marketing_opt_in: boolean;
 }
 
-// Full account record by id — used by the self-service account portal
+// Full account record by id, used by the self-service account portal
 // (whoami, password change, email, deactivate). Distinct from findAccount,
 // which keys on username for the login path.
 export async function accountById(accountId: number): Promise<AccountInfoRow | null> {
@@ -883,8 +932,8 @@ export async function createCompanionToken(
   await saveToken(token, accountId, ttlHours, 'read', label);
 }
 
-// Live (unexpired) read tokens for an account. Never returns the full secret —
-// only an 8-char prefix for display — so a leaked portal response can't be
+// Live (unexpired) read tokens for an account. Never returns the full secret,
+// only an 8-char prefix for display, so a leaked portal response can't be
 // replayed as a bearer token.
 export async function listCompanionTokens(accountId: number): Promise<CompanionTokenRow[]> {
   const res = await pool.query(
@@ -1272,7 +1321,7 @@ export async function linkWalletToAccount(accountId: number, pubkey: string): Pr
   } catch (err) {
     // TOCTOU: another account claimed this pubkey between the check above and
     // here. The pubkey column is UNIQUE (not the ON CONFLICT target), so that
-    // races to a 23505 — treat it as "already owned" (→ 409), not a 500.
+    // races to a 23505: treat it as "already owned" (→ 409), not a 500.
     if (isUniqueViolation(err)) return false;
     throw err;
   }
@@ -1349,7 +1398,7 @@ export async function getPlayerCardBySlug(slug: string): Promise<PlayerCardRow |
 }
 
 // Metadata-only read for the OG-unfurl HTML page, which doesn't need the (up to
-// ~4 MB) PNG bytes — keeps getPlayerCardBySlug's heavy SELECT for the image route.
+// ~4 MB) PNG bytes, keeps getPlayerCardBySlug's heavy SELECT for the image route.
 export async function getPlayerCardMetaBySlug(
   slug: string,
 ): Promise<{ title: string; description: string; locale: string; updatedAt: number } | null> {
@@ -1372,7 +1421,7 @@ export async function getPlayerCardMetaBySlug(
   };
 }
 
-// The account that owns a card slug — i.e. the referrer credited when someone
+// The account that owns a card slug, i.e. the referrer credited when someone
 // signs up through their link.
 export async function accountForSlug(slug: string): Promise<number | null> {
   const res = await pool.query('SELECT account_id FROM player_cards WHERE slug = $1', [slug]);
@@ -1414,7 +1463,7 @@ export async function primarySlugForAccount(accountId: number): Promise<string |
 }
 
 // Where a character ranks among all characters on its realm by lifetime XP (the
-// canonical progression metric — encodes level plus post-cap overflow), for the
+// canonical progression metric, encodes level plus post-cap overflow), for the
 // player card's "Top N%" flex. Ownership + realm are enforced via the caller's
 // account; returns null when the character isn't the caller's. rank is 1-based
 // (1 = highest lifetime XP on the realm); total is the realm population.
@@ -1439,7 +1488,7 @@ export async function lifetimeXpStanding(
 }
 
 // Realm-scoped lifetime-XP rank for a character addressed by id, WITHOUT an
-// ownership check — for the public character sheet / profile page, where rank is
+// ownership check, for the public character sheet / profile page, where rank is
 // shown for any player. Same expression-index predicate as lifetimeXpStanding.
 // Returns null when no such character exists on this realm.
 export async function lifetimeXpRankForCharacter(
@@ -1624,7 +1673,7 @@ export async function listCharacterNamesForSitemap(limit = 50000): Promise<strin
   return res.rows.map((r) => r.name as string);
 }
 
-// Realm-scoped character read by id WITHOUT an ownership check — for the public
+// Realm-scoped character read by id WITHOUT an ownership check, for the public
 // character sheet / profile page, which serve any character on the realm. Returns
 // the same shape as getCharacter so the sheet normalizer treats both alike.
 export async function getCharacterById(characterId: number): Promise<CharacterRow | null> {
@@ -1724,7 +1773,7 @@ export async function createCharacterCapped(
 // Reclaim a character name abandoned by a deactivated ("invalid") account.
 // Character names are unique per (realm, lower(name)), and deactivation is a
 // soft delete (accounts.deactivated_at) that leaves the account's characters in
-// place — so an abandoned name stays reserved forever, blocking the original
+// place, so an abandoned name stays reserved forever, blocking the original
 // player from recreating it on a new account. Classic MMOs free the names of
 // deactivated/deleted accounts; this releases such a name by archiving the
 // orphaned character (a suffixed placeholder name + force_rename) so its row
@@ -1784,7 +1833,7 @@ export async function deleteCharacter(accountId: number, characterId: number): P
   return (res.rowCount ?? 0) > 0;
 }
 
-// How many characters this account has on each realm — deliberately NOT
+// How many characters this account has on each realm, deliberately NOT
 // realm-scoped, so the realm-list screen can show "N characters" per realm
 // like classic MMOs. Keyed by realm name.
 export async function characterCountsByRealm(accountId: number): Promise<Record<string, number>> {
@@ -1862,6 +1911,10 @@ export async function saveCharacterAndMarketState(
   state: CharacterState,
   market: MarketSave,
 ): Promise<void> {
+  // Gate the escrow flush on the boot backfill just like saveMarketState:
+  // this writes the realm-market row, so it must not run before ensureSchema
+  // has confirmed the marker and opened the gate. Checked before any pool work.
+  assertMarketWriteGateOpen();
   const cleanState = sanitizeRemovedZone1Content(state).state;
   const client = await pool.connect();
   try {
@@ -1951,7 +2004,7 @@ export async function topArenaRatings(
 // Lifetime-XP leaderboard (Max-Level XP Overflow). Ranks characters by the
 // `lifetimeXp` stored in their state JSONB. Realm-scoped (FR-4.3) and backed by
 // the `characters_lifetime_xp` index. Read through the server-side cache in
-// main.ts — never run per request under load.
+// main.ts, never run per request under load.
 // ---------------------------------------------------------------------------
 
 export interface LifetimeXpLeaderRow {
@@ -2199,6 +2252,20 @@ export async function loadWorldState<T>(key: string): Promise<T | null> {
 }
 
 export async function saveWorldState(key: string, data: unknown): Promise<void> {
+  // The pre-scoping bare 'market' row is RETAINED as the rollback artifact for
+  // the Phase 20 partitioned backfill (server/market_backfill.ts) and is never
+  // written again: reject any attempt to persist it, gate open or not.
+  if (key === LEGACY_MARKET_KEY) {
+    throw new Error(
+      'legacy market key is read-only: the pre-scoping "market" row is retained as a rollback artifact (see server/market_backfill.ts)',
+    );
+  }
+  // A realm-market write must not race ahead of the boot backfill: block every
+  // `market:<realm>` write until ensureSchema has confirmed the marker row and
+  // opened the gate (openMarketWriteGate).
+  if (key.startsWith(MARKET_KEY_PREFIX)) {
+    assertMarketWriteGateOpen();
+  }
   await pool.query(
     `INSERT INTO world_state (key, data, updated_at) VALUES ($1, $2, now())
      ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
@@ -2206,53 +2273,64 @@ export async function saveWorldState(key: string, data: unknown): Promise<void> 
   );
 }
 
+// Boot-ordering write gate for the World Market. Before ensureSchema's
+// partitioned backfill (server/market_backfill.ts) has run and recorded its
+// marker row, a realm process must not persist its market: the 30 s autosave
+// could otherwise overwrite a realm partition the backfill has not produced
+// yet. ensureSchema opens the gate only AFTER its advisory-lock transaction
+// COMMITs (also when the marker pre-existed and the backfill was a no-op).
+let marketWriteGateOpen = false;
+
+export function openMarketWriteGate(): void {
+  marketWriteGateOpen = true;
+}
+
+// Test-only: re-close the gate so a fresh test starts from the boot default.
+// (vi.resetModules also yields a fresh CLOSED gate; this is the in-file reset.)
+export function closeMarketWriteGateForTests(): void {
+  marketWriteGateOpen = false;
+}
+
+function assertMarketWriteGateOpen(): void {
+  if (!marketWriteGateOpen) {
+    throw new Error(
+      'market write blocked: ensureSchema must confirm the backfill marker first before any market:<realm> write (see server/market_backfill.ts)',
+    );
+  }
+}
+
 // The World Market is realm-scoped like characters, friends, guilds and
 // presence: each realm process keeps its own listings under `market:<realm>`.
 // Before this scoping the market lived in a single bare 'market' row shared by
 // every realm pointed at the same DATABASE_URL, so two realms silently
 // overwrote each other's listings and proceeds (and stomped nextListingId).
-const LEGACY_MARKET_KEY = 'market';
-
-export function marketStateKey(realm: string): string {
-  return `market:${realm}`;
-}
-
+//
+// Migration is NOT lazy here: ensureSchema runs a partitioned backfill
+// (server/market_backfill.ts) inside its advisory-lock transaction, splitting
+// the legacy blob per seller realm, RETAINING the legacy row as a rollback
+// artifact, and recording completion in the MARKET_BACKFILL_MARKER_KEY marker
+// row. Every market write is gated on that marker (openMarketWriteGate) so a
+// racing autosave can never overtake the backfill. loadMarketState is a pure
+// READ: it serves the realm row, and only a pre-backfill database (no marker)
+// still falls back to the retained legacy row, never writing or deleting it.
 export async function loadMarketState(): Promise<MarketSave | null> {
-  const key = marketStateKey(REALM);
-  const own = await loadWorldState<MarketSave>(key);
+  const own = await loadWorldState<MarketSave>(marketStateKey(REALM));
   if (own !== null) return own;
-  // One-time GLOBAL migration: the first realm to boot after this scoping
-  // lands adopts the pre-scoping shared row into its own key, then deletes
-  // the legacy row so no later-added realm can re-adopt (and thereby
-  // duplicate) the same listings. The claiming SELECT ... FOR UPDATE plus
-  // the delete run in one transaction, so only one realm ever wins the row
-  // even if several boot at once.
-  const client = await pool.connect();
-  try {
-    await client.query('BEGIN');
-    const res = await client.query('SELECT data FROM world_state WHERE key = $1 FOR UPDATE', [
-      LEGACY_MARKET_KEY,
-    ]);
-    const legacy = (res.rows[0]?.data as MarketSave) ?? null;
-    if (legacy !== null) {
-      await client.query(
-        `INSERT INTO world_state (key, data, updated_at) VALUES ($1, $2, now())
-         ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
-        [key, JSON.stringify(legacy)],
-      );
-      await client.query('DELETE FROM world_state WHERE key = $1', [LEGACY_MARKET_KEY]);
-    }
-    await client.query('COMMIT');
-    return legacy;
-  } catch (err) {
-    await client.query('ROLLBACK').catch(() => {});
-    throw err;
-  } finally {
-    client.release();
-  }
+  // No realm row. If the ensureSchema backfill has recorded its marker, a
+  // backfilled database never serves the stale legacy blob (this realm simply
+  // has no market yet, which is correct). Only a database that predates the
+  // backfill (no marker) falls back to a plain back-compat READ of the retained
+  // legacy row; the backfill owns adoption, so this path never writes or deletes.
+  // On a normal boot this fallback is unreachable (ensureSchema always confirms
+  // the marker before game.loadMarket runs); it is a defensive net for an
+  // out-of-band caller hitting a pre-backfill database.
+  const marker = await loadWorldState<unknown>(MARKET_BACKFILL_MARKER_KEY);
+  if (marker !== null) return null;
+  return loadWorldState<MarketSave>(LEGACY_MARKET_KEY);
 }
 
 export async function saveMarketState(save: MarketSave): Promise<void> {
+  assertMarketWriteGateOpen();
   await saveWorldState(marketStateKey(REALM), save);
 }
 

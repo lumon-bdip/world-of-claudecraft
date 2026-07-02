@@ -36,8 +36,11 @@ vi.mock('pg', () => ({
   }),
 }));
 
-import { ensureSchema } from '../server/db';
+import { closeMarketWriteGateForTests, ensureSchema, saveMarketState } from '../server/db';
 import { RATELIMIT_PRUNE_SQL } from '../server/ratelimit_db';
+import type { MarketSave } from '../src/sim/sim';
+
+const emptyMarket: MarketSave = { listings: [], collections: [], nextListingId: 1 };
 
 describe('ensureSchema wires every schema module at boot', () => {
   beforeEach(() => {
@@ -142,6 +145,56 @@ describe('ensureSchema wires every schema module at boot', () => {
     expect(applied).toContain(RATELIMIT_PRUNE_SQL);
     expect(RATELIMIT_PRUNE_SQL).toContain('DELETE FROM rate_limits WHERE window_start <');
     expect(RATELIMIT_PRUNE_SQL).not.toMatch(/\$\d/);
+  });
+
+  it('runs the Phase 20 market backfill inside the boot transaction', async () => {
+    // Phase 20 moves the market migration into ensureSchema's advisory-lock
+    // transaction (server/market_backfill.ts): a marker probe, the legacy row
+    // claim (FOR UPDATE), and the marker upsert all run under the same lock as
+    // the schema DDL. Pinned with literal SQL fragments so a refactor that
+    // drops the backfill is caught. The recording fake returns no rows for
+    // world_state, so the backfill finds no legacy blob and only probes the
+    // marker, claims the (absent) legacy row, and upserts the marker.
+    await ensureSchema();
+    const applied = h.calls.join('\n');
+    expect(applied).toContain('pg_advisory_xact_lock');
+    // The marker probe and the legacy claim read world_state; the claim locks
+    // the legacy row so a not-yet-upgraded process's lazy claim serializes.
+    expect(applied).toContain('FROM world_state');
+    expect(applied).toContain('FOR UPDATE');
+    // The marker (and any realm partition) is written with the world_state
+    // upsert, so a re-run is a no-op.
+    expect(applied).toContain('INTO world_state');
+    expect(applied).toContain('ON CONFLICT (key) DO UPDATE');
+  });
+
+  it('opens the market write gate only after the boot transaction commits', async () => {
+    // The Phase 20 boot-ordering gate: a market write before ensureSchema has
+    // confirmed the backfill marker must throw, and a successful boot must open
+    // the gate (openMarketWriteGate runs after COMMIT in ensureSchema).
+    closeMarketWriteGateForTests();
+    await expect(saveMarketState(emptyMarket)).rejects.toThrow(/market write blocked/);
+    await ensureSchema();
+    await expect(saveMarketState(emptyMarket)).resolves.toBeUndefined();
+  });
+
+  it('halts boot under MARKET_BACKFILL_DRY_RUN without writing or opening the gate', async () => {
+    // The operator dry-run: ensureSchema throws deliberately after logging the
+    // partition plan, the transaction rolls back, nothing is written to
+    // world_state (no marker, no partitions), and the write gate stays closed.
+    closeMarketWriteGateForTests();
+    process.env.MARKET_BACKFILL_DRY_RUN = '1';
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    try {
+      await expect(ensureSchema()).rejects.toThrow(/MARKET_BACKFILL_DRY_RUN/);
+    } finally {
+      delete process.env.MARKET_BACKFILL_DRY_RUN;
+      logSpy.mockRestore();
+    }
+    const applied = h.calls.join('\n');
+    expect(applied).not.toContain('INSERT INTO world_state');
+    expect(applied).toContain('ROLLBACK');
+    await expect(saveMarketState(emptyMarket)).rejects.toThrow(/market write blocked/);
   });
 
   it('boot assertion passes when to_regclass reports the rate_limits table exists', async () => {

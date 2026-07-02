@@ -12,13 +12,21 @@ vi.mock('pg', () => ({
   },
 }));
 
-import { saveCharacterAndMarketState } from '../server/db';
+import {
+  closeMarketWriteGateForTests,
+  openMarketWriteGate,
+  saveCharacterAndMarketState,
+} from '../server/db';
 import { REALM } from '../server/realm';
 import type { CharacterState, MarketSave } from '../src/sim/sim';
 
 beforeEach(() => {
   dbMock.query.mockReset();
   dbMock.connect.mockReset();
+  // The escrow flush writes the realm-market row, so it is gated on the boot
+  // backfill. Open the gate by default so the escrow-transaction pins run; the
+  // closed-gate case below re-closes it explicitly.
+  openMarketWriteGate();
 });
 
 function clientStub() {
@@ -50,7 +58,7 @@ describe('saveCharacterAndMarketState', () => {
     // Both rows are written on the same client (so they commit or fail together).
     expect(sqls.some((s) => /UPDATE characters/i.test(s))).toBe(true);
     expect(sqls.some((s) => /world_state/i.test(s))).toBe(true);
-    // Nothing leaks onto the bare pool — atomicity would be lost otherwise.
+    // Nothing leaks onto the bare pool: atomicity would be lost otherwise.
     expect(dbMock.query).not.toHaveBeenCalled();
     expect(client.release).toHaveBeenCalled();
   });
@@ -85,5 +93,17 @@ describe('saveCharacterAndMarketState', () => {
     expect(sqls.some((s) => /ROLLBACK/.test(s))).toBe(true);
     expect(sqls.some((s) => /^COMMIT/.test(s))).toBe(false);
     expect(client.release).toHaveBeenCalled();
+  });
+
+  it('blocks the escrow flush when the market write gate is closed, before any SQL', async () => {
+    closeMarketWriteGateForTests();
+
+    // The gate assertion runs before pool.connect, so no client is checked out
+    // and no BEGIN is issued: the flush cannot race ahead of the boot backfill.
+    await expect(saveCharacterAndMarketState(5, 3, STATE, MARKET)).rejects.toThrow(
+      /market write blocked/,
+    );
+    expect(dbMock.connect).not.toHaveBeenCalled();
+    expect(dbMock.query).not.toHaveBeenCalled();
   });
 });
