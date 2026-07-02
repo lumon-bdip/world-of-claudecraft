@@ -85,7 +85,11 @@ export function createRequireAdmin(getDb: () => AdminAuthDb): Middleware {
       json(ctx.res, 401, ADMIN_AUTH_REQUIRED);
       return;
     }
-    // Admin bearers are full-scope; the legacy gate never scope-checks them.
+    // NOMINAL stamp, not the token's real scope: the legacy gate never scope-checks
+    // an admin bearer (accountForToken ignores the scope column, so a read-scope
+    // companion token of an is_admin account passes too, parity-first). Today's admin
+    // handlers read only ctxAccountId; do NOT trust ctx.account.scope downstream of
+    // requireAdmin for a scope decision without resolving the token's actual scope.
     ctx.account = { accountId, scope: 'full' };
     await next();
   };

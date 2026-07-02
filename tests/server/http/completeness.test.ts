@@ -395,9 +395,12 @@ describe('registry completeness: Phase 17 admin surface (server/admin.ts)', () =
     }
   });
 
-  it('the admin :id routes are operator-scoped and admin-surface (excluded from the account clause)', () => {
+  it('the admin :param routes are operator-scoped and admin-surface (excluded from the account clause)', () => {
+    // ANY param segment, not the literal ':id': a future admin route with a
+    // differently-named param (':accountId', ':name') must still carry the operator
+    // marker, which is what routes it into the functional 401/422 operator sweep.
     const idRoutes = [...apiRoutes].filter(
-      (r) => r.path.startsWith('/admin/') && r.path.includes('/:id'),
+      (r) => r.path.startsWith('/admin/') && r.path.includes('/:'),
     );
     expect(idRoutes.length).toBeGreaterThanOrEqual(12);
     for (const r of idRoutes) {

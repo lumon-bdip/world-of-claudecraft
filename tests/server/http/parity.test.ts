@@ -602,9 +602,11 @@ describe('/admin/api dispatch parity (legacy flag vs new flag)', () => {
   // before the handler (and a notFound/methodNotAllowed/enum path delegates to the
   // legacy ladder, which gates identically). A representative spread across a read, an
   // ip-block write, the restructured enum route (valid AND invalid action), a wrong
-  // method, and an unknown endpoint.
+  // method, a HEAD (the inherited HEAD-parity rule: a head:true match DELEGATES to the
+  // legacy ladder, which gates auth before method, on the admin dispatcher too), and an
+  // unknown endpoint.
   const NOAUTH_ADMIN_REQUESTS: ReadonlyArray<{
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
     url: string;
     label: string;
   }> = [
@@ -626,6 +628,11 @@ describe('/admin/api dispatch parity (legacy flag vs new flag)', () => {
       label: 'a :id route with a non-numeric id (auth-gated so no 422 leaks)',
     },
     { method: 'PUT', url: '/admin/api/overview', label: 'a wrong method (delegates to legacy)' },
+    {
+      method: 'HEAD',
+      url: '/admin/api/overview',
+      label: 'a HEAD to a migrated GET (head match delegates to legacy; auth precedes method)',
+    },
     {
       method: 'GET',
       url: '/admin/api/this-endpoint-does-not-exist',

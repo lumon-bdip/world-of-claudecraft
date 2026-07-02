@@ -836,15 +836,18 @@ describe('migrated read handlers (QA gate parity coverage)', () => {
     });
   });
 
-  it('perf/summary passes the hours query through (default 24)', async () => {
-    const clientPerfSummary = vi.fn(async (hours: number) => ({ hours }));
+  it('perf/summary passes the hours query through (default 24) and the body is the bare passthrough', async () => {
+    const clientPerfSummary = vi.fn(async (hours: number) => ({ hours, avgFps: 58 }));
     authedAdminDb({ clientPerfSummary });
     installAdminRuntime();
-    await runRoute('GET', '/admin/api/perf/summary', {
+    const r = await runRoute('GET', '/admin/api/perf/summary', {
       url: '/admin/api/perf/summary?hours=12',
       headers: { authorization: BEARER },
     });
     expect(clientPerfSummary).toHaveBeenCalledWith(12);
+    // The summary rides UNWRAPPED as data (legacy ok(res, await clientPerfSummary(...))):
+    // a reshape (e.g. { summary: ... }) would break the dashboard at the flag flip.
+    expect(r.body).toEqual({ success: true, data: { hours: 12, avgFps: 58 }, error: null });
     await runRoute('GET', '/admin/api/perf/summary', { headers: { authorization: BEARER } });
     expect(clientPerfSummary).toHaveBeenLastCalledWith(24);
   });
@@ -1111,14 +1114,20 @@ describe('migrated read handlers (QA gate parity coverage)', () => {
   });
 
   it('characters passes search/sort/dir/page/limit through (dir whitelisted, sort defaults to level)', async () => {
-    const listCharacters = vi.fn(async () => ({ rows: [], total: 0 }));
+    const listCharacters = vi.fn(async () => ({ rows: [{ id: 3, name: 'Bob' }], total: 1 }));
     authedAdminDb({ listCharacters });
     installAdminRuntime();
-    await runRoute('GET', '/admin/api/characters', {
+    const r = await runRoute('GET', '/admin/api/characters', {
       url: '/admin/api/characters?search=bob&sort=name&dir=asc&page=2&limit=10',
       headers: { authorization: BEARER },
     });
     expect(listCharacters).toHaveBeenCalledWith('bob', 'name', 'asc', 2, 10);
+    // The db result rides UNWRAPPED as data (legacy ok(res, await listCharacters(...))).
+    expect(r.body).toEqual({
+      success: true,
+      data: { rows: [{ id: 3, name: 'Bob' }], total: 1 },
+      error: null,
+    });
     await runRoute('GET', '/admin/api/characters', {
       // Anything but asc coerces to desc; search/sort/page/limit take their defaults.
       url: '/admin/api/characters?dir=sideways',
@@ -1300,5 +1309,232 @@ describe('migrated write handlers + side effects (QA gate parity coverage)', () 
     });
     expect(r.body).toEqual({ success: true, data: { ok: true }, error: null });
     expect(ignoreReport).toHaveBeenCalledWith(5, ADMIN_ACCOUNT_ID, 'duplicate');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 12. Re-verification pins (Phase 17 audit): the overview merge math, the
+// catch -> 400 err.message remaps, and the remaining legacy guard negatives.
+// ---------------------------------------------------------------------------
+
+describe('overview merge math (the one non-trivial read computation)', () => {
+  it('pins the full merged body: both peak Math.max merges, server.peakOnline, and the usage passthrough', async () => {
+    // Values chosen so each non-trivial Math.max argument WINS somewhere: live online
+    // (3) beats peakOnlineToday (1); db peakOnlineAllTime (100) beats live online AND
+    // is the winning middle argument of server.peakOnline (over live peakOnline 5).
+    // Dropping any merge argument changes the asserted body.
+    const usage = { generatedAt: 9, windows: ['w'], metrics: ['m'], caches: ['c'] };
+    authedAdminDb({
+      overviewCounts: async () => ({ accounts: 4, peakOnlineToday: 1, peakOnlineAllTime: 100 }),
+      providerUsageSnapshot: () => usage,
+    });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: {
+        accounts: 4,
+        peakOnlineToday: 3,
+        peakOnlineAllTime: 100,
+        server: {
+          online: 3,
+          onlineAccounts: 2,
+          peakOnline: 100,
+          uptimeSeconds: 100,
+          tickMsAvg: 1,
+          simEntities: 10,
+          rssBytes: 1,
+          heapUsedBytes: 1,
+        },
+        usage,
+      },
+      error: null,
+    });
+  });
+});
+
+describe('catch -> 400 err.message remap (legacy prose passthrough, per write handler)', () => {
+  // Every migrated write handler reproduces the legacy try/catch that surfaces a thrown
+  // domain Error verbatim as 400 { success:false, data:null, error: err.message }. The
+  // dashboard keys on that prose, so pin the passthrough on each handler. The moderate
+  // action uses 'unban' (no admin-target guard, no mail/disconnect side path).
+  const CATCH_CASES: ReadonlyArray<{
+    label: string;
+    path: string;
+    params?: Record<string, string>;
+    fake: string;
+  }> = [
+    {
+      label: 'moderate :action',
+      path: '/admin/api/moderation/accounts/:id/:action',
+      params: { id: '5', action: 'unban' },
+      fake: 'moderateAccount',
+    },
+    {
+      label: 'reactivate',
+      path: '/admin/api/moderation/accounts/:id/reactivate',
+      params: { id: '5' },
+      fake: 'setAccountDeactivated',
+    },
+    {
+      label: 'chat-mute',
+      path: '/admin/api/moderation/accounts/:id/chat-mute',
+      params: { id: '5' },
+      fake: 'muteAccountChat',
+    },
+    {
+      label: 'force-rename',
+      path: '/admin/api/moderation/characters/:id/force-rename',
+      params: { id: '5' },
+      fake: 'forceCharacterRename',
+    },
+    {
+      label: 'lift-mute',
+      path: '/admin/api/moderation/accounts/:id/lift-mute',
+      params: { id: '5' },
+      fake: 'liftAccountChatMute',
+    },
+    {
+      label: 'note',
+      path: '/admin/api/moderation/accounts/:id/note',
+      params: { id: '5' },
+      fake: 'addAccountNote',
+    },
+    { label: 'blocked-ips add', path: '/admin/api/blocked-ips', fake: 'addBlockedIp' },
+  ];
+
+  for (const c of CATCH_CASES) {
+    it(`${c.label}: a thrown domain Error surfaces verbatim as the 400 error prose`, async () => {
+      authedAdminDb({
+        [c.fake]: async () => {
+          throw new Error(`${c.label} exploded`);
+        },
+      });
+      installAdminRuntime();
+      const r = await runRoute('POST', c.path, {
+        headers: { authorization: BEARER },
+        params: c.params,
+        body: {},
+      });
+      expect(r.status).toBe(400);
+      expect(r.body).toEqual({ success: false, data: null, error: `${c.label} exploded` });
+    });
+  }
+
+  it('a NON-Error throw falls back to the per-route legacy prose (reactivation failed)', async () => {
+    authedAdminDb({
+      setAccountDeactivated: async () => {
+        // The legacy catch only reads .message off an Error; anything else gets the fallback.
+        throw 'boom';
+      },
+    });
+    installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/moderation/accounts/:id/reactivate', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: {},
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({ success: false, data: null, error: 'reactivation failed' });
+  });
+});
+
+describe('remaining legacy guard negatives (re-verification audit)', () => {
+  it('login 401s a wrong password for an EXISTING account (verifyPassword negative)', async () => {
+    const verifyPassword = vi.fn(async () => false);
+    setDb({
+      rateLimited: () => false,
+      findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
+      verifyPassword,
+      isAdminAccount: async () => true,
+    });
+    const r = await runRoute('POST', '/admin/api/login', {
+      body: { username: 'bob', password: 'wrong' },
+    });
+    expect(r.status).toBe(401);
+    expect(r.body).toEqual({ success: false, data: null, error: 'invalid username or password' });
+    expect(verifyPassword).toHaveBeenCalledWith('wrong', 'h');
+  });
+
+  it('a suspend with NO expiresAt mails the "until reviewed" until (the third derivation branch)', async () => {
+    const target = { id: 5, username: 'x', email: 'x@y.z', locale: 'en', marketing_opt_in: false };
+    const emailSecurityIncident = vi.fn();
+    authedAdminDb({
+      moderateAccount: async () => {},
+      accountMailTarget: async () => target,
+      emailSecurityIncident,
+    });
+    installAdminRuntime();
+    await runRoute('POST', '/admin/api/moderation/accounts/:id/:action', {
+      headers: { authorization: BEARER },
+      params: { id: '5', action: 'suspend' },
+      body: { reason: 'griefing' },
+    });
+    await new Promise((resolve) => setImmediate(resolve));
+    expect(emailSecurityIncident).toHaveBeenCalledWith(
+      target,
+      'suspend',
+      'griefing',
+      'until reviewed',
+    );
+  });
+
+  it('an unsuspend on an ADMIN target passes the guard (it applies to suspend|ban only, legacy parity)', async () => {
+    const moderateAccount = vi.fn(async () => {});
+    authedAdminDb({ moderateAccount });
+    installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/moderation/accounts/:id/:action', {
+      headers: { authorization: BEARER },
+      params: { id: String(ADMIN_ACCOUNT_ID), action: 'unsuspend' },
+      body: {},
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({ success: true, data: { ok: true }, error: null });
+    expect(moderateAccount).toHaveBeenCalledWith(
+      expect.objectContaining({ accountId: ADMIN_ACCOUNT_ID, action: 'unsuspend' }),
+    );
+  });
+
+  it('400s a chat-filter word that is empty after normalization (addFilterWord false), no reload', async () => {
+    authedAdminDb({ addFilterWord: async () => false });
+    const rt = installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/chat-filter/words', {
+      headers: { authorization: BEARER },
+      body: { word: '   ', tier: 'soft' },
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'word is empty after normalization',
+    });
+    expect(rt.reloadChatFilter).not.toHaveBeenCalled();
+  });
+
+  it('400s a blocked-ips add when addBlockedIp rejects the ip (falsy), no reload and no kick', async () => {
+    authedAdminDb({ addBlockedIp: async () => '' });
+    const rt = installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/blocked-ips', {
+      headers: { authorization: BEARER },
+      body: { ip: 'not-an-ip' },
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({ success: false, data: null, error: 'a valid IP address is required' });
+    expect(rt.reloadBlockedIps).not.toHaveBeenCalled();
+    expect(rt.disconnectByIp).not.toHaveBeenCalled();
+  });
+
+  it('400s a blocked-ips delete on an invalid ip BEFORE the remove (cleanIp pre-check)', async () => {
+    const removeBlockedIp = vi.fn(async () => true);
+    authedAdminDb({ cleanIp: () => '', removeBlockedIp });
+    installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/blocked-ips/delete', {
+      headers: { authorization: BEARER },
+      body: { ip: 'not-an-ip' },
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({ success: false, data: null, error: 'a valid IP address is required' });
+    expect(removeBlockedIp).not.toHaveBeenCalled();
   });
 });

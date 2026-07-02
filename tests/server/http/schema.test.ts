@@ -53,6 +53,11 @@ describe('scalars', () => {
     expect(num().decode('7')).toEqual({ ok: true, value: 7 });
     expect(num().decode(7)).toEqual({ ok: true, value: 7 });
     expect(num().decode('  7  ')).toEqual({ ok: true, value: 7 });
+    // Pins the adminIdParamDecode / characterIdParamDecode ledger claim: the decoder
+    // is WIDER than a legacy \d+ route regex, so these spellings of a positive integer
+    // decode (and reach the handler) where the legacy ladder 404-fell-through.
+    expect(num({ int: true, min: 1 }).decode('+5')).toEqual({ ok: true, value: 5 });
+    expect(num({ int: true, min: 1 }).decode('5.0')).toEqual({ ok: true, value: 5 });
   });
 
   it('num: rejects NaN, non-finite, empty and non-numeric input with code type', () => {

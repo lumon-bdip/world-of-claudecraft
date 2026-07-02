@@ -73,7 +73,11 @@ export interface ApiRegistry {
  * Discord family (server/discord.ts: the OAuth start/callback pair, the two
  * first-login chooser routes login/new + login/link, the GET/DELETE /api/discord
  * link status + unlink pair, and the previously-orphaned POST
- * /api/discord/swag/claim).
+ * /api/discord/swag/claim). Phase 17 adds the admin surface (server/admin.ts:
+ * the anonymous login plus the 31 authed /admin/api reads, moderation /
+ * chat-filter / ip-block writes, and the restructured :id/:action sanction
+ * route, all behind requireAdmin and served through main.ts's own flag-gated
+ * admin dispatcher).
  */
 export const apiRoutes: readonly RouteDef[] = [
   ...leaderboardRoutes,

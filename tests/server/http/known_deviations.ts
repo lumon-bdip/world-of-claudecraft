@@ -396,7 +396,9 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
       'the 404 unknown-endpoint arm without the bearer ever being read; a numeric-but-non-' +
       'positive :id ("0") matches \\d+, reaches the account-scoped getCharacter(accountId, ' +
       '0) which misses, and answers the legacy 404 body ("character not found" for sheet / ' +
-      'standing / rename, "not found" for takeover / delete).',
+      'standing / rename, "not found" for takeover / delete); a digit string past 2^53 ' +
+      'also matches \\d+ and reaches the account-scoped read with a non-safe Number (the ' +
+      'same 404 miss, or a pg bigint-range 500 on the widest ids).',
     intendedBehavior:
       'Phase 12 serves these routes through the new pipeline, where requireOwned decodes ' +
       ':id with num({ int: true, min: 1 }) BEFORE any DB call, so a non-numeric OR non-' +
@@ -806,30 +808,42 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
       '/admin/api/bug-reports/:id/screenshot',
     ],
     currentBehavior:
-      'The legacy handleAdminApi matches every admin :id route with a `(\\d+)` regex, so ' +
-      'a non-numeric or non-positive :id never matches: it 404-falls-through to ' +
-      '"unknown admin endpoint" (a GET :id route) or the 405 method guard (a POST :id ' +
-      'route), for an authenticated admin.',
+      'The legacy handleAdminApi matches every admin :id route with a `(\\d+)` regex. ' +
+      'A NON-NUMERIC :id (or a "+5" / "5.0" / " 5 " spelling) never matches: it ' +
+      '404-falls-through to "unknown admin endpoint" (a GET :id route) or the 405 method ' +
+      'guard (a POST :id route), for an authenticated admin. A DIGIT-STRING id the ' +
+      'handlers never store DOES match `\\d+` and runs the handler: "0" / "00" reach the ' +
+      'DB-miss path (the handler-owned 404 "account not found" / "word not found" / ' +
+      '"open report not found", a 200 { screenshot: null } on bug-reports/:id/screenshot, ' +
+      "a 200 { ok: true } on reactivate's zero-row UPDATE), and a digit string past 2^53 " +
+      'passes a non-safe Number to the *_db layer (a DB miss answers the handler-owned ' +
+      "404; a pg bigint-range error surfaces as the catch's 400 err.message on the " +
+      'moderation writes or the outer 500 "internal error" on the reads).',
     intendedBehavior:
       'Phase 17 matches :id generically (path_pattern cannot constrain a param to ' +
       'digits) and decodes it with requireAdminTarget num({ int, min: 1 }) BEFORE any DB ' +
-      'call. A non-numeric / non-positive id throws the decode failure, which withErrors ' +
-      'maps to 422 { success: false, data: null, error: "validation.failed" } on the ' +
-      'known route family (NaN-safe: a query never receives NaN). The decoder is also ' +
-      'slightly WIDER than the legacy regex: a trimmed decimal spelling of a positive ' +
+      'call. A non-numeric, non-positive, or non-safe-integer id throws the decode ' +
+      'failure, which withErrors maps to 422 { success: false, data: null, error: ' +
+      '"validation.failed" } on the known route family (NaN-safe: a query never receives ' +
+      'NaN or a non-safe Number). That one 422 replaces the WHOLE legacy spread above ' +
+      '(the fallthrough 404/405 for a non-numeric id, and the handler-owned 404 / 200 / ' +
+      '400 / 500 shapes for a degenerate numeric one). The decoder is also slightly ' +
+      'WIDER than the legacy regex: a trimmed decimal spelling of a positive ' +
       'integer ("+5", "5.0", a whitespace-padded " 5 ") decodes to the same id and reaches ' +
       'the handler where legacy 404-fell-through; harmless (an operator holds universal ' +
       'authority and plain "5" reaches the same row) and shared with the num() decoders ' +
       'on every migrated :id surface. AUTH-GATED: requireAdmin ' +
-      'precedes the decode, so an unauthenticated bad-id request 401s on both paths; the ' +
-      '422-vs-404/405 divergence is only reachable behind a valid admin bearer. Exact ' +
-      'sibling to characterIdParamDecode. No golden pins a non-numeric admin id and no ' +
+      'precedes the decode, so an unauthenticated bad-id request 401s on both paths; ' +
+      'every divergence above is only reachable behind a valid admin bearer. Sibling to ' +
+      'characterIdParamDecode (whose legacy arm answered the account-scoped miss 404 for ' +
+      'a matched "0"). No golden pins a non-numeric or degenerate-numeric admin id and no ' +
       'client sends one, so it is not a parity divergence the harness can observe.',
     introducedInPhase: 17,
     reason:
       'The new router matches :id generically where the legacy `\\d+` regex 404-fell-' +
-      'through, so the operator loader rejects a malformed id with a 422 rather than ' +
-      'letting NaN reach a query. Not observable by the numeric-only, db-free parity ' +
+      'through a malformed id (and ran the handler on a degenerate numeric one), so the ' +
+      'operator loader rejects both classes with a 422 rather than letting NaN or a ' +
+      'non-safe Number reach a query. Not observable by the numeric-only, db-free parity ' +
       'corpus (and auth-gated), documented here.',
   },
   {
