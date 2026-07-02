@@ -583,6 +583,79 @@ describe('/api dispatch parity (legacy flag vs new flag)', () => {
 });
 
 // -----------------------------------------------------------------------------
+// Phase 17: /admin/api dual-path parity. Phase 17 routes /admin/api through its OWN
+// flag-gated dispatcher (main.ts adminApiEntry) whose delegate is the legacy
+// handleAdminApi, so makeModedDispatch (which flips the shared API_DISPATCH flag)
+// drives the admin surface old-vs-new too. The admin authenticated reads/writes need
+// Postgres (pool-less here), so this pins the DB-FREE deterministic admin contract
+// paths: every one 401s at the admin gate (auth precedes route/method) OR answers the
+// anonymous login's db-free 401, byte-identical on both flags. The two AUTH-GATED
+// divergences the migration introduces (adminEnumInvalid422, adminIdParamDecode) are
+// invisible here (an unauthenticated request 401s before the action/id decode on both
+// paths); they are documented in known_deviations.ts and pinned with fakes in
+// tests/server/admin.test.ts.
+// -----------------------------------------------------------------------------
+
+describe('/admin/api dispatch parity (legacy flag vs new flag)', () => {
+  // Every non-login admin route answers the same db-free 401 to a missing bearer:
+  // legacy adminAccountId gates before route match; the new path's requireAdmin gates
+  // before the handler (and a notFound/methodNotAllowed/enum path delegates to the
+  // legacy ladder, which gates identically). A representative spread across a read, an
+  // ip-block write, the restructured enum route (valid AND invalid action), a wrong
+  // method, and an unknown endpoint.
+  const NOAUTH_ADMIN_REQUESTS: ReadonlyArray<{
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    url: string;
+    label: string;
+  }> = [
+    { method: 'GET', url: '/admin/api/overview', label: 'a migrated read' },
+    { method: 'POST', url: '/admin/api/blocked-ips', label: 'an ip-block write' },
+    {
+      method: 'POST',
+      url: '/admin/api/moderation/accounts/5/suspend',
+      label: 'the enum :action route (valid action)',
+    },
+    {
+      method: 'POST',
+      url: '/admin/api/moderation/accounts/5/frobnicate',
+      label: 'the enum :action route (invalid action, auth-gated so no 422 leaks)',
+    },
+    {
+      method: 'GET',
+      url: '/admin/api/accounts/abc',
+      label: 'a :id route with a non-numeric id (auth-gated so no 422 leaks)',
+    },
+    { method: 'PUT', url: '/admin/api/overview', label: 'a wrong method (delegates to legacy)' },
+    {
+      method: 'GET',
+      url: '/admin/api/this-endpoint-does-not-exist',
+      label: 'an unknown endpoint (auth precedes the 404 fallthrough)',
+    },
+  ];
+
+  for (const { method, url, label } of NOAUTH_ADMIN_REQUESTS) {
+    it(`${method} ${url} with no auth is identical old-vs-new and is a 401 (${label})`, async () => {
+      const { oldCap, newCap } = await captureBothModes(() => makeReq({ method, url }));
+      expect(oldCap.status).toBe(401);
+      expect(newCap.status).toBe(oldCap.status);
+      expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+    });
+  }
+
+  it('POST /admin/api/login with an empty body is identical old-vs-new and is a db-free 401', async () => {
+    // login is anonymous (no admin gate); an empty body has no username string, so both
+    // handleLogin and loginHandler answer 401 { ...error: 'invalid username or password' }
+    // before findAccount (db-free), with a fresh rate-limit bucket (isolate resets it).
+    const { oldCap, newCap } = await captureBothModes(() =>
+      makeReq({ method: 'POST', url: '/admin/api/login', body: {} }),
+    );
+    expect(oldCap.status).toBe(401);
+    expect(newCap.status).toBe(oldCap.status);
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+});
+
+// -----------------------------------------------------------------------------
 // SKIPPED requests (present in characterization.test.ts or on the surface, but not
 // replayed here) and why:
 //   - GET /api/project-stats, GET /api/arena/leaderboard, GET /api/woc/balance,
@@ -593,7 +666,11 @@ describe('/api dispatch parity (legacy flag vs new flag)', () => {
 //   - GET /api/auth/discord/callback SUCCESS bounce: embeds a live session token in
 //     inlined HTML the normalizer returns verbatim (non-deterministic + a privacy
 //     flag); only the error bounce is replayed.
-//   - The /admin/api/*, /oauth/*, and /internal/* surfaces: those route through
-//     handleAdminApi / handleOAuth / handleInternalApi, NOT the flag-gated /api
-//     dispatcher (apiEntry), so they are out of scope for the /api parity anchor.
+//   - The /admin/api authenticated reads/writes: they reach pool.query against the
+//     pool-less test db. Phase 17 routes /admin/api through its own flag-gated
+//     dispatcher, so the DB-FREE admin contract paths ARE replayed old-vs-new in the
+//     '/admin/api dispatch parity' block above (the 401 gate + the login db-free 401);
+//     only the authed bodies are deferred, exactly as characterization defers them.
+//   - The /oauth/* and /internal/* surfaces: those still route through handleOAuth /
+//     handleInternalApi, NOT a flag-gated dispatcher, so they are out of scope here.
 // -----------------------------------------------------------------------------

@@ -23,6 +23,13 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  type AdminRuntime,
+  configureAdminRuntime,
+  resetAdminDbForTests,
+  resetAdminRuntimeForTests,
+  setAdminDbForTests,
+} from '../../../server/admin';
+import {
   type CharactersRuntime,
   configureCharactersRuntime,
   resetCharactersDbForTests,
@@ -30,6 +37,8 @@ import {
   setCharactersDbForTests,
 } from '../../../server/characters';
 import { compose } from '../../../server/http/compose';
+import { ADMIN_AUTH_REQUIRED } from '../../../server/http/middleware/require_admin';
+import { withErrors } from '../../../server/http/middleware/with_errors';
 import { apiRoutes } from '../../../server/http/registry';
 import type { Ctx, Middleware, RouteDef } from '../../../server/http/types';
 import { json } from '../../../server/http_util';
@@ -213,17 +222,193 @@ describe('ownership coverage: registry-wide deny-by-default sweep', () => {
   });
 });
 
-describe('ownership coverage: operator scope is not yet present (Phase 17 forward guard)', () => {
-  it('the registry has no operator-scoped requireOwned route today', () => {
-    // The account-scoped loader (requireOwnedCharacter) is the only ownership loader
-    // wired so far. Phase 17 introduces the admin/operator surface, which gets its
-    // OWN admin-scope loader (denial 403, not the account 404). Until then the deny
-    // sweep must not silently skip an operator-scoped :id route: assert none exists,
-    // so when the first operator route lands this guard fails and forces the sweep to
-    // be extended to cover the operator loader too.
-    const operatorOwnedRoutes = apiRoutes.filter(
-      (route) => route.meta?.requireOwned?.ownerScope === 'operator',
-    );
-    expect(operatorOwnedRoutes).toEqual([]);
+// -------------------------------------------------------------------------
+// Operator-scope deny-by-default sweep (Phase 17).
+//
+// Phase 17 introduced the admin/operator surface, so the forward guard that once
+// asserted "no operator route exists" is replaced by a real sweep. The operator
+// :id routes (server/admin.ts) authorize NO cross-scope object (an admin has
+// universal authority over every target), so unlike the account loader they emit no
+// per-object 403/404 denial: the handlers keep their own legacy resource-not-found
+// 404. The deny-by-default guarantee for operator routes is therefore twofold and
+// this sweep proves BOTH are mounted on EVERY operator :id route:
+//   1. requireAdmin: a non-admin bearer is refused with the legacy 401 admin body
+//      BEFORE the handler runs (so an operator route can never serve a non-admin);
+//   2. requireAdminTarget: a non-numeric :id is rejected with a 422 (admin envelope)
+//      before any DB call (so a NaN id can never reach a query).
+// A route that forgot either guard is caught: the negative controls prove both
+// assertions are non-vacuous.
+// -------------------------------------------------------------------------
+
+// The operator-scoped :id routes the sweep covers: every registry route whose
+// meta.requireOwned is operator-scoped (the admin :id family).
+const operatorOwnedRoutes: RouteDef[] = apiRoutes.filter(
+  (route) => route.meta?.requireOwned?.ownerScope === 'operator',
+);
+
+// A real account id the non-admin fake resolves the bearer to (is_admin = false).
+const NON_ADMIN_ACCOUNT_ID = 999;
+
+// The admin envelope validation.failed body serializeAdmin writes for a 422.
+const ADMIN_VALIDATION_FAILED = { success: false, data: null, error: 'validation.failed' };
+
+// Install the admin db seam so requireAdmin resolves the bearer to a NON-admin
+// account: the token is valid, the account exists, but is_admin is false, so the
+// gate's is_admin check is the one that must refuse it.
+function installNonAdminDb(): void {
+  setAdminDbForTests({
+    accountForToken: async () => NON_ADMIN_ACCOUNT_ID,
+    isAdminAccount: async () => false,
+  });
+}
+
+// Install the admin db seam so requireAdmin PASSES (a real admin), so the sweep can
+// reach requireAdminTarget's :id decode with a valid operator identity.
+function installAdminDb(): void {
+  setAdminDbForTests({
+    accountForToken: async () => CALLER_ACCOUNT_ID,
+    isAdminAccount: async () => true,
+  });
+}
+
+// Run a route's chain UNDER withErrors (surface 'admin'), so requireAdminTarget's
+// thrown decode failure maps to the 422 admin envelope exactly as the real
+// dispatcher onion does. Returns the FakeRes and the handler spy.
+async function runRouteWithErrors(
+  route: RouteDef,
+  ctx: Ctx,
+): Promise<{ res: FakeRes; handler: ReturnType<typeof vi.fn> }> {
+  const handler = vi.fn(async (c: Ctx) => {
+    await route.handler(c);
+  });
+  const stack: Middleware[] = [
+    withErrors({ surface: route.meta?.envelope }),
+    ...(route.middleware ?? []),
+    handler as unknown as Middleware,
+  ];
+  await compose(stack)(ctx);
+  return { res: resOf(ctx), handler };
+}
+
+describe('ownership coverage: operator-scope deny-by-default sweep (Phase 17)', () => {
+  beforeEach(() => {
+    // A stubbed runtime so a handler that unexpectedly ran (a regression) fails on a
+    // clean assertion, not an unconfigured-runtime throw. The sweep never reaches it
+    // (the guards short-circuit), but the negative control writes 200 without it.
+    configureAdminRuntime({} as AdminRuntime);
+  });
+
+  afterEach(() => {
+    resetAdminDbForTests();
+    resetAdminRuntimeForTests();
+    vi.restoreAllMocks();
+  });
+
+  it('selects a non-vacuous set of operator-scoped :id routes (the admin :id family)', () => {
+    expect(operatorOwnedRoutes.length).toBeGreaterThanOrEqual(12);
+  });
+
+  it('every operator-scoped route is admin-surface (excluded from the account-owner clause)', () => {
+    // checkRequireOwnedCoverage exempts operator + admin-surface :id routes from the
+    // missing-loader clause and flags an operator scope on any NON-admin surface. So
+    // every operator route must be surface 'admin', or the coverage gate goes red.
+    for (const route of operatorOwnedRoutes) {
+      expect(route.surface, `${route.method} ${route.path}`).toBe('admin');
+    }
+    expect(
+      apiRoutes.filter(
+        (r) => r.meta?.requireOwned?.ownerScope === 'operator' && r.surface !== 'admin',
+      ),
+    ).toEqual([]);
+  });
+
+  for (const route of operatorOwnedRoutes) {
+    it(`refuses a non-admin bearer on ${route.method} ${route.path} with a 401 and never runs the handler`, async () => {
+      installNonAdminDb();
+      const ctx = authedCtx(route);
+      const { res, handler } = await runRouteWithErrors(route, ctx);
+
+      // requireAdmin (mounted first) refuses the non-admin with the legacy admin 401
+      // body and short-circuits, so the handler's success body is never produced.
+      expect(res.statusCode).toBe(401);
+      expect(handler).not.toHaveBeenCalled();
+      expect(JSON.parse(res.body)).toEqual(ADMIN_AUTH_REQUIRED);
+    });
+
+    it(`rejects a non-numeric :id on ${route.method} ${route.path} with a 422 and never runs the handler`, async () => {
+      installAdminDb();
+      const ctx = fakeCtx({
+        method: route.method,
+        url: concretePath(route.path),
+        headers: { authorization: `Bearer ${VALID_TOKEN}` },
+        params: { id: 'not-a-number' },
+      });
+      const { res, handler } = await runRouteWithErrors(route, ctx);
+
+      // requireAdminTarget decodes the :id with num({ int, min: 1 }); a non-numeric id
+      // throws the decode failure, which withErrors maps to the 422 admin envelope
+      // BEFORE any DB call, so the handler never runs.
+      expect(res.statusCode).toBe(422);
+      expect(handler).not.toHaveBeenCalled();
+      expect(JSON.parse(res.body)).toEqual(ADMIN_VALIDATION_FAILED);
+    });
+  }
+
+  it('negative control: an operator route MISSING requireAdmin serves a non-admin (200), so the 401 sweep is non-vacuous', async () => {
+    installNonAdminDb();
+    // A synthetic operator route that DECLARES operator scope (so the sweep would
+    // select it) but mounts NO requireAdmin gate. Kept LOCAL to the test (never added
+    // to apiRoutes). Under the same non-admin environment its handler runs and writes
+    // 200, proving the sweep's 401 assertion actually detects requireAdmin's presence.
+    const missingGateRoute: RouteDef = {
+      method: 'GET',
+      path: '/admin/api/synthetic-no-gate/:id',
+      surface: 'admin',
+      middleware: [],
+      handler: async (ctx) => {
+        json(ctx.res, 200, { success: true, data: { ok: true }, error: null });
+      },
+      meta: { envelope: 'admin', requireOwned: { kind: 'account', ownerScope: 'operator' } },
+    };
+    expect(missingGateRoute.meta?.requireOwned?.ownerScope).toBe('operator');
+
+    const ctx = authedCtx(missingGateRoute);
+    const { res, handler } = await runRouteWithErrors(missingGateRoute, ctx);
+
+    expect(res.statusCode).toBe(200);
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(res.statusCode).not.toBe(401);
+  });
+
+  it('negative control: an operator route MISSING requireAdminTarget lets a NaN :id reach the handler, so the 422 sweep is non-vacuous', async () => {
+    installAdminDb();
+    // A synthetic operator route with an auth-passing stub but NO requireAdminTarget:
+    // a non-numeric :id is never decoded, so it reaches the handler (200) instead of a
+    // 422, proving the sweep's 422 assertion detects requireAdminTarget's presence.
+    const authStub: Middleware = async (ctx, next) => {
+      ctx.account = { accountId: CALLER_ACCOUNT_ID, scope: 'full' };
+      await next();
+    };
+    const missingDecodeRoute: RouteDef = {
+      method: 'GET',
+      path: '/admin/api/synthetic-no-decode/:id',
+      surface: 'admin',
+      middleware: [authStub],
+      handler: async (ctx) => {
+        json(ctx.res, 200, { success: true, data: { ok: true }, error: null });
+      },
+      meta: { envelope: 'admin', requireOwned: { kind: 'account', ownerScope: 'operator' } },
+    };
+    const ctx = fakeCtx({
+      method: 'GET',
+      url: '/admin/api/synthetic-no-decode/not-a-number',
+      headers: { authorization: `Bearer ${VALID_TOKEN}` },
+      params: { id: 'not-a-number' },
+    });
+    const { res, handler } = await runRouteWithErrors(missingDecodeRoute, ctx);
+
+    expect(res.statusCode).toBe(200);
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(res.statusCode).not.toBe(422);
   });
 });

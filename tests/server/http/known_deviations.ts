@@ -44,6 +44,9 @@ export const DEVIATION_ID = {
   discordCallbackHtmlNotRedirect: 'discord-callback-html-not-redirect',
   swagClaimOrphanUnreachable: 'swag-claim-orphan-unreachable',
   discordBodyValidationRemap: 'discord-body-validation-remap',
+  adminEnumInvalid422: 'admin-enum-invalid-422',
+  adminIdParamDecode: 'admin-id-param-decode-422',
+  adminBodyValidationRemap: 'admin-body-validation-remap',
 } as const;
 export type DeviationId = (typeof DEVIATION_ID)[keyof typeof DEVIATION_ID];
 
@@ -759,6 +762,110 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
       'stays HTML per discordCallbackHtmlNotRedirect). These framework-error paths are ' +
       'NOT exercised by the db-free parity corpus (which replays valid bodies only), so ' +
       'the divergence is documented here rather than harness-caught.',
+  },
+  // --- Phase 17: the admin surface (server/admin.ts) ---------------------------
+  {
+    id: DEVIATION_ID.adminEnumInvalid422,
+    routes: ['/admin/api/moderation/accounts/:id/(suspend|unsuspend|ban|unban)'],
+    currentBehavior:
+      'The legacy handleAdminApi matches the sanction route with the regex ' +
+      '/moderation/accounts/(\\d+)/(suspend|unsuspend|ban|unban); an action outside the ' +
+      'four does not match, falls through every POST branch, and (for an authenticated ' +
+      'admin) answers 405 { success: false, data: null, error: "method not allowed" } ' +
+      'from the `if (req.method !== "GET")` guard.',
+    intendedBehavior:
+      'Phase 17 restructures the enum-alternation route to :id/:action (the Phase 4 ' +
+      'no-regex-routing guard rejects the alternation) and validates the action with a ' +
+      'schema enum { suspend, unsuspend, ban, unban }. An action outside the four decodes ' +
+      'to a 422 { success: false, data: null, error: "validation.failed" } (the admin ' +
+      'envelope) instead of the legacy 405. The change is AUTH-GATED: an unauthenticated ' +
+      'request 401s on both paths (requireAdmin precedes the action decode), so the ' +
+      '422-vs-405 divergence is only reachable behind a valid admin bearer, and becomes ' +
+      'the real behavior at the Phase 25 flag flip.',
+    introducedInPhase: 17,
+    reason:
+      'Restructuring the only enum-alternation route to a schema-validated :action ' +
+      'param is required by the no-regex-routing guard; an invalid action becomes a ' +
+      'validation error (422) rather than a method-fallthrough 405. Not exercised by the ' +
+      'db-free parity corpus (admin authed reads need Postgres), documented here.',
+  },
+  {
+    id: DEVIATION_ID.adminIdParamDecode,
+    routes: [
+      '/admin/api/moderation/accounts/:id/(suspend|unsuspend|ban|unban)',
+      '/admin/api/moderation/accounts/:id/reactivate',
+      '/admin/api/moderation/accounts/:id/chat-mute',
+      '/admin/api/moderation/accounts/:id/lift-mute',
+      '/admin/api/moderation/accounts/:id/note',
+      '/admin/api/moderation/accounts/:id/reset-strikes',
+      '/admin/api/moderation/reports/:id/ignore',
+      '/admin/api/moderation/characters/:id/force-rename',
+      '/admin/api/moderation/accounts/:id',
+      '/admin/api/accounts/:id',
+      '/admin/api/chat-filter/words/:id/delete',
+      '/admin/api/bug-reports/:id/screenshot',
+    ],
+    currentBehavior:
+      'The legacy handleAdminApi matches every admin :id route with a `(\\d+)` regex, so ' +
+      'a non-numeric or non-positive :id never matches: it 404-falls-through to ' +
+      '"unknown admin endpoint" (a GET :id route) or the 405 method guard (a POST :id ' +
+      'route), for an authenticated admin.',
+    intendedBehavior:
+      'Phase 17 matches :id generically (path_pattern cannot constrain a param to ' +
+      'digits) and decodes it with requireAdminTarget num({ int, min: 1 }) BEFORE any DB ' +
+      'call. A non-numeric / non-positive id throws the decode failure, which withErrors ' +
+      'maps to 422 { success: false, data: null, error: "validation.failed" } on the ' +
+      'known route family (NaN-safe: a query never receives NaN). AUTH-GATED: requireAdmin ' +
+      'precedes the decode, so an unauthenticated bad-id request 401s on both paths; the ' +
+      '422-vs-404/405 divergence is only reachable behind a valid admin bearer. Exact ' +
+      'sibling to characterIdParamDecode. No golden pins a non-numeric admin id and no ' +
+      'client sends one, so it is not a parity divergence the harness can observe.',
+    introducedInPhase: 17,
+    reason:
+      'The new router matches :id generically where the legacy `\\d+` regex 404-fell-' +
+      'through, so the operator loader rejects a malformed id with a 422 rather than ' +
+      'letting NaN reach a query. Not observable by the numeric-only, db-free parity ' +
+      'corpus (and auth-gated), documented here.',
+  },
+  {
+    id: DEVIATION_ID.adminBodyValidationRemap,
+    routes: [
+      '/admin/api/login',
+      '/admin/api/moderation/accounts/:id/(suspend|unsuspend|ban|unban)',
+      '/admin/api/chat-filter/config',
+      '/admin/api/blocked-ips',
+      '/admin/api/accounts',
+    ],
+    currentBehavior:
+      'The legacy handleAdminApi self-reads each body with readBody and wraps its whole ' +
+      'body in one try/catch: a malformed / over-cap body (readBody throws "bad json" / ' +
+      '"body too large") OR any unexpected throw (a Postgres error) falls to the outer ' +
+      'catch and answers 500 { success: false, data: null, error: "internal error" }.',
+    intendedBehavior:
+      'Phase 17 keeps the handlers self-reading (NO withBody, so no 400/413 status ' +
+      'remap), so every handler-owned body stays byte-identical. The ONLY divergence is ' +
+      'the 500 BODY on an unexpected throw / bad body: it propagates to the Phase 8 ' +
+      'withErrors boundary and serializes as the admin envelope 500 { success: false, ' +
+      'data: null, error: "internal.error" } (the stable code) instead of the legacy ' +
+      'outer-catch 500 { ...error: "internal error" }. Same 500 STATUS and same ' +
+      '{ success, data, error } shape; only the error string differs (the code ' +
+      '"internal.error" vs the prose "internal error"). Leak-free (the 500 detail is a ' +
+      'stable code; the original error goes only to the logger). SYSTEMIC HEADER NOTE: ' +
+      'every withErrors-served admin error path (this 500 plus the adminIdParamDecode / ' +
+      'adminEnumInvalid422 422s) attaches an X-Request-Id response header the legacy ' +
+      'fail() did not; this is the shared Phase-8 pipeline behavior on every migrated ' +
+      'surface (Phase 10 to 16), auth-gated, and invisible to the db-free parity corpus ' +
+      '(the tested 401 gate writes via direct json()/fail(), no header), NOT admin-specific.',
+    introducedInPhase: 17,
+    reason:
+      'The migrated admin handlers surface an unexpected throw / bad body through the ' +
+      'shared Phase 7/8 error-model boundary as 500 { ...error: "internal.error" } (the ' +
+      'admin serializer, selected by meta.envelope "admin") instead of the legacy ' +
+      'outer-catch 500 { ...error: "internal error" }. Same status + envelope shape, ' +
+      'different error string. Exact sibling to accountBodyValidationRemap / ' +
+      'walletBodyValidationRemap / reportsBodyValidationRemap / discordBodyValidationRemap. ' +
+      'The listed routes are representative (the remap applies to every admin route); the ' +
+      'framework-error path is not exercised by the db-free parity corpus, documented here.',
   },
 ];
 

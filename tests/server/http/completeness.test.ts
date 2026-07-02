@@ -250,8 +250,13 @@ describe('registry completeness: migrated baseline (Phase 10 public reads + Phas
   ];
   const MIGRATED_PATHS = MIGRATED_ROUTES.map((r) => r.path);
 
-  it('registers exactly the migrated routes (one RouteDef per path)', () => {
-    const registered = [...apiRoutes].map((r) => r.path).sort();
+  it('registers exactly the migrated /api routes (one RouteDef per path)', () => {
+    // Scoped to the /api family: the /admin/api surface (Phase 17) has its own
+    // registration assertion below, derived from the admin ladder.
+    const registered = [...apiRoutes]
+      .filter((r) => !r.path.startsWith('/admin/'))
+      .map((r) => r.path)
+      .sort();
     expect(registered).toEqual([...MIGRATED_PATHS].sort());
   });
 
@@ -314,6 +319,99 @@ describe('registry completeness: migrated baseline (Phase 10 public reads + Phas
     expect(legacyServes({ method: 'POST', path: '/api/discord/swag/claim' }, legacyServed)).toBe(
       false,
     );
+  });
+});
+
+describe('registry completeness: Phase 17 admin surface (server/admin.ts)', () => {
+  // The admin ladder is the legacy handleAdminApi surface (SURFACE_INVENTORY rows
+  // whose dispatcher is DISPATCH.admin). Phase 17 migrated EVERY branch onto a
+  // RouteDef, restructuring the one enum-alternation route to a :action param. These
+  // assertions derive the expected admin route set FROM the ladder, so a dropped or
+  // added admin branch fails the gate without a hand-maintained parallel list.
+
+  // The one enum-alternation ladder path, rewritten to the migrated :action form.
+  function enumToActionParam(path: string): string {
+    return path.replace('(suspend|unsuspend|ban|unban)', ':action');
+  }
+
+  // A concrete request path for a ladder pattern: :param -> a placeholder segment,
+  // and the enum alternation -> its first alternative (suspend), so resolve() can be
+  // queried against every admin ladder row.
+  function adminConcretePath(path: string): string {
+    return path
+      .split('/')
+      .map((seg) => {
+        if (seg.startsWith(':')) return 'x';
+        if (seg.startsWith('(') && seg.endsWith(')')) return seg.slice(1, -1).split('|')[0];
+        return seg;
+      })
+      .join('/');
+  }
+
+  const adminLadder = SURFACE_INVENTORY.filter((r) => r.dispatcher === DISPATCH.admin);
+  const adminLadderPaths = adminLadder.map((r) => enumToActionParam(r.path)).sort();
+  const registeredAdminPaths = [...apiRoutes]
+    .filter((r) => r.path.startsWith('/admin/'))
+    .map((r) => r.path)
+    .sort();
+
+  it('derives a non-empty admin ladder', () => {
+    expect(adminLadder.length).toBeGreaterThan(25);
+  });
+
+  it('registers exactly the admin ladder routes (enum row rewritten to :action)', () => {
+    // Path-and-multiplicity match: the GET+POST /admin/api/blocked-ips pair appears
+    // twice in both sets, so a dropped or duplicated admin RouteDef is caught.
+    expect(registeredAdminPaths).toEqual(adminLadderPaths);
+  });
+
+  it('the router OWNS every admin ladder branch (no dropped admin route)', () => {
+    const dropped = adminLadder
+      .filter((r) => apiRegistry.resolve(r.method, adminConcretePath(r.path)).kind !== 'matched')
+      .map((r) => `${r.method} ${r.path}`);
+    expect(dropped).toEqual([]);
+  });
+
+  it('the enum route resolves each of the four actions to the same handler', () => {
+    for (const action of ['suspend', 'unsuspend', 'ban', 'unban']) {
+      const match = apiRegistry.resolve('POST', `/admin/api/moderation/accounts/5/${action}`);
+      expect(match.kind).toBe('matched');
+      if (match.kind === 'matched') {
+        expect(match.route.path).toBe('/admin/api/moderation/accounts/:id/:action');
+        expect(match.params).toEqual({ id: '5', action });
+      }
+    }
+  });
+
+  it('the literal moderation action routes win over the :action catch-all', () => {
+    // The no-regex restructure only works if the specificity sort orders the literal
+    // sibling routes ahead of :action; assert each resolves to its own path.
+    for (const literal of ['reactivate', 'chat-mute', 'lift-mute', 'note', 'reset-strikes']) {
+      const match = apiRegistry.resolve('POST', `/admin/api/moderation/accounts/5/${literal}`);
+      expect(match.kind).toBe('matched');
+      if (match.kind === 'matched') {
+        expect(match.route.path).toBe(`/admin/api/moderation/accounts/:id/${literal}`);
+      }
+    }
+  });
+
+  it('the admin :id routes are operator-scoped and admin-surface (excluded from the account clause)', () => {
+    const idRoutes = [...apiRoutes].filter(
+      (r) => r.path.startsWith('/admin/') && r.path.includes('/:id'),
+    );
+    expect(idRoutes.length).toBeGreaterThanOrEqual(12);
+    for (const r of idRoutes) {
+      expect(r.surface, r.path).toBe('admin');
+      expect(r.meta?.requireOwned?.ownerScope, r.path).toBe('operator');
+      expect(r.meta?.envelope, r.path).toBe('admin');
+    }
+  });
+
+  it('every admin RouteDef selects the { success, data, error } envelope', () => {
+    for (const r of [...apiRoutes].filter((r) => r.path.startsWith('/admin/'))) {
+      expect(r.surface, r.path).toBe('admin');
+      expect(r.meta?.envelope, r.path).toBe('admin');
+    }
   });
 });
 
