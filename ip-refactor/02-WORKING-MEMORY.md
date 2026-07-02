@@ -45,6 +45,17 @@ Status values: `not-started` -> `in-progress (<who>)` -> `done-on-track (<branch
 - Until both are checked, NO V/C/W/T slice may start. Append-only after LOCK; a slice needing a
   missing string STOPS and appends a request row here for the operator, never invents a name.
 
+## OPERATOR RULING - parity goldens under rename (2026-07-02, Phase 4)
+V1 and W1 independently proved the goldens' per-checkpoint  digests fold event TEXT
+(display names embedded), so ANY display rename shifts them while every state hash, RNG
+draw-order fingerprint, draw count and nextId stays byte-identical. Operator extended the
+C1/C2 golden exception to ALL rename slices: re-mint with UPDATE_PARITY=1, then
+ MUST pass before commit; the four
+hardcoded old names in tests/parity/coverage.test.ts update to their new names (authorized
+gate-text edit). Integrator re-mints on the merged tree in Phase 5; Z1 inspector-verifies the
+final goldens. Map amendment #2 in the same ruling: Quaking Blow / Armor Shear / Oath of Iron
+/ Seething Fury (+ pairings) and polymorph critter sheep -> toad.
+
 ## Scanner worklist registry (owned by G0) — the verbatim names still present
 > G0 seeds this from the RED baseline (the names `tests/ip_scrub.test.ts` currently flags). Each
 > track ticks the entries it clears. Z1 requires the whole list ticked (scanner fully green).

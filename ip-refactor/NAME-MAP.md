@@ -20,6 +20,19 @@
 > (operator caught the WoW 'Snarl' shield), Stalk, and specs Fieldcraft / Thundercall /
 > Warspirit. Operator counter-proposals declined for IP reasons: Guardian (WoW druid spec),
 > Ironeye (Elden Ring Nightreign), Thunderlord (WoW clan). All pairing rows cascaded.
+>
+> POST-LOCK AMENDMENT #2 (2026-07-02, operator-approved during Phase 4): four new names
+> collided with armed scanner words and were fixed (Quaking Slam -> Quaking Blow, Armor Rend
+> -> Armor Shear, Oath of Vigor -> Oath of Iron, Seething Wrath -> Seething Fury, pairings
+> cascaded) and the polymorph critter word row was added (sheep -> toad). SAME DATE, OPERATOR
+> RULING ON PARITY GOLDENS: the goldens' event digests fold event TEXT, which embeds display
+> names, so display renames legitimately shift `events` digest fields. The C1/C2 golden
+> exception is EXTENDED to every rename slice under a mandatory verification: after
+> UPDATE_PARITY=1 re-mint, `node ip-refactor/golden_token_inspector.mjs <worktree>` must pass
+> (only events-digests + exact locked token swaps changed; all state hashes / RNG fingerprints
+> / counts byte-identical), and the hardcoded old names in tests/parity/coverage.test.ts are
+> updated to the new names as an operator-authorized gate-text edit. The integrator re-mints
+> once more on the merged tree at Phase 5; Z1 runs the inspector across the whole map.
 
 This file is the single source of truth for every old -> new string, the analog of the
 world-api `CommandName` table. Every rename slice applies it VERBATIM and never invents a name.
@@ -88,7 +101,7 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `demoralizing_shout` | Demoralizing Shout | Direhowl | ability | rename |
 | `charge` | Charge | Onrush | ability | rename |
 | `rend` | Rend | Deep Gash | ability | rename |
-| `thunder_clap` | Thunder Clap | Quaking Slam | ability | rename |
+| `thunder_clap` | Thunder Clap | Quaking Blow | ability | rename |
 | `hamstring` | Hamstring | Hobbling Cut | ability | rename |
 | `bloodrage` | Bloodrage | Blood Toll | ability | rename |
 | `overpower` | Overpower | Redhand | ability | rename |
@@ -96,13 +109,13 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `slam` | Slam | Brute Swing | ability | rename |
 | `cleave` | Cleave | Reaping Arc | ability | rename |
 | `defensive_stance` | Defensive Stance | Guarded Stance | ability | rename |
-| `sunder_armor` | Sunder Armor | Armor Rend | ability | rename |
+| `sunder_armor` | Sunder Armor | Armor Shear | ability | rename |
 | `taunt` | Taunt | Goad | ability | rename |
 | `mortal_strike` | Mortal Strike | Maiming Strike | ability | rename |
 | `bloodthirst` | Bloodthirst | Bloodletting | ability | rename |
 | `shield_slam` | Shield Slam | Shieldcrack | ability | rename |
 | `whirlwind` | Whirlwind | Bladed Gyre | ability | rename |
-| `berserker_rage` | Berserker Rage | Seething Wrath | ability | rename |
+| `berserker_rage` | Berserker Rage | Seething Fury | ability | rename |
 
 ### Mage
 | id (frozen) | old | new (PROPOSED) | kind | flag |
@@ -116,6 +129,7 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `fire_blast` | Fire Blast | Cinderfall | ability | rename |
 | `arcane_missiles` | Arcane Missiles | Aether Darts | ability | rename |
 | `polymorph` | Polymorph | Bewitch | ability | rename |
+| polymorph critter word (description prose) | sheep | toad | prose | rename |
 | `frost_nova` | Frost Nova | Icebind | ability | rename |
 | `arcane_explosion` | Arcane Explosion | Aetherburst | ability | rename |
 | `scorch` | Scorch | Scald | ability | rename |
@@ -154,7 +168,7 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `holy_light` | Holy Light | Mending Light | ability | rename |
 | `devotion_aura` | Devotion Aura | Steadfast Aura | ability | rename |
 | `judgement` | Judgement | Verdict | ability | rename |
-| `blessing_of_might` | Blessing of Might | Oath of Vigor | ability | rename |
+| `blessing_of_might` | Blessing of Might | Oath of Iron | ability | rename |
 | `divine_protection` | Divine Protection | Ward of Faith | ability | rename |
 | `hammer_of_justice` | Hammer of Justice | Sundering Gavel | ability | rename |
 | `lay_on_hands` | Lay on Hands | Last Rite | ability | rename |
@@ -300,12 +314,12 @@ Kept original: mastery `arms` Sharpened Blades.
 | `war_toughness` | Toughness | Grit | talent | rename |
 | `war_cruelty` | Cruelty | Barbarity | talent | rename |
 | `war_imp_heroic_strike` | Improved Heroic Strike | Improved Reaver Strike | talent | pairing |
-| `war_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Slam | talent | pairing |
+| `war_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Blow | talent | pairing |
 | `war_deflection` | Deflection | Blade Turn | talent | rename |
 | `war_tactical_choice` | Tactical Mastery | Battle Doctrine | choice | rename |
 | `tc_anticipation` | Anticipation | Fair Warning | choice | rename |
 | `tc_bladed_armor` | Bladed Armor | Spiked Harness | choice | rename |
-| `war_berserker_rage` | Berserker Rage | Seething Wrath | talent | pairing |
+| `war_berserker_rage` | Berserker Rage | Seething Fury | talent | pairing |
 | `war_second_wind` | Second Wind | Deep Reserves | talent | rename |
 | `arms_imp_overpower` | Improved Overpower | Improved Redhand | talent | pairing |
 | `arms_deep_wounds` | Deep Wounds | Lingering Wounds | talent | rename |
@@ -325,8 +339,8 @@ Kept original: mastery `arms` Sharpened Blades.
 | `fury_imp_bloodthirst` | Improved Bloodthirst | Improved Bloodletting | talent | pairing |
 | `prot_toughness` | Shield Mastery | Shieldwright | talent | rename |
 | `prot_anticipation` | Anticipation | Fair Warning | talent | rename |
-| `prot_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Slam | talent | pairing |
-| `prot_imp_sunder` | Improved Sunder Armor | Improved Armor Rend | talent | pairing |
+| `prot_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Blow | talent | pairing |
+| `prot_imp_sunder` | Improved Sunder Armor | Improved Armor Shear | talent | pairing |
 | `pc_shield_spec` | Shield Specialization | Shieldbearer | choice | rename |
 | `pc_imp_taunt` | Improved Taunt | Improved Goad | choice | pairing |
 | `pc_last_stand` | Last Stand | Eleventh Hour | choice | rename |
