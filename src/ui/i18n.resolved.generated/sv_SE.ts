@@ -1385,11 +1385,11 @@ export const sv_SE: EnTranslations = {
         "name": "Spindlar",
         "desc": "Nätspinnare och giftiga lurande varelser som bygger bo på mörka, snåriga platser. Jägare kan tämja dem, precis som bestar."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocer",
         "desc": "Amfibiska träskbor som svärmar i grunden i högljudda, revirhävdande flockar."
       },
-      "kobold": {
+      "burrower": {
         "name": "Koboldar",
         "desc": "Ljushuvade grävare som plågar gruvor och hålor och hetsigt vaktar sin malm."
       },

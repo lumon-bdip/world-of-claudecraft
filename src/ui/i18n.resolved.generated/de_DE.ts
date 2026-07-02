@@ -1385,11 +1385,11 @@ export const de_DE: EnTranslations = {
         "name": "Spinnen",
         "desc": "Netzweber und giftige Lauerer, die in dunklen, verwucherten Orten nisten. Jäger können sie zähmen, genau wie Wildtiere."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocs",
         "desc": "Amphibische Moorbewohner, die in lärmenden, territorialen Rudeln das Seichte überschwemmen."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolde",
         "desc": "Kerzenköpfige Schaufler, die Minen und Höhlen verseuchen und ihr Erz erbittert verteidigen."
       },

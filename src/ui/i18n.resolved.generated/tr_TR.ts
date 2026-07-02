@@ -1385,11 +1385,11 @@ export const tr_TR: EnTranslations = {
         "name": "Örümcekler",
         "desc": "Karanlık, çapraşık yerlerde yuvalanan ağ örücüler ve zehirli pusucular. Avcılar onları, tıpkı yabani hayvanlar gibi evcilleştirebilir."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloclar",
         "desc": "Sığ suları gürültülü, bölgeci sürüler hâlinde saran amfibik bataklık sakinleri."
       },
-      "kobold": {
+      "burrower": {
         "name": "Koboldlar",
         "desc": "Madenleri ve oyukları istila eden, cevherlerini hırsla koruyan mum başlı kazıcılar."
       },

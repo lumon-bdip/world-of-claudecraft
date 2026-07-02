@@ -1385,11 +1385,11 @@ export const pl_PL: EnTranslations = {
         "name": "Pająki",
         "desc": "Tkacze sieci i jadowite czyhające stworzenia, które gnieżdżą się w ciemnych, splątanych miejscach. Łowcy mogą je oswajać, tak samo jak bestie."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloki",
         "desc": "Ziemnowodni mieszkańcy bagien, którzy zalewają płycizny w hałaśliwych, terytorialnych watahach."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobold",
         "desc": "Świecogłowi kopacze, którzy zarażają kopalnie i nory, zaciekle strzegąc swojej rudy."
       },

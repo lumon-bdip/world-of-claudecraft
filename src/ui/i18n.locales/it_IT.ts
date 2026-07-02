@@ -3665,12 +3665,12 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Banditi, cultisti e altri che hanno scelto il mestiere sbagliato. Combattono con tattica, non solo con i denti.',
   'guide.family.humanoid.name': 'Umanoidi',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Scavatori con la candela in testa che infestano miniere e cunicoli, difendendo ferocemente il loro minerale.',
-  'guide.family.kobold.name': 'Kobold',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobold',
+  'guide.family.mudfin.desc':
     'Abitanti anfibi della palude che brulicano nelle secche in branchi rumorosi e territoriali.',
-  'guide.family.murloc.name': 'Murloc',
+  'guide.family.mudfin.name': 'Murloc',
   'guide.family.ogre.desc':
     'Enormi, ottusi e pericolosi. Si accampano sui passi alti e colpiscono come una frana.',
   'guide.family.ogre.name': 'Ogre',

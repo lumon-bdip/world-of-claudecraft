@@ -440,9 +440,9 @@ export interface LootEntry {
 export type MobFamily =
   | 'beast'
   | 'humanoid'
-  | 'murloc'
+  | 'mudfin'
   | 'spider'
-  | 'kobold'
+  | 'burrower'
   | 'undead'
   | 'troll'
   | 'ogre'

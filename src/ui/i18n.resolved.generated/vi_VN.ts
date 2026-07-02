@@ -1385,11 +1385,11 @@ export const vi_VN: EnTranslations = {
         "name": "Nhện",
         "desc": "Những kẻ giăng tơ và rình rập độc địa làm tổ ở những nơi tối tăm, rậm rạp. Thợ Săn có thể thuần hóa chúng, giống như dã thú."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloc",
         "desc": "Cư dân đầm lầy lưỡng cư tràn ngập vùng nước nông trong những bầy ồn ào, giành lãnh thổ."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobold",
         "desc": "Những kẻ đào hang đầu mang nến tràn ngập các hầm mỏ và hang ổ, hung hãn bảo vệ quặng của chúng."
       },

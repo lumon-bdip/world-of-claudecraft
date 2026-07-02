@@ -3884,11 +3884,11 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.family.spider.name': 'Пауки',
   'guide.family.spider.desc':
     'Плетущие паутину и ядовитые твари, что гнездятся в тёмных, запутанных местах. Охотники могут приручать их так же, как зверей.',
-  'guide.family.murloc.name': 'Мурлоки',
-  'guide.family.murloc.desc':
+  'guide.family.mudfin.name': 'Мурлоки',
+  'guide.family.mudfin.desc':
     'Земноводные обитатели топей, что кишат на мелководье шумными, оберегающими свою территорию стаями.',
-  'guide.family.kobold.name': 'Кобольды',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.name': 'Кобольды',
+  'guide.family.burrower.desc':
     'Землекопы со свечками на головах, что наводняют шахты и норы, яростно охраняя свою руду.',
   'guide.family.humanoid.name': 'Гуманоиды',
   'guide.family.humanoid.desc':

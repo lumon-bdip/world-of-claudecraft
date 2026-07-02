@@ -3822,11 +3822,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.family.spider.name': 'クモ',
   'guide.family.spider.desc':
     '暗く入り組んだ場所に巣を張る、糸を操る毒持ちの待ち伏せ屋たち。ハンターは野獣と同じように手なずけることができます。',
-  'guide.family.murloc.name': 'マーロック',
-  'guide.family.murloc.desc':
+  'guide.family.mudfin.name': 'マーロック',
+  'guide.family.mudfin.desc':
     '浅瀬に群がる水陸両生の沼地の住人。騒がしく、縄張り意識の強い群れをなします。',
-  'guide.family.kobold.name': 'コボルド',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.name': 'コボルド',
+  'guide.family.burrower.desc':
     '頭にろうそくを掲げた採掘者たち。鉱山や巣穴にはびこり、自らの鉱石を必死に守ります。',
   'guide.family.humanoid.name': 'ヒューマノイド',
   'guide.family.humanoid.desc':

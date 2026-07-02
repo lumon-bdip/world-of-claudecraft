@@ -1385,11 +1385,11 @@ export const es_ES: EnTranslations = {
         "name": "Arañas",
         "desc": "Tejedoras de telarañas y acechadoras venenosas que anidan en lugares oscuros y enmarañados. Los Cazadores pueden domarlas, igual que a las bestias."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Múrlocs",
         "desc": "Habitantes anfibios de la ciénaga que pululan por los bajíos en bandadas ruidosas y territoriales."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolds",
         "desc": "Excavadores con velas en la cabeza que infestan minas y madrigueras, defendiendo con ferocidad su mineral."
       },

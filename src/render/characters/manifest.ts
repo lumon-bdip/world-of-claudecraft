@@ -881,9 +881,9 @@ const MOB_KEYS: Record<string, string> = {
 const FAMILY_KEYS: Record<string, string> = {
   beast: 'mob_wolf',
   humanoid: 'mob_bandit',
-  murloc: 'mob_murloc',
+  mudfin: 'mob_murloc',
   spider: 'mob_spider',
-  kobold: 'mob_kobold',
+  burrower: 'mob_kobold',
   undead: 'skel_minion',
   troll: 'mob_troll',
   ogre: 'mob_ogre',

@@ -1385,11 +1385,11 @@ export const it_IT: EnTranslations = {
         "name": "Ragni",
         "desc": "Tessitori di ragnatele e agguatatori velenosi che fanno il nido in luoghi bui e intricati. I cacciatori possono domarli, proprio come le bestie."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloc",
         "desc": "Abitanti anfibi della palude che brulicano nelle secche in branchi rumorosi e territoriali."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobold",
         "desc": "Scavatori con la candela in testa che infestano miniere e cunicoli, difendendo ferocemente il loro minerale."
       },

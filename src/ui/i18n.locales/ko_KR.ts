@@ -3826,11 +3826,11 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.family.spider.name': '거미',
   'guide.family.spider.desc':
     '어둡고 뒤엉킨 곳에 둥지를 트는 거미줄 짜는 자들과 독을 품은 잠복자들. 사냥꾼은 야수와 마찬가지로 이들을 길들일 수 있습니다.',
-  'guide.family.murloc.name': '멀록',
-  'guide.family.murloc.desc':
+  'guide.family.mudfin.name': '멀록',
+  'guide.family.mudfin.desc':
     '시끄럽고 영역 의식이 강한 무리를 이루어 얕은 물가에 떼지어 모이는 양서류 늪지 거주자들.',
-  'guide.family.kobold.name': '코볼트',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.name': '코볼트',
+  'guide.family.burrower.desc':
     '광산과 굴을 들끓게 하며 자기네 광석을 사납게 지키는, 머리에 양초를 단 굴착꾼들.',
   'guide.family.humanoid.name': '인간형',
   'guide.family.humanoid.desc':

@@ -2489,12 +2489,12 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Haydutlar, tarikatçılar ve yanlış işe bulaşmış diğerleri. Sadece dişle değil, taktikle savaşırlar.',
   'guide.family.humanoid.name': 'İnsansılar',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Madenleri ve oyukları istila eden, cevherlerini hırsla koruyan mum başlı kazıcılar.',
-  'guide.family.kobold.name': 'Koboldlar',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Koboldlar',
+  'guide.family.mudfin.desc':
     'Sığ suları gürültülü, bölgeci sürüler hâlinde saran amfibik bataklık sakinleri.',
-  'guide.family.murloc.name': 'Murloclar',
+  'guide.family.mudfin.name': 'Murloclar',
   'guide.family.ogre.desc':
     'Devasa, kıt akıllı ve tehlikeli. Yüksek geçitlere konaklar ve bir heyelan gibi vururlar.',
   'guide.family.ogre.name': 'Devler',

@@ -1385,11 +1385,11 @@ export const nl_NL: EnTranslations = {
         "name": "Spinnen",
         "desc": "Webspinners en giftige loerders die nestelen op donkere, verwarde plekken. Jagers kunnen ze temmen, net als beesten."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocs",
         "desc": "Amfibische moerasbewoners die in luidruchtige, territoriale roedels de ondiepten overspoelen."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolds",
         "desc": "Kaarskoppige gravers die mijnen en holen besmetten en hun erts fel bewaken."
       },

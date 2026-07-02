@@ -2539,12 +2539,12 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Bandieten, sekteleden en anderen die het verkeerde vak kozen. Ze vechten met tactiek, niet alleen met tanden.',
   'guide.family.humanoid.name': 'Mensachtigen',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Kaarskoppige gravers die mijnen en holen besmetten en hun erts fel bewaken.',
-  'guide.family.kobold.name': 'Kobolds',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobolds',
+  'guide.family.mudfin.desc':
     'Amfibische moerasbewoners die in luidruchtige, territoriale roedels de ondiepten overspoelen.',
-  'guide.family.murloc.name': 'Murlocs',
+  'guide.family.mudfin.name': 'Murlocs',
   'guide.family.ogre.desc':
     'Enorm, traag van geest en gevaarlijk. Ze kamperen in de hoge passen en slaan toe als een aardverschuiving.',
   'guide.family.ogre.name': 'Ogres',

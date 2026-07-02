@@ -1385,11 +1385,11 @@ export const fr_CA: EnTranslations = {
         "name": "Araignées",
         "desc": "Tisseuses de toiles et rôdeuses venimeuses qui nichent dans les recoins sombres et enchevêtrés. Les Chasseurs peuvent les apprivoiser, au même titre que les bêtes."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocs",
         "desc": "Habitants amphibies du marais qui pullulent dans les hauts-fonds en meutes bruyantes et territoriales."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolds",
         "desc": "Mineurs à tête de chandelle qui infestent mines et terriers, gardant farouchement leur minerai."
       },

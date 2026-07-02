@@ -1385,11 +1385,11 @@ export const id_ID: EnTranslations = {
         "name": "Laba-laba",
         "desc": "Pemintal jaring dan pengintai berbisa yang bersarang di tempat gelap dan kusut. Pemburu bisa menjinakkannya, sama seperti binatang buas."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloc",
         "desc": "Penghuni rawa amfibi yang menyerbu perairan dangkal dalam gerombolan berisik dan teritorial."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobold",
         "desc": "Penggali berkepala lilin yang menjangkiti tambang dan liang, menjaga bijih mereka dengan garang."
       },

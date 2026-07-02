@@ -2495,12 +2495,12 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Banditter, kultister og andre, der valgte det forkerte erhverv. De kæmper med taktik, ikke kun tænder.',
   'guide.family.humanoid.name': 'Humanoider',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Stearinhovedede gravere, der hærger miner og huler og voldsomt vogter deres malm.',
-  'guide.family.kobold.name': 'Kobolder',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobolder',
+  'guide.family.mudfin.desc':
     'Amfibiske sumpbeboere, der sværmer i det lave vand i larmende, territoriale flokke.',
-  'guide.family.murloc.name': 'Murlocer',
+  'guide.family.mudfin.name': 'Murlocer',
   'guide.family.ogre.desc':
     'Enorme, langsomme i opfattelsen og farlige. De slår lejr i de høje pas og rammer som et jordskred.',
   'guide.family.ogre.name': 'Ogrer',

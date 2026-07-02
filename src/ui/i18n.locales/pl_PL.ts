@@ -2508,12 +2508,12 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Bandyci, kultyści i inni, którzy obrali zły fach. Walczą taktyką, nie tylko kłami.',
   'guide.family.humanoid.name': 'Humanoidy',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Świecogłowi kopacze, którzy zarażają kopalnie i nory, zaciekle strzegąc swojej rudy.',
-  'guide.family.kobold.name': 'Kobold',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobold',
+  'guide.family.mudfin.desc':
     'Ziemnowodni mieszkańcy bagien, którzy zalewają płycizny w hałaśliwych, terytorialnych watahach.',
-  'guide.family.murloc.name': 'Murloki',
+  'guide.family.mudfin.name': 'Murloki',
   'guide.family.ogre.desc':
     'Ogromne, tępe i niebezpieczne. Obozują na wysokich przełęczach i uderzają jak lawina.',
   'guide.family.ogre.name': 'Ogry',

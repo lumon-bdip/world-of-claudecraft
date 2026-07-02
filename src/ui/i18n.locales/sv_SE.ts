@@ -2502,12 +2502,12 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Banditer, kultister och andra som tagit upp fel yrke. De slåss med taktik, inte bara tänder.',
   'guide.family.humanoid.name': 'Humanoider',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Ljushuvade grävare som plågar gruvor och hålor och hetsigt vaktar sin malm.',
-  'guide.family.kobold.name': 'Koboldar',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Koboldar',
+  'guide.family.mudfin.desc':
     'Amfibiska träskbor som svärmar i grunden i högljudda, revirhävdande flockar.',
-  'guide.family.murloc.name': 'Murlocer',
+  'guide.family.mudfin.name': 'Murlocer',
   'guide.family.ogre.desc':
     'Enorma, trögtänkta och farliga. De slår läger i de höga passen och slår till som ett jordskred.',
   'guide.family.ogre.name': 'Ogrer',

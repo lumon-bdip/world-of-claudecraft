@@ -1385,11 +1385,11 @@ export const da_DK: EnTranslations = {
         "name": "Edderkopper",
         "desc": "Spindlere og giftige lurere, der bygger rede på mørke, sammenfiltrede steder. Jægere kan tæmme dem, ligesom bæster."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocer",
         "desc": "Amfibiske sumpbeboere, der sværmer i det lave vand i larmende, territoriale flokke."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolder",
         "desc": "Stearinhovedede gravere, der hærger miner og huler og voldsomt vogter deres malm."
       },

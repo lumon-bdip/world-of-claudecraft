@@ -1385,11 +1385,11 @@ export const pt_BR: EnTranslations = {
         "name": "Aranhas",
         "desc": "Tecelões de teias e espreitadores venenosos que se aninham em lugares escuros e emaranhados. Caçadores podem domá-los, assim como as feras."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocs",
         "desc": "Habitantes anfíbios do pântano que enxameiam as águas rasas em bandos barulhentos e territoriais."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolds",
         "desc": "Escavadores com vela na cabeça que infestam minas e tocas, guardando seu minério com ferocidade."
       },

@@ -1453,7 +1453,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
     ]
   },
   {
-    "family": "murloc",
+    "family": "mudfin",
     "creatures": [
       {
         "name": "Mudfin Skulker",
@@ -1488,10 +1488,10 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
     ]
   },
   {
-    "family": "kobold",
+    "family": "burrower",
     "creatures": [
       {
-        "name": "Tunnel Rat Digger",
+        "name": "Deeprock Digger",
         "min": 4,
         "max": 6,
         "rare": false,

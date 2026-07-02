@@ -2520,12 +2520,12 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Cướp, tín đồ tà giáo, và những kẻ khác đã chọn sai nghề. Chúng chiến đấu bằng chiến thuật, không chỉ bằng nanh vuốt.',
   'guide.family.humanoid.name': 'Nhân Hình',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Những kẻ đào hang đầu mang nến tràn ngập các hầm mỏ và hang ổ, hung hãn bảo vệ quặng của chúng.',
-  'guide.family.kobold.name': 'Kobold',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobold',
+  'guide.family.mudfin.desc':
     'Cư dân đầm lầy lưỡng cư tràn ngập vùng nước nông trong những bầy ồn ào, giành lãnh thổ.',
-  'guide.family.murloc.name': 'Murloc',
+  'guide.family.mudfin.name': 'Murloc',
   'guide.family.ogre.desc':
     'Khổng lồ, chậm trí, và nguy hiểm. Chúng đóng trại nơi những con đèo cao và giáng đòn như một trận lở đất.',
   'guide.family.ogre.name': 'Ogre',

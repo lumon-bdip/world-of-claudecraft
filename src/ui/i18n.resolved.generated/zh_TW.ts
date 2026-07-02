@@ -1385,11 +1385,11 @@ export const zh_TW: EnTranslations = {
         "name": "蜘蛛",
         "desc": "在黑暗糾結之地築巢的織網者與毒蟲。獵人能像馴服野獸一樣馴服牠們。"
       },
-      "murloc": {
+      "mudfin": {
         "name": "魚人",
         "desc": "兩棲的沼澤居民，成群聚集於淺灘，喧鬧且強烈護衛地盤。"
       },
-      "kobold": {
+      "burrower": {
         "name": "狗頭人",
         "desc": "頭頂蠟燭的挖掘者，盤踞於礦坑與洞穴中，凶猛地守衛著礦石。"
       },
