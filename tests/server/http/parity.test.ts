@@ -1079,6 +1079,21 @@ describe('/api + /internal Phase 18b late-arrival dispatch parity (legacy flag v
     expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
   });
 
+  it('POST /api/auth/github/callback (wrong method on the migrated html page) delegates to the ladder 404, identical old-vs-new', async () => {
+    // Only GET is registered for the callback, so the registry resolves
+    // methodNotAllowed and the dispatcher DELEGATES; the exact-path ladder arm
+    // gates on GET, so a POST falls through to the terminal 404, byte-identical.
+    // At the Phase 25 ladder deletion this shape flips to the table 405 (the
+    // systemic planned405BeforeAuth framing; named in the state.md Phase 25
+    // carve-out at the 18b QA gate).
+    const { oldCap, newCap } = await captureBothModes(() =>
+      makeReq({ method: 'POST', url: '/api/auth/github/callback', body: {} }),
+    );
+    expect(oldCap.status).toBe(404);
+    expect(JSON.parse(oldCap.body as string)).toEqual({ error: 'unknown endpoint' });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
   it('POST /api/desktop-login/exchange with an invalid code is a db-free 401, identical old-vs-new', async () => {
     // consumeDesktopLoginCode rejects the malformed code shape against the
     // in-process Map (no db); both paths answer the legacy 401 prose the client

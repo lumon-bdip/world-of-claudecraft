@@ -516,8 +516,8 @@ describe('error-envelope contract', () => {
 // and no bearer is required (the callback carries no auth guard).
 // ---------------------------------------------------------------------------
 
-describe('unconfigured callback (feature off)', () => {
-  it('answers a 503 HTML bounce (not_configured) through the route chain, never a bearer 401', async () => {
+describe('unconfigured feature (503, feature off)', () => {
+  it('answers a 503 HTML bounce (not_configured) on the callback through the route chain, never a bearer 401', async () => {
     const r = await runRoute('GET', '/api/auth/github/callback', {
       url: '/api/auth/github/callback?code=abc&state=s',
     });
@@ -526,5 +526,20 @@ describe('unconfigured callback (feature off)', () => {
     expect(r.contentType).not.toContain('application/problem+json');
     expect(r.raw).toContain('not_configured');
     expect(r.status).not.toBe(401);
+  });
+
+  it('answers 503 { error: "GitHub integration is not configured" } on an authed start through the route chain', async () => {
+    // githubConfig() resolves null (the suite unsets both GITHUB_OAUTH_* keys), so
+    // handleGitHubStart answers its own handler-owned JSON 503 after the auth and
+    // rate guards pass, before minting any OAuth state. Same body as the legacy arm.
+    authedDb();
+    const r = await runRoute('POST', '/api/auth/github/start', {
+      headers: { authorization: BEARER },
+      body: {},
+    });
+    expect(r.reached).toBe(true);
+    expect(r.status).toBe(503);
+    expect(r.contentType).toBe('application/json');
+    expect(r.body).toEqual({ error: 'GitHub integration is not configured' });
   });
 });

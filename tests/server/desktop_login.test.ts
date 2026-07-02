@@ -292,6 +292,27 @@ describe('create: full-session scope fork', () => {
     expect(desktopLoginCodeCountForTest()).toBe(0);
   });
 
+  it('401s a well-formed but unknown/stale bearer (the resolver returns null) and mints no code', async () => {
+    // The guard's account-null branch, distinct from the missing-bearer 401 above:
+    // the bearer PARSES, so accountAndScopeForToken IS consulted and resolves null
+    // (a revoked or stale token). This replaced the pre-18b security.test.ts case
+    // 'create rejects an unknown or stale token with 401' when the core went
+    // post-auth; nothing else in the tree drives the shared guard's null branch.
+    const resolver = vi.fn(async () => null);
+    authedDb({ accountAndScopeForToken: resolver });
+    const r = await runRoute('POST', '/api/desktop-login/create', {
+      headers: { authorization: BEARER },
+      body: {},
+    });
+    expect(r.status).toBe(401);
+    expect(r.body).toEqual({ error: 'not authenticated' });
+    expect(r.reached).toBe(false);
+    // The resolver ran exactly once: this 401 is the account-null branch, not the
+    // missing-bearer short-circuit (where the resolver is never called).
+    expect(resolver).toHaveBeenCalledTimes(1);
+    expect(desktopLoginCodeCountForTest()).toBe(0);
+  });
+
   it('403s a READ-scope token { error: "this token is read-only" } and mints no code', async () => {
     // The scope escalation the fork closes: a read token used to mint a code the exchange
     // leg upgraded to a full session. The guard now rejects it before the handler.
@@ -402,13 +423,14 @@ describe('exchange through the route chain', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. The desktopLoginBodyValidationRemap deviation, new-path pin. exchange self-reads
+// 5. The desktopLoginBodyValidationRemap deviation, new-path pins. exchange self-reads
 // its body (no withBody); a malformed body rejects out of readBody into the withErrors
-// boundary, surfacing a 500 problem+json with an X-Request-Id. The legacy bare-return
-// arm's counterfactual is a request HANG, so this is the flag-gated reliability gain.
+// boundary, surfacing a 500 problem+json with an X-Request-Id, and an unexpected throw
+// out of create's db reads hits the same boundary. The legacy bare-return arms'
+// counterfactual is a request HANG, so this is the flag-gated reliability gain.
 // ---------------------------------------------------------------------------
 
-describe('desktopLoginBodyValidationRemap (malformed body)', () => {
+describe('desktopLoginBodyValidationRemap (the withErrors boundary)', () => {
   it('serializes invalid JSON on exchange as a 500 problem+json with an X-Request-Id (never a hang)', async () => {
     // A plain Error('bad json') from readBody is not a SyntaxError/HttpError/decode-failure,
     // so toAppError maps it to the catch-all 500 internal.error, serialized problem+json for
@@ -420,6 +442,28 @@ describe('desktopLoginBodyValidationRemap (malformed body)', () => {
     expect(r.contentType).toBe('application/problem+json');
     expect(bodyRecord(r.body).code).toBe('internal.error');
     expect(r.headers['x-request-id']).toBeDefined();
+    errSpy.mockRestore();
+  });
+
+  it('serializes an unexpected throw on create (a rejecting db read) as a 500 problem+json, minting no code', async () => {
+    // The create half of the same withErrors boundary: the guard passes, then the
+    // core's accountById rejects (a Postgres error). The legacy bare-return arm's
+    // counterfactual is the same HANG class documented on the deviation.
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    authedDb({
+      accountById: async () => {
+        throw new Error('pg exploded');
+      },
+    });
+    const r = await runRoute('POST', '/api/desktop-login/create', {
+      headers: { authorization: BEARER },
+      body: {},
+    });
+    expect(r.status).toBe(500);
+    expect(r.contentType).toBe('application/problem+json');
+    expect(bodyRecord(r.body).code).toBe('internal.error');
+    expect(r.headers['x-request-id']).toBeDefined();
+    expect(desktopLoginCodeCountForTest()).toBe(0);
     errSpy.mockRestore();
   });
 });
