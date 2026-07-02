@@ -572,6 +572,7 @@ export interface ResolvedAbility {
   effects: AbilityEffect[];
   threatFlat: number; // classic bonus threat on a successful use
   threatMult: number; // classic multiplier on this ability's damage-threat
+  castWhileMoving?: boolean; // talent-granted mobility (def.castWhileMoving covers baseline)
 }
 
 export interface RewardCounters {
@@ -2829,7 +2830,13 @@ export class Sim {
       wishZ = 0,
       wishSpeed = 0;
     if (moving) {
-      if (p.castingAbility) this.cancelCast(p);
+      if (p.castingAbility) {
+        // A mobile cast (def flag, or talent-granted via the resolved ability)
+        // survives its caster's movement; everything else breaks, fishing included.
+        const casting = this.resolvedAbility(p.castingAbility, p.id);
+        const mobile = casting != null && (casting.def.castWhileMoving || casting.castWhileMoving);
+        if (!mobile) this.cancelCast(p);
+      }
       const len = Math.hypot(mx, mz);
       mx /= len;
       mz /= len;
@@ -3053,12 +3060,18 @@ export class Sim {
     pushbackCastImpl(p);
   }
 
-  castAbilityBySlot(slot: number, pid?: number): void {
-    castAbilityBySlotImpl(this.ctx, slot, pid);
+  castAbilityBySlot(slot: number, pid?: number, aim?: { x: number; z: number }): void {
+    castAbilityBySlotImpl(this.ctx, slot, pid, aim);
   }
 
-  castAbility(abilityId: string, pid?: number): void {
-    castAbilityImpl(this.ctx, abilityId, pid);
+  castAbility(abilityId: string, pid?: number, aim?: { x: number; z: number }): void {
+    castAbilityImpl(this.ctx, abilityId, pid, aim);
+  }
+
+  // IWorld ground-targeted cast: offline, the local player (pid undefined) casts
+  // the ability aimed at the world point (x, z).
+  castAbilityAt(abilityId: string, aim: { x: number; z: number }): void {
+    castAbilityImpl(this.ctx, abilityId, undefined, aim);
   }
 
   // Voluntarily cancel one of a player's own helpful auras (the HUD right-click-a-buff
@@ -3245,9 +3258,11 @@ export class Sim {
         ? PVP_POLYMORPH_DR_RESET
         : category === 'fear'
           ? PVP_FEAR_DR_RESET
-          : isStunDrCategory(category)
+          : category === 'lockout'
             ? PVP_STUN_DR_RESET
-            : PVP_ROOT_DR_RESET;
+            : isStunDrCategory(category)
+              ? PVP_STUN_DR_RESET
+              : PVP_ROOT_DR_RESET;
     if (category === 'polymorph') {
       target.ccDr.set(category, { stage: stage + 1, resetAt: this.time + reset });
       return PVP_POLYMORPH_DR_DURATIONS[Math.min(stage, PVP_POLYMORPH_DR_DURATIONS.length - 1)];
