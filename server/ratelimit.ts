@@ -74,6 +74,29 @@ export function rateLimitTier2Store(): RateLimitStore | null {
   return tier2Store;
 }
 
+// Pure outcome math shared by EVERY window limiter: `count` attempts recorded
+// against `limit` in a window that clears at `windowRefMs + windowMs`
+// (`windowRefMs` is the oldest in-window attempt for a sliding window, the
+// window start for the pg fixed window). One helper so its three consumers
+// (slidingWindowOutcome below, rateLimitedPerfReport in perf_report.ts, and the
+// pg tier-2 store in ratelimit_db.ts) can never drift apart. authThrottled
+// deliberately does NOT use it: its ceiling check is `count < limit` (checking
+// is read-only, the failure is recorded separately) and its resetSeconds is 0
+// when no failure is in the window.
+export function windowedRateLimitOutcome(
+  count: number,
+  limit: number,
+  windowRefMs: number,
+  windowMs: number,
+  now: number,
+): RateLimitOutcome {
+  return {
+    allowed: count <= limit,
+    remaining: Math.max(0, limit - count),
+    resetSeconds: Math.max(0, Math.ceil((windowRefMs + windowMs - now) / 1000)),
+  };
+}
+
 // Build the outcome for a record-then-judge sliding-window limiter from the
 // updated timestamp list (already pruned to the window and with `now` pushed).
 // The list always holds at least `now`, so updated[0] is the oldest in-window
@@ -83,19 +106,19 @@ function slidingWindowOutcome(
   maxPerMinute: number,
   now: number,
 ): RateLimitOutcome {
-  const count = updated.length;
-  return {
-    allowed: count <= maxPerMinute,
-    remaining: Math.max(0, maxPerMinute - count),
-    resetSeconds: Math.max(0, Math.ceil((updated[0] + WINDOW_MS - now) / 1000)),
-  };
+  return windowedRateLimitOutcome(updated.length, maxPerMinute, updated[0], WINDOW_MS, now);
 }
 
 // Merge two fused-bucket (IP AND account) outcomes into one, mirroring the old
 // `ipLimited || accountLimited` boolean OR: a fused request is allowed only if
 // BOTH buckets allow, remaining is the tighter (min) of the two, and resetSeconds
 // the longer (max) wait so a retry clears whichever bucket is more backed up.
-function mergeFusedOutcomes(ip: RateLimitOutcome, account: RateLimitOutcome): RateLimitOutcome {
+// Exported because the two-tier resolver's tier-2 merge (server/http/middleware/
+// rate_limit.ts) applies the SAME rule to its pg bucket outcomes.
+export function mergeFusedOutcomes(
+  ip: RateLimitOutcome,
+  account: RateLimitOutcome,
+): RateLimitOutcome {
   return {
     allowed: ip.allowed && account.allowed,
     remaining: Math.min(ip.remaining, account.remaining),

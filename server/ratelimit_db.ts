@@ -16,17 +16,18 @@ import type { Pool } from 'pg';
 import type { MetricSink } from './http/middleware/metric_sink';
 import { noopMetricSink } from './http/middleware/metric_sink';
 import type { RateLimitOutcome, RateLimitStore } from './http/types';
-import { WINDOW_MS } from './ratelimit';
+import { WINDOW_MS, windowedRateLimitOutcome } from './ratelimit';
 
 // One fixed-window counter row per (policy, key). window_start is the epoch-ms
 // start of the current window (a multiple of WINDOW_MS), stored as BIGINT so it
 // survives past 2^31 ms; count is the attempts recorded in that window.
 //
-// Pruning idle rows is DELIBERATELY deferred: the table is bounded by the
-// policy x key cardinality, and a stale window is simply overwritten by the
-// UPSERT on the next hit for that key (the CASE below resets count to 1 when the
-// stored window is older than the incoming one). A future sweep can reclaim rows
-// for keys that never hit again, but nothing here depends on that.
+// Between boots the table is bounded by the policy x key cardinality, and a
+// stale window is simply overwritten by the UPSERT on the next hit for that key
+// (the CASE below resets count to 1 when the stored window is older than the
+// incoming one). Rows for keys that never hit again are reclaimed by
+// RATELIMIT_PRUNE_SQL below, which ensureSchema (server/db.ts) runs at every
+// realm boot; nothing in the hot path depends on that sweep.
 export const RATELIMIT_SCHEMA = `
 CREATE TABLE IF NOT EXISTS rate_limits (
   policy TEXT NOT NULL,
@@ -115,10 +116,13 @@ class PgRateLimitStore implements RateLimitStore {
     const row = res.rows[0];
     const count = Number(row.count);
     const returnedWindowStartMs = Number(row.window_start);
-
-    const allowed = count <= maxPerMinute;
-    const remaining = Math.max(0, maxPerMinute - count);
-    const resetSeconds = Math.max(0, Math.ceil((returnedWindowStartMs + WINDOW_MS - now) / 1000));
+    const outcome = windowedRateLimitOutcome(
+      count,
+      maxPerMinute,
+      returnedWindowStartMs,
+      WINDOW_MS,
+      now,
+    );
 
     // Fire the pg-write counter once per UPSERT. MetricEvent is HTTP-shaped (the
     // Phase 8 seam): `route` carries the counter name, and `status` encodes the
@@ -127,11 +131,11 @@ class PgRateLimitStore implements RateLimitStore {
     this.metrics.record({
       route: 'ratelimit.pg.hit',
       method: 'PG',
-      status: allowed ? 200 : 429,
+      status: outcome.allowed ? 200 : 429,
       durationMs: 0,
     });
 
-    return { allowed, remaining, resetSeconds };
+    return outcome;
   }
 
   async reset(): Promise<void> {

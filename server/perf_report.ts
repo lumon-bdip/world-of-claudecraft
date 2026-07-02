@@ -7,7 +7,7 @@ import {
 } from './db';
 import type { RateLimitOutcome } from './http/types';
 import { json, readBody } from './http_util';
-import { rateLimitNow, requestIp } from './ratelimit';
+import { rateLimitNow, requestIp, windowedRateLimitOutcome } from './ratelimit';
 import { REALM } from './realm';
 
 const PERF_REPORT_SCHEMA_VERSION = 1;
@@ -51,12 +51,13 @@ function rateLimitedPerfReport(req: http.IncomingMessage): RateLimitOutcome {
     }
   }
 
-  const count = updated.length;
-  return {
-    allowed: count <= PERF_REPORT_MAX_PER_MINUTE,
-    remaining: Math.max(0, PERF_REPORT_MAX_PER_MINUTE - count),
-    resetSeconds: Math.max(0, Math.ceil((updated[0] + PERF_REPORT_WINDOW_MS - now) / 1000)),
-  };
+  return windowedRateLimitOutcome(
+    updated.length,
+    PERF_REPORT_MAX_PER_MINUTE,
+    updated[0],
+    PERF_REPORT_WINDOW_MS,
+    now,
+  );
 }
 
 function throttleKey(req: http.IncomingMessage, sessionId: string): string {
