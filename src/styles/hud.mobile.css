@@ -334,7 +334,7 @@
     transform: translateX(-50%);
     display: none;
     width: min(560px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));
-    padding: 10px;
+    --window-pad: 10px;
     pointer-events: auto;
     z-index: 100;
     border: 2px solid #5b4618;
@@ -344,15 +344,11 @@
       0 8px 28px #000d,
       inset 0 1px 0 #ffffff12;
     /* Top-centred modal: cap to the safe viewport so short landscape phones can
-       scroll the full menu without hiding rows behind controls or browser chrome. */
+       scroll the full menu without hiding rows behind controls or browser chrome.
+       No --ui-scale division: this drawer is a <body>-level window OUTSIDE the
+       zoomed #ui (see the --window-scale note in layout.css). */
     max-width: calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right));
-    max-height: calc(
-      var(--app-vh) /
-      var(--ui-scale, 1) -
-      32px -
-      env(safe-area-inset-top) -
-      env(safe-area-inset-bottom)
-    );
+    max-height: calc(var(--app-vh) - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
@@ -362,7 +358,10 @@
     flex-direction: column;
   }
   body.mobile-touch #mobile-extra-controls .panel-title {
-    min-height: 32px;
+    /* 48px, not the old 32px: the close button is a 40x40 absolute-pinned touch
+       target now (it no longer props the header height from the flex flow), so
+       the header itself must be at least as tall as the target. */
+    min-height: 48px;
     margin-bottom: 8px;
     padding-bottom: 6px;
     cursor: move;
@@ -909,10 +908,10 @@
   }
   /* The mobile close button is a 40x40 touch target pinned in the header's
      top-right corner (absolute, see the .window > .panel-title shell rule in
-     layout.css), so reserve symmetric room for it: the centred title must never
-     slide under it, and the header must be at least as tall as the target. */
+     layout.css), so reserve inline-end room for it: the title must never slide
+     under it, and the header must be at least as tall as the target. */
   body.mobile-touch .window > .panel-title {
-    padding-inline: 52px;
+    padding-inline: var(--window-pad) 52px;
     min-height: 48px;
   }
   body.mobile-touch #leaderboard-window,
@@ -1651,11 +1650,13 @@
       /* var(--app-vh), not dvh: viewport units resolve against the initial
          containing block, which can disagree with the JS-synced app viewport
          (see the #mobile-controls note above); --app-vh is this HUD's one
-         source of viewport height. */
+         source of viewport height. Divided by --ui-scale because #community-hud
+         lives INSIDE the zoomed #ui (the layout.css rule of thumb: divide
+         inside #ui, raw outside). */
       top: clamp(
         calc(max(8px, env(safe-area-inset-top)) + 210px),
-        calc(var(--app-vh) * 0.44),
-        calc(var(--app-vh) - 230px)
+        calc(var(--app-vh) * 0.44 / var(--ui-scale, 1)),
+        calc(var(--app-vh) / var(--ui-scale, 1) - 230px)
       );
       right: max(8px, env(safe-area-inset-right));
       bottom: auto;
@@ -1807,10 +1808,10 @@
       left: 50%;
       top: max(10px, env(safe-area-inset-top));
       bottom: auto;
-      padding: 8px;
+      --window-pad: 8px;
+      /* No --ui-scale division: body-level window outside the zoomed #ui. */
       max-height: calc(
-        var(--app-vh) /
-        var(--ui-scale, 1) -
+        var(--app-vh) -
         28px -
         env(safe-area-inset-top) -
         env(safe-area-inset-bottom)

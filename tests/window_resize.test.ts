@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { isResizableWindow } from '../src/ui/window_resize';
+import { isResizableWindow, markResizableWindow } from '../src/ui/window_resize';
 import {
   isInResizeCorner,
   RESIZE_CORNER_BAND,
   RESIZE_CORNER_BAND_TOUCH,
+  RESIZE_ENGAGE_SLOP,
   resizedWindowSize,
   WINDOW_MIN_HEIGHT,
   WINDOW_MIN_WIDTH,
@@ -104,5 +105,31 @@ describe('isResizableWindow', () => {
     for (const id of ['char-window', 'quest-log-window', 'market-window', 'bags', 'spellbook']) {
       expect(isResizableWindow(el(id))).toBe(true);
     }
+  });
+});
+
+describe('markResizableWindow', () => {
+  const fake = (id: string) => {
+    const added: string[] = [];
+    return {
+      el: { id, classList: { add: (c: string) => added.push(c) } } as unknown as HTMLElement,
+      added,
+    };
+  };
+
+  it('stamps the grip class on resizable windows only', () => {
+    const win = fake('char-window');
+    markResizableWindow(win.el);
+    expect(win.added).toEqual(['window-resizable']);
+    const excluded = fake('map-window');
+    markResizableWindow(excluded.el);
+    expect(excluded.added).toEqual([]);
+  });
+});
+
+describe('RESIZE_ENGAGE_SLOP', () => {
+  it('is a small positive travel threshold (a tap must not resize)', () => {
+    expect(RESIZE_ENGAGE_SLOP).toBeGreaterThan(0);
+    expect(RESIZE_ENGAGE_SLOP).toBeLessThan(RESIZE_CORNER_BAND);
   });
 });

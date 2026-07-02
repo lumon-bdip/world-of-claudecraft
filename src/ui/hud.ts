@@ -300,7 +300,7 @@ import {
   wocBalanceVerified,
 } from './wallet_balance';
 import { makeWindowFocus } from './window_focus';
-import { installWindowResize } from './window_resize';
+import { installWindowResize, markResizableWindow } from './window_resize';
 import { formatXp, xpBarView } from './xp_bar';
 import { XpBarPainter } from './xp_bar_painter';
 
@@ -1417,6 +1417,9 @@ export class Hud {
         attributes: true,
         attributeFilter: ['class', 'style', 'hidden'],
       });
+      // Piggyback the resize-grip stamp on this one observer (window_resize.ts
+      // deliberately runs no body-wide observer of its own).
+      markResizableWindow(el);
     };
     this.windowObserver = new MutationObserver((mutations) => {
       for (const m of mutations) {

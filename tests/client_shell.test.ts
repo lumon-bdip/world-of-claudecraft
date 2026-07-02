@@ -1109,13 +1109,13 @@ describe('client HTML shell', () => {
       'max-width: calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right));',
     );
     expect(hudMobileCss).toContain(
-      'max-height: calc(\n      var(--app-vh) /\n      var(--ui-scale, 1) -\n      32px -\n      env(safe-area-inset-top) -\n      env(safe-area-inset-bottom)\n    );',
+      'max-height: calc(var(--app-vh) - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch.mobile-more-open #mobile-extra-controls {\n    display: flex;\n    flex-direction: column;\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-extra-controls .panel-title {\n    min-height: 32px;',
+      'min-height: 48px;\n    margin-bottom: 8px;\n    padding-bottom: 6px;\n    cursor: move;',
     );
     expect(hudMobileCss).toContain(
       'width: min(560px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));',
@@ -1411,7 +1411,7 @@ describe('client HTML shell', () => {
       'body.mobile-touch.mobile-left-handed #mobile-extra-controls {\n    left: 50%;\n    right: auto;',
     );
     expect(hudMobileCss).toContain(
-      'max-height: calc(\n        var(--app-vh) /\n        var(--ui-scale, 1) -\n        28px -\n        env(safe-area-inset-top) -\n        env(safe-area-inset-bottom)\n      );',
+      'max-height: calc(\n        var(--app-vh) -\n        28px -\n        env(safe-area-inset-top) -\n        env(safe-area-inset-bottom)\n      );',
     );
   });
 

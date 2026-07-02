@@ -18,6 +18,9 @@ export const WINDOW_MIN_WIDTH = 220;
 export const WINDOW_MIN_HEIGHT = 140;
 /** Viewport edge margin a resize keeps clear, author px (matches the drag clamp). */
 export const WINDOW_RESIZE_MARGIN = 8;
+/** Pointer travel (visual px) before a corner press becomes a resize: a bare
+ *  tap or click in the band must leave the window completely untouched. */
+export const RESIZE_ENGAGE_SLOP = 4;
 
 export interface CornerRect {
   right: number;
