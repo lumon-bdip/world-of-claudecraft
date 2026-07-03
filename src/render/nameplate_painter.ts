@@ -39,6 +39,7 @@ import { type IWorld, OVERHEAD_EMOTES } from '../world_api';
 // Staff/special Discord role -> localized nameplate tag label key.
 const DISCORD_ROLE_TAG_KEYS: Record<string, TranslationKey> = {
   levyst: 'hudChrome.discord.roleTag.levyst',
+  admin: 'hudChrome.discord.roleTag.admin',
   devs: 'hudChrome.discord.roleTag.devs',
   mods: 'hudChrome.discord.roleTag.mods',
   artists: 'hudChrome.discord.roleTag.artists',
@@ -284,6 +285,9 @@ export class NameplatePainter {
               name: mobName,
             });
         const hpDisplay = e.dead ? 'none' : '';
+        // Quest-target marking lives in the mob's hover tooltip (Questie-style
+        // quest + progress lines), not as an overhead glyph: the marker slot
+        // stays the classic lootable '$' / elite diamond pair.
         const marker = e.lootable ? '$' : elite && !e.dead ? '◆' : '';
         // classic "dragon frame" cue: gold bar frame for elites, red for bosses (live mobs only)
         const frame = e.dead ? '' : boss ? 'boss' : elite ? 'elite' : '';
