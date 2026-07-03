@@ -176,6 +176,17 @@ describe('withOriginCheck: pass-through carve-outs (never gated, both modes)', (
       expect(records).toEqual([]);
     });
 
+    it(`never gates a HEAD carrying a cross-site Origin in ${label} mode`, async () => {
+      const ctx = makeCtx({ method: 'HEAD', origin: 'https://evil.example' });
+      const { records, ran } = await runDirect({
+        route: makeRoute({ method: 'GET' }),
+        ctx,
+        env,
+      });
+      expect(ran).toBe(true);
+      expect(records).toEqual([]);
+    });
+
     it(`never gates a non-'api' (oauth) POST carrying a cross-site Origin in ${label} mode`, async () => {
       const ctx = makeCtx({ origin: 'https://evil.example' });
       const { records, ran } = await runDirect({

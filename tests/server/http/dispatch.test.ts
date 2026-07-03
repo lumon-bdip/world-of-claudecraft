@@ -216,6 +216,72 @@ describe('createApiDispatcher', () => {
     // The same 500-no-leak contract holds on the HTML surface.
     expect(res.body).not.toContain('boom-secret-detail');
   });
+
+  it('mounts the Phase 21 gates on the REAL onion: an enforce-mode cross-site, wrong-type POST is rejected 403 ahead of route-local middleware (the origin gate outranks the 415)', async () => {
+    // The onion_order.test.ts stack is a hand-built replica; this drives the real
+    // createApiDispatcher mount. The gates are mounted with no opts, so they read
+    // their enforce flags from process.env PER REQUEST: stubbing the env flips the
+    // real mount, and the un-injected gates fall back to their console.warn sinks.
+    vi.stubEnv('API_ORIGIN_CHECK_ENFORCE', '1');
+    vi.stubEnv('API_CONTENT_TYPE_ENFORCE', '1');
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      let handlerCalls = 0;
+      let routeMiddlewareCalls = 0;
+      const route: RouteDef = {
+        method: 'POST',
+        path: '/api/things/:id',
+        surface: 'api',
+        middleware: [
+          async (_ctx, next) => {
+            routeMiddlewareCalls++;
+            await next();
+          },
+        ],
+        handler: async () => {
+          handlerCalls++;
+        },
+      };
+      const dispatcher = createApiDispatcher({
+        registry: registryReturning({
+          kind: 'matched',
+          route,
+          params: { id: '42' },
+          head: false,
+        }),
+        delegate: () => {},
+      });
+      const res = new FakeRes();
+      dispatcher(
+        makeReq({
+          method: 'POST',
+          url: '/api/things/42',
+          headers: {
+            origin: 'https://evil.example',
+            host: 'game.example',
+            'content-type': 'text/plain',
+          },
+        }),
+        res as unknown as http.ServerResponse,
+      );
+      await flush(res);
+
+      // 403 origin.cross_site, NOT 415: the origin gate is mounted first, so a
+      // request failing both gates resolves on the origin arm.
+      expect(res.statusCode).toBe(403);
+      expect(JSON.parse(res.body).code).toBe('origin.cross_site');
+      // Exactly ONE sink line fired (the origin gate's): the 415 gate never got
+      // to record, proving the mount ORDER, not just presence.
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).toBe('[http] cross-site origin on mutating /api request');
+      // Both gates sit AHEAD of the route-local middleware and the handler.
+      expect(routeMiddlewareCalls).toBe(0);
+      expect(handlerCalls).toBe(0);
+    } finally {
+      vi.unstubAllEnvs();
+      warn.mockRestore();
+    }
+  });
 });
 
 describe('selectApiEntry', () => {

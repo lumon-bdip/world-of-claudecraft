@@ -159,6 +159,17 @@ describe('withContentType: never gates a non-mutating method', () => {
       expect(state.ran).toBe(true);
       expect(records).toHaveLength(0);
     });
+
+    it(`lets a HEAD with text/plain through with zero records in ${label} mode`, async () => {
+      const { records, state } = await runGate({
+        route: makeRoute({ method: 'GET' }),
+        contentType: 'text/plain',
+        method: 'HEAD',
+        env,
+      });
+      expect(state.ran).toBe(true);
+      expect(records).toHaveLength(0);
+    });
   }
 });
 
@@ -239,6 +250,28 @@ describe('withContentType: enforce mode', () => {
     ])(ctx);
     expect(resOf(ctx).statusCode).toBe(200);
     expect(state.ran).toBe(true);
+    expect(records).toHaveLength(0);
+  });
+
+  // The load-bearing native-client allowance MUST hold under enforce too: a gate
+  // refactor that moved the absent/empty guard below the throw would 415 every
+  // client that omits Content-Type the moment the flag flips, and only these two
+  // cases would catch it (the log-only arms above cannot).
+  it('passes an ABSENT Content-Type with ZERO records even in enforce mode', async () => {
+    const { records, state, res } = await runGate({ route: makeRoute(), env: ENFORCE_ENV });
+    expect(state.ran).toBe(true);
+    expect(res.statusCode).toBe(200);
+    expect(records).toHaveLength(0);
+  });
+
+  it('passes an EMPTY Content-Type with ZERO records even in enforce mode', async () => {
+    const { records, state, res } = await runGate({
+      route: makeRoute(),
+      contentType: '   ',
+      env: ENFORCE_ENV,
+    });
+    expect(state.ran).toBe(true);
+    expect(res.statusCode).toBe(200);
     expect(records).toHaveLength(0);
   });
 });
