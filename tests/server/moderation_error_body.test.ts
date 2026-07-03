@@ -7,7 +7,10 @@
 // and that the prose is passed through byte-for-byte.
 
 import { describe, expect, it } from 'vitest';
+import { requireAccount } from '../../server/http/middleware/require_account';
 import { moderationErrorBody } from '../../server/http_util';
+import { fakeCtx, nextGuard } from './helpers/fake_ctx';
+import { makeReq } from './helpers/fake_http';
 
 const SUSPENDED_ISO = '2026-08-01T00:00:00.000Z';
 
@@ -94,4 +97,72 @@ describe('moderationErrorBody', () => {
     expect(body.error).toBe('literal PROSE stays 100% unchanged');
     expect('date' in body).toBe(false);
   });
+});
+
+// The header comment on moderationErrorBody promises it mirrors the problem+json
+// requireAccount mapping EXACTLY; each path is literal-pinned above and in
+// tests/server/http/require_account.test.ts, but nothing cross-checked the two, so an
+// edit to either mapping could drift silently past both suites. This drives the SAME
+// moderation status through BOTH emitters and asserts they derive the same code and
+// the same date param.
+describe('moderationErrorBody mirrors the require_account problem+json mapping', () => {
+  const VALID_TOKEN = 'a'.repeat(64);
+  const LOCKED_BASE = {
+    locked: true,
+    banned: false,
+    suspendedUntil: null as string | null,
+    deactivated: false,
+    reason: '',
+    message: 'locked',
+    chatMutedUntil: null,
+    chatStrikes: 0,
+  };
+  const MIRROR_CASES = [
+    {
+      label: 'banned account',
+      status: { ...LOCKED_BASE, banned: true, message: 'This account has been banned.' },
+    },
+    {
+      label: 'timed suspension',
+      status: { ...LOCKED_BASE, suspendedUntil: SUSPENDED_ISO, message: 'suspended until ...' },
+    },
+    {
+      label: 'self-deactivation',
+      status: {
+        ...LOCKED_BASE,
+        deactivated: true,
+        message: 'This account has been deactivated.',
+      },
+    },
+    {
+      label: 'locked-but-unclassified fallback',
+      status: { ...LOCKED_BASE, message: 'this account is suspended.' },
+    },
+  ];
+
+  for (const { label, status } of MIRROR_CASES) {
+    it(`derives the same code and date as requireAccount for a ${label}`, async () => {
+      const legacy = moderationErrorBody(status);
+      const middleware = requireAccount({
+        scope: 'full',
+        lookupToken: async () => ({ accountId: 1, scope: 'full' }),
+        moderationStatus: async () => status,
+      });
+      const ctx = fakeCtx({
+        req: makeReq({ headers: { authorization: `Bearer ${VALID_TOKEN}` } }),
+      });
+      let thrown: { status?: number; code?: string; params?: Record<string, unknown> } | undefined;
+      try {
+        await middleware(ctx, nextGuard());
+      } catch (err) {
+        thrown = err as typeof thrown;
+      }
+      expect(thrown, 'requireAccount must reject a locked account').toBeDefined();
+      expect(thrown?.status).toBe(403);
+      expect(thrown?.code).toBe(legacy.code);
+      // Date parity holds in BOTH directions: the timed suspension carries the same
+      // machine ISO date on each path, and every other shape carries none on either.
+      expect(thrown?.params?.date).toBe(legacy.date);
+    });
+  }
 });

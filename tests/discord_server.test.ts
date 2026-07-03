@@ -290,7 +290,7 @@ describe('DELETE /api/discord (unlink)', () => {
     await handleDiscordUnlink(makeReq(), res, 1); // no password in the body
     const { status, data } = parse(res);
     expect(status).toBe(400);
-    expect(data.error).toBe('password_required');
+    expect(data).toEqual({ error: 'password_required', code: 'discord.password_required' });
     // The link must NOT be removed when the account would be stranded.
     expect(
       dbMock.query.mock.calls.some((c) => String(c[0]).includes('DELETE FROM discord_links')),
@@ -320,20 +320,36 @@ describe('DELETE /api/discord (unlink)', () => {
       dbMock.query.mock.calls.some((c) => String(c[0]).includes('DELETE FROM discord_links')),
     ).toBe(false);
   });
+
+  it('404s with the account.not_found code when the account row is gone', async () => {
+    accountByIdRows = []; // the account vanished mid-session
+    const res = makeRes();
+    await handleDiscordUnlink(makeReq(), res, 1);
+    expect(parse(res)).toEqual({
+      status: 404,
+      data: { error: 'account not found', code: 'account.not_found' },
+    });
+  });
 });
 
 describe('POST /api/discord/swag/claim', () => {
   it('400s on an unknown swag id', async () => {
     const res = makeRes();
     await handleSwagClaim(makeReq({ body: { swagId: 'nope' } }), res, 1, noopGrant);
-    expect(parse(res).status).toBe(400);
+    expect(parse(res)).toEqual({
+      status: 400,
+      data: { error: 'unknown swag item', code: 'discord.unknown_swag' },
+    });
   });
 
   it('403s when the account has no linked Discord', async () => {
     linkRow = []; // not linked
     const res = makeRes();
     await handleSwagClaim(makeReq({ body: { swagId: 'title_discordian' } }), res, 1, noopGrant);
-    expect(parse(res).status).toBe(403);
+    expect(parse(res)).toEqual({
+      status: 403,
+      data: { error: 'link your Discord account first', code: 'discord.link_required' },
+    });
   });
 
   it('409s a tier-gated claim before spending anything', async () => {
@@ -353,11 +369,54 @@ describe('POST /api/discord/swag/claim', () => {
     await handleSwagClaim(makeReq({ body: { swagId: 'chroma_blurple' } }), res, 1, noopGrant);
     const { status, data } = parse(res);
     expect(status).toBe(409);
-    expect(data.error).toBe('tier');
+    expect(data).toEqual({ error: 'tier', code: 'discord.swag_tier' });
     // No claim insert attempted on a gated request.
     expect(
       dbMock.query.mock.calls.some((c) => String(c[0]).includes('INSERT INTO swag_claims')),
     ).toBe(false);
+  });
+
+  it('409s a points-gated claim with the swag_points code', async () => {
+    linkRow = [
+      {
+        account_id: 1,
+        discord_user_id: '8',
+        discord_username: 'm',
+        discord_avatar: null,
+        guild_member: false,
+        linked_at: 'now',
+      },
+    ];
+    // Tier 5 via lifetime points, but the spendable balance is below the chroma cost.
+    rewardRows = [{ points: '100', lifetime_points: '5000' }];
+    swagClaimRows = [];
+    const res = makeRes();
+    await handleSwagClaim(makeReq({ body: { swagId: 'chroma_blurple' } }), res, 1, noopGrant);
+    expect(parse(res)).toEqual({
+      status: 409,
+      data: { error: 'points', code: 'discord.swag_points' },
+    });
+  });
+
+  it('409s an already-claimed swag with the swag_claimed code', async () => {
+    linkRow = [
+      {
+        account_id: 1,
+        discord_user_id: '8',
+        discord_username: 'm',
+        discord_avatar: null,
+        guild_member: false,
+        linked_at: 'now',
+      },
+    ];
+    rewardRows = [{ points: '5000', lifetime_points: '5000' }];
+    swagClaimRows = [{ swag_id: 'chroma_blurple' }]; // already claimed
+    const res = makeRes();
+    await handleSwagClaim(makeReq({ body: { swagId: 'chroma_blurple' } }), res, 1, noopGrant);
+    expect(parse(res)).toEqual({
+      status: 409,
+      data: { error: 'claimed', code: 'discord.swag_claimed' },
+    });
   });
 
   it('claims a cosmetic and invokes the grant callback with the swag grantId (the live-chroma hook)', async () => {
@@ -713,7 +772,39 @@ describe('POST /api/auth/discord/login/new', () => {
     pendingRows = []; // consume returns nothing
     const res = makeRes();
     await loginNew(makeReq({ body: { linkToken: 'gone' } }), res);
-    expect(parse(res).status).toBe(400);
+    expect(parse(res)).toEqual({
+      status: 400,
+      data: { error: 'expired', code: 'discord.expired' },
+    });
+  });
+
+  it('409s with the already_linked code when the link insert loses the race and no owner is found', async () => {
+    pendingRows = [
+      {
+        token: 't',
+        discord_user_id: '999999999999999999',
+        discord_username: 'Maxp',
+        discord_avatar: null,
+        guild_member: false,
+      },
+    ];
+    ownerRows = []; // no owner before OR after the failed insert (the racing link vanished)
+    findAccountRows = []; // username 'Maxp' is free, so a fresh account is provisioned
+    dbMock.query.mockImplementation((sql: string) => {
+      // The link upsert loses the discord_user_id TOCTOU race: linkDiscordToAccount
+      // maps the 23505 unique violation to false (discord_db.ts), and with no owner
+      // row to fall back to, loginNew answers the coded already_linked 409.
+      if (String(sql).includes('INSERT INTO discord_links')) {
+        return Promise.reject(Object.assign(new Error('duplicate key'), { code: '23505' }));
+      }
+      return Promise.resolve(defaultRouter(sql));
+    });
+    const res = makeRes();
+    await loginNew(makeReq({ body: { linkToken: 't' } }), res);
+    expect(parse(res)).toEqual({
+      status: 409,
+      data: { error: 'already_linked', code: 'discord.already_linked' },
+    });
   });
 
   it('provisions a password-less account, links it, and returns a session', async () => {
@@ -780,7 +871,10 @@ describe('POST /api/auth/discord/login/link', () => {
       makeReq({ body: { linkToken: 'gone', username: 'maxp', password: 'whatever' } }),
       res,
     );
-    expect(parse(res).status).toBe(400);
+    expect(parse(res)).toEqual({
+      status: 400,
+      data: { error: 'expired', code: 'discord.expired' },
+    });
   });
 
   it('401s on a wrong password and does NOT consume the token', async () => {
@@ -793,7 +887,10 @@ describe('POST /api/auth/discord/login/link', () => {
       makeReq({ body: { linkToken: 't', username: 'maxp', password: 'wrongpassword' } }),
       res,
     );
-    expect(parse(res).status).toBe(401);
+    expect(parse(res)).toEqual({
+      status: 401,
+      data: { error: 'invalid username or password', code: 'auth.invalid_credentials' },
+    });
     expect(
       dbMock.query.mock.calls.some((c) =>
         String(c[0]).includes('DELETE FROM discord_pending_logins'),
