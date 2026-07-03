@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "65802200",
+      "state": "049de197",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -33,6 +33,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -42,6 +43,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -105,7 +107,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 394,
-      "state": "00766e8f",
+      "state": "acb7239e",
       "events": "e0fcbd7f",
       "rng": {
         "draws": 6,
@@ -116,7 +118,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 394,
-      "state": "7be6073a",
+      "state": "46091945",
       "events": "741638a5",
       "rng": {
         "draws": 6,
@@ -127,7 +129,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 394,
-      "state": "4feec8d2",
+      "state": "a93d722d",
       "events": "c2f77e3f",
       "rng": {
         "draws": 98,
@@ -138,7 +140,7 @@
       "tick": 72,
       "time": 3.6,
       "nextId": 394,
-      "state": "593bbeec",
+      "state": "ee40ec93",
       "events": "834d5307",
       "rng": {
         "draws": 153,
@@ -158,6 +160,7 @@
             "damageTaken": 11,
             "kills": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -168,6 +171,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -294,7 +298,7 @@
       "tick": 76,
       "time": 3.8,
       "nextId": 394,
-      "state": "ff0acb64",
+      "state": "9f8bd35b",
       "events": "741638a5",
       "rng": {
         "draws": 171,
@@ -314,6 +318,7 @@
             "damageTaken": 11,
             "kills": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -324,6 +329,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

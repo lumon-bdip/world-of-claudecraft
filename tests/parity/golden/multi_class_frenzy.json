@@ -30,7 +30,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 396,
-      "state": "6451508f",
+      "state": "7e094296",
       "events": "c1ccd481",
       "rng": {
         "draws": 3,
@@ -47,6 +47,7 @@
           "counters": {
             "damageDealt": 30
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -56,6 +57,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -71,6 +73,7 @@
           "counters": {
             "damageDealt": 30
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -80,6 +83,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -95,6 +99,7 @@
           "counters": {
             "damageDealt": 30
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -104,6 +109,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -342,7 +348,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 396,
-      "state": "fb196acc",
+      "state": "64386781",
       "events": "1be213e7",
       "rng": {
         "draws": 6,
@@ -359,6 +365,7 @@
           "counters": {
             "damageDealt": 60
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -368,6 +375,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -383,6 +391,7 @@
           "counters": {
             "damageDealt": 60
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -392,6 +401,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -407,6 +417,7 @@
           "counters": {
             "damageDealt": 60
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -416,6 +427,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -654,7 +666,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 396,
-      "state": "c36d3da8",
+      "state": "d16120ff",
       "events": "1be213e7",
       "rng": {
         "draws": 9,
@@ -671,6 +683,7 @@
           "counters": {
             "damageDealt": 90
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -680,6 +693,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -695,6 +709,7 @@
           "counters": {
             "damageDealt": 90
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -704,6 +719,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -719,6 +735,7 @@
           "counters": {
             "damageDealt": 90
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -728,6 +745,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -966,7 +984,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 396,
-      "state": "bfcc07bd",
+      "state": "df0221d2",
       "events": "1be213e7",
       "rng": {
         "draws": 12,
@@ -983,6 +1001,7 @@
           "counters": {
             "damageDealt": 120
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -992,6 +1011,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1007,6 +1027,7 @@
           "counters": {
             "damageDealt": 120
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -1016,6 +1037,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1031,6 +1053,7 @@
           "counters": {
             "damageDealt": 120
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -1040,6 +1063,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1278,7 +1302,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 396,
-      "state": "b430a655",
+      "state": "f7942a1a",
       "events": "df04a8fd",
       "rng": {
         "draws": 15,
@@ -1289,7 +1313,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 396,
-      "state": "7e79ec58",
+      "state": "48db8239",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -1300,7 +1324,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 396,
-      "state": "7e79ec58",
+      "state": "48db8239",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -1318,6 +1342,7 @@
             "damageDealt": 120,
             "damageTaken": 13
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -1327,6 +1352,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1342,6 +1368,7 @@
           "counters": {
             "damageDealt": 120
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -1351,6 +1378,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1366,6 +1394,7 @@
           "counters": {
             "damageDealt": 120
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -1375,6 +1404,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

@@ -35,7 +35,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 396,
-      "state": "25918baf",
+      "state": "5c1c2458",
       "events": "1e5fc75f",
       "rng": {
         "draws": 2,
@@ -52,6 +52,7 @@
           "counters": {
             "damageTaken": 40
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -62,6 +63,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -75,6 +77,7 @@
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -85,6 +88,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -98,6 +102,7 @@
           "cls": "warlock",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -108,6 +113,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -336,7 +342,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 396,
-      "state": "0b38fed3",
+      "state": "2bf7dda4",
       "events": "3d0d9cde",
       "rng": {
         "draws": 5,
@@ -347,7 +353,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 396,
-      "state": "e0b4eb83",
+      "state": "be8334d4",
       "events": "741638a5",
       "rng": {
         "draws": 5,
@@ -358,7 +364,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 396,
-      "state": "a0bb95c6",
+      "state": "84ad0f2f",
       "events": "741638a5",
       "rng": {
         "draws": 5,
@@ -369,7 +375,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 396,
-      "state": "4699c5a6",
+      "state": "d219dc0f",
       "events": "a3ea2b74",
       "rng": {
         "draws": 5,
@@ -380,7 +386,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 396,
-      "state": "f2a84fe0",
+      "state": "20b67d35",
       "events": "741638a5",
       "rng": {
         "draws": 5,
@@ -391,7 +397,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 396,
-      "state": "3a880e3f",
+      "state": "babcf7a8",
       "events": "741638a5",
       "rng": {
         "draws": 5,
@@ -402,7 +408,7 @@
       "tick": 35,
       "time": 1.75,
       "nextId": 396,
-      "state": "eee3c9ad",
+      "state": "04d8421a",
       "events": "741638a5",
       "rng": {
         "draws": 5,
@@ -413,7 +419,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 396,
-      "state": "da322924",
+      "state": "7a659d21",
       "events": "741638a5",
       "rng": {
         "draws": 5,
@@ -424,7 +430,7 @@
       "tick": 45,
       "time": 2.25,
       "nextId": 396,
-      "state": "51553a66",
+      "state": "02b07acf",
       "events": "432aa090",
       "rng": {
         "draws": 24,
@@ -435,7 +441,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 396,
-      "state": "155ef66c",
+      "state": "cc2369d9",
       "events": "741638a5",
       "rng": {
         "draws": 48,
@@ -446,7 +452,7 @@
       "tick": 55,
       "time": 2.75,
       "nextId": 396,
-      "state": "6b3789c6",
+      "state": "7aae0b2f",
       "events": "741638a5",
       "rng": {
         "draws": 66,
@@ -457,7 +463,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 396,
-      "state": "492d038b",
+      "state": "2812610c",
       "events": "741638a5",
       "rng": {
         "draws": 82,
@@ -468,7 +474,7 @@
       "tick": 65,
       "time": 3.25,
       "nextId": 396,
-      "state": "30513797",
+      "state": "adcd86b0",
       "events": "741638a5",
       "rng": {
         "draws": 103,
@@ -479,7 +485,7 @@
       "tick": 70,
       "time": 3.5,
       "nextId": 396,
-      "state": "c46f11b6",
+      "state": "49b15f1f",
       "events": "3548697b",
       "rng": {
         "draws": 124,
@@ -490,7 +496,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 396,
-      "state": "1cc49005",
+      "state": "eb3dd222",
       "events": "a21390a3",
       "rng": {
         "draws": 149,
@@ -501,7 +507,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 396,
-      "state": "11fd5caf",
+      "state": "801aff58",
       "events": "741638a5",
       "rng": {
         "draws": 162,
@@ -512,7 +518,7 @@
       "tick": 85,
       "time": 4.25,
       "nextId": 396,
-      "state": "5be1cd58",
+      "state": "edcc629d",
       "events": "432aa090",
       "rng": {
         "draws": 197,
@@ -523,7 +529,7 @@
       "tick": 90,
       "time": 4.5,
       "nextId": 396,
-      "state": "9791c3a3",
+      "state": "d76f3df4",
       "events": "741638a5",
       "rng": {
         "draws": 225,
@@ -534,7 +540,7 @@
       "tick": 95,
       "time": 4.75,
       "nextId": 396,
-      "state": "4f10356d",
+      "state": "f56682da",
       "events": "741638a5",
       "rng": {
         "draws": 266,
@@ -545,7 +551,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 396,
-      "state": "e5dd2edd",
+      "state": "047009ca",
       "events": "741638a5",
       "rng": {
         "draws": 283,
@@ -556,7 +562,7 @@
       "tick": 105,
       "time": 5.25,
       "nextId": 396,
-      "state": "b4c0a678",
+      "state": "029f9cbd",
       "events": "741638a5",
       "rng": {
         "draws": 303,
@@ -567,7 +573,7 @@
       "tick": 110,
       "time": 5.5,
       "nextId": 396,
-      "state": "f9078e1f",
+      "state": "5a22a588",
       "events": "741638a5",
       "rng": {
         "draws": 323,
@@ -578,7 +584,7 @@
       "tick": 115,
       "time": 5.75,
       "nextId": 396,
-      "state": "69d27e0b",
+      "state": "b628d48c",
       "events": "a3b45bce",
       "rng": {
         "draws": 362,
@@ -589,7 +595,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 396,
-      "state": "328b9355",
+      "state": "2a22e8f2",
       "events": "741638a5",
       "rng": {
         "draws": 384,
@@ -600,7 +606,7 @@
       "tick": 123,
       "time": 6.15,
       "nextId": 396,
-      "state": "83d51868",
+      "state": "18dcdead",
       "events": "8a87681f",
       "rng": {
         "draws": 411,
@@ -618,6 +624,7 @@
             "damageDealt": 67,
             "damageTaken": 52
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -628,6 +635,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -641,6 +649,7 @@
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -651,6 +660,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -664,6 +674,7 @@
           "cls": "warlock",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -674,6 +685,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -930,7 +942,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 396,
-      "state": "40b56e02",
+      "state": "3a3a7643",
       "events": "6aba1684",
       "rng": {
         "draws": 421,
@@ -941,7 +953,7 @@
       "tick": 130,
       "time": 6.5,
       "nextId": 396,
-      "state": "7e2ee365",
+      "state": "d6566182",
       "events": "741638a5",
       "rng": {
         "draws": 457,
@@ -952,7 +964,7 @@
       "tick": 135,
       "time": 6.75,
       "nextId": 396,
-      "state": "f04d982c",
+      "state": "3fe75099",
       "events": "741638a5",
       "rng": {
         "draws": 488,
@@ -963,7 +975,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 396,
-      "state": "37b8f397",
+      "state": "6fef1ab0",
       "events": "741638a5",
       "rng": {
         "draws": 513,
@@ -974,7 +986,7 @@
       "tick": 145,
       "time": 7.25,
       "nextId": 396,
-      "state": "ff4387e2",
+      "state": "d2b55823",
       "events": "4c58dc7f",
       "rng": {
         "draws": 538,
@@ -985,7 +997,7 @@
       "tick": 145,
       "time": 7.25,
       "nextId": 396,
-      "state": "01d8b56c",
+      "state": "41344571",
       "events": "2446a18f",
       "rng": {
         "draws": 538,
@@ -1003,6 +1015,7 @@
             "damageDealt": 67,
             "damageTaken": 52
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -1013,6 +1026,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1026,6 +1040,7 @@
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -1036,6 +1051,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1051,6 +1067,7 @@
           "counters": {
             "damageTaken": 40
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -1061,6 +1078,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1325,7 +1343,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 396,
-      "state": "8826353f",
+      "state": "0ef473ec",
       "events": "625e18bc",
       "rng": {
         "draws": 574,
@@ -1336,7 +1354,7 @@
       "tick": 153,
       "time": 7.65,
       "nextId": 396,
-      "state": "cfc9b00f",
+      "state": "7344fc04",
       "events": "9859971d",
       "rng": {
         "draws": 596,
@@ -1354,6 +1372,7 @@
             "damageDealt": 69,
             "damageTaken": 52
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -1364,6 +1383,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1377,6 +1397,7 @@
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -1387,6 +1408,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1403,6 +1425,7 @@
             "damageDealt": 13,
             "damageTaken": 60
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -1413,6 +1436,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1675,7 +1699,7 @@
       "tick": 155,
       "time": 7.75,
       "nextId": 396,
-      "state": "bdd3d759",
+      "state": "9c5b55ea",
       "events": "741638a5",
       "rng": {
         "draws": 610,
@@ -1686,7 +1710,7 @@
       "tick": 158,
       "time": 7.9,
       "nextId": 396,
-      "state": "85f661ff",
+      "state": "359f9b34",
       "events": "741638a5",
       "rng": {
         "draws": 624,
@@ -1704,6 +1728,7 @@
             "damageDealt": 69,
             "damageTaken": 52
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -1714,6 +1739,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1727,6 +1753,7 @@
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -1737,6 +1764,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1753,6 +1781,7 @@
             "damageDealt": 13,
             "damageTaken": 60
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -1763,6 +1792,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

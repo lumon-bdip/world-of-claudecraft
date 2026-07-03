@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "65802200",
+      "state": "049de197",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -33,6 +33,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -42,6 +43,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -105,7 +107,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "df1d58ac",
+      "state": "d7be0f6b",
       "events": "8a6d6c96",
       "rng": {
         "draws": 0,
@@ -121,6 +123,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -131,6 +134,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 167200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -198,7 +202,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "637f4e17",
+      "state": "3d74316c",
       "events": "8d7664d6",
       "rng": {
         "draws": 0,
@@ -214,6 +218,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -224,6 +229,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 167200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {},
@@ -288,7 +294,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "66a07322",
+      "state": "024bb10d",
       "events": "1e111961",
       "rng": {
         "draws": 0,
@@ -303,6 +309,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -330,6 +337,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -396,7 +404,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "19924641",
+      "state": "4a25c9f6",
       "events": "4b386184",
       "rng": {
         "draws": 0,
@@ -411,6 +419,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -438,6 +447,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -504,7 +514,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "f75f8c95",
+      "state": "e5832940",
       "events": "8a6d6c96",
       "rng": {
         "draws": 0,
@@ -519,6 +529,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -546,6 +557,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {},
@@ -610,7 +622,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "f75f8c95",
+      "state": "e5832940",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -625,6 +637,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -652,6 +665,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {},

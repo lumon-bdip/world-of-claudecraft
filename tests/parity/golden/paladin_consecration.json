@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "3ae6e2b7",
+      "state": "cf33e6d8",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -31,6 +31,7 @@
           "cls": "paladin",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -40,6 +41,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -104,7 +106,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 394,
-      "state": "402558ee",
+      "state": "72691995",
       "events": "5576622a",
       "rng": {
         "draws": 4,
@@ -115,7 +117,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 394,
-      "state": "5b17d4f3",
+      "state": "f95be382",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -126,7 +128,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 394,
-      "state": "953f2e09",
+      "state": "85008224",
       "events": "87a6d1e0",
       "rng": {
         "draws": 80,
@@ -137,7 +139,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 394,
-      "state": "b8614e62",
+      "state": "58b6b311",
       "events": "741638a5",
       "rng": {
         "draws": 170,
@@ -148,7 +150,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 394,
-      "state": "e4894700",
+      "state": "fbb0a1d3",
       "events": "7f722377",
       "rng": {
         "draws": 270,
@@ -159,7 +161,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 394,
-      "state": "db1a6cb9",
+      "state": "be03eed4",
       "events": "741638a5",
       "rng": {
         "draws": 387,
@@ -170,7 +172,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 394,
-      "state": "cc18e7a1",
+      "state": "75a742cc",
       "events": "cf6ae7ff",
       "rng": {
         "draws": 501,
@@ -181,7 +183,7 @@
       "tick": 160,
       "time": 8,
       "nextId": 394,
-      "state": "a2932007",
+      "state": "73ff1c1e",
       "events": "741638a5",
       "rng": {
         "draws": 627,
@@ -192,7 +194,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 394,
-      "state": "0dc91051",
+      "state": "d6c6123c",
       "events": "9583d1a1",
       "rng": {
         "draws": 765,
@@ -203,7 +205,7 @@
       "tick": 200,
       "time": 10,
       "nextId": 394,
-      "state": "57ca3a68",
+      "state": "ec1e7d8b",
       "events": "741638a5",
       "rng": {
         "draws": 931,
@@ -214,7 +216,7 @@
       "tick": 201,
       "time": 10.05,
       "nextId": 394,
-      "state": "a42d4f06",
+      "state": "1c32c95d",
       "events": "741638a5",
       "rng": {
         "draws": 932,
@@ -233,6 +235,7 @@
             "damageDealt": 164,
             "damageTaken": 22
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -243,6 +246,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 167200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

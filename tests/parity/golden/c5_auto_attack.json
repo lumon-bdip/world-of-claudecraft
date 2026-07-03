@@ -35,7 +35,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 402,
-      "state": "a0e9fe0d",
+      "state": "e724ba30",
       "events": "9530ab98",
       "rng": {
         "draws": 20,
@@ -46,7 +46,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 402,
-      "state": "48838923",
+      "state": "a7d62e32",
       "events": "741638a5",
       "rng": {
         "draws": 20,
@@ -57,7 +57,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 402,
-      "state": "30bed777",
+      "state": "2468d716",
       "events": "ae05cf08",
       "rng": {
         "draws": 23,
@@ -68,7 +68,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 402,
-      "state": "5e62c9e8",
+      "state": "71e4dda7",
       "events": "edaa65be",
       "rng": {
         "draws": 26,
@@ -79,7 +79,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 402,
-      "state": "cefbc363",
+      "state": "08029722",
       "events": "96602a48",
       "rng": {
         "draws": 26,
@@ -90,7 +90,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 402,
-      "state": "e6fc3002",
+      "state": "ed3fd635",
       "events": "741638a5",
       "rng": {
         "draws": 26,
@@ -101,7 +101,7 @@
       "tick": 35,
       "time": 1.75,
       "nextId": 402,
-      "state": "14b29396",
+      "state": "a2257d81",
       "events": "96602a48",
       "rng": {
         "draws": 26,
@@ -112,7 +112,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 402,
-      "state": "32a82db0",
+      "state": "4c08f53f",
       "events": "97f34a41",
       "rng": {
         "draws": 27,
@@ -123,7 +123,7 @@
       "tick": 45,
       "time": 2.25,
       "nextId": 402,
-      "state": "be656c05",
+      "state": "84d4943a",
       "events": "77b3b93d",
       "rng": {
         "draws": 68,
@@ -134,7 +134,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 402,
-      "state": "9c071135",
+      "state": "26a96842",
       "events": "4727b74c",
       "rng": {
         "draws": 93,
@@ -145,7 +145,7 @@
       "tick": 55,
       "time": 2.75,
       "nextId": 402,
-      "state": "b681502d",
+      "state": "6419344a",
       "events": "96602a48",
       "rng": {
         "draws": 105,
@@ -156,7 +156,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 402,
-      "state": "82210446",
+      "state": "ccc31b1d",
       "events": "9b2ccf75",
       "rng": {
         "draws": 129,
@@ -167,7 +167,7 @@
       "tick": 65,
       "time": 3.25,
       "nextId": 402,
-      "state": "69087152",
+      "state": "b14b0341",
       "events": "96602a48",
       "rng": {
         "draws": 151,
@@ -178,7 +178,7 @@
       "tick": 70,
       "time": 3.5,
       "nextId": 402,
-      "state": "3d2b8830",
+      "state": "f968d4fb",
       "events": "741638a5",
       "rng": {
         "draws": 173,
@@ -189,7 +189,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 402,
-      "state": "a3048ea6",
+      "state": "d9aa35b1",
       "events": "ed0691f5",
       "rng": {
         "draws": 198,
@@ -200,7 +200,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 402,
-      "state": "7d773417",
+      "state": "fee3a86a",
       "events": "741638a5",
       "rng": {
         "draws": 216,
@@ -211,7 +211,7 @@
       "tick": 85,
       "time": 4.25,
       "nextId": 402,
-      "state": "03af399b",
+      "state": "ceca0f78",
       "events": "9efb9790",
       "rng": {
         "draws": 256,
@@ -222,7 +222,7 @@
       "tick": 90,
       "time": 4.5,
       "nextId": 402,
-      "state": "d1f95a7a",
+      "state": "b5f89103",
       "events": "2f211a9b",
       "rng": {
         "draws": 285,
@@ -233,7 +233,7 @@
       "tick": 95,
       "time": 4.75,
       "nextId": 402,
-      "state": "68a4e336",
+      "state": "fb45bca7",
       "events": "bca5d867",
       "rng": {
         "draws": 315,
@@ -244,7 +244,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 402,
-      "state": "19943bde",
+      "state": "a39758bf",
       "events": "741638a5",
       "rng": {
         "draws": 341,
@@ -255,7 +255,7 @@
       "tick": 105,
       "time": 5.25,
       "nextId": 402,
-      "state": "3ca539d4",
+      "state": "909ea499",
       "events": "96602a48",
       "rng": {
         "draws": 374,
@@ -266,7 +266,7 @@
       "tick": 110,
       "time": 5.5,
       "nextId": 402,
-      "state": "73ff57b3",
+      "state": "d7abae06",
       "events": "a79a6c0d",
       "rng": {
         "draws": 399,
@@ -277,7 +277,7 @@
       "tick": 115,
       "time": 5.75,
       "nextId": 402,
-      "state": "16d3fbf9",
+      "state": "8c6b90d8",
       "events": "96602a48",
       "rng": {
         "draws": 419,
@@ -288,7 +288,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 402,
-      "state": "9a313b9e",
+      "state": "6f4332b1",
       "events": "64e45200",
       "rng": {
         "draws": 478,
@@ -299,7 +299,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 402,
-      "state": "9a313b9e",
+      "state": "6f4332b1",
       "events": "741638a5",
       "rng": {
         "draws": 478,
@@ -317,6 +317,7 @@
             "damageDealt": 149,
             "damageTaken": 17
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -327,6 +328,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -343,6 +345,7 @@
             "damageDealt": 59,
             "damageTaken": 14
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -353,6 +356,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -369,6 +373,7 @@
             "damageDealt": 54,
             "damageTaken": 27
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -379,6 +384,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -394,6 +400,7 @@
           "counters": {
             "damageDealt": 86
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 395,
@@ -404,6 +411,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -419,6 +427,7 @@
           "counters": {
             "damageDealt": 21
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 396,
@@ -429,6 +438,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1014,7 +1024,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 402,
-      "state": "92af68e4",
+      "state": "09af18b3",
       "events": "de622054",
       "rng": {
         "draws": 516,
@@ -1025,7 +1035,7 @@
       "tick": 126,
       "time": 6.3,
       "nextId": 402,
-      "state": "9dfe24e0",
+      "state": "70245aa7",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1043,6 +1053,7 @@
             "damageDealt": 200,
             "damageTaken": 19
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -1053,6 +1064,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1069,6 +1081,7 @@
             "damageDealt": 59,
             "damageTaken": 14
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -1079,6 +1092,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1095,6 +1109,7 @@
             "damageDealt": 54,
             "damageTaken": 34
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -1105,6 +1120,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1120,6 +1136,7 @@
           "counters": {
             "damageDealt": 86
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 395,
@@ -1130,6 +1147,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1145,6 +1163,7 @@
           "counters": {
             "damageDealt": 21
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 396,
@@ -1155,6 +1174,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1732,7 +1752,7 @@
       "tick": 126,
       "time": 6.3,
       "nextId": 402,
-      "state": "9dfe24e0",
+      "state": "70245aa7",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1750,6 +1770,7 @@
             "damageDealt": 200,
             "damageTaken": 19
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -1760,6 +1781,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1776,6 +1798,7 @@
             "damageDealt": 59,
             "damageTaken": 14
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -1786,6 +1809,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1802,6 +1826,7 @@
             "damageDealt": 54,
             "damageTaken": 34
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 394,
@@ -1812,6 +1837,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1827,6 +1853,7 @@
           "counters": {
             "damageDealt": 86
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 395,
@@ -1837,6 +1864,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1852,6 +1880,7 @@
           "counters": {
             "damageDealt": 21
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 396,
@@ -1862,6 +1891,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

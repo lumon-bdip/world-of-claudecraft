@@ -33,7 +33,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { ClientWorld } from '../src/net/online';
 import { Sim } from '../src/sim/sim';
-import { OVERHEAD_EMOTE_IDS, type PlayerClass } from '../src/sim/types';
+import type { PlayerClass } from '../src/sim/types';
 // The 22 facet interfaces the W1 split produced (src/world_api/<facet>.ts). Imported
 // type-only to pin each facet's runtime member array to its interface key-set below.
 import type { IWorldChat } from '../src/world_api/chat';

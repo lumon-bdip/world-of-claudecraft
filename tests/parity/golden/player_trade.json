@@ -30,7 +30,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 394,
-      "state": "5d91666d",
+      "state": "7333eb2b",
       "events": "6a9fb840",
       "rng": {
         "draws": 0,
@@ -46,6 +46,7 @@
           "companionUpgrades": {},
           "copper": 100,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -61,6 +62,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -75,6 +77,7 @@
           "companionUpgrades": {},
           "copper": 50,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -90,6 +93,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -202,7 +206,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 394,
-      "state": "c5925b19",
+      "state": "beb2f0c1",
       "events": "06657dd4",
       "rng": {
         "draws": 0,
@@ -218,6 +222,7 @@
           "companionUpgrades": {},
           "copper": 80,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -237,6 +242,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -251,6 +257,7 @@
           "companionUpgrades": {},
           "copper": 70,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -270,6 +277,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -382,7 +390,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 394,
-      "state": "c5925b19",
+      "state": "beb2f0c1",
       "events": "f133ce11",
       "rng": {
         "draws": 0,
@@ -398,6 +406,7 @@
           "companionUpgrades": {},
           "copper": 80,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -417,6 +426,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -431,6 +441,7 @@
           "companionUpgrades": {},
           "copper": 70,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -450,6 +461,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -562,7 +574,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 394,
-      "state": "c5925b19",
+      "state": "beb2f0c1",
       "events": "3f1674d8",
       "rng": {
         "draws": 0,
@@ -578,6 +590,7 @@
           "companionUpgrades": {},
           "copper": 80,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -597,6 +610,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -611,6 +625,7 @@
           "companionUpgrades": {},
           "copper": 70,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -630,6 +645,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -742,7 +758,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 394,
-      "state": "5b082ba8",
+      "state": "18eb93d4",
       "events": "283f7cf4",
       "rng": {
         "draws": 0,
@@ -758,6 +774,7 @@
           "companionUpgrades": {},
           "copper": 80,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -777,6 +794,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -791,6 +809,7 @@
           "companionUpgrades": {},
           "copper": 70,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -810,6 +829,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -922,7 +942,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 394,
-      "state": "5b082ba8",
+      "state": "18eb93d4",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -938,6 +958,7 @@
           "companionUpgrades": {},
           "copper": 80,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -957,6 +978,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -971,6 +993,7 @@
           "companionUpgrades": {},
           "copper": 70,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -990,6 +1013,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

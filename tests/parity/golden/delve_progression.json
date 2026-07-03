@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "65802200",
+      "state": "049de197",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -32,6 +32,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -41,6 +42,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -104,7 +106,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 414,
-      "state": "f2f31892",
+      "state": "778eaf73",
       "events": "1c6b947f",
       "rng": {
         "draws": 1,
@@ -115,7 +117,7 @@
       "tick": 7,
       "time": 0.35,
       "nextId": 414,
-      "state": "6381451c",
+      "state": "cd4704b1",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -131,6 +133,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -141,6 +144,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -202,7 +206,7 @@
       "tick": 7,
       "time": 0.35,
       "nextId": 414,
-      "state": "391bd394",
+      "state": "324d2637",
       "events": "6895da0f",
       "rng": {
         "draws": 3,
@@ -221,6 +225,7 @@
           },
           "copper": 100000,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {
             "date": "2099-06-25"
@@ -235,6 +240,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -296,7 +302,7 @@
       "tick": 9,
       "time": 0.45,
       "nextId": 414,
-      "state": "9bcf3766",
+      "state": "da7e8215",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -315,6 +321,7 @@
           },
           "copper": 100000,
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {
             "date": "2099-06-25"
@@ -329,6 +336,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

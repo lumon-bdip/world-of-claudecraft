@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "ac72d7d0",
+      "state": "a847c61f",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -32,6 +32,7 @@
           "cls": "warlock",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -41,6 +42,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -105,7 +107,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 393,
-      "state": "6fe23cbe",
+      "state": "87c6ab3b",
       "events": "e7fac070",
       "rng": {
         "draws": 0,
@@ -116,7 +118,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 393,
-      "state": "04ac8b0c",
+      "state": "93d066b5",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -127,7 +129,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 393,
-      "state": "1e922cb3",
+      "state": "e3d857c0",
       "events": "741638a5",
       "rng": {
         "draws": 100,
@@ -138,7 +140,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 393,
-      "state": "ebf615b6",
+      "state": "7f1a8963",
       "events": "741638a5",
       "rng": {
         "draws": 186,
@@ -149,7 +151,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 394,
-      "state": "f5c79eee",
+      "state": "ca39c9eb",
       "events": "e7feca11",
       "rng": {
         "draws": 271,
@@ -160,7 +162,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 395,
-      "state": "f2bf66af",
+      "state": "fab73274",
       "events": "1425ba5d",
       "rng": {
         "draws": 366,
@@ -171,7 +173,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 395,
-      "state": "689d4e56",
+      "state": "c794c303",
       "events": "eed2b3c0",
       "rng": {
         "draws": 495,
@@ -182,7 +184,7 @@
       "tick": 160,
       "time": 8,
       "nextId": 395,
-      "state": "ca0caffc",
+      "state": "db65dda5",
       "events": "068dce0a",
       "rng": {
         "draws": 636,
@@ -193,7 +195,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 395,
-      "state": "05bbf9f5",
+      "state": "1565ade6",
       "events": "8e376f96",
       "rng": {
         "draws": 774,
@@ -204,7 +206,7 @@
       "tick": 200,
       "time": 10,
       "nextId": 395,
-      "state": "1aa58550",
+      "state": "9e978961",
       "events": "31b2c92e",
       "rng": {
         "draws": 943,
@@ -215,7 +217,7 @@
       "tick": 220,
       "time": 11,
       "nextId": 395,
-      "state": "6c6a6507",
+      "state": "8213a05c",
       "events": "8e376f96",
       "rng": {
         "draws": 1021,
@@ -226,7 +228,7 @@
       "tick": 220,
       "time": 11,
       "nextId": 395,
-      "state": "5ea0e1b1",
+      "state": "1f89570a",
       "events": "741638a5",
       "rng": {
         "draws": 1021,
@@ -244,6 +246,7 @@
           "counters": {
             "damageDealt": 22
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -254,6 +257,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -432,7 +436,7 @@
       "tick": 224,
       "time": 11.2,
       "nextId": 395,
-      "state": "cc66321c",
+      "state": "b00ce1c5",
       "events": "58a1da19",
       "rng": {
         "draws": 1050,
@@ -450,6 +454,7 @@
           "counters": {
             "damageDealt": 22
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -460,6 +465,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 44000,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

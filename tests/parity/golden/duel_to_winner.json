@@ -29,7 +29,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 394,
-      "state": "6b6565e6",
+      "state": "e63fd5e8",
       "events": "0750170c",
       "rng": {
         "draws": 0,
@@ -40,7 +40,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 394,
-      "state": "76347542",
+      "state": "64695c44",
       "events": "e6c0cc42",
       "rng": {
         "draws": 0,
@@ -51,7 +51,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 394,
-      "state": "0b66a61a",
+      "state": "c268cc9c",
       "events": "53f88380",
       "rng": {
         "draws": 71,
@@ -62,7 +62,7 @@
       "tick": 61,
       "time": 3.05,
       "nextId": 394,
-      "state": "e2d7fce0",
+      "state": "96ba82f2",
       "events": "97826425",
       "rng": {
         "draws": 78,
@@ -78,6 +78,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -87,6 +88,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -101,6 +103,7 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -110,6 +113,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -222,7 +226,7 @@
       "tick": 61,
       "time": 3.05,
       "nextId": 394,
-      "state": "4626fa3c",
+      "state": "fb9b856e",
       "events": "71ebcbf4",
       "rng": {
         "draws": 78,
@@ -238,6 +242,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -247,6 +252,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -261,6 +267,7 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -270,6 +277,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -382,7 +390,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 394,
-      "state": "baa9c794",
+      "state": "000e44a6",
       "events": "741638a5",
       "rng": {
         "draws": 150,
@@ -393,7 +401,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 394,
-      "state": "ec283f24",
+      "state": "0b2b88b6",
       "events": "741638a5",
       "rng": {
         "draws": 262,
@@ -404,7 +412,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 394,
-      "state": "9a43df86",
+      "state": "4f205e88",
       "events": "741638a5",
       "rng": {
         "draws": 263,
@@ -420,6 +428,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -429,6 +438,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -443,6 +453,7 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 393,
@@ -452,6 +463,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

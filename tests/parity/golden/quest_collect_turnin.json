@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "dfbfe7a9",
+      "state": "ee34ad80",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -31,6 +31,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -40,6 +41,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -103,7 +105,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "508a6ca7",
+      "state": "9672a0bc",
       "events": "25f9e31f",
       "rng": {
         "draws": 0,
@@ -118,6 +120,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -127,6 +130,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -202,7 +206,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "445c41a0",
+      "state": "451c0799",
       "events": "40b8e83e",
       "rng": {
         "draws": 0,
@@ -219,6 +223,7 @@
           "counters": {
             "questProgress": 5
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -234,6 +239,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -309,7 +315,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "0a813f1b",
+      "state": "356d2f84",
       "events": "a3665dd5",
       "rng": {
         "draws": 0,
@@ -326,6 +332,7 @@
           "counters": {
             "questProgress": 5
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -341,6 +348,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -416,7 +424,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "a4284a83",
+      "state": "c2baada8",
       "events": "5b54bb46",
       "rng": {
         "draws": 0,
@@ -433,6 +441,7 @@
           "counters": {
             "questProgress": 6
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -448,6 +457,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -523,7 +533,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "be561564",
+      "state": "ce4970b5",
       "events": "6b752ce2",
       "rng": {
         "draws": 0,
@@ -543,6 +553,7 @@
             "questsCompleted": 1,
             "xpGained": 350
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -553,6 +564,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 350,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],
@@ -620,7 +632,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 393,
-      "state": "7e264d3e",
+      "state": "ab48df23",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -640,6 +652,7 @@
             "questsCompleted": 1,
             "xpGained": 350
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -650,6 +663,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 350,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],

@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "65802200",
+      "state": "049de197",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -32,6 +32,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -41,6 +42,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -104,7 +106,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 402,
-      "state": "b3b2afe1",
+      "state": "f8d958c6",
       "events": "795d50be",
       "rng": {
         "draws": 4,
@@ -115,7 +117,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 402,
-      "state": "5b584e76",
+      "state": "ce883b7f",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -126,7 +128,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 402,
-      "state": "7b912276",
+      "state": "04c7777f",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -137,7 +139,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 402,
-      "state": "8af05051",
+      "state": "59f564b6",
       "events": "1bd10bbf",
       "rng": {
         "draws": 4,
@@ -148,7 +150,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 402,
-      "state": "6fef9ed0",
+      "state": "15aef5fd",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -159,7 +161,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 402,
-      "state": "f8d0d101",
+      "state": "39defa66",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -170,7 +172,7 @@
       "tick": 35,
       "time": 1.75,
       "nextId": 402,
-      "state": "2c00611e",
+      "state": "bf1dbd37",
       "events": "3a3cdaf4",
       "rng": {
         "draws": 6,
@@ -181,7 +183,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 402,
-      "state": "ea462060",
+      "state": "d92b554d",
       "events": "741638a5",
       "rng": {
         "draws": 6,
@@ -192,7 +194,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 402,
-      "state": "ea462060",
+      "state": "d92b554d",
       "events": "741638a5",
       "rng": {
         "draws": 6,
@@ -210,6 +212,7 @@
             "companion_tessa": 2
           },
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -220,6 +223,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -365,7 +369,7 @@
       "tick": 41,
       "time": 2.05,
       "nextId": 402,
-      "state": "77ba80fb",
+      "state": "df54df04",
       "events": "36d2135a",
       "rng": {
         "draws": 8,
@@ -383,6 +387,7 @@
             "companion_tessa": 2
           },
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -393,6 +398,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -552,7 +558,7 @@
       "tick": 45,
       "time": 2.25,
       "nextId": 402,
-      "state": "06d7c8eb",
+      "state": "7b139ff4",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -563,7 +569,7 @@
       "tick": 49,
       "time": 2.45,
       "nextId": 402,
-      "state": "61683b1d",
+      "state": "1e6c1d1a",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -581,6 +587,7 @@
             "companion_tessa": 2
           },
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -591,6 +598,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -694,7 +702,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 402,
-      "state": "b669e882",
+      "state": "a5c6dde3",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -705,7 +713,7 @@
       "tick": 51,
       "time": 2.55,
       "nextId": 402,
-      "state": "054c0159",
+      "state": "ade0318e",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -723,6 +731,7 @@
             "companion_tessa": 2
           },
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -733,6 +742,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -837,7 +847,7 @@
       "tick": 51,
       "time": 2.55,
       "nextId": 402,
-      "state": "054c0159",
+      "state": "ade0318e",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -855,6 +865,7 @@
             "companion_tessa": 2
           },
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
           "entityId": 392,
@@ -865,6 +876,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
