@@ -1,5 +1,8 @@
 import type {
   AccountCosmetics,
+  DailyRewardHistory,
+  DailyRewardSpinResult,
+  DailyRewardStatus,
   DelveCompanionInfo,
   DelveRunInfo,
   LockpickView,
@@ -282,6 +285,7 @@ import {
   angleTo,
   armorReduction,
   type CrowdControlDrCategory,
+  cloneInvSlot,
   DELVE_COMPANION_HEAL_INTERVAL,
   type DelveDef,
   type DelveModuleDef,
@@ -297,6 +301,7 @@ import {
   FISHING_CAST_TIME,
   GCD,
   type InvSlot,
+  type ItemInstancePayload,
   isConsuming,
   isPetClass,
   isQuestTurnInNpc,
@@ -588,6 +593,7 @@ export interface ResolvedAbility {
   effects: AbilityEffect[];
   threatFlat: number; // classic bonus threat on a successful use
   threatMult: number; // classic multiplier on this ability's damage-threat
+  castWhileMoving?: boolean; // talent-granted mobility (def.castWhileMoving covers baseline)
 }
 
 export interface RewardCounters {
@@ -633,6 +639,10 @@ export interface PlayerMeta {
   characterId?: number;
   cls: PlayerClass;
   name: string;
+  // Dev-only test dummy spawned via "/dev bot <name>" (social/chat.ts, gated by
+  // devCommands): a stationary player you can target and whisper to exercise social
+  // features offline; a whisper to it auto-replies. Runtime-only, never serialized.
+  isDevBot?: boolean;
   skin: number; // appearance index into the render SKINS[player_<cls>]; persisted, synced
   skinCatalog: SkinCatalog;
   // Cosmetic skin-select event: the rank rolled when the event token was used,
@@ -730,7 +740,7 @@ export interface PlayerMeta {
   // Session-only World Market browse filter. The market is capped at
   // MARKET_WIRE_LIMIT listings per snapshot to bound wire cost, so this
   // server-side substring filter (matched against item names) is how a player
-  // reaches goods past the cap. Never persisted — resets on login.
+  // reaches goods past the cap. Never persisted, resets on login.
   marketFilter: string;
   // Flat per-craft skill tracking (#1126): one independent, additive-only skill
   // value per craft on the ten-craft ring (see professions/wheel.ts). Persisted
@@ -1278,8 +1288,8 @@ export class Sim {
         for (const id of s.unlockedMilestones) meta.unlockedMilestones.add(id);
       meta.copper = s.copper;
       meta.equipment = { ...s.equipment };
-      meta.inventory = s.inventory.map((i) => ({ ...i }));
-      meta.vendorBuyback = (s.vendorBuyback ?? []).map((i) => ({ ...i }));
+      meta.inventory = s.inventory.map(cloneInvSlot);
+      meta.vendorBuyback = (s.vendorBuyback ?? []).map(cloneInvSlot);
       for (const q of s.questLog) {
         if (q.state !== 'done')
           meta.questLog.set(q.questId, {
@@ -1363,6 +1373,31 @@ export class Sim {
     player.potionCdRemaining = Math.max(0, player.potionCooldownUntil - this.time);
     if (savedState?.pet) this.restorePet(player, savedState.pet);
     return player.id;
+  }
+
+  // Spawn a stationary test player ("/dev bot <name>", gated by devCommands in
+  // social/chat.ts): a dummy you can target and whisper to exercise social features
+  // offline. Placed a few yards from the primary player so it is visible, and marked
+  // isDevBot so a whisper to it auto-replies (see the whisper handler in chat.ts).
+  // Returns the new pid, or -1 if the name is blank or already taken (whisper
+  // resolution needs a unique name). Never reached in production (the caller runs
+  // only when devCommands is on).
+  spawnDevBot(name: string): number {
+    const clean = name.trim();
+    if (!clean) return -1;
+    for (const m of this.players.values())
+      if (m.name.toLowerCase() === clean.toLowerCase()) return -1;
+    const pid = this.addPlayer('mage', clean);
+    const meta = this.players.get(pid);
+    if (meta) meta.isDevBot = true;
+    const me = this.entities.get(this.primaryId);
+    const e = this.entities.get(pid);
+    if (e && me) {
+      e.pos = this.groundPos(me.pos.x + 3, me.pos.z + 3);
+      e.prevPos = { ...e.pos };
+      this.rebucket(e);
+    }
+    return pid;
   }
 
   removePlayer(pid: number): void {
@@ -1461,8 +1496,8 @@ export class Sim {
       pos: { x: e.pos.x, z: e.pos.z },
       facing: e.facing,
       equipment: { ...meta.equipment },
-      inventory: meta.inventory.map((i) => ({ ...i })),
-      vendorBuyback: meta.vendorBuyback.map((i) => ({ ...i })),
+      inventory: meta.inventory.map(cloneInvSlot),
+      vendorBuyback: meta.vendorBuyback.map(cloneInvSlot),
       questLog: [...meta.questLog.values()].map((q) => ({
         questId: q.questId,
         counts: [...q.counts],
@@ -1724,6 +1759,40 @@ export class Sim {
   devLeaderboard(page = 0, pageSize = LEADERBOARD_PAGE_SIZE): Promise<DevLeaderboardPage> {
     return Promise.resolve(paginateDevLeaderboard([], page, pageSize));
   }
+
+  dailyRewards(): Promise<DailyRewardStatus> {
+    const day = '1970-01-01';
+    return Promise.resolve({
+      day,
+      resetAt: '1970-01-02T00:00:00.000Z',
+      prizePoolUsd: 0,
+      prizePoolSol: null,
+      eligibility: {
+        eligible: false,
+        reason: 'no_wallet',
+        walletPubkey: null,
+        wocBalance: null,
+        wocUsdPrice: null,
+        usdValue: null,
+        minUsd: 20,
+      },
+      score: 0,
+      rank: null,
+      spin: { claimed: false, points: null, outcomeKey: null, claimedAt: null },
+      tasks: [],
+      leaderboard: [],
+    });
+  }
+
+  async spinDailyReward(): Promise<DailyRewardSpinResult> {
+    const status = await this.dailyRewards();
+    return { ...status, awardedPoints: 0, outcomeKey: '' };
+  }
+
+  dailyRewardHistory(): Promise<DailyRewardHistory> {
+    return Promise.resolve({ payouts: [] });
+  }
+
   get known(): ResolvedAbility[] {
     return this.primary.known;
   }
@@ -2036,6 +2105,7 @@ export class Sim {
       // healingThreat/countItem are bound elsewhere in this host (C4a/C2/C3/Q1) - deduped.
       spendResource: sim.spendResource.bind(sim),
       removeItem: sim.removeItem.bind(sim),
+      removeFungibleItem: sim.removeFungibleItem.bind(sim),
       partyOf: sim.partyOf.bind(sim),
       removeFromParty: (pid: number, verb: string) => sim.party.removeFromParty(pid, verb),
       // dropPartyMarkers flips to the T1 marker store (targeting); lazy arrow since
@@ -2050,6 +2120,7 @@ export class Sim {
       onInventoryChangedForQuests: (meta) => onInventoryChangedForQuests(sim.ctx, meta),
       checkQuestReady: (qp, meta) => checkQuestReady(sim.ctx, qp, meta),
       countItem: sim.countItem.bind(sim),
+      countFungibleItem: sim.countFungibleItem.bind(sim),
       completeQuestForDev: (questId, pid) => completeQuestForDev(sim.ctx, questId, pid),
       completeCurrentQuestsForDev: (pid) => completeCurrentQuestsForDev(sim.ctx, pid),
       // I1 dungeon instancing now lives in instances/dungeons.ts; these route through
@@ -2231,6 +2302,8 @@ export class Sim {
       // already bound above; isRooted/moveSpeedMult/swingIntervalMult are M2 bindings above.)
       setPlayerLevel: sim.setPlayerLevel.bind(sim),
       notice: sim.notice.bind(sim),
+      // Dev-only test-dummy spawner backing "/dev bot <name>" in social/chat.ts.
+      spawnDevBot: sim.spawnDevBot.bind(sim),
       // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved items.useItem
       // dispatches to. Late-bound arrows (looked up at call time, not `.bind`d at ctor)
       // so they preserve the pre-move `this.X` dynamic-dispatch semantics, including tests
@@ -2504,6 +2577,7 @@ export class Sim {
   }
 
   private updateLootRolls(): void {
+    if (this.pendingLootRolls.size === 0) return; // skip the defensive copy on the common idle tick
     for (const roll of [...this.pendingLootRolls.values()]) {
       if (roll.expiresAt <= this.time) this.resolveLootRoll(roll);
     }
@@ -2823,7 +2897,13 @@ export class Sim {
       wishZ = 0,
       wishSpeed = 0;
     if (moving) {
-      if (p.castingAbility) this.cancelCast(p);
+      if (p.castingAbility) {
+        // A mobile cast (def flag, or talent-granted via the resolved ability)
+        // survives its caster's movement; everything else breaks, fishing included.
+        const casting = this.resolvedAbility(p.castingAbility, p.id);
+        const mobile = casting != null && (casting.def.castWhileMoving || casting.castWhileMoving);
+        if (!mobile) this.cancelCast(p);
+      }
       const len = Math.hypot(mx, mz);
       mx /= len;
       mz /= len;
@@ -3047,12 +3127,18 @@ export class Sim {
     pushbackCastImpl(p);
   }
 
-  castAbilityBySlot(slot: number, pid?: number): void {
-    castAbilityBySlotImpl(this.ctx, slot, pid);
+  castAbilityBySlot(slot: number, pid?: number, aim?: { x: number; z: number }): void {
+    castAbilityBySlotImpl(this.ctx, slot, pid, aim);
   }
 
-  castAbility(abilityId: string, pid?: number): void {
-    castAbilityImpl(this.ctx, abilityId, pid);
+  castAbility(abilityId: string, pid?: number, aim?: { x: number; z: number }): void {
+    castAbilityImpl(this.ctx, abilityId, pid, aim);
+  }
+
+  // IWorld ground-targeted cast: offline, the local player (pid undefined) casts
+  // the ability aimed at the world point (x, z).
+  castAbilityAt(abilityId: string, aim: { x: number; z: number }): void {
+    castAbilityImpl(this.ctx, abilityId, undefined, aim);
   }
 
   // Voluntarily cancel one of a player's own helpful auras (the HUD right-click-a-buff
@@ -3239,9 +3325,11 @@ export class Sim {
         ? PVP_POLYMORPH_DR_RESET
         : category === 'fear'
           ? PVP_FEAR_DR_RESET
-          : isStunDrCategory(category)
+          : category === 'lockout'
             ? PVP_STUN_DR_RESET
-            : PVP_ROOT_DR_RESET;
+            : isStunDrCategory(category)
+              ? PVP_STUN_DR_RESET
+              : PVP_ROOT_DR_RESET;
     if (category === 'polymorph') {
       target.ccDr.set(category, { stage: stage + 1, resetAt: this.time + reset });
       return PVP_POLYMORPH_DR_DURATIONS[Math.min(stage, PVP_POLYMORPH_DR_DURATIONS.length - 1)];
@@ -4265,12 +4353,25 @@ export class Sim {
     return n;
   }
 
+  // Fungible-only count for `itemId` (excludes per-instance slots, #1165). The
+  // World Market lists/escrows against this, never the instanced count, so an
+  // instanced copy is never sold as if it were a plain stack member.
+  countFungibleItem(itemId: string, pid?: number): number {
+    const r = this.resolve(pid);
+    if (!r) return 0;
+    let n = 0;
+    for (const s of r.meta.inventory) if (s.itemId === itemId && !s.instance) n += s.count;
+    return n;
+  }
+
   addItem(itemId: string, count: number, pid?: number): void {
     const r = this.resolve(pid);
     if (!r) return;
     const { meta } = r;
     const def = ITEMS[itemId];
-    const existing = meta.inventory.find((s) => s.itemId === itemId);
+    // Never merge into (or split off of) an instanced slot: instanced copies keep
+    // their own signer/charges/rolled/boundTo payload, each in its own slot (#1165).
+    const existing = meta.inventory.find((s) => s.itemId === itemId && !s.instance);
     if (existing) existing.count += count;
     else meta.inventory.push({ itemId, count });
     this.emit({
@@ -4285,6 +4386,23 @@ export class Sim {
     }
   }
 
+  // Grant a single non-fungible copy of `itemId` carrying an instance payload
+  // (#1165: signer/charges/rolled/boundTo). Always its own slot entry (count 1),
+  // never merged with an existing plain or differently-instanced stack.
+  addItemInstance(itemId: string, instance: ItemInstancePayload, pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    const { meta } = r;
+    const def = ITEMS[itemId];
+    meta.inventory.push({ itemId, count: 1, instance });
+    this.emit({
+      type: 'loot',
+      text: `You receive: ${def?.name ?? itemId}.`,
+      pid: meta.entityId,
+    });
+    this.ctx.onInventoryChangedForQuests(meta);
+  }
+
   removeItem(itemId: string, count: number, pid?: number): void {
     const r = this.resolve(pid);
     if (!r) return;
@@ -4292,6 +4410,24 @@ export class Sim {
     for (let i = meta.inventory.length - 1; i >= 0 && count > 0; i--) {
       const s = meta.inventory[i];
       if (s.itemId !== itemId) continue;
+      const take = Math.min(s.count, count);
+      s.count -= take;
+      count -= take;
+      if (s.count <= 0) meta.inventory.splice(i, 1);
+    }
+    this.ctx.onInventoryChangedForQuests(meta);
+  }
+
+  // Fungible-only removal (#1165): skips instanced slots entirely, so a market
+  // listing/escrow can never consume a signed/rolled/bound copy even when the
+  // caller only checked countFungibleItem beforehand.
+  removeFungibleItem(itemId: string, count: number, pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    const { meta } = r;
+    for (let i = meta.inventory.length - 1; i >= 0 && count > 0; i--) {
+      const s = meta.inventory[i];
+      if (s.itemId !== itemId || s.instance) continue;
       const take = Math.min(s.count, count);
       s.count -= take;
       count -= take;
