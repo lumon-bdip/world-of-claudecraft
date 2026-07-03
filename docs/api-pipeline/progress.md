@@ -1732,6 +1732,29 @@ wrong-method class; main.ts line anchors re-based (~2350); root CLAUDE.md build 
 (five, editor) and server/CLAUDE.md housekeeping RouteDef count (11) corrected. Full
 gate re-run PASS (all 9 steps) after the fixes.
 
+## v0.20.0 release merge, fourth slice (2026-07-03): bags, ghost death loop, Drowned Litany, guild last-login
+
+Merge bbd063447 (release tip fd66e1db0) landed the WoW-style bag system, the ghost/death
+loop with Spirit Healers, The Drowned Litany delve, guild-roster last-login, unit-frame
+auras, and gamepad brand glyphs. ZERO HTTP API surface: the server delta is only db.ts /
+game.ts / social.ts / social_db.ts. The five new commands (equip_bag, unequip_bag,
+resurrect_corpse, resurrect_healer, delve_rite_choose) are WS world-protocol dispatch
+cases in server/game.ts, pinned by the release side in tests/command_schema.test.ts
+(116/125 send/dispatch) and tests/world_api_parity.test.ts (167/42/125 with facet and
+runtime membership checks on both worlds). The additive idempotent characters.last_login
+column plus touchCharacterLogin (fire-and-forget on the WS join path) and the widened
+SocialDb.guildMembers lastLogin shape are consumed only by the WS social hub; no HTTP
+envelope, migrated handler, legacy arm, or injected runtime picks any of it up. The
+migrated set STAYS 45; no corpus rows, RouteDefs, or deviations needed. Conflicts were
+the three i18n generated artifacts only, resolved by regeneration. Full five-dimension
+release-merge audit (overlap reads, legacy-arm divergence, endpoint inventory, injected
+helpers, planning premises) returned zero blocking findings; the two nits applied were a
+stale world_api_parity method-kind test TITLE (122 to 125; assertion was already correct)
+and this ledger entry itself (the packet previously recorded the v0.20.0 merges as a
+closed set of three). Targeted suites green at the merged tip (command_schema,
+world_api_parity, game_sessions, snapshots, architecture, localization_fixes,
+parity/coverage, social_system, social_frames, delves); tsc 0.
+
 ## Phase 25: Docs + new:endpoint scaffold + flag-default flip
 
 Deliverables:

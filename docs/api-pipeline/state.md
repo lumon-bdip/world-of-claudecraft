@@ -24,6 +24,14 @@ bearer-guard factories; HTTP_METHODS gained PUT; deviations mapsAssetsRateLimite
 character-rename handler mirrors the release's Ravenpost mail rekey. Full record:
 progress.md "v0.20.0 release merge, third slice". Phase 25's premises updated in place
 (migrated-set count, the maps/assets 405 carve-out, the optionalViewerGuard throttle note).
+
+FOURTH v0.20.0 RELEASE-MERGE SLICE (2026-07-03, merge bbd063447): bags, ghost death loop,
+Drowned Litany, guild last-login. ZERO HTTP API surface (server delta only
+db.ts/game.ts/social.ts/social_db.ts; five new WS commands pinned release-side; additive
+last_login DDL consumed only by the WS social hub). Migrated set STAYS 45; no corpus,
+RouteDef, deviation, or premise changes. Full record: progress.md "v0.20.0 release merge,
+fourth slice".
+
 loadConfig(env) is now the validated FAIL-FAST boot edge, called once as startServer's
 first step (before the DB retry loop) and memoized behind main.ts activeConfig() (+
 resetActiveConfigForTests) so request-time consumers read lazily and a bare import stays
