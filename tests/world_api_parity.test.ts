@@ -34,7 +34,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { ClientWorld } from '../src/net/online';
 import { Sim } from '../src/sim/sim';
 import { OVERHEAD_EMOTE_IDS, type PlayerClass } from '../src/sim/types';
-// The 20 facet interfaces the W1 split produced (src/world_api/<facet>.ts). Imported
+// The 21 facet interfaces the W1 split produced (src/world_api/<facet>.ts). Imported
 // type-only to pin each facet's runtime member array to its interface key-set below.
 import type { IWorldChat } from '../src/world_api/chat';
 // The overhead-emote runtime surface the chat facet derives locally (see the
@@ -71,7 +71,7 @@ interface IWorldMember {
 }
 
 // The 150 members of `interface IWorld`, in interface order (world_api.ts:342-509).
-// Partition: 36 `data` + 112 `method` (read-returning + command-void + 3 async).
+// Partition: 37 `data` + 113 `method` (read-returning + command-void + 3 async).
 // biome-ignore lint/suspicious/noExportsInTest: IWORLD_MEMBERS is the W0c pinned structural-parity contract (the authoritative IWorld member list)
 export const IWORLD_MEMBERS = [
   // --- core world / player roster + economy reads (data) ---
@@ -277,7 +277,7 @@ function withDomStubs<T>(fn: () => T): T {
 }
 
 // A real ClientWorld whose FIELD INITIALIZERS have run (a raw
-// `Object.create(ClientWorld.prototype)` bareClient would be missing all 36 data
+// `Object.create(ClientWorld.prototype)` bareClient would be missing all 37 data
 // props). Pass a non-empty `base` so the ctor builds a `ws://localhost/ws` URL instead
 // of touching `location`; `.close()` clears the stubbed input timer.
 function makeClientWorld(): ClientWorld {
@@ -692,7 +692,7 @@ describe('membership, not equality: world extras do not fail the gate', () => {
   });
 });
 
-// --- W1: aggregate == disjoint union of the 20 facet member sets --------------------
+// --- W1: aggregate == disjoint union of the 21 facet member sets --------------------
 // After the facet split (W1), `interface IWorld extends` 20 domain facet interfaces
 // (src/world_api/<facet>.ts; the 19 owner-backed facets plus IWorldTelemetry). This
 // block proves the split dropped nothing and duplicated nothing:
@@ -999,7 +999,7 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 21 fa
     }
   });
 
-  it('the 20 facet arrays are pairwise disjoint (no member filed in two facets)', () => {
+  it('the 21 facet arrays are pairwise disjoint (no member filed in two facets)', () => {
     const entries = Object.entries(FACET_MEMBER_ARRAYS);
     const overlaps: string[] = [];
     for (let i = 0; i < entries.length; i++) {
