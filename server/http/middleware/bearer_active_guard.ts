@@ -21,9 +21,10 @@
 //
 // This is a transitional artifact: it emits the legacy prose { error } bodies the
 // client prose-matcher (src/main.ts userFacingApiError) still keys on, NOT the
-// RFC 9457 problem+json requireAccount middleware. When Phase 22 wires the client
-// code-matcher and Phase 25 flips API_DISPATCH, the legacy-body guards give way to
-// the coded requireAccount path.
+// RFC 9457 problem+json requireAccount middleware. The Phase 22 code-matcher and the
+// Phase 25 default flip are both live, but the give-way to the coded requireAccount
+// path happens at the ladder-deletion PR (next release): until then these guards keep
+// emitting the legacy-parity bodies on both dispatch arms.
 
 import type * as http from 'node:http';
 import { type AccountModerationStatus, scopeAllowsMutation, type TokenScope } from '../../db';

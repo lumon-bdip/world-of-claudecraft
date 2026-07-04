@@ -849,7 +849,7 @@ export async function handleDailyRewardInternalApi(
 //   POST /internal/daily-rewards/payout-history    payout service ops
 //   POST /internal/daily-rewards/leaderboard       payout service ops
 //   POST /internal/daily-rewards/mark-payout       payout service ops
-// The legacy dispatch stays as the flag-off rollback path until Phase 25: the
+// The legacy dispatch stays as the flag-off rollback path until the ladder-deletion PR: the
 // main.ts prefix arm (startsWith('/api/daily-rewards'), bearerActiveAccount
 // BEFORE delegating) for the player family, and the /internal composite
 // delegate (handleDailyRewardInternalApi tried FIRST, ordering load-bearing)

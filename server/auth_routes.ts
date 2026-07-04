@@ -373,7 +373,7 @@ async function challengeHandler(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------
 // The route table. registry.ts spreads this into apiRoutes. Under API_DISPATCH
 // 'new' the Phase 9 dispatcher serves these via the onion; the legacy handleApi
-// arms stay in main.ts for the flag-off rollback until Phase 25.
+// arms stay in main.ts for the flag-off rollback until the ladder-deletion PR (next release).
 //
 // Middleware order per route is the exact legacy check order, cheap-reject-first:
 // origin guard, IP rate-limit, (register) IP block, withBody (parse), Turnstile.

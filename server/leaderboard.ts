@@ -6,7 +6,7 @@
 // single-page limit form), the arena ladder, the GitHub releases proxy feed,
 // project-stats, search, the realm directory, the public character sheet, the
 // dev-only perf profile, and status. The legacy handleApi arms for these paths
-// stay in main.ts as the flag-off rollback path (removed only in Phase 25), so a
+// stay in main.ts as the flag-off rollback path (removed only by the ladder-deletion PR), so a
 // migrated route is intentionally BOTH router-owned (flag 'new') AND legacy-served
 // (flag 'legacy'); the two paths are proven byte-identical by the parity harness.
 //
@@ -561,7 +561,7 @@ async function publicSheetHandler(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------
 // The route table. registry.ts spreads this into apiRoutes. Under API_DISPATCH
 // 'new' the Phase 9 dispatcher serves these via the onion; the legacy handleApi
-// arms stay in main.ts for the flag-off rollback until Phase 25.
+// arms stay in main.ts for the flag-off rollback until the ladder-deletion PR (next release).
 // ---------------------------------------------------------------------------
 
 /** The anonymous-friendly bearer resolver both authz-gap-close routes share. */

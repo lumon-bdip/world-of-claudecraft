@@ -771,7 +771,7 @@ async function unsubscribeHandler(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------
 // The route table. registry.ts spreads this into apiRoutes. Under API_DISPATCH
 // 'new' the Phase 9 dispatcher serves these via the onion; the legacy handleApi
-// arms stay in main.ts for the flag-off rollback until Phase 25. All routes carry
+// arms stay in main.ts for the flag-off rollback until the ladder-deletion PR. All routes carry
 // [activeGuard] EXCEPT: logout (logoutGuard: sign-out survives moderation locks)
 // and the two token-in-query link routes email/verify + email/unsubscribe (no
 // auth). companion-token is THREE method-specific RouteDefs (the legacy arm fanned

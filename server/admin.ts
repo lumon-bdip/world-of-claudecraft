@@ -628,7 +628,8 @@ export async function handleAdminApi(
 // shared server/http/ pipeline the Phase 9 dispatcher serves under API_DISPATCH
 // 'new' (server/main.ts routes /admin/api through its own flag-gated dispatcher
 // whose delegate is the legacy handleAdminApi, kept as the flag-off rollback path
-// until Phase 25). This follows the server/discord.ts + server/reports.ts template:
+// until the ladder-deletion PR, next release). This follows the server/discord.ts +
+// server/reports.ts template:
 //
 //  - PARITY-FIRST bodies + envelope. Every migrated handler reproduces its legacy
 //    branch's logic and writes the SAME { success, data, error } admin envelope
@@ -1315,7 +1316,7 @@ const adminAssetUnblockHandler = adminAssetStatusHandler('active');
 // requireAdmin, and each :id route also carries requireAdminTarget (operator-scope
 // loader). All registered so an unsupported method / unknown path delegates to the
 // legacy handleAdminApi ladder (the dispatcher delegates notFound / methodNotAllowed
-// until Phase 25).
+// until the ladder-deletion PR, next release).
 // ---------------------------------------------------------------------------
 
 export const routes: RouteDef[] = [

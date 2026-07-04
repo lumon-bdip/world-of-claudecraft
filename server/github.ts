@@ -279,8 +279,9 @@ function bouncePage(res: http.ServerResponse, status: number, payload: BouncePay
 //   GET    /api/auth/github/callback   OAuth callback (HTML bounce; NON-JSON)
 //   GET    /api/github                 link status (JSON; full session)
 //   DELETE /api/github                 unlink (JSON; full session)
-// The legacy handleApi arms stay in main.ts as the flag-off rollback path until
-// Phase 25. PARITY-FIRST: the thin handlers reuse the SAME handleGitHub*
+// The legacy handleApi arms stay in main.ts as the flag-off rollback path until the
+// ladder-deletion PR (next release). PARITY-FIRST: the thin handlers reuse the SAME
+// handleGitHub*
 // functions UNCHANGED, so every body is the legacy JSON / HTML-bounce byte-for-
 // byte. The auth gate is the shared legacy-body createActiveGuard (mirrors
 // bearerActiveAccount), never the problem+json requireAccount. The rate guards

@@ -7,8 +7,9 @@
 //   POST /api/bug-reports     in-game bug report capture (account-gated write)
 //   POST /api/perf-report     client perf beacon (public telemetry)
 //   POST /api/site-presence   site-presence heartbeat (public telemetry)
-// The legacy handleApi arms stay in main.ts as the flag-off rollback path until
-// Phase 25. This follows the server/wallet.ts + server/account.ts template:
+// The legacy handleApi arms stay in main.ts as the flag-off rollback path until the
+// ladder-deletion PR (next release). This follows the server/wallet.ts +
+// server/account.ts template:
 //
 //  - PARITY-FIRST bodies. The migrated handlers write the SAME legacy { error }
 //    and { ok } bodies byte-for-byte (RFC 9457 is Phase 22; the client

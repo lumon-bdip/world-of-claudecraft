@@ -193,7 +193,7 @@ export async function handleWalletUnlink(
 //    configureWalletRuntime, so `export const routes` stays a static array
 //    registry.ts can spread. The db.ts reads the guard uses are bundled behind
 //    setWalletDbForTests for unit tests. The legacy handleApi arms stay in
-//    main.ts as the flag-off rollback path until Phase 25.
+//    main.ts as the flag-off rollback path until the ladder-deletion PR (next release).
 // ===========================================================================
 
 // The exact legacy { error } identities the guard + card pre-auth check emit.
@@ -387,7 +387,7 @@ async function referralsHandler(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------
 // The route table. registry.ts spreads this into apiRoutes. Under API_DISPATCH
 // 'new' the Phase 9 dispatcher serves these via the onion; the legacy handleApi
-// arms stay in main.ts for the flag-off rollback until Phase 25. All routes carry
+// arms stay in main.ts for the flag-off rollback until the ladder-deletion PR. All routes carry
 // [activeGuard] EXCEPT /api/woc/balance (public, IP-limited only). The rate-limit
 // middleware sits AFTER activeGuard on the two wallet-link routes + card (the
 // fused ip+account limiter needs ctx.account), and is the sole limiter on the

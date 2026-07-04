@@ -1971,7 +1971,8 @@ let apiEntry: ApiDispatcher = selectApiEntry(DEFAULT_DISPATCH, apiDispatcher, ha
 // /api family) whose DELEGATE is the legacy handleAdminApi ladder (bound to the live
 // game). Under API_DISPATCH 'new' a matched admin RouteDef runs the onion; every
 // unmatched admin path (an unknown endpoint, a wrong method, a HEAD) delegates to
-// handleAdminApi UNCHANGED, so behavior stays byte-identical until Phase 25 removes it.
+// handleAdminApi UNCHANGED, so behavior stays byte-identical until the ladder-deletion
+// PR (next release) removes it.
 const adminLegacy: ApiDelegate = (req, res) => handleAdminApi(req, res, liveGame());
 const adminApiDispatcher = createApiDispatcher({
   registry: apiRegistry,
@@ -1988,7 +1989,7 @@ let adminApiEntry: ApiDispatcher = selectApiEntry(
 // (oauth paths are a disjoint '/oauth' first segment). The delegate is the legacy
 // handleOAuth ladder UNCHANGED, so the GET consent/device HTML pages (off the route
 // table), HEAD, unknown /oauth paths, and wrong-method requests all keep their
-// legacy behavior byte-identically until Phase 25.
+// legacy behavior byte-identically until the ladder-deletion PR (next release).
 const oauthLegacy: ApiDelegate = (req, res) => handleOAuth(req, res);
 const oauthApiDispatcher = createApiDispatcher({
   registry: apiRegistry,
@@ -2105,7 +2106,7 @@ function applyCorsAndPreflight(
 // flag-gated dispatchers) instead of calling handleApi / handleAdminApi / handleOAuth
 // / the daily-rewards+handleInternalApi composite directly; each dispatcher delegates
 // its own unmatched paths to the same legacy handler, so behavior is byte-identical
-// until Phase 25.
+// until the ladder-deletion PR (next release).
 export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResponse): void {
   // Top-level so both dispatch arms and every prefix (and the OPTIONS-204
   // short-circuit) carry the headers; a flag rollback cannot drop them.
@@ -2267,8 +2268,9 @@ export async function startServer(): Promise<http.Server> {
   console.log('database ready');
 
   // Select the /api dispatch path from the single API_DISPATCH flag on the one boot
-  // Config loaded above (never a scattered process.env read). Default is 'legacy'
-  // (a later phase flips the production default to 'new'); rollback is a flag flip.
+  // Config loaded above (never a scattered process.env read). The default is 'new'
+  // (flipped in Phase 25); API_DISPATCH=legacy is the one-flag rollback to the
+  // retained legacy ladder.
   setApiDispatchMode(config.dispatch);
   logApiDispatchSelection(logger, config.dispatch, process.env.NODE_ENV);
 

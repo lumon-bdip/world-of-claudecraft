@@ -4,7 +4,7 @@
 // A SIBLING of server/desktop_login.ts (which stays db-import-free so its
 // pure-unit tests never construct the pg pool), following the auth_routes.ts
 // route-module pattern. The legacy handleApi arms in main.ts stay as the
-// flag-off rollback path until Phase 25.
+// flag-off rollback path until the ladder-deletion PR (next release).
 //
 // PARITY-FIRST: both handlers reuse the desktop_login.ts cores UNCHANGED
 // (issueDesktopLoginCode / handleDesktopLoginExchange), so every body is the

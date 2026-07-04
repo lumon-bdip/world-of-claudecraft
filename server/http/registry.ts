@@ -66,7 +66,7 @@ export interface ApiRegistry {
  * (server/leaderboard.ts). Every un-migrated /api path is not in this list, so
  * the Phase 9 dispatcher delegates it to the legacy handleApi ladder unchanged.
  * A migrated route stays served by its legacy arm too (the flag-off rollback
- * path) until Phase 25 removes the ladder. Phase 10 added the public reads
+ * path) until the ladder-deletion PR (next release). Phase 10 added the public reads
  * (server/leaderboard.ts); Phase 11 added the auth credential surface
  * (server/auth_routes.ts: register, login, native-attestation challenge); Phase 12
  * adds the owner-gated character surface (server/characters.ts: the character list

@@ -87,10 +87,10 @@ export function createApiDispatcher(deps: ApiDispatcherDeps): ApiDispatcher {
       // a 404 (every === arm gates on GET; the one exception is the v0.20.0
       // housekeeping family, whose prefix sub-dispatcher answers a post-auth
       // in-family 405 to any non-GET/POST method, HEAD included), so while the
-      // legacy arms are retained (through Phase 24) a HEAD match delegates too,
-      // keeping the migration byte-identical old-vs-new: both arms run the same
-      // code either way. Serving HEAD as GET is a deliberate behavior change
-      // deferred to the Phase 25 flag flip / ladder deletion; note the housekeeping
+      // legacy arms are retained (until the ladder-deletion PR) a HEAD match
+      // delegates too, keeping the migration byte-identical old-vs-new: both arms
+      // run the same code either way. Serving HEAD as GET is a deliberate behavior
+      // change deferred to the ladder deletion (next release); note the housekeeping
       // HEAD shape flips from that 405 to a GET-served response there, not from 404.
       delegateWithReqId(deps.delegate, req, res);
       return;
@@ -132,8 +132,8 @@ export function createApiDispatcher(deps: ApiDispatcherDeps): ApiDispatcher {
       // X-Request-Id response header to every migrated-route 2xx/429/404 response
       // where the retained legacy delegate emits none, breaking the parity harness
       // (tests/server/http/parity.test.ts) across the whole corpus. Turning the echo
-      // on is a corpus-wide parity decision deferred to the Phase 25 flag flip /
-      // ladder deletion (normalize X-Request-Id out of the shared parity normalizer,
+      // on is a corpus-wide parity decision deferred to the ladder deletion, next
+      // release (normalize X-Request-Id out of the shared parity normalizer,
       // or register it corpus-wide). withErrors still emits X-Request-Id on the
       // error path, which the existing per-domain deviations already cover.
       // Route-local middleware (per-route rate limits, withBody, requireAccount)
@@ -160,8 +160,8 @@ function runHandler(route: RouteDef): Middleware {
  * Pick the /api entry for the current dispatch mode. When 'new', the in-house
  * dispatcher fronts the legacy ladder; when 'legacy', the legacy handleApi runs
  * directly, an inert rollback in which the new pipeline is never entered. main.ts
- * reads the mode from loadConfig once at boot; flipping the production default to
- * 'new' is Phase 25's deliverable, not this phase's.
+ * reads the mode from loadConfig once at boot; Phase 25 flipped the production
+ * default to 'new' (API_DISPATCH=legacy is the one-flag rollback).
  */
 export function selectApiEntry(
   mode: DispatchMode,

@@ -973,8 +973,9 @@ function bouncePage(res: http.ServerResponse, status: number, payload: BouncePay
 //   GET    /api/discord                  link status (JSON)
 //   DELETE /api/discord                  unlink (JSON)
 //   POST   /api/discord/swag/claim       swag claim (JSON; previously ORPHANED)
-// The legacy handleApi arms stay in main.ts as the flag-off rollback path until
-// Phase 25. This follows the server/reports.ts + server/wallet.ts template:
+// The legacy handleApi arms stay in main.ts as the flag-off rollback path until the
+// ladder-deletion PR (next release). This follows the server/reports.ts +
+// server/wallet.ts template:
 //
 //  - PARITY-FIRST bodies. The migrated handlers reuse the SAME handleDiscord*
 //    functions UNCHANGED, so every response is the legacy { error } / { ok } /
@@ -1181,7 +1182,7 @@ async function discordSwagClaimHandler(ctx: Ctx): Promise<void> {
 // mode; the others authorize via the single-use pending-login token / OAuth state);
 // status/unlink are [activeGuard, discordActiveRateGuard]; swag is [activeGuard] (it
 // self-limits). All registered so an unsupported method delegates to the legacy
-// ladder (the dispatcher delegates a methodNotAllowed resolve until Phase 25).
+// ladder (the dispatcher delegates a methodNotAllowed resolve until the ladder-deletion PR).
 // ---------------------------------------------------------------------------
 
 export const routes: RouteDef[] = [
