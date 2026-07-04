@@ -70,6 +70,7 @@ const h = vi.hoisted(() => {
     spinForAccount: vi.fn(async () => state.spin),
     recordSpin: vi.fn(async () => true),
     addPoints: vi.fn(async () => true),
+    questTaskCompletionCount: vi.fn(async () => 0),
     recentPayouts: vi.fn(async (_limit: number) => state.recentPayouts),
     finalizeDay: vi.fn(async () => {}),
     pendingPayouts: vi.fn(async (_limit: number) => state.pendingPayouts),
@@ -102,6 +103,7 @@ vi.mock('../../server/daily_rewards_db', async (importOriginal) => {
     spinForAccount = h.db.spinForAccount;
     recordSpin = h.db.recordSpin;
     addPoints = h.db.addPoints;
+    questTaskCompletionCount = h.db.questTaskCompletionCount;
     recentPayouts = h.db.recentPayouts;
     finalizeDay = h.db.finalizeDay;
     pendingPayouts = h.db.pendingPayouts;
