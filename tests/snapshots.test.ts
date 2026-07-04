@@ -2157,7 +2157,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(30);
+    expect(scraped.size).toBe(31);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
