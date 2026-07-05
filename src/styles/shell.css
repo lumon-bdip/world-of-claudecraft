@@ -2552,7 +2552,11 @@
      name floats top-center, and the actions sit in the corners. On the
      roster (#charselect-panel) the character list docks right instead, WoW
      style, and the summary docks left. All the ids / buttons / rows stay
-     untouched, so the main.ts wiring is unchanged. */
+     untouched, so the main.ts wiring is unchanged.
+     Intentionally starts before the shared 900px card foundation: this
+     takeover restates the sizing and inner grids required throughout the
+     861px to 899px range.
+     */
   @media (min-width: 861px) {
     #offline-select.cs-wow,
     body:not(.mobile-touch) :is(#charselect-panel, #charcreate-panel).cs-wow {
