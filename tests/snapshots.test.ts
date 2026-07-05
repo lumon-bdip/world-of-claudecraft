@@ -357,7 +357,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     expect(snap).not.toBeNull();
     // a fresh session has an empty lastSent, so EVERY maybe() delta key rides the
-    // first snapshot (even the null-valued ones like party/trade); widened to all 26
+    // first snapshot (even the null-valued ones like party/trade); widened to all 27
     for (const key of ALL_DELTA_KEYS) {
       expect(snap.self, `self.${key} missing from first snapshot`).toHaveProperty(key);
     }
@@ -420,7 +420,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     // This single-tick test stays on the decay-safe subset: cds and the timer-backed
     // keys (delve/arena timers, delveDaily) can re-emit after a real sim.tick(), so the
-    // widened all-26 omission is proven by the no-op re-broadcast test instead.
+    // widened all-27 omission is proven by the no-op re-broadcast test instead.
     for (const key of DELTA_KEYS) {
       expect(snap.self, `self.${key} resent although unchanged`).not.toHaveProperty(key);
     }
@@ -774,7 +774,7 @@ describe('delta snapshots', () => {
     joinServer(server, fc2, 2, 'Testb');
     broadcast(server);
     const snapNew = lastSnap(fc2.sent);
-    // a fresh session always receives the full self state: all 26 delta keys
+    // a fresh session always receives the full self state: all 27 delta keys
     for (const key of ALL_DELTA_KEYS) {
       expect(snapNew.self, `self.${key} missing for fresh session`).toHaveProperty(key);
     }
@@ -1821,20 +1821,20 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // ---------------------------------------------------------------------------
 // W0a: full self-snapshot delta round-trip gate.
 //
-// `selfWireJson` (server/game.ts) emits 26 heavy "delta" fields through a
+// `selfWireJson` (server/game.ts) emits 31 heavy "delta" fields through a
 // `maybe(key, value)` closure that ships a key only when its serialized form
 // changed since this session last received it; `applySnapshot` (src/net/
 // online.ts) mirrors each with `if (s.X !== undefined)` (or the inline
 // `s.X ?? e.X` form for `stats`/`weapon`). This is the single most fragile codec
-// in the workstream, so we pin: (a) the exact 26-key set against drift, (b) the
+// in the workstream, so we pin: (a) the exact 31-key set against drift, (b) the
 // terse-key -> IWorld-name rename map, (c) that every dirtied value round-trips
-// onto the correct decode target, and (d) that a no-op re-broadcast omits all 28
+// onto the correct decode target, and (d) that a no-op re-broadcast omits all 31
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 28 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 31 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
-// 29th unregistered delta key reddens this gate.
+// 32nd unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
   'arena',
   'bags',
