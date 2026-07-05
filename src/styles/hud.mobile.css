@@ -260,8 +260,8 @@
      packing them into the ring geometry too. */
   body.mobile-touch #mobile-combat-grid {
     position: relative;
-    width: 230px;
-    height: 62px;
+    width: 236px;
+    height: 64px;
     transform: scale(var(--btn-scale, 1));
     transform-origin: right bottom;
     pointer-events: none;
@@ -316,8 +316,10 @@
     height: 22px;
   }
   body.mobile-touch #mobile-attack-nearest {
-    width: 58px;
-    height: 58px;
+    /* Slightly bigger than the other cluster buttons (was 58px): it's the
+       single most-pressed button, worth the extra thumb target. */
+    width: 64px;
+    height: 64px;
     right: 0;
     bottom: 0;
     color: #ffdf9c;
@@ -326,19 +328,19 @@
   body.mobile-touch #mobile-interact {
     width: 50px;
     height: 50px;
-    right: 64px;
+    right: 70px;
     bottom: 4px;
   }
   body.mobile-touch #mobile-target {
     width: 50px;
     height: 50px;
-    right: 120px;
+    right: 126px;
     bottom: 4px;
   }
   body.mobile-touch #mobile-jump {
     width: 50px;
     height: 50px;
-    right: 176px;
+    right: 182px;
     bottom: 4px;
   }
   body.mobile-touch.mobile-left-handed #mobile-attack-nearest {
@@ -347,15 +349,15 @@
   }
   body.mobile-touch.mobile-left-handed #mobile-interact {
     right: auto;
-    left: 64px;
+    left: 70px;
   }
   body.mobile-touch.mobile-left-handed #mobile-target {
     right: auto;
-    left: 120px;
+    left: 126px;
   }
   body.mobile-touch.mobile-left-handed #mobile-jump {
     right: auto;
-    left: 176px;
+    left: 182px;
   }
   /* Autorun/Chat/More are the low-frequency verbs (a travel toggle and two
      menu-openers, never a split-second combat tap), so they move out of the
@@ -431,7 +433,7 @@
     bottom: auto;
     transform: translateX(-50%);
     display: none;
-    width: min(560px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+    width: min(440px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));
     --window-pad: 10px;
     pointer-events: auto;
     z-index: 100;
@@ -479,34 +481,34 @@
   body.mobile-touch #mobile-extra-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-auto-rows: 42px;
-    gap: 7px;
+    grid-auto-rows: 36px;
+    gap: 6px;
   }
   body.mobile-touch #mobile-extra-controls .mobile-btn {
     width: 100%;
-    height: 42px;
+    height: 36px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 0 10px;
-    font-size: 17px;
+    gap: 6px;
+    padding: 0 8px;
+    font-size: 14px;
     /* The base .mobile-btn's border-radius: 50% is meant for the near-square
        combat/hotbar buttons; on this wide row it computes a squashed oval
        (elliptical corner radii bigger than the box is tall). A pill needs the
        radius capped at half the height so the ends are true semicircles and
        the sides stay straight. */
-    border-radius: 21px;
+    border-radius: 18px;
   }
   body.mobile-touch #mobile-extra-controls .mobile-label {
     display: inline;
     margin: 0;
-    font-size: 10px;
+    font-size: 9px;
     color: #e6d8ae;
   }
   body.mobile-touch #mobile-extra-controls .mobile-btn .ui-icon {
-    flex: 0 0 22px;
+    flex: 0 0 18px;
   }
   /* A toggle tray button (e.g. Nameplates) glows gold while its feature is on. */
   body.mobile-touch #mobile-extra-controls .mobile-btn.active {
@@ -979,17 +981,28 @@
     box-sizing: border-box;
     font-size: 16px;
   }
+  /* Own HP/mana lives bottom-center, the one part of the screen every other
+     mobile element deliberately leaves empty (move joystick bottom-left,
+     combat cluster + hotbar bottom-right, low-frequency verbs + minimap rail
+     top corners) -- keeping the HUD as unobtrusive as possible while still
+     putting the player's own vitals where the thumb never has to look away
+     from center to check them. justify-content stays flex-start (not
+     centered): the container itself is centered on screen via left/transform,
+     but internally the portrait must stay flush at the container's own
+     origin, since the XP ring (#player-frame::before) is positioned relative
+     to that origin, not to the portrait element. */
   body.mobile-touch #player-frame {
     position: fixed;
-    left: max(20px, calc(env(safe-area-inset-left) + 10px));
-    top: max(8px, env(safe-area-inset-top));
+    left: 50%;
+    top: auto;
+    bottom: calc(14px + env(safe-area-inset-bottom));
     z-index: 21;
     width: 300px;
     margin: 0;
     display: flex;
     justify-content: flex-start;
-    transform: scale(0.82);
-    transform-origin: left top;
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: center bottom;
   }
   body.mobile-touch #player-frame .portrait-wrap {
     z-index: 3;
@@ -2074,8 +2087,8 @@
     }
     body.mobile-touch #mobile-extra-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-auto-rows: 40px;
-      gap: 6px;
+      grid-auto-rows: 34px;
+      gap: 5px;
     }
     body.mobile-touch.mobile-left-handed #mobile-extra-controls {
       left: 50%;
@@ -2083,10 +2096,10 @@
     }
     body.mobile-touch #mobile-extra-controls .mobile-btn {
       width: 100%;
-      height: 40px;
-      font-size: 16px;
-      padding: 0 9px;
-      border-radius: 20px;
+      height: 34px;
+      font-size: 13px;
+      padding: 0 7px;
+      border-radius: 17px;
     }
     body.mobile-touch #mobile-extra-controls .mobile-label {
       font-size: 9px;
@@ -2163,10 +2176,11 @@
       width: min(330px, 44vw);
     }
     body.mobile-touch #player-frame {
-      left: max(6px, env(safe-area-inset-left));
-      top: max(6px, env(safe-area-inset-top));
+      left: 50%;
+      top: auto;
+      bottom: calc(10px + env(safe-area-inset-bottom));
       width: 300px;
-      transform: scale(0.6);
+      transform: translateX(-50%) scale(0.6);
     }
     body.mobile-touch #player-frame .uf-bars {
       width: 224px;

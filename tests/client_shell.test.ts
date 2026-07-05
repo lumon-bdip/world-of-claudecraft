@@ -846,8 +846,10 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain('conic-gradient(\n      from var(--xp-ring-start),');
     expect(hudMobileCss).toContain('calc(var(--xp-fill, 0) * 360deg)');
     expect(hudMobileCss).toContain('transparent var(--xp-ring-arc) 360deg');
+    // Own HP/mana lives bottom-center (the one part of the screen every
+    // other mobile element deliberately leaves empty), not top-left.
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #player-frame {\n    position: fixed;\n    left: max(20px, calc(env(safe-area-inset-left) + 10px));\n    top: max(8px, env(safe-area-inset-top));\n    z-index: 21;',
+      'body.mobile-touch #player-frame {\n    position: fixed;\n    left: 50%;\n    top: auto;\n    bottom: calc(14px + env(safe-area-inset-bottom));\n    z-index: 21;',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #player-frame .portrait-wrap {\n    z-index: 3;\n  }',
@@ -1133,8 +1135,10 @@ describe('client HTML shell', () => {
     expect(drawerTitleBody).toContain('margin-bottom: 8px;');
     expect(drawerTitleBody).toContain('padding-bottom: 6px;');
     expect(drawerTitleBody).toContain('cursor: move;');
+    // Smaller than the old 560px cap: the More tray only holds short pill
+    // buttons now, not a wide desktop-style panel.
     expect(hudMobileCss).toContain(
-      'width: min(560px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));',
+      'width: min(440px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #mobile-extra-grid {\n    display: grid;\n    grid-template-columns: repeat(3, minmax(0, 1fr));',
@@ -1313,19 +1317,22 @@ describe('client HTML shell', () => {
       'body.mobile-touch #mobile-combat-controls {\n    position: absolute;\n    left: auto;\n    right: max(32px, calc(env(safe-area-inset-right) + 18px));\n    bottom: calc(22px + env(safe-area-inset-bottom));\n    z-index: 30;\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-combat-grid {\n    position: relative;\n    width: 230px;\n    height: 62px;',
+      'body.mobile-touch #mobile-combat-grid {\n    position: relative;\n    width: 236px;\n    height: 64px;',
+    );
+    // Attack is slightly bigger than the other cluster buttons (64px vs 50px):
+    // it's the single most-pressed button, worth the extra thumb target.
+    expect(hudMobileCss).toContain('body.mobile-touch #mobile-attack-nearest {\n');
+    expect(hudMobileCss).toMatch(
+      /#mobile-attack-nearest \{[^}]*width: 64px;[^}]*height: 64px;[^}]*right: 0;[^}]*bottom: 0;[^}]*\}/,
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-attack-nearest {\n    width: 58px;\n    height: 58px;\n    right: 0;\n    bottom: 0;',
+      'body.mobile-touch #mobile-interact {\n    width: 50px;\n    height: 50px;\n    right: 70px;\n    bottom: 4px;\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-interact {\n    width: 50px;\n    height: 50px;\n    right: 64px;\n    bottom: 4px;\n  }',
+      'body.mobile-touch #mobile-target {\n    width: 50px;\n    height: 50px;\n    right: 126px;\n    bottom: 4px;\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-target {\n    width: 50px;\n    height: 50px;\n    right: 120px;\n    bottom: 4px;\n  }',
-    );
-    expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-jump {\n    width: 50px;\n    height: 50px;\n    right: 176px;\n    bottom: 4px;\n  }',
+      'body.mobile-touch #mobile-jump {\n    width: 50px;\n    height: 50px;\n    right: 182px;\n    bottom: 4px;\n  }',
     );
     expect(hudMobileCss).toContain('body.mobile-touch.mobile-left-handed #mobile-attack-nearest {');
     // Autorun/Chat/More are fixed-positioned out of the grid into their own
