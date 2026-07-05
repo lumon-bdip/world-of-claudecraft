@@ -77,6 +77,7 @@ import { forEachGuarded, runGuarded } from './guarded_iter';
 import { IpBlockList } from './ip_block';
 import { loadActiveBlockedIps } from './ip_block_db';
 import { type LiveSharedIp, sharedIpsFromLiveSessions } from './live_shared_ips';
+import { trackReachedLevel5 } from './meta_capi';
 import {
   forceCharacterRename,
   moderateAccount,
@@ -399,6 +400,10 @@ export interface ClientSession {
   socialTrackedIds?: number[];
   // IP address at join time (from requestMetadata); used for per-IP session counting.
   ip: string;
+  userAgent: string;
+  fbp: string;
+  fbc: string;
+  sourceUrl: string;
   isAdmin: boolean;
   // Seed the client sends at auth; signs its challenge answers.
   clientSeed: string;
@@ -1478,6 +1483,9 @@ export class GameServer {
         chatStrikes?: number;
         isAdmin?: boolean;
         clientSeed?: string;
+        fbp?: string | null;
+        fbc?: string | null;
+        sourceUrl?: string | null;
       } = {},
   ): ClientSession | { error: string } {
     if (this.sessionsByCharacterId.has(characterId)) return { error: 'character already in world' };
@@ -1544,6 +1552,10 @@ export class GameServer {
       lastWireRev: -1,
       sentEnts: new Map(),
       ip: sessionIp,
+      userAgent: meta.userAgent ?? '',
+      fbp: meta.fbp ?? '',
+      fbc: meta.fbc ?? '',
+      sourceUrl: meta.sourceUrl ?? '',
       isAdmin: meta.isAdmin ?? false,
       clientSeed: meta.clientSeed ?? '',
       botTrackingContext,
@@ -3528,6 +3540,21 @@ export class GameServer {
   private detectActivity(events: SimEvent[]): void {
     const now = Date.now();
     for (const ev of events) {
+      if (ev.type === 'levelup' && ev.level === 5 && ev.pid !== undefined) {
+        const s = this.clients.get(ev.pid);
+        if (s) {
+          void trackReachedLevel5(
+            s.characterId,
+            {
+              clientIp: s.ip,
+              clientUserAgent: s.userAgent,
+              fbp: s.fbp,
+              fbc: s.fbc,
+            },
+            s.sourceUrl,
+          );
+        }
+      }
       if (ev.type === 'levelup' && ev.level === MAX_LEVEL && ev.pid !== undefined) {
         const s = this.clients.get(ev.pid);
         if (!s) continue;
