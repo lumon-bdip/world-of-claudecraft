@@ -2654,6 +2654,31 @@
       border-radius: 0;
       z-index: 1;
     }
+    /* The selected character's name, centred over the top of the 3D stage so it
+       is unmistakable which character you are about to play. Truncates rather
+       than wrapping; non-interactive so it never blocks the turntable. */
+    body:not(.mobile-touch) #charselect-panel.cs-wow #charselect-preview-name {
+      display: block;
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      max-width: min(56%, 420px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+      font-family: var(--title-font);
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-shadow:
+        0 2px 8px #000,
+        0 0 14px rgba(0, 0, 0, 0.55);
+      pointer-events: none;
+    }
     /* Name entry floats just under the title. */
     #offline-select.cs-wow .auth-label {
       position: absolute;
@@ -4543,6 +4568,14 @@
     display: block;
     width: 100% !important;
     height: 100% !important;
+  }
+
+  /* The selected-character name plate over the 3D stage. Belongs to the desktop
+     docked layout (the only one with a full 3D turntable); mobile shows the name
+     on each roster card already, so it stays hidden by default and the docked
+     layout reveals it. */
+  .cs-preview-name {
+    display: none;
   }
 
   .char-input-group {

@@ -3923,9 +3923,10 @@ async function refreshCharacters(): Promise<void> {
   const listEl = $('#char-list');
   listEl.innerHTML = `<li class="char-list-message">${escapeHtml(t('character.loading'))}</li>`;
   // Drop any stale selection from a previous realm; the default first-row
-  // selection below re-arms the shared Enter World button.
+  // selection below re-arms the shared Enter World button and the preview name.
   charselectSelected = null;
   syncCharselectEnterButton();
+  setCharselectPreviewName('');
   try {
     const chars = sortCharacters(await api.characters(), charSortMode);
     if (api.realm) $('#charselect-realm').textContent = api.realm;
@@ -4008,6 +4009,7 @@ async function refreshCharacters(): Promise<void> {
         characterPreview?.setSkin(c.skin ?? 0);
         charselectSelected = c;
         syncCharselectEnterButton();
+        setCharselectPreviewName(c.name);
       };
 
       row.addEventListener('click', selectRow);
@@ -4089,6 +4091,15 @@ async function takeOverAndEnter(c: CharacterSummary, btn: HTMLButtonElement): Pr
     // Reflect any state change (e.g. a lost race) back into the list.
     void refreshCharacters();
   }
+}
+
+// The selected character's name, shown above the 3D preview on the desktop
+// stage so it is obvious which character you are about to play. textContent (not
+// innerHTML): names are player-supplied. Only the desktop docked layout reveals
+// the element (CSS), but setting it is a harmless no-op elsewhere.
+function setCharselectPreviewName(name: string): void {
+  const el = document.getElementById('charselect-preview-name');
+  if (el) el.textContent = name;
 }
 
 // Reflect the selected character's primary action on the desktop shared Enter
