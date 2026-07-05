@@ -272,7 +272,7 @@ export class Api {
     turnstileToken = '',
     ref = '',
     nativeAttestation: unknown = undefined,
-  ): Promise<void> {
+  ): Promise<{ accountId?: number }> {
     const data = await this.post('/api/register', {
       username,
       password,
@@ -285,6 +285,7 @@ export class Api {
     this.username = data.username;
     // A fresh registration always has the mandatory email; trust the server flag.
     this.emailMissing = data.emailMissing === true;
+    return { accountId: typeof data.accountId === 'number' ? data.accountId : undefined };
   }
 
   // Returns { twoFactorRequired: true } when the account has 2FA on and no code
