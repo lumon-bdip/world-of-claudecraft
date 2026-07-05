@@ -2478,6 +2478,9 @@ export class GameServer {
       case 'harvest_node':
         if (typeof msg.node === 'string') sim.harvestNode(msg.node, pid);
         break;
+      case 'craft_item':
+        if (typeof msg.recipe === 'string') sim.craftItem(msg.recipe, pid);
+        break;
       case 'sell_all_junk':
         sim.sellAllJunk(pid);
         break;
@@ -3445,6 +3448,10 @@ export class GameServer {
     // key `prof` and IWorld member `professionsState` are the settled names
     // for the professions facet (#1164, src/sim/professions/CLAUDE.md).
     maybe('prof', this.sim.professionsStateFor(anchorSession.pid));
+    // Gathering profession proficiency (#1119). Wire key `gprof`, IWorld member
+    // `gatheringProficiency`; see TERSE_TO_IWORLD/ALL_DELTA_KEYS in
+    // tests/snapshots.test.ts.
+    maybe('gprof', this.sim.gatheringProficiencyFor(anchorSession.pid));
     // stats + weapon stay per-tick: recalcPlayerStats re-derives them on every
     // stat-affecting aura gain/loss (Bear/Cat Form, shouts, debuffs, elixir
     // wear-off, a buff cast on you by someone else), none of which mark this
