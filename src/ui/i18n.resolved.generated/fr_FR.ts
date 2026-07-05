@@ -1187,6 +1187,20 @@ export const fr_FR: EnTranslations = {
       "mining": "Minage",
       "logging": "Bûcheronnage",
       "herbalism": "Herboristerie"
+    },
+    "archetypeTitle": {
+      "label": "Title",
+      "none": "None",
+      "armorcrafting": "Armorer",
+      "weaponcrafting": "Weaponsmith",
+      "jewelcrafting": "Jeweler",
+      "alchemy": "Alchemist",
+      "engineering": "Tinkerer",
+      "cooking": "Chef",
+      "inscription": "Scribe",
+      "enchanting": "Enchanter",
+      "tailoring": "Tailor",
+      "leatherworking": "Leathercrafter"
     }
   },
   "guide": {

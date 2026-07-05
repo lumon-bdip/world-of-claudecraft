@@ -1187,6 +1187,20 @@ export const id_ID: EnTranslations = {
       "mining": "Penambangan",
       "logging": "Penebangan",
       "herbalism": "Herbalisme"
+    },
+    "archetypeTitle": {
+      "label": "Title",
+      "none": "None",
+      "armorcrafting": "Armorer",
+      "weaponcrafting": "Weaponsmith",
+      "jewelcrafting": "Jeweler",
+      "alchemy": "Alchemist",
+      "engineering": "Tinkerer",
+      "cooking": "Chef",
+      "inscription": "Scribe",
+      "enchanting": "Enchanter",
+      "tailoring": "Tailor",
+      "leatherworking": "Leathercrafter"
     }
   },
   "guide": {

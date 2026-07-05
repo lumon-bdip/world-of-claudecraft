@@ -1187,6 +1187,20 @@ export const ru_RU: EnTranslations = {
       "mining": "Горное дело",
       "logging": "Лесозаготовка",
       "herbalism": "Травничество"
+    },
+    "archetypeTitle": {
+      "label": "Титул",
+      "none": "Нет",
+      "armorcrafting": "Бронник",
+      "weaponcrafting": "Оружейник",
+      "jewelcrafting": "Ювелир",
+      "alchemy": "Алхимик",
+      "engineering": "Механик",
+      "cooking": "Повар",
+      "inscription": "Писарь",
+      "enchanting": "Зачарователь",
+      "tailoring": "Портной",
+      "leatherworking": "Кожевник"
     }
   },
   "guide": {
