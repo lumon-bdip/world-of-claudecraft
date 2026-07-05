@@ -119,6 +119,7 @@ import {
   validateEmailShape,
   validatePasswordChange,
 } from './ui/account_portal';
+import { technicalErrorMessage, userFacingApiError } from './ui/api_error_i18n';
 import {
   handleKeyboardActivation,
   syncInputAriaState,
@@ -177,7 +178,6 @@ import {
   setStandingProvider,
 } from './ui/player_card_share';
 import { hydratePortraits, portraitChipHtml } from './ui/portrait_chip';
-import { tServer } from './ui/server_i18n';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { type PresetId, type ThemeKnob, ThemeStore } from './ui/theme';
 import {
@@ -292,10 +292,6 @@ function escapeHtml(text: string): string {
   });
 }
 
-function technicalErrorMessage(err: unknown): string {
-  return err instanceof Error ? err.message : String(err);
-}
-
 function readHomepageMusicMuted(): boolean {
   if (typeof window === 'undefined') return false;
   try {
@@ -314,106 +310,10 @@ function saveHomepageMusicMuted(muted: boolean): void {
   }
 }
 
-function userFacingApiError(err: unknown): string {
-  const text = technicalErrorMessage(err);
-  const suspended = text.match(/^This account is suspended until (.+)\.$/);
-  if (suspended) return t('errors.api.accountSuspended', { date: suspended[1] });
-
-  const normalized = text.toLowerCase();
-  if (normalized.startsWith('too many attempts')) return t('errors.api.tooManyAttempts');
-  if (normalized === 'username must be 3-24 chars (letters, digits, _)')
-    return t('errors.api.usernameShape');
-  if (normalized === 'username is not allowed') return t('errors.api.usernameNotAllowed');
-  if (normalized === 'password must be at least 6 chars') return t('errors.api.passwordMin');
-  if (normalized === 'username already taken') return t('errors.api.usernameTaken');
-  if (normalized === 'invalid username or password') return t('errors.api.invalidCredentials');
-  if (normalized === 'invalid character name (2-16 letters)')
-    return t('errors.api.invalidCharacterName');
-  if (normalized === 'character name is not allowed')
-    return t('errors.api.characterNameNotAllowed');
-  if (normalized === 'invalid class') return t('errors.api.invalidClass');
-  if (normalized === 'character limit reached') return t('errors.api.characterLimit');
-  if (normalized === 'that name is taken') return t('errors.api.nameTaken');
-  if (
-    normalized === 'character not found' ||
-    normalized === 'no such character' ||
-    normalized === 'not found'
-  )
-    return t('errors.api.characterNotFound');
-  if (normalized === 'character is currently online') return t('errors.api.characterOnline');
-  if (normalized === 'character rename is not permitted') return t('errors.api.renameNotPermitted');
-  if (normalized === 'type the character name to confirm deletion')
-    return t('errors.api.deleteConfirm');
-  if (normalized === 'not authenticated' || normalized === 'authentication required')
-    return t('errors.api.notAuthenticated');
-  if (normalized === 'this account has been banned.') return t('errors.api.accountBanned');
-  if (normalized === 'character already in world') return t('errors.api.alreadyInWorld');
-  if (normalized === 'character taken over') return t('errors.api.takenOver');
-  if (normalized === 'this character must be renamed before entering the world.')
-    return t('errors.api.renameBeforeEntering');
-  if (normalized === 'logins are only allowed from the game client')
-    return t('errors.api.webLoginOnly');
-  // Account portal REST errors (server/main.ts /api/account/*). English-source,
-  // re-localized here onto the English-only hudChrome.account.* keys.
-  if (normalized === 'current password is incorrect')
-    return t('hudChrome.account.errCurrentPassword');
-  if (normalized === 'enter a valid email address') return t('hudChrome.account.errEmailInvalid');
-  if (normalized === 'username does not match') return t('hudChrome.account.errUsernameMatch');
-  if (normalized === 'password is incorrect') return t('hudChrome.account.errPasswordIncorrect');
-  if (normalized === 'log out all characters before deactivating')
-    return t('hudChrome.account.errCharactersOnline');
-  if (normalized === 'this account has been deactivated.')
-    return t('hudChrome.account.deactivatedLocked');
-  if (normalized === 'password must be at most 128 chars')
-    return t('hudChrome.account.errPasswordLong');
-  if (normalized === 'that is already your email address')
-    return t('hudChrome.account.errEmailUnchanged');
-  if (
-    normalized === 'that code is not valid, try again' ||
-    normalized === 'invalid authentication code'
-  )
-    return t('hudChrome.account.errTwoFactorCode');
-  if (
-    normalized === 'start two-factor setup first' ||
-    normalized === 'two-factor is already enabled' ||
-    normalized === 'two-factor is not enabled'
-  )
-    return t('hudChrome.account.errTwoFactorState');
-  // The account row vanished mid-session (404 from /api/account/*); treat as a
-  // dropped session rather than rendering raw English in the form.
-  if (normalized === 'account not found') return t('errors.api.notAuthenticated');
-  // Cloudflare Turnstile rejection on login/register (passesTurnstile in
-  // server/turnstile.ts).
-  if (normalized === 'verification failed, please try again')
-    return t('errors.api.verificationFailed');
-  // Desktop app login handoff (server/desktop_login.ts exchange, plus the
-  // client-side guard in completeDesktopBrowserLogin when the mint response
-  // carries no code).
-  if (
-    normalized === 'invalid or expired desktop login code' ||
-    normalized === 'missing desktop login code'
-  )
-    return t('errors.api.desktopCodeInvalid');
-  // WebSocket disconnect reasons surfaced through the fatal overlay (net/online.ts).
-  if (normalized === 'connection to the server was lost.') return t('loading.connectionLost');
-  if (normalized === 'rejected by server') return t('loading.connectionRejected');
-  // NOTE: protocol/transport diagnostics ('bad auth message', 'authentication timed out',
-  // etc.) are intentionally NOT translated — they are developer/diagnostic errors and must
-  // stay English so browser logs and support reports match the server source.
-  // Moderation kicks and the login brute-force throttle (server/admin.ts, server/main.ts).
-  if (normalized === 'this account is suspended.') return tServer('moderation.suspended');
-  if (normalized === 'a moderator requires one of your characters to be renamed.')
-    return tServer('moderation.forceRename');
-  if (normalized.startsWith('too many failed attempts')) return tServer('moderation.tooManyFailed');
-  // Transport/runtime failures are diagnostic code errors. Preserve their
-  // English source text so browser logs and support reports match exactly.
-  return text;
-}
-
 // --- Cloudflare Turnstile (bot gate on the login/register form) ---------------
 // The site key is injected at build time; when it is empty (local/offline dev or
 // a build without the env var) the widget never renders and the token is '', so
-// the server — which also skips verification without its secret — lets requests
+// the server, which also skips verification without its secret, lets requests
 // through unchanged. The api.js <script> is in index.html.
 const TURNSTILE_SITEKEY = String(import.meta.env.VITE_TURNSTILE_SITEKEY ?? '');
 
@@ -813,7 +713,7 @@ function hideLoadingScreen(): void {
 // (new Renderer/new Hud) runs fully synchronously and blocks the main thread,
 // so without a real paint first the loading screen never shows on warm loads
 // (cached assets ⇒ assetsReady resolves on a microtask) and entry looks frozen.
-// Two rAFs guarantee a paint happened between them — same idiom used to cut to
+// Two rAFs guarantee a paint happened between them, same idiom used to cut to
 // the game on the first rendered frame below.
 function nextPaint(): Promise<void> {
   return new Promise((resolve) => {
@@ -890,7 +790,7 @@ async function startGame(
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur();
   }
-  // Paint the loading screen before anything can block — assetsReady may resolve
+  // Paint the loading screen before anything can block, assetsReady may resolve
   // immediately when assets are already cached, and the scene build is synchronous.
   await nextPaint();
   // Lazy locale flip: fetch the active locale's chunk and make it resident before the HUD
@@ -1125,7 +1025,7 @@ async function startGame(
       onTab: () => world.tabTarget(),
       onTargetFriendly: () => world.targetNearestFriendly(),
       onCycleFriendly: () => world.friendlyTabTarget(),
-      // slot 0 (key 1) is Attack for every class — auto-attack without needing
+      // slot 0 (key 1) is Attack for every class, auto-attack without needing
       // right-click; keys and clicks share the Hud's remappable slot layout
       onAbility: (slot) => hud.castSlot(slot),
       onInputIntent: (kind) => perf.markInputIntent(kind),
@@ -1806,7 +1706,7 @@ async function startGame(
 
   function clickMovePathTo(target: { x: number; z: number }): { x: number; z: number }[] {
     // ignoreFences: the player can hop fences, so route straight over them
-    // instead of around — resolveMove fires the jump as we reach the rail.
+    // instead of around, resolveMove fires the jump as we reach the rail.
     // swim: the player can swim, so let the route cross/enter water.
     return findPlayerPath(world.cfg.seed, world.player.pos, target, undefined, true, true);
   }
@@ -1983,7 +1883,7 @@ async function startGame(
   }
 
   // The player can't move toward a click-to-move destination while rooted/stunned
-  // — surface that on the marker so the freeze reads as crowd control, not a bug.
+  // surface that on the marker so the freeze reads as crowd control, not a bug.
   function playerImmobilized(): boolean {
     return world.player.auras.some((a) => IMMOBILE_AURA_KINDS.has(a.kind));
   }
@@ -2114,7 +2014,7 @@ async function startGame(
       orbiting: input.leftDown && input.isCameraDragActive(),
     });
     input.camYaw = next.camYaw;
-    lastInterpFacing = next.lastInterpFacing; // track through mouselook too — no snap on release
+    lastInterpFacing = next.lastInterpFacing; // track through mouselook too, no snap on release
   }
 
   // Resolve this step's movement input, folding in click-to-move (#95). Returns
@@ -2190,7 +2090,7 @@ async function startGame(
           // can turn at close range.
           mi.forward = clickMoveShouldWalk(smoothFacing, step.facing);
           // The path can route over fences (the player jumps them), so hop when
-          // one is just ahead along our heading — the sim only jumps while
+          // one is just ahead along our heading, the sim only jumps while
           // grounded, so setting this every frame near a fence is safe. Once we
           // give up on jumping and reroute around, stop auto-hopping.
           if (mi.forward && !clickMoveReroutedAround) {
@@ -2798,7 +2698,7 @@ function renderSkinPicker(
   const count = skinCount(`player_${cls}`);
   const picker = row.closest('.skin-picker') as HTMLElement | null;
   if (count <= 1) {
-    // only the default exists — nothing to pick
+    // only the default exists, nothing to pick
     if (picker) picker.style.display = 'none';
     return;
   }
@@ -3932,7 +3832,7 @@ async function refreshCharacters(): Promise<void> {
     if (api.realm) $('#charselect-realm').textContent = api.realm;
     listEl.innerHTML = '';
     if (chars.length === 0) {
-      // No characters on this realm — drop straight into the create screen.
+      // No characters on this realm, drop straight into the create screen.
       listEl.innerHTML = `<li class="char-list-message">${escapeHtml(t('character.noneYet'))}</li>`;
       show('#charcreate-panel');
       return;
@@ -4641,8 +4541,8 @@ async function changeLanguage(
 }
 
 async function loadProjectStats(): Promise<void> {
-  // Realm status now lives in the realm dropdown — both in the trigger sub-line
-  // and inside the Online option — so update every instance by class.
+  // Realm status now lives in the realm dropdown, both in the trigger sub-line
+  // and inside the Online option, so update every instance by class.
   const accountEls = document.querySelectorAll<HTMLElement>('.js-stat-accounts');
   if (!accountEls.length) return;
   const setAll = (els: NodeListOf<HTMLElement>, text: string): void => {
@@ -4761,14 +4661,14 @@ async function loadHighscores(): Promise<void> {
 
 // Minimal, safe Markdown → HTML for GitHub release notes. The input is escaped
 // FIRST, so every regex below operates on inert text; the only markup we emit is
-// our own whitelisted tags. Deliberately tiny (no tables/images/blockquotes) —
+// our own whitelisted tags. Deliberately tiny (no tables/images/blockquotes),
 // enough to make patch notes readable without pulling in a markdown dependency.
 function renderReleaseBody(md: string): string {
   const esc = (s: string): string =>
     s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
   const inline = (s: string): string =>
     esc(s)
-      // [text](url) — only http(s) links survive; anything else renders as text.
+      // [text](url), only http(s) links survive; anything else renders as text.
       .replace(
         /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
         (_m, text, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`,
@@ -5438,7 +5338,7 @@ async function refreshWocBalance(address: string, fresh = false): Promise<void> 
   const wallet = await loadWallet();
   const balance = await wallet.fetchWocBalance(address, fresh);
   // Skip stale results (wallet switched mid-flight) and fresh-read transport blips
-  // that would wipe a shown balance — see resolveWocBalanceUpdate.
+  // that would wipe a shown balance, see resolveWocBalanceUpdate.
   const { apply, setLinked } = resolveWocBalanceUpdate({
     address,
     fresh,
@@ -5453,7 +5353,7 @@ async function refreshWocBalance(address: string, fresh = false): Promise<void> 
 }
 
 // Re-fetch the connected/linked wallet's balance on demand (server cache
-// bypassed) so surfaces that display it — the bag footer and the player card —
+// bypassed) so surfaces that display it, the bag footer and the player card,
 // reflect on-chain changes. No-op when the wallet feature is off or nothing is
 // connected/linked. Prefers the account-LINKED wallet (whose balance the badge
 // shows) over a merely-connected one, and a short throttle coalesces rapid
@@ -6289,7 +6189,7 @@ window.addEventListener('woc:wallet-verify', () => {
 
 // ---- Landing-page cinematic backdrop ------------------------------------
 // Decides per-visit whether the start screen shows the looping trailer video or
-// a static, dimmed, high-contrast poster — and crucially NEVER fetches the
+// a static, dimmed, high-contrast poster, and crucially NEVER fetches the
 // 5.7 MB mp4 in the static case (the <video> ships with no source/autoplay; we
 // attach the source only when we choose the video path). Called at boot, when the
 // footer toggle flips, and when the in-game mirror setting changes.
@@ -6829,7 +6729,7 @@ function wireStartScreens(): void {
       resetTurnstile();
       return;
     }
-    // Auth succeeded — a later realm-entry error is NOT a verification failure,
+    // Auth succeeded, a later realm-entry error is NOT a verification failure,
     // so don't reset the widget or let the user re-submit the (now duplicate) auth.
     try {
       await completeOnlineAuth();
@@ -7353,9 +7253,11 @@ function wireStartScreens(): void {
       discordChoiceError(t('hudChrome.discord.choice.expired'));
       return;
     }
-    // Server codes userFacingApiError doesn't localize (a unique-link race, a 500, or
-    // the discord rate-limit bucket) would otherwise render raw; show the localized
-    // generic instead. The credential / 2FA / moderation messages it DOES localize
+    // Codes best shown as the chooser's own generic: already_linked (a unique-link
+    // race) and server_error (a 500) would render raw from userFacingApiError, and
+    // 'rate limited' (which userFacingApiError now resolves to
+    // errors.api.tooManyAttempts) deliberately keeps the panel's single generic here.
+    // The credential / 2FA / moderation messages userFacingApiError DOES localize
     // pass through unchanged.
     const code = err instanceof Error ? err.message : '';
     if (code === 'already_linked' || code === 'server_error' || code === 'rate limited') {
@@ -7761,7 +7663,7 @@ function fadeOutHomepageMusic(durationMs = 1600): void {
     for (const name of Object.keys(vars))
       document.documentElement.style.setProperty(name, vars[name]);
   } catch {
-    /* localStorage/DOM unavailable — fall back to index.html defaults */
+    /* localStorage/DOM unavailable, fall back to index.html defaults */
   }
 })();
 
