@@ -206,19 +206,6 @@ import {
   normalizeGatheringProficiency,
 } from './professions/gathering';
 import type { ProfessionRecipeRecord as RecipeDef } from './professions/types';
-  craftSkillsFor,
-  emptyCraftSkills,
-  gainCraftSkill,
-  normalizeCraftSkills,
-} from './professions/wheel';
-  gatherNodeById,
-  gatheringSkillsView,
-  gatherNodeById,
-  harvestNode as harvestNodeImpl,
-  isNodeHarvestableBy,
-  normalizeGatheringProficiency,
-} from './professions/gathering';
-import type { ProfessionRecipeRecord as RecipeDef } from './professions/types';
 import {
   craftSkillsFor,
   emptyCraftSkills,
@@ -883,7 +870,6 @@ export interface CharacterState {
   // pre-rename key, kept for back-compat with old saves; `gatheringProficiency`
   // is the current key both read (preferred) and written going forward.
   professions?: Partial<Record<string, number>>;
-  // load cleanly, defaulting every profession to 0).
   gatheringProficiency?: Partial<Record<string, number>>;
   copper: number;
   hp: number;
@@ -1504,7 +1490,6 @@ export class Sim {
       raidLockouts: new Map(),
       away: null,
       marketQuery: defaultMarketQuery(),
-      marketFilter: '',
       craftSkills: emptyCraftSkills(),
       mailWelcomed: false,
       marketFilter: '',
@@ -6671,15 +6656,68 @@ export class Sim {
     return this.craftSkillsFor(this.primaryId);
   }
 
-  // Read-only gathering-profession proficiency surface for IWorld. Stubbed
-  // directly on IWorld pending issue #1164 (a broader professions facet); see
-  // that issue for the eventual reconciliation.
-  gatheringProficiencyFor(pid: number): Record<string, number> {
-    return { ...(this.players.get(pid)?.gatheringProficiency ?? emptyGatheringProficiency()) };
+  /** The active-archetype craft id, or null before the zone-1 acceptance quest has
+   *  ever been completed (see professions/archetype.ts). */
+  activeArchetypeFor(pid: number): string | null {
+    return archetypeStateFor(this.ctx, pid).activeArchetype;
   }
 
-  get gatheringProficiency(): Record<string, number> {
-    return this.gatheringProficiencyFor(this.primaryId);
+  get activeArchetype(): string | null {
+    return this.activeArchetypeFor(this.primaryId);
+  }
+
+  /** Total successful archetype switches this character has ever made. */
+  archetypeSwitchCountFor(pid: number): number {
+    return archetypeStateFor(this.ctx, pid).switchCount;
+  }
+
+  get archetypeSwitchCount(): number {
+    return this.archetypeSwitchCountFor(this.primaryId);
+  }
+
+  /** Amends progress accrued toward the CURRENT switch's threshold, and the
+   *  threshold itself (see requiredAmendsProgress: it scales with switchCount). */
+  archetypeAmendsProgressFor(pid: number): number {
+    return archetypeStateFor(this.ctx, pid).amendsProgress;
+  }
+
+  get archetypeAmendsProgress(): number {
+    return this.archetypeAmendsProgressFor(this.primaryId);
+  }
+
+  archetypeAmendsRequiredFor(pid: number): number {
+    return requiredAmendsProgress(archetypeStateFor(this.ctx, pid).switchCount);
+  }
+
+  get archetypeAmendsRequired(): number {
+    return this.archetypeAmendsRequiredFor(this.primaryId);
+  }
+
+  /** Stub entry point for the zone-1 acceptance quest's completion (see
+   *  professions/archetype.ts for what is stubbed and why). No-op (returns false)
+   *  if an archetype is already set. */
+  acceptArchetypeQuest(craftId: string, pid?: number): boolean {
+    const r = this.resolve(pid);
+    if (!r) return false;
+    return acceptArchetypeQuestImpl(this.ctx, r.meta.entityId, craftId);
+  }
+
+  /** Stub entry point for one completion of the repeatable "make amends" quest
+   *  (see professions/archetype.ts). No-op before an archetype has ever been
+   *  chosen. */
+  advanceAmendsProgress(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    advanceAmendsProgressImpl(this.ctx, r.meta.entityId);
+  }
+
+  /** Attempt to switch the active archetype to a different craft; blocked (a
+   *  complete no-op) unless enough amends progress has accrued. See
+   *  professions/archetype.ts switchArchetype for the full gating rule. */
+  switchArchetype(craftId: string, pid?: number): boolean {
+    const r = this.resolve(pid);
+    if (!r) return false;
+    return switchArchetypeImpl(this.ctx, r.meta.entityId, craftId);
   }
 
   /** The active-archetype craft id, or null before the zone-1 acceptance quest has

@@ -1020,6 +1020,19 @@ export class ClientWorld implements IWorld {
   // Craft-result surface (#1127), mirrored from the server's `craftResult`
   // event (applyEvent below). Null until this session's first craft attempt.
   lastCraftResult: CraftResultView | null = null;
+  // Active-archetype identity (#1129, superseded scope). Same not-yet-wired-on-the-
+  // wire status as craftSkills/gatheringProficiency above: this change lands the
+  // sim-side state machine + persistence only, so online play sees the all-unset
+  // default (no archetype, switchCount 0) until a follow-up wires a self-snap field
+  // and the corresponding `cmd` dispatch cases in server/game.ts the way
+  // craft_item/harvest_node do for recipeList/nodeHarvestableByMe.
+  activeArchetype: string | null = null;
+  archetypeSwitchCount = 0;
+  archetypeAmendsProgress = 0;
+  archetypeAmendsRequired = 0;
+  acceptArchetypeQuest(_craftId: string): void {}
+  advanceAmendsProgress(): void {}
+  switchArchetype(_craftId: string): void {}
   // --- IWorldParty: raid-target marker mirror, from the self-wire `marks` (markerFor
   // reads it, no send). ---
   markers: Record<number, number> = {}; // entityId -> markerId, mirrored from the self-wire
@@ -2384,19 +2397,6 @@ export class ClientWorld implements IWorld {
   }
   delveRiteChoose(intensity: RiteIntensity): void {
     this.cmd({ cmd: 'delve_rite_choose', intensity });
-  }
-  // Mirror the authoritative craftResult event into lastCraftResult (#1127).
-  // The event still flows to the HUD (drainEvents) for a toast/log line.
-  private applyCraftResultEvent(ev: SimEvent): void {
-    if (ev.type !== 'craftResult') return;
-    this.lastCraftResult = {
-      ok: ev.ok,
-      recipeId: ev.recipeId,
-      itemId: ev.itemId,
-      count: ev.count,
-      quality: ev.quality as MaterialRarity | undefined,
-      reason: ev.reason,
-    };
   }
   // Mirror the authoritative lockpick lifecycle into lockpickState. The events
   // still flow to the HUD (drainEvents) for transient feedback (juice/sounds).
