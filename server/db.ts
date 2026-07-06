@@ -622,6 +622,30 @@ CREATE TABLE IF NOT EXISTS referrals (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS referrals_referrer ON referrals(referrer_account_id);
+-- Append-only audit ledger, one row per SUCCESSFUL bank op, written fire-and-forget
+-- off the game loop; rows are never updated or deleted by the server. The container
+-- discriminator is guild-bank readiness: v1 writes only 'personal' with a NULL
+-- container_id, while the future guild bank writes 'guild' plus the guild id into
+-- this SAME table. realm carries no DEFAULT deliberately: the interpolated-default
+-- pattern is last-boot-wins across realm processes, so every insert passes realm
+-- explicitly.
+CREATE TABLE IF NOT EXISTS bank_ledger (
+  id BIGSERIAL PRIMARY KEY,
+  realm TEXT NOT NULL,
+  character_id INT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  op TEXT NOT NULL,
+  item_id TEXT,
+  count INT,
+  instance JSONB,
+  copper_delta BIGINT NOT NULL DEFAULT 0,
+  purchased_slots_after INT NOT NULL,
+  container TEXT NOT NULL DEFAULT 'personal',
+  container_id BIGINT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS bank_ledger_character ON bank_ledger(character_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS bank_ledger_created ON bank_ledger(created_at);
 `;
 
 export async function ensureSchema(): Promise<void> {
@@ -2655,4 +2679,49 @@ export async function pruneChatLogs(retentionDays: number): Promise<number> {
     [String(Math.floor(retentionDays))],
   );
   return res.rowCount ?? 0;
+}
+
+// ---------------------------------------------------------------------------
+// Bank ledger: one append-only row per SUCCESSFUL bank op, written fire-and-forget
+// off the game loop by server/bank_ledger.ts. See the bank_ledger DDL block in
+// SCHEMA above; realm is passed explicitly (the table carries no DEFAULT), and
+// container is always 'personal' with a NULL container_id until the guild bank
+// lands. `instance` is the item's per-instance payload (or null for a plain
+// fungible stack / a buy_slots row), serialized the same way as characters.state.
+// ---------------------------------------------------------------------------
+
+export interface BankLedgerRow {
+  realm: string;
+  characterId: number;
+  accountId: number;
+  op: 'deposit' | 'withdraw' | 'buy_slots';
+  itemId: string | null;
+  count: number | null;
+  instance: unknown;
+  copperDelta: number;
+  purchasedSlotsAfter: number;
+  container: 'personal';
+  containerId: null;
+}
+
+export async function insertBankLedgerRow(row: BankLedgerRow): Promise<void> {
+  await pool.query(
+    `INSERT INTO bank_ledger
+       (realm, character_id, account_id, op, item_id, count, instance,
+        copper_delta, purchased_slots_after, container, container_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+    [
+      row.realm,
+      row.characterId,
+      row.accountId,
+      row.op,
+      row.itemId,
+      row.count,
+      row.instance == null ? null : JSON.stringify(row.instance),
+      row.copperDelta,
+      row.purchasedSlotsAfter,
+      row.container,
+      row.containerId,
+    ],
+  );
 }

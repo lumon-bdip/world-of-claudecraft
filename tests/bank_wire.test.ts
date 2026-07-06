@@ -12,6 +12,8 @@ vi.mock('../server/db', () => ({
   walletForAccount: vi.fn(async () => null),
   markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
   grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  // A successful bank op now dereferences the fire-and-forget ledger writer.
+  insertBankLedgerRow: vi.fn(async () => {}),
 }));
 
 import { GameServer } from '../server/game';

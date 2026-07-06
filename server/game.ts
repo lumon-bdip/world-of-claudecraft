@@ -35,6 +35,7 @@ import {
 import { type CommandName, isOverheadEmoteId } from '../src/world_api';
 import { recordOnlineSample } from './admin_db';
 import { offensiveName } from './auth';
+import { recordBankOp } from './bank_ledger';
 import type {
   BotDetector,
   BotTrackingContext,
@@ -3245,19 +3246,30 @@ export class GameServer {
       // alive-state, exact-copper cost + purchase cap); `bonusSlots` is never
       // client-supplied. bank_buy_slots is an economy action bounded by the
       // blanket per-frame message limiter plus the Sim's escalating-price cap.
+      // The bank_ledger write is OBSERVATIONAL and fire-and-forget: the sim methods
+      // return void and emit no success event, so recordBankOp derives success by
+      // diffing the bankInfoFor snapshot before and after each call. It is never
+      // awaited and never a gameplay dependency; a refused/no-op call diffs empty.
       case 'bank_deposit':
         if (typeof msg.slot === 'number') {
+          const before = sim.bankInfoFor(pid);
           sim.bankDeposit(msg.slot, typeof msg.count === 'number' ? msg.count : undefined, pid);
+          recordBankOp('deposit', session, before, sim.bankInfoFor(pid));
         }
         break;
       case 'bank_withdraw':
         if (typeof msg.slot === 'number') {
+          const before = sim.bankInfoFor(pid);
           sim.bankWithdraw(msg.slot, typeof msg.count === 'number' ? msg.count : undefined, pid);
+          recordBankOp('withdraw', session, before, sim.bankInfoFor(pid));
         }
         break;
-      case 'bank_buy_slots':
+      case 'bank_buy_slots': {
+        const before = sim.bankInfoFor(pid);
         sim.bankBuySlots(pid);
+        recordBankOp('buy_slots', session, before, sim.bankInfoFor(pid));
         break;
+      }
       // dev/ops commands, only when ALLOW_DEV_COMMANDS=1 (never in production)
       case 'dev_level': {
         if (process.env.ALLOW_DEV_COMMANDS === '1' && typeof msg.level === 'number') {
