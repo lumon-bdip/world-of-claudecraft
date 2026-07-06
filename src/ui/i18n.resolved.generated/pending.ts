@@ -92,6 +92,17 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.bursar_petra_vell.title"
   ],
   "ru_RU": [],
+  "cs_CZ": [
+    "entities.npcs.bursar_aldous_crane.greeting",
+    "entities.npcs.bursar_aldous_crane.name",
+    "entities.npcs.bursar_aldous_crane.title",
+    "entities.npcs.bursar_fernando.greeting",
+    "entities.npcs.bursar_fernando.name",
+    "entities.npcs.bursar_fernando.title",
+    "entities.npcs.bursar_petra_vell.greeting",
+    "entities.npcs.bursar_petra_vell.name",
+    "entities.npcs.bursar_petra_vell.title"
+  ],
   "nl_NL": [
     "entities.npcs.bursar_aldous_crane.greeting",
     "entities.npcs.bursar_aldous_crane.name",
