@@ -1,9 +1,13 @@
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { azureSignOptionsFromEnv, desktopBuilderConfig } from './electron-builder-config.mjs';
+import {
+  azureSignOptionsFromEnv,
+  desktopBuilderConfig,
+  stampChannelFeedFiles,
+} from './electron-builder-config.mjs';
 import { buildElectronVendor } from './electron-vendor.mjs';
 
 // Usage: node scripts/electron-build.mjs [pack|build] [website|steam]
@@ -95,6 +99,12 @@ const config = desktopBuilderConfig({
   loginOrigin,
   crashSubmitUrl: process.env.WOC_CRASH_SUBMIT_URL ?? '',
   azureSign: process.platform === 'win32' ? azureSignOptionsFromEnv(process.env) : null,
+  // The update track defaults from apiOrigin (production origin publishes the
+  // 'latest' feed, anything else 'dev'); WOC_UPDATE_CHANNEL=dev stages a
+  // production-origin artifact on the dev track for update-pipeline testing.
+  // The one dangerous combination, 'latest' with a non-production origin,
+  // makes desktopBuilderConfig throw before anything is built.
+  updateChannel: process.env.WOC_UPDATE_CHANNEL ?? null,
 });
 const configDir = mkdtempSync(path.join(tmpdir(), 'woc-eb-'));
 const configPath = path.join(configDir, 'electron-builder.json');
@@ -114,3 +124,26 @@ run(electronBuilderCommand, [
 // The derived config holds no secrets, but do not litter the tmpdir on the
 // success path (run() exits the process on failure, skipping this).
 rmSync(configDir, { recursive: true, force: true });
+
+// Stamp every emitted update-feed file with the baked API origin so the
+// running app can refuse a cross-track artifact (electron/update_guard.cjs).
+// Steam builds publish nothing and pack builds emit no feed files, so this is
+// a no-op there.
+const feedChannel = config.publish?.channel;
+if (feedChannel) {
+  const outDir = path.join(root, config.directories?.output ?? 'release');
+  const stamped = stampChannelFeedFiles({
+    outDir,
+    channel: feedChannel,
+    apiOrigin,
+    fs: { existsSync, readdirSync, readFileSync, writeFileSync },
+    joinPath: path.join,
+  });
+  for (const name of stamped) console.log(`[electron-build] stamped wocApiOrigin into ${name}`);
+  if (mode === 'build' && stamped.length === 0) {
+    console.warn(
+      `[electron-build] no ${feedChannel}*.yml feed files found in ${outDir}; ` +
+        'nothing stamped (expected for target sets with no updatable artifact)',
+    );
+  }
+}

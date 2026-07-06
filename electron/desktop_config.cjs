@@ -14,6 +14,8 @@
 // code and differ only by this stamp. WOC_DISTRIBUTION overrides it for local
 // testing of either path in `electron .` / electron:dev.
 
+const { updateChannelForOrigin } = require('./update_guard.cjs');
+
 const DISTRIBUTIONS = new Set(['website', 'steam']);
 
 // Resolve the distribution channel. The WOC_DISTRIBUTION env override applies
@@ -92,14 +94,20 @@ function updaterAllowed({ distribution, isPackaged }) {
   return isPackaged === true && distribution === 'website';
 }
 
-// One-call summary used by electron/main.cjs at startup.
+// One-call summary used by electron/main.cjs at startup. updateChannel is a
+// pure function of the resolved apiOrigin (electron/update_guard.cjs): there
+// is deliberately no stamp and no env hatch for it, so a build baked with a
+// non-production origin can never read the production update feed, however it
+// was stamped or launched.
 function resolveDesktopConfig({ packagedMetadata, env, isPackaged } = {}) {
   const distribution = resolveDistribution({ packagedMetadata, env, isPackaged });
+  const origins = resolveDesktopOrigins({ packagedMetadata, env, isPackaged });
   return {
     distribution,
     updaterEnabled: updaterAllowed({ distribution, isPackaged }),
     crashSubmitUrl: resolveCrashSubmitUrl({ packagedMetadata, env, isPackaged }),
-    ...resolveDesktopOrigins({ packagedMetadata, env, isPackaged }),
+    updateChannel: updateChannelForOrigin(origins.apiOrigin),
+    ...origins,
   };
 }
 

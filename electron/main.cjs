@@ -464,6 +464,7 @@ app.whenReady().then(() => {
     packaged: app.isPackaged,
     distribution: desktopConfig.distribution,
     updaterEnabled: desktopConfig.updaterEnabled,
+    updateChannel: desktopConfig.updateChannel,
     crashUpload: desktopConfig.crashSubmitUrl !== '',
     crashDumpDir: app.getPath('crashDumps'),
     logFile: logFilePath,
@@ -501,6 +502,11 @@ app.whenReady().then(() => {
         getWindow: () => mainWindow,
         isTrusted: trustedSender,
         isPackaged: app.isPackaged,
+        // The normalized origin this install talks to and the update channel
+        // derived from it (electron/update_guard.cjs): the updater reads only
+        // its own track's feed and refuses cross-origin artifacts.
+        apiOrigin,
+        updateChannel: desktopConfig.updateChannel,
       });
     } catch (err) {
       log.error('[updater] init failed', err);

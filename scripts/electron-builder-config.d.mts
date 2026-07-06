@@ -22,7 +22,7 @@ export interface DesktopBuilderConfig {
       crashSubmitUrl?: string;
     };
   };
-  publish: unknown;
+  publish: { channel?: 'latest' | 'dev'; [key: string]: unknown } | null;
   directories: { output?: string; [key: string]: unknown };
   mac: { [key: string]: unknown };
   win: { azureSignOptions?: AzureSignOptions; [key: string]: unknown };
@@ -38,4 +38,20 @@ export function desktopBuilderConfig(input: {
   loginOrigin?: string;
   crashSubmitUrl?: string;
   azureSign?: AzureSignOptions | null;
+  updateChannel?: string | null;
 }): DesktopBuilderConfig;
+
+export function isChannelFeedFile(fileName: unknown, channel: unknown): boolean;
+export function stampFeedFile(text: string, apiOrigin: string): string;
+export function stampChannelFeedFiles(input: {
+  outDir: string;
+  channel: unknown;
+  apiOrigin: string;
+  fs: {
+    existsSync: (path: string) => boolean;
+    readdirSync: (path: string) => string[];
+    readFileSync: (path: string, encoding: 'utf8') => string;
+    writeFileSync: (path: string, data: string) => void;
+  };
+  joinPath: (...parts: string[]) => string;
+}): string[];
