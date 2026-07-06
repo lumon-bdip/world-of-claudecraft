@@ -107,6 +107,11 @@
 
 (Fill in after each phase: deferrals, surprises, drift.)
 
+### Release merge 2026-07-06 (before Phase 3)
+
+- Merged origin/release/v0.22.0 (63 commits, tip 2b6519497) as b660fccb9. All 50 conflicts were generated artifacts, resolved by regeneration only: npm run i18n:gen for the i18n pair, UPDATE_PARITY=1 for 48 goldens (regenerated goldens keep the +3 banker entities on top of release sim changes; parity 96/96 without UPDATE). The i18n resolved-table sha256 baseline needed a re-write (scripts/i18n_resolved_hash.mjs --write): the merge is not behavior-preserving for i18n, so the re-baseline is correct, not a bug.
+- release-merge-audit verdict: CLEAN both directions (three-way diff-of-diffs on every dual-touched file; banker flag flow re-verified end to end; no release-side bank/vault pre-landing; no command/delta-key/facet collisions). Only findings: stale pin baselines in state.md and the phase-03 packet, corrected in this commit. Release side notes: the merge brings the #1483 mobile-controls revert and 7 archetype IWorld members; ClientWorld has 7 adjacent archetype STUB members awaiting their own wire phase (do not wire them in bank work). A release-side oddity (inert CharacterState.worldBossDaily declared under a comment saying it was dropped, src/sim/sim.ts ~963) predates the merge and belongs upstream, not in bank commits.
+
 ### Phase 1 (2026-07-05)
 - Reviewers: architecture-reviewer, migration-safety, qa-checklist all returned ZERO blocking; every should-fix and nice-to-have applied (Math.floor price-index hardening, `CharacterState.bank?: BankState` type reuse, deposit-side un-credit test, bonusSlots clamp deferral documented).
 - Parity: the new `PlayerMeta.bank` field entered the sampled trace, so `bank` was added to `META_EXCLUDE` (pin updated in harness.test.ts); goldens byte-untouched. DEBT: Phase 3 must remove the exclusion and pin the bank in parity scenarios when it goes on the wire.

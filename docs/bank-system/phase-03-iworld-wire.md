@@ -63,9 +63,11 @@ Agent B (ClientWorld + pins + tests) deliverables:
   empty on omission.
 - Pin bumps in the SAME commit as each seam edit: tests/world_api_parity.test.ts
   (member count and sorted lists; facet count 22 plus one),
-  tests/command_schema.test.ts (EXPECTED_SEND_COUNT 118 plus 3, EXPECTED_DISPATCH_COUNT
-  127 plus 3), tests/snapshots.test.ts (ALL_DELTA_KEYS 30 to 31, TERSE_TO_IWORLD bank
+  tests/command_schema.test.ts (EXPECTED_SEND_COUNT 119 plus 3, EXPECTED_DISPATCH_COUNT
+  128 plus 3), tests/snapshots.test.ts (ALL_DELTA_KEYS 31 to 32, TERSE_TO_IWORLD bank
   -> bankInfo, dirtyEveryDeltaField), tests/command_facets.test.ts.
+  (Baselines re-derived 2026-07-06 after the v0.22.0 merge; always confirm against the
+  test files themselves, they are the authority, per STEP 1.)
 - Tests: wire round-trip (vi.mock('../server/db') hoisted above the server/game import,
   fakeWs, GameServer join + handleMessage + broadcastSnapshots, bare ClientWorld via
   Object.create + applySnapshot); offline Sim vs online ClientWorld parity for

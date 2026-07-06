@@ -38,11 +38,11 @@ Current phase: Phase 2 + Phase 2 QA complete (2026-07-06, verdict PASS after fix
 
 ## Pinned counts that must be bumped in the SAME commit as the seam change
 
-- `tests/world_api_parity.test.ts`: IWorld members 170 (42 data + 128 method), facets 22, sorted toEqual lists.
-- `tests/command_schema.test.ts`: EXPECTED_SEND_COUNT 118, EXPECTED_DISPATCH_COUNT 127, DISPATCH_ONLY 9.
-- `tests/snapshots.test.ts`: ALL_DELTA_KEYS has 30 entries (stale comments say 28) + TERSE_TO_IWORLD + dirtyEveryDeltaField.
-- `tests/command_facets.test.ts`: append-only COMMAND_FACETS tags keyed on wire strings.
-- `tests/architecture.test.ts`: UI_PURE_CORES 52 entries; new `bank_view.ts` must be registered (the `*_view` suffix is what the completeness sweep catches).
+- `tests/world_api_parity.test.ts`: IWorld members 181 (49 data + 132 method), facets 22, sorted toEqual lists. (Re-baselined 2026-07-06 after the v0.22.0 merge: the release professions facet gained 7 archetype members. NOTE a pre-existing gap, NOT ours to fix: the real extends list has 23 facets but the pin covers 22; IWorldDailyRewards (PR #1307) is unpinned. After the bank facet the pin goes 22 to 23 while the extends list reads 24; do not "reconcile" by adding daily-rewards.)
+- `tests/command_schema.test.ts`: EXPECTED_SEND_COUNT 119, EXPECTED_DISPATCH_COUNT 128, DISPATCH_ONLY 9. (Re-baselined 2026-07-06; Phase 3 targets 122/131/9.)
+- `tests/snapshots.test.ts`: ALL_DELTA_KEYS has 31 entries (the release registered `gprof`; in-file comments now correct) + TERSE_TO_IWORLD + dirtyEveryDeltaField. Phase 3 takes it to 32.
+- `tests/command_facets.test.ts`: append-only COMMAND_FACETS tags keyed on wire strings. (COMMAND_FACETS is a PARTIAL tag map: professions commands are untagged and IWorldProfessions is absent from the WorldFacet union; tagging bank commands is optional, and if done the union needs `'IWorldBank'` added.)
+- `tests/architecture.test.ts`: UI_PURE_CORES 53 entries (the v0.22.0 merge brought the #1483 mobile-controls revert, removing 2); new `bank_view.ts` must be registered (the `*_view` suffix is what the completeness sweep catches).
 - `tests/localization_fixes.test.ts`: hardcoded simSrc list (append `src/sim/bank.ts`).
 
 ## Validation matrix by change type
