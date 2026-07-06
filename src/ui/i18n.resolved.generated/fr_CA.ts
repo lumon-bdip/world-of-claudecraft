@@ -313,13 +313,7 @@ export const fr_CA: EnTranslations = {
       "hapticsOff": "Vibrations désactivées",
       "toggleHaptics": "Activer/désactiver les vibrations",
       "hotbarPage": "Techniques",
-      "hotbarPageAria": "Afficher la prochaine série de techniques",
-      "actionRing": "Actions de combat",
-      "actionPageToggle": "Changer de page d'action",
-      "actionPageIndicator": "Page {page}",
-      "targetCycle": "Échanger la cible",
-      "targetCycleShort": "Cible",
-      "spellbookPageLabel": "Page {page}"
+      "hotbarPageAria": "Afficher la prochaine série de techniques"
     },
     "tutorial": {
       "moveBodyTouch": "Utilise le joystick de déplacement pour te déplacer et fais glisser l'écran pour regarder autour de toi. Fais quelques pas pour commencer.",
@@ -426,9 +420,7 @@ export const fr_CA: EnTranslations = {
       "itemLevelLine": "Niveau d'objet {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Afficher la barre d'action secondaire",
-      "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes",
-      "mobileCameraJoystick": "Manette de caméra",
-      "mobileLeftHanded": "Disposition pour gaucher"
+      "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes"
     },
     "controller": {
       "title": "Manette",
