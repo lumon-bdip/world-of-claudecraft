@@ -1059,6 +1059,18 @@ export const fr_FR: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Développeur",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const fr_FR: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Faucille Pétale de Soleil"
+      },
+      "thorium_ore": {
+        "name": "Minerai de Thorium"
+      },
+      "arcanite_bar": {
+        "name": "Barre d'Arcanite"
+      },
+      "ashwood_log": {
+        "name": "Bûche de Frêne Gris"
+      },
+      "elderwood_log": {
+        "name": "Bûche de Sureau Ancien"
+      },
+      "goldleaf_herb": {
+        "name": "Herbe Feuille d'Or"
+      },
+      "sunpetal_herb": {
+        "name": "Herbe Pétale de Soleil"
       },
       "bristleback_maul": {
         "name": "Marteau Gallowglass"

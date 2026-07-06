@@ -1059,6 +1059,18 @@ export const id_ID: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Pengembang",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const id_ID: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Sabit Kelopak Matahari"
+      },
+      "thorium_ore": {
+        "name": "Bijih Torium"
+      },
+      "arcanite_bar": {
+        "name": "Batangan Arkanit"
+      },
+      "ashwood_log": {
+        "name": "Kayu Gelondongan Abu"
+      },
+      "elderwood_log": {
+        "name": "Kayu Gelondongan Tua Elder"
+      },
+      "goldleaf_herb": {
+        "name": "Herba Daun Emas"
+      },
+      "sunpetal_herb": {
+        "name": "Herba Kelopak Matahari"
       },
       "bristleback_maul": {
         "name": "Palu Gallowglass"

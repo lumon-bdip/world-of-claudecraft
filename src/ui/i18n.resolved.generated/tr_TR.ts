@@ -1059,6 +1059,18 @@ export const tr_TR: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Geliştirici",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const tr_TR: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Güneşyaprağı Orağı"
+      },
+      "thorium_ore": {
+        "name": "Toryum Cevheri"
+      },
+      "arcanite_bar": {
+        "name": "Arkanit Külçesi"
+      },
+      "ashwood_log": {
+        "name": "Kül Ağacı Kütüğü"
+      },
+      "elderwood_log": {
+        "name": "Yaşlı Mürver Kütüğü"
+      },
+      "goldleaf_herb": {
+        "name": "Altın Yaprak Otu"
+      },
+      "sunpetal_herb": {
+        "name": "Güneş Yaprağı Otu"
       },
       "bristleback_maul": {
         "name": "Gallowglass Balyozu"

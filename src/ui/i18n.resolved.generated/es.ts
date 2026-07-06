@@ -1059,6 +1059,18 @@ export const es: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Desarrollador",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const es: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Hoz de Pétalo Solar"
+      },
+      "thorium_ore": {
+        "name": "Mineral de Torio"
+      },
+      "arcanite_bar": {
+        "name": "Barra de Arcanita"
+      },
+      "ashwood_log": {
+        "name": "Tronco de Ceniza"
+      },
+      "elderwood_log": {
+        "name": "Tronco de Saúco"
+      },
+      "goldleaf_herb": {
+        "name": "Hierba Hoja de Oro"
+      },
+      "sunpetal_herb": {
+        "name": "Hierba Pétalo de Sol"
       },
       "bristleback_maul": {
         "name": "Martillo Gallowglass"

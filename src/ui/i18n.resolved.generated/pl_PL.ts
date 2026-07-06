@@ -1059,6 +1059,18 @@ export const pl_PL: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Deweloper",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const pl_PL: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Sierp Słonecznopłatkowy"
+      },
+      "thorium_ore": {
+        "name": "Ruda Toru"
+      },
+      "arcanite_bar": {
+        "name": "Sztabka Arkanitu"
+      },
+      "ashwood_log": {
+        "name": "Kłoda Jesionu Popiołowego"
+      },
+      "elderwood_log": {
+        "name": "Kłoda Starego Bzu"
+      },
+      "goldleaf_herb": {
+        "name": "Ziele Złotolistne"
+      },
+      "sunpetal_herb": {
+        "name": "Ziele Słonecznego Płatka"
       },
       "bristleback_maul": {
         "name": "Młot Gallowglass"

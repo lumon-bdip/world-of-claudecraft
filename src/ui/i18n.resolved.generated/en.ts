@@ -1059,6 +1059,18 @@ export const en: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Developer",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const en: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Sunpetal Sickle"
+      },
+      "thorium_ore": {
+        "name": "Thorium Ore"
+      },
+      "arcanite_bar": {
+        "name": "Arcanite Bar"
+      },
+      "ashwood_log": {
+        "name": "Ashwood Log"
+      },
+      "elderwood_log": {
+        "name": "Elderwood Log"
+      },
+      "goldleaf_herb": {
+        "name": "Goldleaf Herb"
+      },
+      "sunpetal_herb": {
+        "name": "Sunpetal Herb"
       },
       "bristleback_maul": {
         "name": "Gallowglass Hammer"

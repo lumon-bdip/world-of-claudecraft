@@ -1059,6 +1059,18 @@ export const en_XA: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "[Çŕáƒţíñĝ]",
+      "close": "[Çļóšé çŕáƒţíñĝ]",
+      "craft": "[Çŕáƒţ]",
+      "reagentsNeeded": "[Ŕéɋúíŕéš:]",
+      "reagentLine": "[{name} ẋ{have}/{required}]",
+      "empty": "[Ñó ŕéçíþéš ķñóŵñ ýéţ.]",
+      "resultAria": "[Çŕáƒţ {name}]",
+      "craftedToast": "[Çŕáƒţéð: {name}]",
+      "insufficientMaterials": "[Ýóú ðó ñóţ ĥáʋé ţĥé ɱáţéŕíáļš ƒóŕ ţĥáţ.]",
+      "unknownRecipe": "[Ţĥáţ ŕéçíþé ðóéš ñóţ éẋíšţ.]"
+    },
     "devBadge": {
       "title": "[Ðéʋéļóþéŕ]",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const en_XA: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "[Šúñþéţáļ Šíçķļé]"
+      },
+      "thorium_ore": {
+        "name": "[Ţĥóŕíúɱ Óŕé]"
+      },
+      "arcanite_bar": {
+        "name": "[Áŕçáñíţé Ɓáŕ]"
+      },
+      "ashwood_log": {
+        "name": "[Ášĥŵóóð Ļóĝ]"
+      },
+      "elderwood_log": {
+        "name": "[Éļðéŕŵóóð Ļóĝ]"
+      },
+      "goldleaf_herb": {
+        "name": "[Ĝóļðļéáƒ Ĥéŕƀ]"
+      },
+      "sunpetal_herb": {
+        "name": "[Šúñþéţáļ Ĥéŕƀ]"
       },
       "bristleback_maul": {
         "name": "[Ĝáļļóŵĝļášš Ĥáɱɱéŕ]"

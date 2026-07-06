@@ -1059,6 +1059,18 @@ export const da_DK: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Udvikler",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const da_DK: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Solkronbladssegl"
+      },
+      "thorium_ore": {
+        "name": "Thoriummalm"
+      },
+      "arcanite_bar": {
+        "name": "Arkanitbarre"
+      },
+      "ashwood_log": {
+        "name": "Askeved Stamme"
+      },
+      "elderwood_log": {
+        "name": "Gammel Hyldeved Stamme"
+      },
+      "goldleaf_herb": {
+        "name": "Guldbladurt"
+      },
+      "sunpetal_herb": {
+        "name": "Solkroneurt"
       },
       "bristleback_maul": {
         "name": "Gallowglass-Hammer"

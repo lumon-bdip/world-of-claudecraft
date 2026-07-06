@@ -1059,6 +1059,18 @@ export const ja_JP: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "製作",
+      "close": "製作を閉じる",
+      "craft": "製作",
+      "reagentsNeeded": "必要素材:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "既知のレシピはありません。",
+      "resultAria": "{name}を製作",
+      "craftedToast": "製作しました:{name}",
+      "insufficientMaterials": "材料が不足しています。",
+      "unknownRecipe": "そのレシピは存在しません。"
+    },
     "devBadge": {
       "title": "開発者",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const ja_JP: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "陽花弁の鎌"
+      },
+      "thorium_ore": {
+        "name": "トリウム鉱石"
+      },
+      "arcanite_bar": {
+        "name": "アーケナイトの延べ棒"
+      },
+      "ashwood_log": {
+        "name": "アッシュウッドの丸太"
+      },
+      "elderwood_log": {
+        "name": "エルダーウッドの丸太"
+      },
+      "goldleaf_herb": {
+        "name": "ゴールドリーフ草"
+      },
+      "sunpetal_herb": {
+        "name": "サンペタル草"
       },
       "bristleback_maul": {
         "name": "ギャロウグラスの大槌"

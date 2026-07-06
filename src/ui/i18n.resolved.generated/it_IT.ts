@@ -1059,6 +1059,18 @@ export const it_IT: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Sviluppatore",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const it_IT: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Falcetto Petalo di Sole"
+      },
+      "thorium_ore": {
+        "name": "Minerale di Torio"
+      },
+      "arcanite_bar": {
+        "name": "Barra di Arcanite"
+      },
+      "ashwood_log": {
+        "name": "Tronco di Frassino Cinereo"
+      },
+      "elderwood_log": {
+        "name": "Tronco di Sambuco Antico"
+      },
+      "goldleaf_herb": {
+        "name": "Erba Fogliadoro"
+      },
+      "sunpetal_herb": {
+        "name": "Erba Petalosole"
       },
       "bristleback_maul": {
         "name": "Martello Gallowglass"

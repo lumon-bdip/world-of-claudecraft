@@ -1059,6 +1059,18 @@ export const vi_VN: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Nhà phát triển",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const vi_VN: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Liềm Cánh Hoa Mặt Trời"
+      },
+      "thorium_ore": {
+        "name": "Quặng Thori"
+      },
+      "arcanite_bar": {
+        "name": "Thỏi Arcanite"
+      },
+      "ashwood_log": {
+        "name": "Khúc Gỗ Tần Bì Tro"
+      },
+      "elderwood_log": {
+        "name": "Khúc Gỗ Cơm Cháy Cổ"
+      },
+      "goldleaf_herb": {
+        "name": "Thảo Dược Lá Vàng"
+      },
+      "sunpetal_herb": {
+        "name": "Thảo Dược Cánh Mặt Trời"
       },
       "bristleback_maul": {
         "name": "Búa Gallowglass"

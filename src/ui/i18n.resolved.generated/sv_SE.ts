@@ -1059,6 +1059,18 @@ export const sv_SE: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Utvecklare",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const sv_SE: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Solkronbladsskära"
+      },
+      "thorium_ore": {
+        "name": "Toriummalm"
+      },
+      "arcanite_bar": {
+        "name": "Arkanittacka"
+      },
+      "ashwood_log": {
+        "name": "Askvedstock"
+      },
+      "elderwood_log": {
+        "name": "Uråldrig Flädervedsstock"
+      },
+      "goldleaf_herb": {
+        "name": "Guldbladsört"
+      },
+      "sunpetal_herb": {
+        "name": "Solkronbladsört"
       },
       "bristleback_maul": {
         "name": "Gallowglass-hammare"

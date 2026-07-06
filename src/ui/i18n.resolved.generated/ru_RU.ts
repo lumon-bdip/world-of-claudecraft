@@ -1059,6 +1059,18 @@ export const ru_RU: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Крафт",
+      "close": "Закрыть крафт",
+      "craft": "Создать",
+      "reagentsNeeded": "Требуется:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "Известных рецептов пока нет.",
+      "resultAria": "Создать {name}",
+      "craftedToast": "Создано: {name}",
+      "insufficientMaterials": "У вас недостаточно материалов.",
+      "unknownRecipe": "Такого рецепта не существует."
+    },
     "devBadge": {
       "title": "Разработчик",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const ru_RU: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Солнцелепестковый серп"
+      },
+      "thorium_ore": {
+        "name": "Ториевая руда"
+      },
+      "arcanite_bar": {
+        "name": "Слиток аркана"
+      },
+      "ashwood_log": {
+        "name": "Бревно пепельного дерева"
+      },
+      "elderwood_log": {
+        "name": "Бревно древней бузины"
+      },
+      "goldleaf_herb": {
+        "name": "Трава золотолист"
+      },
+      "sunpetal_herb": {
+        "name": "Трава солнцелепест"
       },
       "bristleback_maul": {
         "name": "Молот Гэллоугласа"

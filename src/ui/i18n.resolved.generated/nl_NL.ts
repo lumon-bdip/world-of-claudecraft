@@ -1059,6 +1059,18 @@ export const nl_NL: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Ontwikkelaar",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const nl_NL: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Zonneblaadjessikkel"
+      },
+      "thorium_ore": {
+        "name": "Thoriumerts"
+      },
+      "arcanite_bar": {
+        "name": "Arcaniet Staaf"
+      },
+      "ashwood_log": {
+        "name": "Essenhout Blok"
+      },
+      "elderwood_log": {
+        "name": "Oud Vlierhout Blok"
+      },
+      "goldleaf_herb": {
+        "name": "Goudbladkruid"
+      },
+      "sunpetal_herb": {
+        "name": "Zonnepetaalkruid"
       },
       "bristleback_maul": {
         "name": "Gallowglass-Hamer"

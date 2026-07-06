@@ -1059,6 +1059,18 @@ export const zh_TW: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "製作",
+      "close": "關閉製作",
+      "craft": "製作",
+      "reagentsNeeded": "需要:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "尚無已知配方。",
+      "resultAria": "製作{name}",
+      "craftedToast": "已製作:{name}",
+      "insufficientMaterials": "你沒有足夠的材料。",
+      "unknownRecipe": "該配方不存在。"
+    },
     "devBadge": {
       "title": "開發者",
       "tiers": {
@@ -5799,6 +5811,24 @@ export const zh_TW: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "陽瓣鐮刀"
+      },
+      "thorium_ore": {
+        "name": "瑟銀礦石"
+      },
+      "arcanite_bar": {
+        "name": "秘銀錠"
+      },
+      "ashwood_log": {
+        "name": "灰木原木"
+      },
+      "elderwood_log": {
+        "name": "古老接骨木原木"
+      },
+      "goldleaf_herb": {
+        "name": "金葉草"
+      },
+      "sunpetal_herb": {
+        "name": "陽瓣草"
       },
       "bristleback_maul": {
         "name": "加洛格拉斯戰錘"
