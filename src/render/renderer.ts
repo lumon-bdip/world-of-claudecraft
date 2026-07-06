@@ -4982,10 +4982,36 @@ export class Renderer {
   /**
    * Re-seat the water surface at the ACTIVE waterLevel() and recompute the
    * shoreline depth attribute from the current terrain (after a water-level
-   * edit or a shoreline sculpt). Editor-only.
+   * edit or a shoreline sculpt). A cheap in-place update: it does NOT change
+   * which lakes exist or where they are, only their shared level/shore depth.
+   * Editor-only.
    */
   rebuildWater(): void {
     this.waterView.setLevel();
+  }
+
+  /**
+   * Full water rebuild: dispose every existing lake mesh and rebuild from the
+   * CURRENT `waterBodies()` (declared lake list). Needed after the editor adds,
+   * removes, or moves a lake marker: `rebuildWater()` only reseats existing
+   * meshes in place, so a moved marker would otherwise leave the water mesh,
+   * shader `uCenter`/`uRadius`, and shore-depth attribute at the OLD footprint
+   * while the terrain basin itself has already moved. Editor-only.
+   */
+  rebuildWaterBodies(): void {
+    for (const mesh of this.waterView.meshes) {
+      this.scene.remove(mesh);
+      mesh.geometry.dispose();
+      const mat = mesh.material as THREE.Material | THREE.Material[];
+      if (Array.isArray(mat)) for (const m of mat) m.dispose();
+      else mat.dispose();
+    }
+    this.waterView = buildWater(this.sim.cfg.seed);
+    for (const mesh of this.waterView.meshes) {
+      setRenderCategory(mesh, 'water');
+      this.scene.add(mesh);
+      freezeStaticMatrices(mesh);
+    }
   }
 
   /**

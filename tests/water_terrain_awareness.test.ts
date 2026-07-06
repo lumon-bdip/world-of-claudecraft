@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { isLeapableWater } from '../src/render/fish';
 import { isBlocked } from '../src/sim/colliders';
 import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
 import { findPlayerPath, PLAYER_SWIM_DEPTH, resolvePlayerDestination } from '../src/sim/pathfind';
@@ -10,6 +11,7 @@ import {
   waterBodies,
   waterLevelAt,
 } from '../src/sim/world';
+import { mapCanvasHeight, paintTerrainRows } from '../src/ui/map_terrain';
 
 // #1518: water height must be terrain/feature-aware (declared lakes only), not
 // a single flat height applied to a whole zone. A content author's sunken
@@ -95,5 +97,37 @@ describe('terrain/feature-aware water (#1518)', () => {
 
     const swum = resolvePlayerDestination(SEED, water, true);
     expect(Math.hypot(swum.x - water.x, swum.z - water.z)).toBeLessThan(0.5);
+  });
+
+  it('src/render/fish.ts never leaps at a dry sunken feature (real render predicate)', () => {
+    setActiveWorldContent(withSunkenFeature());
+    // mirrors buildFish()'s depthAt: waterLevelAt() - terrainHeight(), the
+    // actual render-side composition, not a hand-duplicated formula.
+    const depthAt = (x: number, z: number): number =>
+      waterLevelAt(x, z) - terrainHeight(x, z, SEED);
+    expect(isLeapableWater(DRY_SPOT.x, DRY_SPOT.z, depthAt)).toBe(false);
+
+    const [lakeX, lakeZ] = [-108, 84]; // deep lake cell (see pathfind.test.ts)
+    expect(isLeapableWater(lakeX, lakeZ, depthAt)).toBe(true);
+  });
+
+  it('src/ui/map_terrain.ts never paints a dry sunken feature as water', () => {
+    setActiveWorldContent(withSunkenFeature());
+    const region = {
+      minX: DRY_SPOT.x - 8,
+      maxX: DRY_SPOT.x + 8,
+      minZ: DRY_SPOT.z - 8,
+      maxZ: DRY_SPOT.z + 8,
+    };
+    const W = 32;
+    const H = mapCanvasHeight(W, region);
+    const data = new Uint8ClampedArray(W * H * 4);
+    paintTerrainRows(data, W, H, region, SEED, 0, H);
+    const cx = Math.floor(W / 2);
+    const cy = Math.floor(H / 2);
+    const k = (cy * W + cx) * 4;
+    // the map's water blue is (38, 84, 138); a dry sunken feature must not
+    // paint that color no matter how deep it goes.
+    expect([data[k], data[k + 1], data[k + 2]]).not.toEqual([38, 84, 138]);
   });
 });
