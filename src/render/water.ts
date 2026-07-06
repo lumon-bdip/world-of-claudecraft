@@ -21,7 +21,7 @@ import { shoreDepthAt } from './water_core';
 // Low tier keeps the legacy scrolling Phong plane, one per lake, upgraded with
 // the real swell normal map for textured speculars.
 
-const VERTEX_SPACING = 2; // yards/segment — matches the old whole-zone density
+const VERTEX_SPACING = 2; // yards/segment, matches the old whole-zone density
 const MIN_SEGMENTS = 8;
 
 // Real water normal maps, fetched at module import and gated by the boot
