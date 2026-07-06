@@ -185,8 +185,8 @@ import {
 } from './pathfind';
 import * as petAi from './pet/pet_ai';
 import * as petCommands from './pet/pet_commands';
-import * as professionsFocus from './professions/focus';
 import { type CraftResult, craftItem as craftItemImpl } from './professions/crafting';
+import * as professionsFocus from './professions/focus';
 import {
   drainGatheringGrants,
   emptyGatheringProficiency,
