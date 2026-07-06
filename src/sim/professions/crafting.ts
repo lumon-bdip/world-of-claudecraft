@@ -12,6 +12,14 @@
 // Higher-tier gating, the wheel, and archetype-exclusive combos are later
 // issues; this module resolves exactly the common-tier path end to end.
 //
+// Specialization material discount (#1134): once a player is specialized in a
+// recipe's craft (wheel.ts `isSpecialized`, gated on `PERK_THRESHOLDS`
+// content), every reagent's required quantity is discounted via
+// `materialCostMultiplier`, floored, with a minimum of 1 (a discount can never
+// make a recipe free of an ingredient it needs at least one of). This is
+// applied identically to the availability check and the actual consumption,
+// so a specialized crafter is never asked for more than they are charged.
+//
 // This module is `src/sim`-pure (see src/sim/CLAUDE.md): no DOM/render/ui/
 // game/net imports, no Math.random/Date.now, host-agnostic so it runs
 // offline, on the server, and in the headless RL env unchanged.
@@ -20,7 +28,14 @@ import { recipeById } from '../content/recipes';
 import type { SimContext } from '../sim_context';
 import { type MaterialRarity, rollMaterialRarity } from './gathering';
 import type { ProfessionRecipeRecord } from './types';
-import { gainCraftSkill, tierCapability, tierForSkill, tierProgressMultiplier } from './wheel';
+import {
+  type CraftSkillState,
+  gainCraftSkill,
+  materialCostMultiplier,
+  tierCapability,
+  tierForSkill,
+  tierProgressMultiplier,
+} from './wheel';
 
 // One flat craft-skill point per successful common-tier craft (the free-floor
 // rule: common-tier crafting itself never costs anything, but skill still
@@ -39,27 +54,49 @@ export interface CraftResult {
   reason?: 'unknown_recipe' | 'insufficient_materials';
 }
 
+/**
+ * The quantity of one reagent actually required after the crafter's
+ * specialization discount (#1134): `count` multiplied by
+ * `materialCostMultiplier` for `professionId`, floored, with a minimum of 1.
+ * A non-specialized crafter (multiplier 1) always gets back the listed
+ * `count` unchanged.
+ */
+export function discountedReagentCount(
+  count: number,
+  craftSkills: CraftSkillState,
+  professionId: string,
+): number {
+  const multiplier = materialCostMultiplier(craftSkills, professionId);
+  return Math.max(1, Math.floor(count * multiplier));
+}
+
 /** Whether the given player currently holds every reagent a recipe requires,
- *  in the required quantities. Read-only: never mutates inventory. */
+ *  in the required quantities, after that player's specialization discount
+ *  (#1134). Read-only: never mutates inventory. */
 export function hasRecipeMaterials(
   ctx: SimContext,
   recipe: ProfessionRecipeRecord,
   pid: number,
 ): boolean {
-  return recipe.reagents.every((r) => ctx.countItem(r.itemId, pid) >= r.count);
+  const meta = ctx.players.get(pid);
+  const craftSkills = meta ? meta.craftSkills : {};
+  return recipe.reagents.every(
+    (r) => ctx.countItem(r.itemId, pid) >= discountedReagentCount(r.count, craftSkills, recipe.professionId),
+  );
 }
 
 /** Pure resolution of one craft attempt against an already-resolved recipe
  *  record and player entity id (issue #1128 tiered mastery gating): denies
  *  (no side effect at all) if any reagent is short, partial consumption never
- *  happens. On success, consumes every reagent, rolls the output's quality off
- *  the player's current skill in the recipe's craft, grants the output item,
- *  and grants craft skill scaled by tier mastery: full at or above the
- *  player's tier capability (including always-full for the common tier,
- *  regardless of capability), reduced one tier below, zero two or more tiers
- *  below. Exported separately from `resolveCraft` so tests can exercise the
- *  tier curve against a synthetic recipe without needing higher-tier content
- *  in `content/recipes.ts`. */
+ *  happens. On success, consumes every reagent (each discounted per the
+ *  crafter's specialization, #1134), rolls the output's quality off the
+ *  player's current skill in the recipe's craft, grants the output item, and
+ *  grants craft skill scaled by tier mastery: full at or above the player's
+ *  tier capability (including always-full for the common tier, regardless of
+ *  capability), reduced one tier below, zero two or more tiers below.
+ *  Exported separately from `resolveCraft` so tests can exercise the tier
+ *  curve against a synthetic recipe without needing higher-tier content in
+ *  `content/recipes.ts`. */
 export function resolveCraftForRecipe(
   ctx: SimContext,
   pid: number,
@@ -68,10 +105,12 @@ export function resolveCraftForRecipe(
   if (!hasRecipeMaterials(ctx, recipe, pid)) {
     return { ok: false, recipeId: recipe.id, reason: 'insufficient_materials' };
   }
-  for (const reagent of recipe.reagents) {
-    ctx.removeItem(reagent.itemId, reagent.count, pid);
-  }
   const meta = ctx.players.get(pid);
+  const craftSkills = meta ? meta.craftSkills : {};
+  for (const reagent of recipe.reagents) {
+    const qty = discountedReagentCount(reagent.count, craftSkills, recipe.professionId);
+    ctx.removeItem(reagent.itemId, qty, pid);
+  }
   const skill = meta ? (meta.craftSkills[recipe.professionId] ?? 0) : 0;
   const quality = rollMaterialRarity(skill, ctx.rng);
   ctx.addItem(recipe.resultItemId, recipe.resultCount, pid);
