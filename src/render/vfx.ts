@@ -582,6 +582,70 @@ export class Vfx {
     }
   }
 
+  // Vale Cup celebration: one team-colored firework shell (per-particle colors,
+  // the levelUpPillar/burst pattern). The renderer staggers several calls per
+  // goal to read as a volley; colors alternate through the scoring nation's
+  // flag palette. A slow confetti sprinkle rides along under lighter gravity.
+  fireworkBurst(at: THREE.Vector3, colors: readonly number[], count = 46, power = 1): void {
+    const cols = (colors.length > 0 ? colors : [0xffd14d]).map((c) =>
+      new THREE.Color(c).multiplyScalar(hdr(1.8)),
+    );
+    // the report flash
+    this.spawn(
+      at.x,
+      at.y,
+      at.z,
+      0,
+      0.3,
+      0,
+      new THREE.Color(0xfff6e0).multiplyScalar(hdr(2.2)),
+      1.5 * power,
+      0.2,
+      0,
+      SPR.flash,
+    );
+    const n = this.scaledCount(count);
+    for (let i = 0; i < n; i++) {
+      // even-ish spherical shell
+      const u = Math.random() * 2 - 1;
+      const a = Math.random() * Math.PI * 2;
+      const s = Math.sqrt(Math.max(0, 1 - u * u));
+      const sp = (6 + Math.random() * 2.6) * power;
+      this.spawn(
+        at.x,
+        at.y,
+        at.z,
+        Math.cos(a) * s * sp,
+        u * sp * 0.85 + 1.2,
+        Math.sin(a) * s * sp,
+        cols[i % cols.length],
+        0.4 + Math.random() * 0.2,
+        0.95 + Math.random() * 0.5,
+        4.5,
+        i % 3 === 0 ? SPR.star : SPR.sparkle,
+      );
+    }
+    // confetti flecks: slower, tumbling, longer-lived
+    const confetti = this.scaledCount(Math.round(count * 0.4));
+    for (let i = 0; i < confetti; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = (1.5 + Math.random() * 2) * power;
+      this.spawn(
+        at.x,
+        at.y,
+        at.z,
+        Math.sin(a) * sp,
+        Math.random() * 1.5,
+        Math.cos(a) * sp,
+        cols[(i + 1) % cols.length],
+        0.22,
+        1.4 + Math.random() * 0.6,
+        1.6,
+        SPR.debris,
+      );
+    }
+  }
+
   // continuous emitters (called per frame)
   castSparkle(entityId: number, school: string, dt: number): void {
     if (!this.emitChance(30, dt)) return;
