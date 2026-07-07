@@ -337,4 +337,41 @@ describe('bank wire round-trip', () => {
     expect(onBank.purchasedSlots).toBe(offBank.purchasedSlots);
     expect(onBank.copper).toBe(offBank.copper);
   });
+
+  it('a bank-bonus stamped join rides the wire: bonusSlots, capacity, and byte-equal breakdown rows', () => {
+    // Phase 8: ws_auth stamps the recomputed grant into the join meta bag; addPlayer
+    // writes bonusSlots + the breakdown into the character state; bankInfoFor exposes
+    // them and the proximity-gated `bank` self-delta ships them. Here we stamp the meta
+    // directly (the 8th join arg) to prove the whole state-to-wire path end to end.
+    const server = new GameServer();
+    const fw = fakeWs();
+    const bankBonus = {
+      bonusSlots: 6,
+      sources: [
+        { id: 'email', slots: 2, maxSlots: 2 },
+        { id: 'referral', slots: 4, maxSlots: 10, count: 2, cap: 5 },
+      ],
+    };
+    const s = server.join(fw.ws as any, 1, 1, 'Vaultg', 'warrior', null, false, {
+      bankBonus,
+    }) as any;
+    if ('error' in s) throw new Error(s.error);
+    s.blockListLoaded = true;
+    const pid = s.pid;
+    const sim = server.sim as any;
+    bringBankerToPlayer(sim, pid);
+
+    fw.sent.length = 0;
+    (server as any).broadcastSnapshots();
+    const snap = lastSnap(fw.sent);
+    expect(snap.self.bank).not.toBeNull();
+    expect(snap.self.bank.bonusSlots).toBe(6);
+    expect(snap.self.bank.capacity).toBe(30); // 24 base + 0 purchased + 6 bonus
+    expect(snap.self.bank.purchasedSlots).toBe(0);
+    // The stamped breakdown rows ride byte-for-byte, count/cap included on the referral row.
+    expect(snap.self.bank.bonusSources).toEqual([
+      { id: 'email', slots: 2, maxSlots: 2 },
+      { id: 'referral', slots: 4, maxSlots: 10, count: 2, cap: 5 },
+    ]);
+  });
 });
