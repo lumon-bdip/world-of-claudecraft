@@ -6,8 +6,9 @@ import { describe, expect, it } from 'vitest';
 //
 // Every desktop HUD window (an element with class `window` and an id) must have a
 // deliberate mobile-touch decision: either it is brought into the shared "mobile
-// sheet base" pattern (at least one `body.mobile-touch ... #id ...` rule pins or
-// sizes or floors it), or it is listed in MOBILE_WINDOW_EXCEPTIONS with a reason.
+// sheet base" pattern (at least one `body.mobile-touch ... #id ...` rule that also
+// carries a real pin/size/floor property, not merely a cosmetic z-index/border), or
+// it is listed in MOBILE_WINDOW_EXCEPTIONS with a reason.
 //
 // This is the future-proofing half of the phase: a NEW window added to the markup
 // without a mobile rule and without an exception entry FAILS this test, so it can
@@ -69,6 +70,8 @@ const MOBILE_WINDOW_EXCEPTIONS: Record<string, string> = {
     'small centered modal (dynamic, reused by the input dialog); the base .window centering is correct on touch',
   'delve-rite-panel': 'in-run gameplay overlay, not a menu window that docks to a sheet',
   'lockpick-panel': 'in-run gameplay overlay, not a menu window that docks to a sheet',
+  'daily-rewards-window':
+    'sized entirely by the shared body.mobile-touch .window sheet base (max-width/max-height) plus its own .dr-body 2-column body rule; its only id-specific mobile rule is a z-index bump, so it carries no id-scoped pin of its own',
 };
 
 // A src/styles/*.css module contains a positioning/floor rule for #id on touch when
@@ -82,11 +85,29 @@ function stylesText(): string {
     .join('\n');
 }
 
+// A window counts as sheeted on mobile only when a `body.mobile-touch ... #id ...`
+// rule ALSO carries at least one real pin/size/floor declaration in its block, so a
+// purely cosmetic id rule (a lone z-index, border, or color) cannot spoof coverage.
+// The block scanned is the leaf declaration block after the selector: CSS
+// declarations hold no nested braces, so the first `{`..`}` after a selector match
+// is exactly that rule's body even inside the file's @layer/@media wrappers (which
+// is why this scans per-rule rather than brace-parsing the whole nested file).
+const PIN_PROP_RE = /(?:^|[;{\s])(?:left|right|top|max-height|min-height|transform)\s*:/;
+
 function hasMobileRule(css: string, id: string): boolean {
-  // A selector line that starts with `body.mobile-touch` (optionally with extra
-  // state classes) and names `#id` as the target or an ancestor of the target.
-  const re = new RegExp(`body\\.mobile-touch[^,{}]*#${id}(?![-a-z0-9])`, 'g');
-  return re.test(css);
+  // A selector that starts with `body.mobile-touch` (optionally with extra state
+  // classes) and names `#id` as the target or an ancestor of the target.
+  const selRe = new RegExp(`body\\.mobile-touch[^,{}]*#${id}(?![-a-z0-9])`, 'g');
+  let m: RegExpExecArray | null;
+  // biome-ignore lint/suspicious/noAssignInExpressions: standard regex exec loop.
+  while ((m = selRe.exec(css)) !== null) {
+    const open = css.indexOf('{', m.index + m[0].length);
+    if (open === -1) continue;
+    const close = css.indexOf('}', open + 1);
+    if (close === -1) continue;
+    if (PIN_PROP_RE.test(css.slice(open + 1, close))) return true;
+  }
+  return false;
 }
 
 describe('mobile window coverage (Phase 5 parity)', () => {

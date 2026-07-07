@@ -2453,9 +2453,12 @@
     min-height: 40px;
     box-sizing: border-box;
   }
-  /* Mailbox: the folder tab strip and the "back to inbox" link. */
+  /* Mailbox: the folder tab strip, the "back to inbox" link, and the Send-tab
+     remove-staged-parcel chip (a real <button>, base min-height 32px in
+     components.css, below the touch floor). */
   body.mobile-touch #mailbox-window .mail-tab,
-  body.mobile-touch #mailbox-window .mail-back {
+  body.mobile-touch #mailbox-window .mail-back,
+  body.mobile-touch #mailbox-window .mail-parcel-chip {
     min-height: 40px;
     box-sizing: border-box;
   }
@@ -3269,6 +3272,24 @@
   body.mobile-touch.hud-mobile-compact #swingbar {
     left: calc(50% - 15px);
   }
+  /* Narrowest compact phones (galaxy-s8-class 740px and below): at that width the
+     centred frame's right tail (right edge ~445) runs into Jump's ring crescent
+     (its circle centre sits only ~82px right of viewport centre on so narrow a
+     screen), overlapping the button by ~18px. The -15px seat above clears Jump
+     fine from 844px up (34px+), so key the extra left nudge to <=800px only, and
+     shift the frame plus BOTH its bars together to -44px. That drops the frame's
+     right edge to ~416 (an ~11px clear circle to Jump) while its left edge only
+     reaches ~236, still ~104px clear of the fixed 132px-wide move-joystick
+     capture zone: it keeps the round-4 joystick-zone clearance AND clears the
+     jump crescent, the two constraints that pull the frame in opposite directions
+     on a very narrow viewport. 844/915/932 stay on the -15px seat above. */
+  @media (max-width: 800px) {
+    body.mobile-touch.hud-mobile-compact #player-frame,
+    body.mobile-touch.hud-mobile-compact #castbar,
+    body.mobile-touch.hud-mobile-compact #swingbar {
+      left: calc(50% - 44px);
+    }
+  }
   /* Tablet: a large viewport can afford a bigger, easier-to-hit cluster than
      the standard baseline; reuses the ring's own sizing hooks (a tier value on
      top of the settings scale, not a fork of it). Radius keeps the same chord
@@ -3283,6 +3304,18 @@
   }
   body.mobile-touch.hud-mobile-tablet #right-tracker-stack {
     width: 220px;
+  }
+  /* Tablet: unlike compact, the frame has no left nudge here, so on a 4:3 tablet
+     (1024x768) the centred frame's right edge (~602) grazes the tablet-tier Jump
+     crescent (60px circle, left edge ~589), leaving only ~2px, below the 4px
+     interactive floor. A small -10px nudge of the frame plus BOTH its bars (kept
+     in lockstep so the swing/cast bars stay centred over the frame, as in round 4)
+     opens that to ~8px on 1024x768. It is inconsequential on the wider tablet
+     profile (1920x1080), where Jump sits hundreds of px clear regardless. */
+  body.mobile-touch.hud-mobile-tablet #player-frame,
+  body.mobile-touch.hud-mobile-tablet #castbar,
+  body.mobile-touch.hud-mobile-tablet #swingbar {
+    left: calc(50% - 10px);
   }
 
   /* ---------- floating combat text (mobile) ----------

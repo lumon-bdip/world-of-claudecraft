@@ -77,6 +77,14 @@ const CHROME_IDS = [
 // controls plus minimap-zoom / minimap-wrap are things a finger taps; frames and
 // bars are read, not tapped, so two of them only need to not visually collide.
 const INTERACTIVE_IDS = new Set([...CONTROL_IDS, 'minimap-wrap']);
+// Toggled overlay PANELS (class="panel", not always-on chrome): the player opens
+// #meters-window deliberately and it has its own close button, so like a Pass-B
+// window it may legitimately sit over the passive readability frames/bars when the
+// short-landscape viewport has no other room. It is therefore NOT hard-failed for
+// overlapping a readability surface (that pair is NOTED), but it still MUST stay
+// clear of the interactive thumb controls and the minimap (an overlay must never
+// cover a tap target) and stay on-screen: those pairs keep the normal >= 4px rule.
+const OVERLAY_CHROME_IDS = new Set(['meters-window']);
 // The ring controls are true circles (border-radius: 50% clips the hit-test too),
 // so their mis-tap distance is centre-to-centre minus radii, not box separation.
 const CIRCLE_IDS = new Set([
@@ -145,6 +153,16 @@ function collectRects(page, ids) {
     for (const id of elIds) out.rects[id] = grab(document.getElementById(id));
     out.belowTarget = !!document.getElementById('party-frames')?.classList.contains('below-target');
     out.windowOpenClass = document.body.classList.contains('mobile-window-open');
+    // Diagnostics for the quest tracker, which the landscape media block hides by
+    // design: report whether its STATE populated (rows built) and its display, so a
+    // "not measurable" note can say "populated but display:none in landscape" (a real
+    // skip) versus "empty" (a broken injection).
+    const qt = document.getElementById('quest-tracker');
+    out.questTracker = {
+      display: qt ? getComputedStyle(qt).display : 'missing',
+      rows: document.querySelectorAll('#quest-tracker .qt-title').length,
+      htmlLen: qt ? qt.innerHTML.length : -1,
+    };
     return out;
   }, ids);
 }
@@ -194,6 +212,56 @@ async function flipViewport(page, media, w, h, dsf, expectedTier) {
     if (!settled) fail(`flipViewport: tier/${expectedTier} or controls never settled`);
   }
   await sleep(250);
+}
+
+// Deterministically wait for the party/target HUD to SETTLE before measuring,
+// instead of a fixed sleep (a fixed sleep raced the HUD's own repaint cadence and
+// flaked with spurious target / below-target violations on iphone-13-landscape).
+// Settled means: while #target-frame is visible, #party-frames carries the
+// .below-target offset class, AND two consecutive rect samples of #target-frame and
+// #party-frames are byte-identical (the frames have stopped moving). If a target is
+// not expected (no hostile mob), we only require two stable #party-frames samples.
+// Returns { settled, note }; a bounded timeout resolves settled:false with a note.
+async function settleFrames(page, { expectTarget }) {
+  const DEADLINE = 4000;
+  const INTERVAL = 120;
+  const start = Date.now();
+  let prev = null;
+  const sampleOf = () =>
+    page.evaluate(() => {
+      const grab = (id) => {
+        const el = document.getElementById(id);
+        if (!el) return null;
+        const s = getComputedStyle(el);
+        if (s.display === 'none' || s.visibility === 'hidden') return null;
+        const r = el.getBoundingClientRect();
+        return { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+      };
+      const pf = document.getElementById('party-frames');
+      return {
+        target: grab('target-frame'),
+        party: grab('party-frames'),
+        belowTarget: !!pf?.classList.contains('below-target'),
+      };
+    });
+  while (Date.now() - start < DEADLINE) {
+    const s = await sampleOf();
+    const targetReady = expectTarget ? !!s.target && s.belowTarget : true;
+    // `same` compares this sample to the PREVIOUS one, so it is true only when two
+    // consecutive samples are byte-identical (the frames have stopped moving). With
+    // targetReady also satisfied, the HUD has settled: measure now.
+    const same = prev !== null && JSON.stringify(prev) === JSON.stringify(s);
+    if (same && targetReady) return { settled: true, note: null };
+    prev = s;
+    await sleep(INTERVAL);
+  }
+  const last = await sampleOf();
+  return {
+    settled: false,
+    note:
+      `SETTLE-TIMEOUT after ${DEADLINE}ms (expectTarget=${expectTarget}, ` +
+      `target=${last.target ? 'shown' : 'absent'}, belowTarget=${last.belowTarget})`,
+  };
 }
 
 // Build a real 4-member party alongside the local player. On this branch
@@ -262,7 +330,9 @@ async function populateBuffBar(page) {
   return page.evaluate(() => {
     const sim = window.__game.sim;
     const p = sim.player;
-    if (Array.isArray(p.auras)) {
+    if (Array.isArray(p.auras) && !p.auras.some((a) => a.id === 'audit-buff')) {
+      // Idempotent, matching the debuff helper: re-calling per profile must not
+      // stack duplicate buff-bar entries (which would grow the bar's width).
       p.auras.push({
         id: 'audit-buff',
         name: 'Audit Vigor',
@@ -275,6 +345,66 @@ async function populateBuffBar(page) {
       });
     }
     return true;
+  });
+}
+
+// Accept a quest so #quest-tracker renders. sim.acceptQuest requires the player to
+// stand next to the quest's giver NPC, which we cannot arrange blind; the tracker
+// reads world.questLog directly, so inject a single active entry into that Map (the
+// same deterministic bypass scripts/quest_collapse_verify_shot.mjs uses). q_wolves
+// is a single-objective zone1 quest, so counts is a one-element array. Returns the
+// active-quest count on the world after injection.
+async function acceptQuest(page) {
+  return page.evaluate(() => {
+    const ql = window.__game.world.questLog; // === sim.questLog offline
+    ql.set('q_wolves', { questId: 'q_wolves', counts: [0], state: 'active' });
+    return ql.size;
+  });
+}
+
+// Populate the debuff bar: push a synthetic harmful aura onto player.auras. The
+// buff/debuff split (src/ui/auras_view.ts isAuraDebuff) keys on aura.kind, not a
+// harmful flag; 'sunder' is in DEBUFF_AURA_KINDS and, unlike 'dot', does not tick,
+// so it stays an inert render-only marker for the audit. Well-formed against the
+// Aura interface (src/sim/types.ts). Returns true if the aura array now holds it.
+async function populateDebuffBar(page) {
+  return page.evaluate(() => {
+    const sim = window.__game.sim;
+    const p = sim.player;
+    if (Array.isArray(p.auras)) {
+      // Idempotent: only push if the marker aura is not already present, so
+      // re-calling per profile never stacks duplicate debuff-bar entries.
+      if (!p.auras.some((a) => a.id === 'audit-debuff')) {
+        p.auras.push({
+          id: 'audit-debuff',
+          name: 'Audit Sunder',
+          kind: 'sunder',
+          remaining: 300,
+          duration: 300,
+          value: 10,
+          sourceId: sim.primaryId,
+          school: 'physical',
+        });
+      }
+      return p.auras.some((a) => a.id === 'audit-debuff');
+    }
+    return false;
+  });
+}
+
+// Open the meters window (#meters-window) so it is a laid-out, measurable chrome
+// neighbour during pass A. It is persistent-chrome-adjacent by design (docks near
+// the bottom-right joystick), so it must not crowd the thumb controls either.
+// Returns true if hud.toggleMeters exists and the window is now display:block.
+async function openMeters(page) {
+  return page.evaluate(() => {
+    const hud = window.__game.hud;
+    if (typeof hud?.toggleMeters !== 'function') return false;
+    const el = document.getElementById('meters-window');
+    // toggleMeters flips display; only open it if it is not already open.
+    if (!el || getComputedStyle(el).display !== 'block') hud.toggleMeters();
+    const now = document.getElementById('meters-window');
+    return !!now && getComputedStyle(now).display === 'block';
   });
 }
 
@@ -347,6 +477,22 @@ try {
   // measured id set, but closing it keeps the state clean and the shots readable).
   await page.evaluate(() => window.__game.hud.closeAll?.());
 
+  // Populate the three previously-skipped chrome surfaces ONCE (all persist across
+  // viewport flips, like the party): accept a quest so #quest-tracker renders,
+  // apply a debuff so #debuff-bar renders, and open the meters window so
+  // #meters-window is a measured neighbour. Done AFTER closeAll (which would have
+  // closed the meters window). Each is measured for real in every profile below.
+  const questAccepted = await acceptQuest(page);
+  const debuffOk = await populateDebuffBar(page);
+  const metersOpen = await openMeters(page);
+  console.log(
+    `state extras: questLog size=${questAccepted}, debuffApplied=${debuffOk}, ` +
+      `metersOpen=${metersOpen}`,
+  );
+  if (!questAccepted) fail('pass A setup: quest injection left an empty questLog');
+  if (!debuffOk) fail('pass A setup: debuff aura was not applied to the player');
+  if (!metersOpen) fail('pass A setup: #meters-window did not open (hud.toggleMeters)');
+
   for (const prof of PROFILES) {
     await flipViewport(page, media, prof.w, prof.h, prof.dsf, prof.tier);
     const targetId = await forceTarget(page);
@@ -354,12 +500,21 @@ try {
       note(`${prof.name}: no hostile mob found to target; #target-frame will be absent`);
     }
     const buffOk = await populateBuffBar(page);
+    // Re-assert the debuff + open meters window each profile: the aura array and
+    // the quest log survive a viewport flip, but re-pushing the debuff if a tick
+    // consumed it and re-opening meters if a resize repaint closed it keeps every
+    // profile measuring the full populated chrome set.
+    await populateDebuffBar(page);
+    await openMeters(page);
     // Nudge the HUD to repaint the frames/bars/target after the state change.
     await page.evaluate(() => {
       window.__game.hud?.update?.(0.05);
       window.dispatchEvent(new Event('resize'));
     });
-    await sleep(1000);
+    // Deterministic settle instead of a fixed sleep: wait for the party/target
+    // frames to stop moving and #party-frames to gain .below-target (bounded).
+    const settle = await settleFrames(page, { expectTarget: targetId !== null });
+    if (!settle.settled) note(`${prof.name}: ${settle.note}`);
 
     const allIds = [...CHROME_IDS, ...CONTROL_IDS];
     const g = await collectRects(page, allIds);
@@ -376,12 +531,36 @@ try {
       note(`${prof.name}: #target-frame not visible (skipping below-target assertion)`);
     }
 
-    // Note any chrome that is display:none in this state (not measured).
+    // Note any chrome that is display:none in this state (not measured). The quest
+    // tracker gets a precise reason: the landscape media block hides it by design
+    // (short landscape phones show quests via the map badges instead), so it is a
+    // deliberate skip on every (all-landscape) audit profile, NOT a broken state.
+    // We still assert its STATE populated (rows built from the injected questLog),
+    // so a genuinely empty tracker would fail rather than pass as a silent skip.
     for (const id of CHROME_IDS) {
-      if (!g.rects[id]) note(`${prof.name}: #${id} not measurable (display:none / empty)`);
+      if (g.rects[id]) continue;
+      if (id === 'quest-tracker') {
+        const qt = g.questTracker;
+        if (qt.rows < 1 || qt.htmlLen < 1) {
+          fail(
+            `${prof.name}: #quest-tracker has no content despite the injected quest ` +
+              `(rows=${qt.rows}, htmlLen=${qt.htmlLen}); the questLog injection is broken`,
+          );
+        } else {
+          note(
+            `${prof.name}: #quest-tracker populated (rows=${qt.rows}) but display:${qt.display} ` +
+              `-- hidden by the landscape media block by design; SKIPPED (not measurable in landscape)`,
+          );
+        }
+        continue;
+      }
+      note(`${prof.name}: #${id} not measurable (display:none / empty)`);
     }
     if (!g.rects['buff-bar']) {
       note(`${prof.name}: #buff-bar empty despite populate attempt (buffOk=${buffOk}); SKIPPED`);
+    }
+    if (!g.rects['debuff-bar']) {
+      note(`${prof.name}: #debuff-bar empty despite debuff apply (debuffOk=${debuffOk}); SKIPPED`);
     }
 
     // Pairwise gap check across every visible chrome + control rect.
@@ -391,8 +570,22 @@ try {
         const [idA, a] = entries[i];
         const [idB, b] = entries[j];
         const interactive = INTERACTIVE_IDS.has(idA) || INTERACTIVE_IDS.has(idB);
-        const req = interactive ? MIN_GAP_INTERACTIVE : MIN_GAP_CHROME;
         const gap = controlGap(idA, a, idB, b, CIRCLE_IDS);
+        // A toggled overlay panel (meters) over a passive readability surface is
+        // allowed (NOTE, like a Pass-B window over chrome); its interactive-control
+        // and minimap pairs still enforce the normal gap.
+        const overlayVsReadable =
+          (OVERLAY_CHROME_IDS.has(idA) || OVERLAY_CHROME_IDS.has(idB)) && !interactive;
+        if (overlayVsReadable) {
+          if (gap < MIN_GAP_CHROME) {
+            note(
+              `${prof.name}: #${idA} vs #${idB} overlap ${(-gap).toFixed(1)}px ` +
+                `(toggled overlay over readability surface; allowed)`,
+            );
+          }
+          continue;
+        }
+        const req = interactive ? MIN_GAP_INTERACTIVE : MIN_GAP_CHROME;
         if (gap < req) {
           fail(
             `${prof.name}: #${idA} vs #${idB} gap ${gap.toFixed(1)}px < ${req}px ` +
@@ -410,9 +603,30 @@ try {
       }
     }
 
+    // A toggled overlay panel is not gated against the frames, but it must still
+    // sit fully on-screen (a half-off overlay is a real bug on any viewport).
+    for (const id of OVERLAY_CHROME_IDS) {
+      const r = g.rects[id];
+      if (r && (r.left < -0.5 || r.top < -0.5 || r.right > g.vw + 0.5 || r.bottom > g.vh + 0.5)) {
+        fail(
+          `${prof.name}: overlay #${id} leaves the viewport ` +
+            `(l=${r.left.toFixed(1)} t=${r.top.toFixed(1)} r=${r.right.toFixed(1)} ` +
+            `b=${r.bottom.toFixed(1)} vs ${g.vw}x${g.vh})`,
+        );
+      }
+    }
+
     await page.screenshot({ path: `${SHOT_DIR}/passA_${prof.name}.png` });
     console.log(`checked ${prof.name} (${prof.w}x${prof.h}, target=${targetId})`);
   }
+
+  // Close the meters overlay before Pass B: it is a toggled panel (not a .window),
+  // so Pass B's closeAll() would leave it open and its own toggleMeters check would
+  // then TOGGLE it shut and mis-read as "did not open". Close it here explicitly.
+  await page.evaluate(() => {
+    const el = document.getElementById('meters-window');
+    if (el && getComputedStyle(el).display === 'block') window.__game.hud.toggleMeters?.();
+  });
 
   // ---- PASS B: window-open matrix (AUDIT by default; --gate to enforce). ----
   console.log(`\n=== PASS B: window-open matrix (${GATE ? 'GATE' : 'AUDIT'} mode) ===`);
