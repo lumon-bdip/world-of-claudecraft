@@ -29,7 +29,10 @@ mode; each swap is a drop-in behind an existing seam.
   28.3 MB source to 479 KB shipped). The one authored clip (the block,
   `Armature|Block5|baselayer`) is mapped as the HIT reaction, so Yumi blocks
   whenever she is struck; no idle clip on purpose (rest pose, she only
-  teleports). Wired as `mob_yumi_cat` in the manifest.
+  teleports). Wired as `mob_yumi_cat` in the manifest. Sized at 1.2x player
+  height (manifest `HUMANOID_H * 1.2`, template scale 1) so the objective
+  reads over the scrum; this supersedes the smaller chibi sizing drafted
+  below.
 - Want: a chibi magical cat familiar, sitting upright, faintly glowing collar
   or rune charm, readable at 0.6-1.0yd tall, low-poly stylized to match the
   KayKit/Quaternius look of the game.

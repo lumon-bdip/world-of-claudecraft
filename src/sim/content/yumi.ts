@@ -27,7 +27,7 @@ export const YUMI_MOBS: Record<string, MobTemplate> = {
     xpMult: 0,
     ccImmune: true,
     slowImmune: true,
-    scale: 0.6,
+    scale: 1,
     color: 0xf2e0c8,
   },
 };

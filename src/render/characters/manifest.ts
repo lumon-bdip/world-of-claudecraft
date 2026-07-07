@@ -595,7 +595,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // so no entity tint.
   mob_yumi_cat: {
     url: `${CREATURES}/yumi_cat.glb`,
-    height: 1.5,
+    height: HUMANOID_H * 1.2, // the objective reads over player heads
     clips: {
       idle: 'None',
       walk: 'None',
