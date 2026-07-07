@@ -3536,8 +3536,8 @@ export const pt_BR: EnTranslations = {
     "rendererFailed": "Não foi possível iniciar o renderizador: tente recarregar. {error}",
     "enterTimeout": "Não foi possível entrar no mundo. A conexão expirou. O servidor do jogo está em execução?",
     "connectionLost": "A conexão com o servidor foi perdida.",
-    "reconnecting": "Conexão perdida. Reconectando...",
-    "connectionRejected": "O servidor encerrou a conexão."
+    "connectionRejected": "O servidor encerrou a conexão.",
+    "reconnecting": "Conexão perdida. Reconectando..."
   },
   "errors": {
     "nothingInteract": "Nada para interagir.",

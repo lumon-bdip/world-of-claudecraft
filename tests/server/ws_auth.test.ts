@@ -64,7 +64,6 @@ function setup() {
     clients: { size: 1 },
     handleMessage: vi.fn(),
     leave: vi.fn(async () => {}),
-    socketClosed: vi.fn(() => true),
   };
   const deps: WsAuthDeps = {
     game: game as unknown as WsAuthDeps['game'],
@@ -286,11 +285,9 @@ describe('createWsAuth: authenticateWebSocket accept path', () => {
     ws.emit('message', 'move-frame');
     expect(game.handleMessage).toHaveBeenCalledWith(session, 'move-frame');
 
-    // A dropped socket routes through game.socketClosed (the linkdead grace),
-    // never a direct game.leave: the character is held in-world for a resume.
+    // Disconnect routes through game.leave with the disconnect reason.
     ws.emit('close');
-    expect(game.socketClosed).toHaveBeenCalledWith(session, ws);
-    expect(game.leave).not.toHaveBeenCalled();
+    expect(game.leave).toHaveBeenCalledWith(session, 'disconnected');
   });
 
   it('snapshots the staff roles into isAdmin + expanded adminPermissions, and rides the CAPI attribution', async () => {
@@ -340,17 +337,16 @@ describe('createWsAuth: authenticateWebSocket accept path', () => {
     );
   });
 
-  it('routes a post-join socket error into the linkdead grace, not a teardown', async () => {
+  it('routes a post-join socket error through game.leave with the error reason', async () => {
     const { ws, game, session, deps, req } = setup();
     const { authenticateWebSocket } = createWsAuth(deps);
     await authenticateWebSocket(asWs(ws), authRaw(), req);
 
-    // The post-join 'error' handler holds the session linkdead like a clean
-    // close; the grace-expiry sweep in game.ts owns the eventual leave().
+    // The post-join 'error' handler tears the session down with the distinct
+    // 'connection error' reason (vs 'disconnected' on a clean close).
     expect(ws.listenerCount('error')).toBeGreaterThanOrEqual(1);
     ws.emit('error', new Error('connection reset'));
-    expect(game.socketClosed).toHaveBeenCalledWith(session, ws);
-    expect(game.leave).not.toHaveBeenCalled();
+    expect(game.leave).toHaveBeenCalledWith(session, 'connection error');
   });
 
   it('prefers the account-level chat mute over the chat-level mute in the join meta', async () => {
