@@ -1,6 +1,6 @@
 // W0c: the IWorld structural-parity gate.
 //
-// `IWorld` (src/world_api.ts, 192 members) is the ONE seam render/ui depend
+// `IWorld` (src/world_api.ts, 196 members) is the ONE seam render/ui depend
 // on. `tsc` already proves both the offline `Sim` and the online `ClientWorld` satisfy
 // it structurally, but the interface is erased at build: there is NO runtime member
 // list, so nothing catches a present-but-throws stub or a kind flip (method vs read).
@@ -9,7 +9,7 @@
 // IWORLD_MEMBERS below is the hand-maintained member list, the W0c analog of the
 // append-only CALLBACK_KEYS in tests/sim_context.test.ts. It is APPEND-ONLY WITH THE
 // INTERFACE: whenever a future slice adds (or removes/renames) a member on `IWorld`,
-// it lands the matching edit here in the SAME commit. The count pins (192 / 51 / 141)
+// it lands the matching edit here in the SAME commit. The count pins (196 / 51 / 145)
 // plus the sorted-name `toEqual` snapshots (modeled on the anti-loosening exclude-set
 // pin in tests/parity/harness.test.ts:131-162) are what force that: a dropped or
 // renamed member reddens deliberately, never silently.
@@ -34,11 +34,12 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { ClientWorld } from '../src/net/online';
 import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
-// The 23 facet interfaces the W1 split produced (src/world_api/<facet>.ts). Imported
+// The 24 facet interfaces the W1 split produced (src/world_api/<facet>.ts). Imported
 // type-only to pin each facet's runtime member array to its interface key-set below.
 import type { IWorldChat } from '../src/world_api/chat';
 import type { IWorldCombat } from '../src/world_api/combat';
 import type { IWorldCosmetics } from '../src/world_api/cosmetics';
+import type { IWorldDailyRewards } from '../src/world_api/daily_rewards';
 import type { IWorldDelves } from '../src/world_api/delves';
 import type { IWorldDuelArena } from '../src/world_api/duel_arena';
 import type { IWorldDungeons } from '../src/world_api/dungeons';
@@ -67,8 +68,8 @@ interface IWorldMember {
   readonly kind: IWorldMemberKind;
 }
 
-// The 192 members of `interface IWorld`, in interface order (world_api.ts).
-// Partition: 51 `data` + 141 `method` (read-returning + command-void + async).
+// The 196 members of `interface IWorld`, in interface order (world_api.ts).
+// Partition: 51 `data` + 145 `method` (read-returning + command-void + async).
 // biome-ignore lint/suspicious/noExportsInTest: IWORLD_MEMBERS is the W0c pinned structural-parity contract (the authoritative IWorld member list)
 export const IWORLD_MEMBERS = [
   // --- core world / player roster + economy reads (data) ---
@@ -260,6 +261,11 @@ export const IWORLD_MEMBERS = [
   { name: 'guildLeaderboard', kind: 'method' }, // async
   { name: 'devLeaderboard', kind: 'method' }, // async
   { name: 'prestige', kind: 'method' },
+  // --- daily WOC-holder rewards (IWorldDailyRewards; all async) ---
+  { name: 'dailyRewards', kind: 'method' },
+  { name: 'dailyRewardLeaderboard', kind: 'method' },
+  { name: 'spinDailyReward', kind: 'method' },
+  { name: 'dailyRewardHistory', kind: 'method' },
   // --- talents & specializations (reads + commands) ---
   { name: 'talents', kind: 'data' },
   { name: 'talentSpec', kind: 'data' },
@@ -374,9 +380,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(192);
+    expect(IWORLD_MEMBERS.length).toBe(196);
     expect(DATA_MEMBERS.length).toBe(51);
-    expect(METHOD_MEMBERS.length).toBe(141);
+    expect(METHOD_MEMBERS.length).toBe(145);
   });
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
@@ -385,7 +391,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
 
   // Sorted-name `toEqual` snapshots: a dropped, renamed, or kind-flipped member reddens
   // these deliberately, forcing a reviewed edit. NOT length-only.
-  it('the full sorted member set is exactly the pinned 192', () => {
+  it('the full sorted member set is exactly the pinned 196', () => {
     expect(IWORLD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -434,6 +440,9 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'craftItem',
       'craftSkills',
       'cupInfo',
+      'dailyRewardHistory',
+      'dailyRewardLeaderboard',
+      'dailyRewards',
       'deleteLoadout',
       'delveBuyShopItem',
       'delveDaily',
@@ -547,6 +556,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'setPetMode',
       'setSpec',
       'socialInfo',
+      'spinDailyReward',
       'startAutoAttack',
       'stopAutoAttack',
       'submitLootRoll',
@@ -638,7 +648,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     ]);
   });
 
-  it('the sorted method-kind set is exactly the pinned 141', () => {
+  it('the sorted method-kind set is exactly the pinned 145', () => {
     expect(METHOD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -671,6 +681,9 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'convertPartyToRaid',
       'convertRaidToParty',
       'craftItem',
+      'dailyRewardHistory',
+      'dailyRewardLeaderboard',
+      'dailyRewards',
       'deleteLoadout',
       'delveBuyShopItem',
       'delveInteract',
@@ -756,6 +769,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'setPetAutoTaunt',
       'setPetMode',
       'setSpec',
+      'spinDailyReward',
       'startAutoAttack',
       'stopAutoAttack',
       'submitLootRoll',
@@ -816,17 +830,17 @@ describe('membership, not equality: world extras do not fail the gate', () => {
   });
 });
 
-// --- W1: aggregate == disjoint union of the 23 facet member sets --------------------
-// After the facet split (W1), `interface IWorld extends` 23 domain facet interfaces
-// (src/world_api/<facet>.ts; the 22 owner-backed facets plus IWorldTelemetry). This
+// --- W1: aggregate == disjoint union of the 24 facet member sets --------------------
+// After the facet split (W1), `interface IWorld extends` 24 domain facet interfaces
+// (src/world_api/<facet>.ts; the 23 owner-backed facets plus IWorldTelemetry). This
 // block proves the split dropped nothing and duplicated nothing:
 //   (1) each facet's runtime name array is pinned to its interface key-set via
 //       `satisfies readonly (keyof IWorldX)[]` (rejects a FOREIGN name at compile time);
 //   (2) a type-level AssertNever<Exclude<keyof IWorldX, array[number]>> per facet rejects
 //       a MISSING name (if the array omits a key, Exclude<> is a non-never union and tsc
 //       fails) -- (1)+(2) together make each array EXACTLY its facet key-set;
-//   (3) the 23 arrays are pairwise DISJOINT (a member filed in two facets reddens);
-//   (4) their union, sorted, equals the pinned 192-name IWORLD_MEMBERS set (a member
+//   (3) the 24 arrays are pairwise DISJOINT (a member filed in two facets reddens);
+//   (4) their union, sorted, equals the pinned 196-name IWORLD_MEMBERS set (a member
 //       dropped from the split reddens).
 // This is the rigorous form, NOT the tautological `keyof IWorld === keyof (A & B & ...)`
 // (IWorld extends them, so that self-equality proves nothing): it asserts against the
@@ -1100,6 +1114,16 @@ const FACET_DELVES = [
 ] as const satisfies readonly (keyof IWorldDelves)[];
 type _ExhaustDelves = AssertNever<Exclude<keyof IWorldDelves, (typeof FACET_DELVES)[number]>>;
 
+const FACET_DAILY_REWARDS = [
+  'dailyRewards',
+  'dailyRewardLeaderboard',
+  'spinDailyReward',
+  'dailyRewardHistory',
+] as const satisfies readonly (keyof IWorldDailyRewards)[];
+type _ExhaustDailyRewards = AssertNever<
+  Exclude<keyof IWorldDailyRewards, (typeof FACET_DAILY_REWARDS)[number]>
+>;
+
 const FACET_TELEMETRY = ['reportTelemetry'] as const satisfies readonly (keyof IWorldTelemetry)[];
 type _ExhaustTelemetry = AssertNever<
   Exclude<keyof IWorldTelemetry, (typeof FACET_TELEMETRY)[number]>
@@ -1158,14 +1182,15 @@ const FACET_MEMBER_ARRAYS: Readonly<Record<string, readonly string[]>> = {
   mail: FACET_MAIL,
   dungeons: FACET_DUNGEONS,
   delves: FACET_DELVES,
+  dailyRewards: FACET_DAILY_REWARDS,
   telemetry: FACET_TELEMETRY,
   professions: FACET_PROFESSIONS,
   valeCup: FACET_VALE_CUP,
 };
 
-describe('W1: aggregate IWorld member set equals the disjoint union of the 23 facets', () => {
-  it('pins the facet count at 23', () => {
-    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(23);
+describe('W1: aggregate IWorld member set equals the disjoint union of the 24 facets', () => {
+  it('pins the facet count at 24', () => {
+    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(24);
   });
 
   it('each facet array is non-empty and internally duplicate-free', () => {
@@ -1175,7 +1200,7 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 23 fa
     }
   });
 
-  it('the 23 facet arrays are pairwise disjoint (no member filed in two facets)', () => {
+  it('the 24 facet arrays are pairwise disjoint (no member filed in two facets)', () => {
     const entries = Object.entries(FACET_MEMBER_ARRAYS);
     const overlaps: string[] = [];
     for (let i = 0; i < entries.length; i++) {
@@ -1191,10 +1216,10 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 23 fa
     expect(overlaps, `members filed in more than one facet:\n${overlaps.join('\n')}`).toEqual([]);
   });
 
-  it('the union of the 23 facets equals the pinned 192-member IWORLD_MEMBERS set', () => {
+  it('the union of the 24 facets equals the pinned 196-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(192);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(192);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(196);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(196);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

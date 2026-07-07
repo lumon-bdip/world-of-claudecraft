@@ -4680,11 +4680,13 @@ export class Hud {
   // Per-frame: paint the power meter off the pure view core; the core's `cancel`
   // auto-releases if I leave the match or die mid-charge so the meter never sticks.
   private updateShootCharge(): void {
+    const charging = this.shootChargeSlot !== null;
     const view = buildVcupChargeView(
-      this.shootChargeSlot !== null,
+      charging,
       !!this.sim.cupInfo?.match,
       this.sim.player.dead,
-      this.shootChargeFrac(),
+      // Only read the charge clock while a slot is actually held.
+      charging ? this.shootChargeFrac() : 0,
     );
     if (view.cancel) this.shootChargeSlot = null;
     this.vcupCharge.update(view);

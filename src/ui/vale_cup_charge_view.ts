@@ -13,7 +13,9 @@
 // directly by tests/vale_cup_charge_view.test.ts.
 
 // Band thresholds on the 0..1 charge fraction: ideal is the sweet spot band,
-// over is the over-power band (the sim's shoot inaccuracy climbs past it).
+// over is the over-power band. UI-local feel tuning: the sim scales shot power
+// and loft linearly with the fraction (no threshold of its own); these bands
+// just teach the player where a hard shot starts sailing over the bar.
 export const SHOOT_IDEAL_FRAC = 0.6;
 export const SHOOT_OVER_FRAC = 0.85;
 
