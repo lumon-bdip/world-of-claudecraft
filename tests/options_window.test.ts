@@ -255,3 +255,33 @@ describe('options_window: title-bar back control', () => {
     expect(rule).toContain('transform: none;');
   });
 });
+
+describe('options_window: uiScale slider commits on release (#1558)', () => {
+  it('a commit-on-change slider commits only on change, previewing readout on input', () => {
+    // Isolate the settingSlider commit-on-change branch.
+    const fn = painter.slice(painter.indexOf('if (c.commitOnChange) {'));
+    const branch = fn.slice(0, fn.indexOf('} else {'));
+    // input previews only (readout + fill), and must NOT commit the setting.
+    const inputHandler = branch.slice(
+      branch.indexOf("addEventListener('input'"),
+      branch.indexOf("addEventListener('change'"),
+    );
+    expect(inputHandler).toContain('readoutFromSlider();');
+    expect(inputHandler).not.toContain('onSettingChange');
+    // change (release / keyboard step) is the one that commits.
+    const changeHandler = branch.slice(branch.indexOf("addEventListener('change'"));
+    expect(changeHandler).toContain(
+      'hooks.onSettingChange(key, sliderDispatchValue(slider.value))',
+    );
+  });
+
+  it('a normal slider still commits live on input (behavior preserved)', () => {
+    const elseArm = painter.slice(
+      painter.indexOf('} else {', painter.indexOf('if (c.commitOnChange) {')),
+    );
+    const inputHandler = elseArm.slice(elseArm.indexOf("addEventListener('input'"));
+    expect(inputHandler.slice(0, inputHandler.indexOf('});'))).toContain(
+      'hooks.onSettingChange(key, sliderDispatchValue(slider.value))',
+    );
+  });
+});
