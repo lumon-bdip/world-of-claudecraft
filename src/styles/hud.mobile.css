@@ -3282,8 +3282,11 @@
      reaches ~236, still ~104px clear of the fixed 132px-wide move-joystick
      capture zone: it keeps the round-4 joystick-zone clearance AND clears the
      jump crescent, the two constraints that pull the frame in opposite directions
-     on a very narrow viewport. 844/915/932 stay on the -15px seat above. */
-  @media (max-width: 800px) {
+     on a very narrow viewport. 844/915/932 stay on the -15px seat above.
+     Landscape-gated: the crescent geometry that justifies the nudge only exists
+     in landscape; a portrait phone at these widths keeps the tier's base seat
+     instead of an off-centre frame. */
+  @media (max-width: 800px) and (orientation: landscape) {
     body.mobile-touch.hud-mobile-compact #player-frame,
     body.mobile-touch.hud-mobile-compact #castbar,
     body.mobile-touch.hud-mobile-compact #swingbar {
@@ -3311,11 +3314,15 @@
      interactive floor. A small -10px nudge of the frame plus BOTH its bars (kept
      in lockstep so the swing/cast bars stay centred over the frame, as in round 4)
      opens that to ~8px on 1024x768. It is inconsequential on the wider tablet
-     profile (1920x1080), where Jump sits hundreds of px clear regardless. */
-  body.mobile-touch.hud-mobile-tablet #player-frame,
-  body.mobile-touch.hud-mobile-tablet #castbar,
-  body.mobile-touch.hud-mobile-tablet #swingbar {
-    left: calc(50% - 10px);
+     profile (1920x1080), where Jump sits hundreds of px clear regardless.
+     Landscape-gated for the same reason as the compact narrow-width nudge:
+     portrait keeps the centred base seat. */
+  @media (orientation: landscape) {
+    body.mobile-touch.hud-mobile-tablet #player-frame,
+    body.mobile-touch.hud-mobile-tablet #castbar,
+    body.mobile-touch.hud-mobile-tablet #swingbar {
+      left: calc(50% - 10px);
+    }
   }
 
   /* ---------- floating combat text (mobile) ----------

@@ -187,3 +187,35 @@ describe.each(HTML_ENTRIES)('mobile window backdrop (%s)', (entry) => {
     expect(z).toBeLessThan(uiOpenZ);
   });
 });
+
+describe('tier player-frame nudges are landscape-gated (hud.mobile.css)', () => {
+  // The compact narrow-width (-44px) and tablet (-10px) player-frame seats exist
+  // to clear the bottom-right Jump crescent, a landscape-only geometry. The tier
+  // classes themselves carry no orientation gate (a 390x844 portrait phone still
+  // resolves compact), so without an orientation media the nudges would off-centre
+  // the frame in browser portrait. Pin both rules inside an
+  // `@media (orientation: landscape)` block. Raw-text scan on purpose: the flat
+  // rule scan above unwraps only the outer @layer, not nested @media blocks.
+  const css = readFileSync(
+    fileURLToPath(new URL('../src/styles/hud.mobile.css', import.meta.url)),
+    'utf8',
+  );
+
+  function mediaPrelude(needle: string): string {
+    const at = css.indexOf(needle);
+    expect(at, `${needle} rule should exist`).toBeGreaterThanOrEqual(0);
+    // Nearest @media prelude ABOVE the rule; nudge rules sit directly inside it.
+    const before = css.slice(0, at);
+    const open = before.lastIndexOf('@media');
+    expect(open, `${needle} should sit inside a media block`).toBeGreaterThanOrEqual(0);
+    return before.slice(open, before.indexOf('{', open));
+  }
+
+  it('keys the compact -44px seat to landscape', () => {
+    expect(mediaPrelude('left: calc(50% - 44px)')).toContain('(orientation: landscape)');
+  });
+
+  it('keys the tablet -10px seat to landscape', () => {
+    expect(mediaPrelude('left: calc(50% - 10px)')).toContain('(orientation: landscape)');
+  });
+});
