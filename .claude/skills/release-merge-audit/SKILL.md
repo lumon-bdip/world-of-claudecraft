@@ -100,3 +100,12 @@ side of `src/ui/i18n.resolved.sha256` leaves a stale baseline, and `npm run i18n
 rewrite it (the merged union table hashes to a value neither parent had). After regenerating,
 run `node scripts/i18n_resolved_hash.mjs --write` and confirm
 `npx vitest run tests/i18n_resolved_equivalence.test.ts` is green, in the SAME merge commit.
+
+A second recurring trap (reddened the gate on the v0.23.0 merge before bank Phase 9): a
+release-authored test that drives GameServer mocks `../server/db` with the export list as of
+the RELEASE tree, so a db function the BRANCH added to game.join/leave or the autosave loop
+throws "No X export is defined on the mock" only on the merged tree. Neither parent can carry
+the fix, targeted suites miss it, and only the full gate catches it. After any merge that
+brings new `vi.mock('../server/db')` sites, diff each new mock's keys against what
+`server/game.ts` imports from db on the branch, and mirror the branch's canonical mock shape
+(for the character-lease surface: `tests/character_lease_game.test.ts`).
