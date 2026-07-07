@@ -4157,7 +4157,12 @@
        past it above 100% (issue 1559). A px length zoom-scales exactly like the
        frame, so the map fills its window at every UI scale; the 100% look is
        unchanged. The mobile rule below overrides this with width 100% to fill the
-       responsive window. */
+       responsive window.
+       box-sizing: content-box so the 2px border sits OUTSIDE the 560 content box:
+       under the global border-box reset, a plain width:560px would make the content
+       box 556 and downscale the 560 backing (~0.7%). content-box keeps the content
+       box exactly 560, so the map stays a crisp 1:1 at 100%. */
+    box-sizing: content-box;
     width: 560px;
     height: 560px;
     border: 2px solid var(--border);
