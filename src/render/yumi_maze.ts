@@ -92,8 +92,8 @@ export function buildYumiMaze(
   floor.receiveShadow = true;
   group.add(floor);
 
-  // Team accents: an emissive pad under each spawn plaza plus a neutral gold
-  // ring at the center plaza, so orientation reads at a glance.
+  // Team accents: an emissive pad under each spawn plaza, so orientation
+  // reads at a glance (the center plaza is marked by its gold brazier alone).
   const plazaHalf = layout.pitch * 2 - layout.wallHalf * 2;
   const accent = (cx: number, cz: number, color: number) => {
     const pad = new THREE.Mesh(
@@ -197,20 +197,6 @@ export function buildYumiMaze(
       fireLight(tx, torchY + 1.6, tz, WARM_FLAME);
     }
   }
-  const ring = new THREE.Mesh(
-    new THREE.RingGeometry(2.4, 3.2, 40),
-    surfaceMat({
-      color: CENTER_GOLD,
-      emissive: CENTER_GOLD,
-      emissiveIntensity: 0.6,
-      roughness: 0.5,
-      side: THREE.DoubleSide,
-    }),
-  );
-  ring.rotation.x = -Math.PI / 2;
-  ring.position.y = 0.06;
-  group.add(ring);
-
   // The two cat beacons: world-anchored, so they live on the SCENE-space
   // subgroup (the cats' coordinates are world coords, not maze-local).
   const beacons = new THREE.Group();
