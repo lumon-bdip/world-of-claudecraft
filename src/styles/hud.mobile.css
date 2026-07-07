@@ -1830,7 +1830,16 @@
   body.mobile-touch #spellbook,
   body.mobile-touch #vendor-window,
   body.mobile-touch #market-window,
-  body.mobile-touch #quest-dialog {
+  body.mobile-touch #quest-dialog,
+  body.mobile-touch #calendar-window,
+  body.mobile-touch #crafting-window,
+  body.mobile-touch #mailbox-window,
+  body.mobile-touch #emote-editor,
+  body.mobile-touch #arena-window,
+  body.mobile-touch #valecup-window,
+  body.mobile-touch #delve-board,
+  body.mobile-touch #leaderboard-window,
+  body.mobile-touch #loot-settings-window {
     left: 10px;
     right: 10px;
     top: 10px;
@@ -1870,6 +1879,25 @@
     min-height: 40px;
     font-size: 16px;
   }
+  /* Phase 5: the tall list windows (mailbox, calendar) are flex columns with an
+     inner scroll body (#mailbox-body, .cal-day-pane) and overflow:hidden on the
+     shell. Edge-pinned they take the full available height (the #market-window
+     template) so the inner body keeps a usable, touch-scrollable height under the
+     header instead of the sheet's overflow-y:auto fighting the inner flex scroll. */
+  body.mobile-touch #mailbox-window,
+  body.mobile-touch #calendar-window {
+    height: auto;
+    max-height: calc(var(--app-vh) / var(--ui-scale, 1) - 20px);
+    overflow: hidden;
+  }
+  /* The leaderboard body (.lb-body) has its own 56vh scroll; cap the whole sheet to
+     the viewport so a long board never runs the window past the bottom edge. */
+  body.mobile-touch #leaderboard-window {
+    max-height: calc(var(--app-vh) / var(--ui-scale, 1) - 20px);
+  }
+  /* Loot Settings is a small dialog; JS docks it beside the party frames on desktop
+     but on touch it joins the sheet. Its select is the one interactive control, so
+     the sheet pin plus the touch floor below is all it needs (no reflow hazard). */
   /* Inspect (player profile) on mobile: a full-width, scrollable window with the
      gear stacked into a single one-item-per-row list, so each item name reads in
      full instead of being squeezed into two narrow columns. */
@@ -2403,6 +2431,54 @@
   body.mobile-touch #ctx-menu .ctx-item {
     display: flex;
     align-items: center;
+    min-height: 40px;
+    font-size: 16px;
+  }
+  /* Phase 5 touch floors: the interactive descendants of the newly sheeted windows
+     that render below the 40px tap target on desktop. Only the controls that need it
+     are listed here; each window's list rows, primary buttons, and text inputs
+     already meet the floor in their base rules (mailbox rows/action/send buttons and
+     16px inputs, calendar cells, delve-board tabs/tiers/companions/shop buttons,
+     valecup bracket/nation/role pickers, crafting .vendor-item via the shared rule). */
+  /* Arena: the small bracket tabs and the join/leave .btn (base .btn is padding-only). */
+  body.mobile-touch #arena-window .arena-bracket,
+  body.mobile-touch #arena-window .btn {
+    min-height: 40px;
+    box-sizing: border-box;
+  }
+  /* Vale Cup: the join/leave .btn and the guild-record toggle (its pickers already
+     carry a pointer:coarse floor). */
+  body.mobile-touch #valecup-window .btn,
+  body.mobile-touch #valecup-window .vcup-guild-toggle {
+    min-height: 40px;
+    box-sizing: border-box;
+  }
+  /* Mailbox: the folder tab strip and the "back to inbox" link. */
+  body.mobile-touch #mailbox-window .mail-tab,
+  body.mobile-touch #mailbox-window .mail-back {
+    min-height: 40px;
+    box-sizing: border-box;
+  }
+  /* Calendar: the month prev/next nav, the per-event delete, and the add-event button. */
+  body.mobile-touch #calendar-window .cal-nav-btn,
+  body.mobile-touch #calendar-window .cal-event-del,
+  body.mobile-touch #calendar-window .cal-add-btn {
+    min-width: 40px;
+    min-height: 40px;
+    box-sizing: border-box;
+  }
+  /* Emote editor: the footer Done .btn (the emote items are already 58px tall). */
+  body.mobile-touch #emote-editor .btn {
+    min-height: 40px;
+    box-sizing: border-box;
+  }
+  /* Leaderboard: the Players/Guilds/Devs tab bar. */
+  body.mobile-touch #leaderboard-window .lb-tab {
+    min-height: 40px;
+    box-sizing: border-box;
+  }
+  /* Loot Settings: the loot-mode / threshold selects (40px + 16px iOS no-zoom). */
+  body.mobile-touch #loot-settings-window select {
     min-height: 40px;
     font-size: 16px;
   }
