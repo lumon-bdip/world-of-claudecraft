@@ -24,7 +24,8 @@ import {
 
 // ---------------------------------------------------------------------------
 // Tuning constants (all yards / seconds). GRAVITY matches the player jump arc
-// constant in sim.ts so lofted balls and jumping players share one gravity.
+// constant (src/sim/player_motion.ts) so lofted balls and jumping players
+// share one gravity.
 // ---------------------------------------------------------------------------
 export const VC_BALL_GRAVITY = 16;
 export const VC_BALL_RADIUS = 0.49; // a real soccer ball, 30% smaller than the old ball
