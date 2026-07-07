@@ -47,6 +47,14 @@ export interface VcupBettingView {
   oddsB: number | null;
   /** Betting still accepted (the briefing window is open). */
   open: boolean;
+  /**
+   * Stake controls locked per side: every control once the window closes, and
+   * the OTHER side once I have backed one (a parimutuel wager is one-sided).
+   * The painter applies these as real `disabled` attributes plus the `.locked`
+   * visual, and its click handlers refuse a locked side.
+   */
+  lockA: boolean;
+  lockB: boolean;
   /** Whole seconds left to wager (0 once the window closes). */
   countdown: number;
   bettors: number;
@@ -76,6 +84,8 @@ const INACTIVE: VcupBettingView = {
   oddsA: null,
   oddsB: null,
   open: false,
+  lockA: true,
+  lockB: true,
   countdown: 0,
   bettors: 0,
   myStake: 0,
@@ -144,6 +154,8 @@ export function buildVcupBettingView(info: CupInfo | null): VcupBettingView {
     oddsA,
     oddsB,
     open: m.bets.open,
+    lockA: !m.bets.open || m.bets.mySide === 'B',
+    lockB: !m.bets.open || m.bets.mySide === 'A',
     countdown: Math.max(0, Math.ceil(m.briefingLeft)),
     bettors: m.bets.count,
     myStake: m.bets.myStake,

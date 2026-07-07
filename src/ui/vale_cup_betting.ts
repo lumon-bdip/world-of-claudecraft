@@ -141,20 +141,20 @@ export class ValeCupBetting {
       );
     }
     // Lock the losing-side controls once a side is backed, and every control once
-    // the window closes. `.locked` is the visual + pointer gate; `disabled` on
-    // the stake buttons is the real control gate (keyboard focus + Enter/Space
-    // included), matching the window painter's disabled attributes.
-    const lockA = !view.open || view.mySide === 'B';
-    const lockB = !view.open || view.mySide === 'A';
-    if (this.sideAControls) w.toggleClass(this.sideAControls, 'locked', lockA);
-    if (this.sideBControls) w.toggleClass(this.sideBControls, 'locked', lockB);
-    if (lockA !== this.lockedA) {
-      this.lockedA = lockA;
-      for (const btn of this.stakeBtnsA) btn.disabled = lockA;
+    // the window closes (the view core decides view.lockA/lockB; unit-tested in
+    // tests/vale_cup_betting_view.test.ts). `.locked` is the visual + pointer
+    // gate; `disabled` on the stake buttons is the real control gate (keyboard
+    // focus + Enter/Space included), matching the window painter's disabled
+    // attributes.
+    if (this.sideAControls) w.toggleClass(this.sideAControls, 'locked', view.lockA);
+    if (this.sideBControls) w.toggleClass(this.sideBControls, 'locked', view.lockB);
+    if (view.lockA !== this.lockedA) {
+      this.lockedA = view.lockA;
+      for (const btn of this.stakeBtnsA) btn.disabled = view.lockA;
     }
-    if (lockB !== this.lockedB) {
-      this.lockedB = lockB;
-      for (const btn of this.stakeBtnsB) btn.disabled = lockB;
+    if (view.lockB !== this.lockedB) {
+      this.lockedB = view.lockB;
+      for (const btn of this.stakeBtnsB) btn.disabled = view.lockB;
     }
   }
 

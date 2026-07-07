@@ -11,7 +11,7 @@ import {
 } from '../src/ui/vale_cup_charge_view';
 
 describe('buildVcupChargeView', () => {
-  it('pins the band thresholds (the sim shoot inaccuracy is tuned against these)', () => {
+  it('pins the band thresholds (UI-local tuning the meter feel depends on)', () => {
     expect(SHOOT_IDEAL_FRAC).toBe(0.6);
     expect(SHOOT_OVER_FRAC).toBe(0.85);
   });

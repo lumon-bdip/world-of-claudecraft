@@ -215,8 +215,10 @@ describe('vale_cup_betting: locked stakes are disabled controls, not just pointe
   // past. The stake buttons must also carry the real `disabled` attribute (the
   // window painter precedent) and the once-wired handler must refuse a locked side.
   it('writes the disabled property on lock transitions for both sides', () => {
-    expect(bettingSrc).toContain('btn.disabled = lockA');
-    expect(bettingSrc).toContain('btn.disabled = lockB');
+    // The lock DECISION lives in the pure core (view.lockA/lockB, unit-tested
+    // in tests/vale_cup_betting_view.test.ts); the painter only applies it.
+    expect(bettingSrc).toContain('btn.disabled = view.lockA');
+    expect(bettingSrc).toContain('btn.disabled = view.lockB');
   });
 
   it('re-applies the lock to freshly rebuilt stake buttons', () => {
@@ -225,7 +227,35 @@ describe('vale_cup_betting: locked stakes are disabled controls, not just pointe
   });
 
   it('early-returns a click on a locked side (keyboard defense in depth)', () => {
-    expect(bettingSrc).toContain("side === 'A' ? this.lockedA : this.lockedB");
+    // Pin the guard INCLUDING its return, so dropping the verb (leaving a
+    // bare expression statement) reddens here.
+    expect(bettingSrc).toContain("if (side === 'A' ? this.lockedA : this.lockedB) return;");
+  });
+});
+
+describe('vale_cup_charge: painter and stylesheet stay coupled', () => {
+  // The meter id and tint classes are string-coupled across hud.ts, the painter
+  // markup, and components.css; a typo in any of the three silently unstyles
+  // the meter, so pin all three sides here.
+  const css = read('src/styles/components.css');
+
+  it('mounts the id the stylesheet targets', () => {
+    expect(hud).toContain("rootId: 'vcup-charge'");
+    expect(css).toContain('#vcup-charge {');
+  });
+
+  it('renders the fill and label classes the stylesheet styles', () => {
+    for (const cls of ['vcup-charge-fill', 'vcup-charge-label']) {
+      expect(chargeSrc).toContain(`class="${cls}"`);
+      expect(css).toContain(`.${cls}`);
+    }
+  });
+
+  it('toggles the tint classes the stylesheet defines', () => {
+    expect(chargeSrc).toContain("'over', view.over");
+    expect(chargeSrc).toContain("'ideal', view.ideal");
+    expect(css).toContain('.vcup-charge-fill.over');
+    expect(css).toContain('.vcup-charge-fill.ideal');
   });
 });
 

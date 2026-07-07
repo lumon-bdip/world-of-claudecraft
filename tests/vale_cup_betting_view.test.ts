@@ -131,4 +131,57 @@ describe('vale_cup_betting_view', () => {
     const other = buildVcupBettingView(makeCup({ spectate: makeMatch({ id: 12 }) }));
     expect(other.sig).not.toBe(base.sig);
   });
+
+  // The per-side stake locks the painter applies as `disabled` + `.locked`:
+  // a parimutuel wager is one-sided, so backing a side locks only the OTHER
+  // side while the window is open, and closing the window locks both.
+  it('locks neither side while the window is open and I have not bet', () => {
+    const v = buildVcupBettingView(
+      makeCup({
+        spectate: makeMatch({
+          bets: { open: true, poolA: 300, poolB: 100, count: 3, myStake: 0, mySide: null },
+          origin: { x: 0, z: 0 },
+        }),
+      }),
+    );
+    expect(v.lockA).toBe(false);
+    expect(v.lockB).toBe(false);
+  });
+
+  it('locks ONLY the opposite side once I have backed one', () => {
+    const backedA = buildVcupBettingView(makeCup({ spectate: makeMatch() })); // mySide 'A'
+    expect(backedA.lockA).toBe(false);
+    expect(backedA.lockB).toBe(true);
+    const backedB = buildVcupBettingView(
+      makeCup({
+        spectate: makeMatch({
+          bets: { open: true, poolA: 300, poolB: 100, count: 3, myStake: 100, mySide: 'B' },
+          origin: { x: 0, z: 0 },
+        }),
+      }),
+    );
+    expect(backedB.lockA).toBe(true);
+    expect(backedB.lockB).toBe(false);
+  });
+
+  it('locks both sides once the wager window closes, whatever I backed', () => {
+    for (const mySide of [null, 'A', 'B'] as const) {
+      const v = buildVcupBettingView(
+        makeCup({
+          spectate: makeMatch({
+            bets: { open: false, poolA: 300, poolB: 100, count: 3, myStake: 100, mySide },
+            origin: { x: 0, z: 0 },
+          }),
+        }),
+      );
+      expect(v.lockA, `lockA with mySide=${mySide}`).toBe(true);
+      expect(v.lockB, `lockB with mySide=${mySide}`).toBe(true);
+    }
+  });
+
+  it('locks both sides on the inactive view (nothing to wager on)', () => {
+    const v = buildVcupBettingView(null);
+    expect(v.lockA).toBe(true);
+    expect(v.lockB).toBe(true);
+  });
 });
