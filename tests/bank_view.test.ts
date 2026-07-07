@@ -1,6 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import type { InvSlot } from '../src/sim/types';
-import { type BankItemLookup, bankSlotAction, buildBankView } from '../src/ui/bank_view';
+import { bankCapacity } from '../src/sim/bank';
+// Aliased: this file already declares a small synthetic `ITEMS` for the buildBankView
+// tests, so the real merged table (needed for the real-Sim replay) comes in renamed.
+import { ITEMS as REAL_ITEMS } from '../src/sim/data';
+import { Sim } from '../src/sim/sim';
+import type { Entity, InvSlot, ItemDef, SimEvent } from '../src/sim/types';
+import type { ItemLookup } from '../src/ui/bag_filter';
+import {
+  type BankItemLookup,
+  bankSlotAction,
+  buildBankView,
+  hasDepositableMaterials,
+  planDepositAllMaterials,
+} from '../src/ui/bank_view';
 import type { BankInfo } from '../src/world_api';
 
 // The bank core maps the proximity-gated BankInfo snapshot (null away from a
@@ -163,5 +175,228 @@ describe('ClientWorld-vs-Sim parity', () => {
     };
     const cliInfo = JSON.parse(JSON.stringify(simInfo)) as BankInfo;
     expect(buildBankView(simInfo, lookup)).toEqual(buildBankView(cliInfo, lookup));
+  });
+});
+
+// planDepositAllMaterials simulates each candidate deposit on deep clones via the sim's
+// OWN moveBetweenContainers, so the plan is whatever the server will do. These tests pin
+// the selection (materials only, never quest, unknown-id skipped), the DESCENDING order
+// (so a splice never invalidates a later index), the whole-stack-or-skip rule with the
+// `full` flag, and prove the plan replays cleanly against a REAL Sim.
+describe('planDepositAllMaterials: selection and order (synthetic lookup)', () => {
+  // Category comes from THIS lookup; the stacking math inside moveBetweenContainers reads
+  // the live ITEMS table, where these synthetic ids are absent, so each fresh stack needs
+  // one free bank slot (capacity is effectively a slot count here).
+  const KINDS: Record<string, string> = {
+    m1: 'junk',
+    m2: 'junk',
+    m3: 'tool',
+    m4: 'junk',
+    gear: 'weapon',
+    quest1: 'quest',
+  };
+  const lookup: ItemLookup = (id) => (KINDS[id] ? ({ kind: KINDS[id] } as ItemDef) : undefined);
+
+  it('plans only materials, descending, each as a whole-stack send', () => {
+    const inv: InvSlot[] = [
+      { itemId: 'gear', count: 1 }, // 0 weapon: skip
+      { itemId: 'm1', count: 5 }, // 1 material
+      { itemId: 'quest1', count: 1 }, // 2 quest: skip
+      { itemId: 'm2', count: 3 }, // 3 material
+      { itemId: 'ghost', count: 1 }, // 4 unknown: skip
+      { itemId: 'm3', count: 1 }, // 5 material (tool)
+    ];
+    const plan = planDepositAllMaterials(inv, [], 24, lookup);
+    expect(plan.sends).toEqual([
+      { slot: 5, count: 1 },
+      { slot: 3, count: 3 },
+      { slot: 1, count: 5 },
+    ]);
+    expect(plan.stacks).toBe(3);
+    expect(plan.full).toBe(false);
+  });
+
+  it('never plans a quest item and never mutates the inputs', () => {
+    const inv: InvSlot[] = [
+      { itemId: 'quest1', count: 2 },
+      { itemId: 'm1', count: 1 },
+    ];
+    const bank: InvSlot[] = [];
+    const plan = planDepositAllMaterials(inv, bank, 24, lookup);
+    expect(plan.sends).toEqual([{ slot: 1, count: 1 }]);
+    expect(inv).toEqual([
+      { itemId: 'quest1', count: 2 },
+      { itemId: 'm1', count: 1 },
+    ]);
+    expect(bank).toEqual([]);
+  });
+
+  it('plans an instanced material as a whole-stack send', () => {
+    const inv: InvSlot[] = [{ itemId: 'm1', count: 2, instance: { signer: 'X' } }];
+    const plan = planDepositAllMaterials(inv, [], 24, lookup);
+    expect(plan.sends).toEqual([{ slot: 0, count: 2 }]);
+    expect(plan.full).toBe(false);
+  });
+
+  it('stops as the bank fills: only the fitting stacks are sent and full is set', () => {
+    const inv: InvSlot[] = [
+      { itemId: 'm1', count: 1 },
+      { itemId: 'm2', count: 1 },
+      { itemId: 'm3', count: 1 },
+      { itemId: 'm4', count: 1 },
+    ];
+    // Two free bank slots for four distinct materials: the two highest indices fit.
+    const plan = planDepositAllMaterials(inv, [], 2, lookup);
+    expect(plan.sends).toEqual([
+      { slot: 3, count: 1 },
+      { slot: 2, count: 1 },
+    ]);
+    expect(plan.stacks).toBe(2);
+    expect(plan.full).toBe(true);
+  });
+
+  it('plans nothing (and is not full) when there are no materials', () => {
+    const inv: InvSlot[] = [
+      { itemId: 'gear', count: 1 },
+      { itemId: 'quest1', count: 1 },
+    ];
+    expect(planDepositAllMaterials(inv, [], 24, lookup)).toEqual({
+      sends: [],
+      stacks: 0,
+      full: false,
+    });
+  });
+
+  it('reports the bank already full: nothing sent but full is set', () => {
+    const inv: InvSlot[] = [{ itemId: 'm1', count: 1 }];
+    const plan = planDepositAllMaterials(inv, [{ itemId: 'gear', count: 1 }], 1, lookup);
+    expect(plan).toEqual({ sends: [], stacks: 0, full: true });
+  });
+
+  it('hasDepositableMaterials is true only when a material stack is present', () => {
+    expect(hasDepositableMaterials([{ itemId: 'm1', count: 1 }], lookup)).toBe(true);
+    expect(hasDepositableMaterials([{ itemId: 'm3', count: 1 }], lookup)).toBe(true);
+    expect(
+      hasDepositableMaterials(
+        [
+          { itemId: 'gear', count: 1 },
+          { itemId: 'quest1', count: 1 },
+        ],
+        lookup,
+      ),
+    ).toBe(false);
+    expect(hasDepositableMaterials([{ itemId: 'ghost', count: 1 }], lookup)).toBe(false);
+    expect(hasDepositableMaterials([], lookup)).toBe(false);
+  });
+});
+
+describe('planDepositAllMaterials: replays cleanly against a real Sim', () => {
+  const BANKER = 'bursar_fernando';
+  function bankerEntity(sim: Sim): Entity {
+    for (const e of sim.entities.values()) {
+      if (e.kind === 'npc' && e.templateId === BANKER) return e;
+    }
+    throw new Error('banker not spawned');
+  }
+  function moveToBanker(sim: Sim): void {
+    const p = sim.entities.get(sim.playerId);
+    if (!p) throw new Error('missing player');
+    p.pos = { ...bankerEntity(sim).pos };
+    p.prevPos = { ...p.pos };
+    sim.rebucket(p);
+  }
+  function metaOf(sim: Sim) {
+    const m = sim.meta(sim.playerId);
+    if (!m) throw new Error('missing meta');
+    return m;
+  }
+  // Distinct real junk/tool ids so each material occupies its own bank slot.
+  const MATS = ['wolf_fang', 'amber_hide', 'spider_leg', 'stag_antler'] as const;
+  const GEAR = Object.values(REAL_ITEMS)
+    .filter((d) => d.kind === 'weapon' || d.kind === 'armor')
+    .map((d) => d.id);
+
+  it('confirms the fixtures are real materials (junk/tool), not quest', () => {
+    for (const id of MATS) {
+      const kind = REAL_ITEMS[id]?.kind;
+      expect(kind === 'junk' || kind === 'tool', `${id} is ${kind}`).toBe(true);
+    }
+  });
+
+  it('deposits every planned stack with zero refusal when the bank has room', () => {
+    const sim = new Sim({ seed: 11, playerClass: 'warrior', autoEquip: false });
+    moveToBanker(sim);
+    const m = metaOf(sim);
+    m.inventory.length = 0;
+    m.inventory.push(
+      { itemId: MATS[0], count: 3 },
+      { itemId: 'boar_hide', count: 1 }, // a quest item: must be skipped
+      { itemId: MATS[1], count: 2 },
+      { itemId: MATS[2], count: 5 },
+    );
+    m.bank.inventory.length = 0;
+    const plan = planDepositAllMaterials(
+      m.inventory,
+      m.bank.inventory,
+      bankCapacity(m.bank),
+      (id) => REAL_ITEMS[id],
+    );
+    expect(plan.stacks).toBe(3);
+    expect(plan.full).toBe(false);
+    sim.drainEvents();
+    const errors: SimEvent[] = [];
+    for (const send of plan.sends) {
+      sim.bankDeposit(send.slot, send.count);
+      for (const ev of sim.drainEvents()) if (ev.type === 'error') errors.push(ev);
+    }
+    expect(errors).toEqual([]);
+    // All three materials landed; the quest item stayed in the bags.
+    expect(m.bank.inventory.map((s) => s.itemId).sort()).toEqual([...MATS.slice(0, 3)].sort());
+    expect(m.inventory.map((s) => s.itemId)).toEqual(['boar_hide']);
+  });
+
+  it('replays a mid-run-full plan exactly: only the fitting stacks deposit, none refuse', () => {
+    const sim = new Sim({ seed: 12, playerClass: 'warrior', autoEquip: false });
+    moveToBanker(sim);
+    const m = metaOf(sim);
+    m.inventory.length = 0;
+    m.inventory.push(
+      { itemId: MATS[0], count: 3 }, // 0
+      { itemId: MATS[1], count: 2 }, // 1
+      { itemId: MATS[2], count: 5 }, // 2
+      { itemId: MATS[3], count: 1 }, // 3
+    );
+    // Pre-fill the bank so only 2 of the 4 materials fit (24 - 22 = 2 free slots).
+    m.bank.inventory.length = 0;
+    for (let i = 0; i < 22; i++) m.bank.inventory.push({ itemId: GEAR[i], count: 1 });
+    m.bank.purchasedSlots = 0;
+    m.bank.bonusSlots = 0;
+    const cap = bankCapacity(m.bank);
+    expect(cap).toBe(24);
+    const plan = planDepositAllMaterials(
+      m.inventory,
+      m.bank.inventory,
+      cap,
+      (id) => REAL_ITEMS[id],
+    );
+    expect(plan.stacks).toBe(2);
+    expect(plan.full).toBe(true);
+    expect(plan.sends).toEqual([
+      { slot: 3, count: 1 },
+      { slot: 2, count: 5 },
+    ]);
+    sim.drainEvents();
+    const errors: SimEvent[] = [];
+    for (const send of plan.sends) {
+      sim.bankDeposit(send.slot, send.count);
+      for (const ev of sim.drainEvents()) if (ev.type === 'error') errors.push(ev);
+    }
+    expect(errors).toEqual([]);
+    expect(m.bank.inventory.length).toBe(24); // filled exactly, no overflow
+    expect(m.bank.inventory.some((s) => s.itemId === MATS[3])).toBe(true);
+    expect(m.bank.inventory.some((s) => s.itemId === MATS[2])).toBe(true);
+    // The two that did not fit remain in the bags.
+    expect(m.inventory.some((s) => s.itemId === MATS[0])).toBe(true);
+    expect(m.inventory.some((s) => s.itemId === MATS[1])).toBe(true);
   });
 });

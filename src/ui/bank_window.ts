@@ -20,16 +20,30 @@ import { audio } from '../game/audio';
 import { ITEMS } from '../sim/data';
 import type { IWorld } from '../world_api';
 import {
+  BAG_CATEGORIES,
+  BAG_SORTS,
+  type BagCategory,
+  type BagFilterState,
+  type BagSort,
+  DEFAULT_BAG_FILTER,
+  parseBagFilter,
+  serializeBagFilter,
+} from './bag_filter';
+import { bankFilterIsDefault, filterBankSlots } from './bank_filter';
+import {
   type BankBuySlotsModel,
   type BankSlotModel,
   bankSlotAction,
   buildBankView,
+  type DepositAllPlan,
+  hasDepositableMaterials,
+  planDepositAllMaterials,
 } from './bank_view';
 import { markDialogRoot } from './dialog_root';
 import { itemDisplayName } from './entity_i18n';
 import { esc } from './esc';
 import { FOCUSABLE_SELECTOR } from './focus_manager';
-import { formatMoney, formatNumber, t } from './i18n';
+import { formatMoney, formatNumber, type TranslationKey, t } from './i18n';
 import { QUALITY_COLOR } from './icons';
 import type { PainterHostPresentation } from './painter_host';
 import { svgIcon } from './ui_icons';
@@ -55,6 +69,35 @@ const BANK_PROMPT_SELECTOR = '.bank-quantity-prompt, .bank-buy-prompt';
 function dismissBankPrompts(): void {
   for (const p of document.querySelectorAll(BANK_PROMPT_SELECTOR)) p.remove();
 }
+
+// The bank's window-local filter preferences persist under their OWN key, distinct
+// from the bags' 'woc_bag_filter': the two windows share the state SHAPE (BagFilterState)
+// and the tolerant serialize/parse, but keep independent category/sort/search choices.
+const BANK_FILTER_KEY = 'woc_bank_filter';
+
+// How long the transient deposit-all summary stays on screen before it clears. The
+// summary is a polite aria-live status line INSIDE the window (the bank painter cannot
+// reach Hud's toast without a hud.ts-wired deps callback, which the non-modal cluster
+// forbids here), so it self-expires rather than lingering across later data refreshes.
+const DEPOSIT_STATUS_MS = 4_000;
+
+// The category chips and sort options REUSE the bags' generic label keys (All / Weapons
+// / Recent / ...): those strings are not bags-specific, so duplicating them into the
+// catalog would only add untranslated debt. The bank adds only its OWN aria labels
+// (filterGroupAria / sortAria / searchAria) where the bags wording names "bags".
+const BANK_CATEGORY_LABEL_KEYS: Record<BagCategory, TranslationKey> = {
+  all: 'hudChrome.bags.filterAll',
+  weapon: 'hudChrome.bags.filterWeapon',
+  armor: 'hudChrome.bags.filterArmor',
+  consumable: 'hudChrome.bags.filterConsumable',
+  material: 'hudChrome.bags.filterMaterial',
+  quest: 'hudChrome.bags.filterQuest',
+};
+const BANK_SORT_LABEL_KEYS: Record<BagSort, TranslationKey> = {
+  recent: 'hudChrome.bags.sortRecent',
+  quality: 'hudChrome.bags.sortQuality',
+  name: 'hudChrome.bags.sortName',
+};
 
 /**
  * Hud-supplied glue. The icon/money/tooltip painters are the shared
@@ -88,6 +131,33 @@ export class BankWindow {
   private openerFocus: HTMLElement | null = null;
   private openedAt = 0;
 
+  // Window-local filter state: category chips + sort + live search, persisted across
+  // sessions under BANK_FILTER_KEY. Pure logic lives in bank_filter.ts (reusing
+  // bag_filter.ts); this is the consumer. Tolerant parse: corrupt storage falls back
+  // to the default filter, never throwing.
+  private filter: BagFilterState = (() => {
+    try {
+      return parseBagFilter(localStorage.getItem(BANK_FILTER_KEY));
+    } catch {
+      return { ...DEFAULT_BAG_FILTER };
+    }
+  })();
+
+  // The transient deposit-all summary and its self-expire timer. Rendered as a polite
+  // aria-live line; re-painted (while fresh) across data-driven rebuilds so a repaint
+  // that lands after the online mirror catches up does not swallow the feedback.
+  private depositStatus: { text: string; at: number } | null = null;
+  private statusTimer: number | null = null;
+
+  // In-flight guard for deposit-all: the ONLINE mirror lags the sent commands by about
+  // a tick, so a rapid second click would re-plan from the STALE mirror and re-send
+  // slot indices the server has already spliced, banking whatever shifted into them
+  // (the wrong-item class the Phase 5 stale-index prompt guard exists for). The button
+  // stays disabled from send until the mirror echoes (refreshIfChanged sees a new data
+  // signature) or the fallback timer clears a lost echo.
+  private depositAllPending = false;
+  private depositAllTimer: number | null = null;
+
   constructor(private readonly deps: BankWindowDeps) {}
 
   get isOpen(): boolean {
@@ -118,6 +188,10 @@ export class BankWindow {
     // orphaned aria-modal dialog, then clear the inert it set (a hidden window must
     // never stay inert or the next open shows a dead grid).
     dismissBankPrompts();
+    // Drop any pending deposit-all summary (and its timer) so a reopened bank never
+    // flashes a stale line, and no late timer fires render() on the hidden window.
+    this.clearDepositStatus();
+    this.clearDepositAllPending();
     const el = this.deps.root();
     el.style.display = 'none';
     el.inert = false;
@@ -126,6 +200,22 @@ export class BankWindow {
     this.deps.restoreFocus(this.openerFocus);
     this.openerFocus = null;
     this.deps.onClosed();
+  }
+
+  private clearDepositStatus(): void {
+    if (this.statusTimer !== null) {
+      window.clearTimeout(this.statusTimer);
+      this.statusTimer = null;
+    }
+    this.depositStatus = null;
+  }
+
+  private clearDepositAllPending(): void {
+    if (this.depositAllTimer !== null) {
+      window.clearTimeout(this.depositAllTimer);
+      this.depositAllTimer = null;
+    }
+    this.depositAllPending = false;
   }
 
   render(): void {
@@ -167,6 +257,12 @@ export class BankWindow {
     capacity.textContent = t('hudChrome.bank.capacity', { used, total });
     capacity.setAttribute('aria-label', t('hudChrome.bank.capacityAria', { used, total }));
     el.appendChild(capacity);
+    // Always mount the toolbar in the bank state: the deposit-all button belongs there
+    // even over an empty bank, while buildFilterBar drops the search/category/sort
+    // controls when there is nothing yet to filter.
+    el.appendChild(this.buildFilterBar(model.empty));
+    const status = this.buildDepositStatus();
+    if (status) el.appendChild(status);
     const grid = document.createElement('div');
     grid.className = 'bank-grid';
     this.fillGrid(grid, model.slots, model.emptyCells, model.empty);
@@ -193,6 +289,9 @@ export class BankWindow {
     ]);
     if (sig === this.lastSig) return;
     this.lastSig = sig;
+    // The bank data moved: any in-flight deposit-all run has echoed back (online) or
+    // already applied (offline), so the button may re-enable on this repaint.
+    this.clearDepositAllPending();
     this.render();
   }
 
@@ -210,7 +309,25 @@ export class BankWindow {
       grid.innerHTML = `<div class="bank-empty">${esc(t('hudChrome.bank.empty'))}</div>`;
       return;
     }
-    for (const slot of slots) {
+    // Apply the window-local filter/sort. slotIndex rides through, so a filtered or
+    // sorted cell still acts on its ORIGINAL bank slot; filterBankSlots drops unknown-id
+    // (dormant) slots exactly as the bags filter does.
+    const isDefault = bankFilterIsDefault(this.filter);
+    const visible = filterBankSlots(
+      slots,
+      (id) => ITEMS[id],
+      this.filter,
+      (id) => this.itemNameOf(id),
+    );
+    if (visible.length === 0) {
+      // A narrowing filter matched nothing: show the no-match line. With NO filter active
+      // (only dormant unknown-id slots remain) there is nothing to "match", so keep the
+      // classic empty-square pad instead of a misleading no-match line.
+      if (isDefault) this.appendEmptyCells(grid, emptyCells);
+      else grid.innerHTML = `<div class="bank-empty">${esc(t('hudChrome.bags.noMatch'))}</div>`;
+      return;
+    }
+    for (const slot of visible) {
       const item = ITEMS[slot.itemId];
       if (!item) continue;
       const cell = document.createElement('button');
@@ -233,14 +350,210 @@ export class BankWindow {
       });
       grid.appendChild(cell);
     }
-    // Free-slot squares: the classic empty sockets that make remaining capacity
-    // visible at a glance. Decorative, not focusable (mirrors bags).
-    for (let i = 0; i < emptyCells; i++) {
+    // Free-slot squares only in the unfiltered view: a narrowed view shows matches only,
+    // never the remaining capacity (the bags precedent).
+    this.appendEmptyCells(grid, isDefault ? emptyCells : 0);
+  }
+
+  // The classic empty sockets that make remaining capacity visible at a glance.
+  // Decorative, not focusable (mirrors bags).
+  private appendEmptyCells(grid: HTMLElement, n: number): void {
+    for (let i = 0; i < n; i++) {
       const cell = document.createElement('div');
       cell.className = 'bank-item empty';
       cell.setAttribute('aria-hidden', 'true');
       grid.appendChild(cell);
     }
+  }
+
+  // Localized display name, used for search matching AND the name-sort so both agree
+  // with the visible cell. An unknown id (already dropped by filterBankSlots) falls back
+  // to the raw id defensively.
+  private itemNameOf(itemId: string): string {
+    const item = ITEMS[itemId];
+    return item ? itemDisplayName(item) : itemId;
+  }
+
+  // Repaint ONLY the grid from the live bank + current filter, preserving the search
+  // input's focus/caret (the toolbar is untouched) and the scroll offset. Used by the
+  // live-search keystroke path; a full render() still handles open/language/data
+  // changes (mirrors bags_window.refreshGrid).
+  private refreshGrid(): void {
+    const grid = this.deps.root().querySelector('.bank-grid') as HTMLElement | null;
+    if (!grid) return;
+    const info = this.deps.world().bankInfo;
+    if (!info) return; // walked away; refreshIfChanged owns the grace-close
+    const model = buildBankView(info, (id) => ITEMS[id]);
+    if (model.kind !== 'bank') return;
+    const prevScrollTop = grid.scrollTop;
+    grid.innerHTML = '';
+    this.fillGrid(grid, model.slots, model.emptyCells, model.empty);
+    grid.scrollTop = prevScrollTop;
+  }
+
+  // The category-chip + sort + search toolbar, plus the deposit-all-materials button.
+  // Reuses the bags filter-bar classes so the shared CSS carries the styling. A chip or
+  // sort change re-renders (the bags idiom); a search keystroke routes through
+  // refreshGrid so the input keeps focus and caret. The search / category / sort
+  // controls only matter once the bank holds items, so they are skipped over an empty
+  // bank; the deposit-all button (which acts on the BAGS) stays visible even then,
+  // since dumping a fresh character's materials into an empty bank is its primary use.
+  private buildFilterBar(bankEmpty: boolean): HTMLElement {
+    const bar = document.createElement('div');
+    bar.className = 'bag-filter-bar bank-filter-bar';
+
+    const tools = document.createElement('div');
+    tools.className = 'bag-tools';
+
+    if (!bankEmpty) {
+      const chips = document.createElement('div');
+      chips.className = 'bag-chips';
+      chips.setAttribute('role', 'group');
+      chips.setAttribute('aria-label', t('hudChrome.bank.filterGroupAria'));
+      for (const category of BAG_CATEGORIES) {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `bag-chip${this.filter.category === category ? ' active' : ''}`;
+        chip.textContent = t(BANK_CATEGORY_LABEL_KEYS[category]);
+        chip.setAttribute('aria-pressed', this.filter.category === category ? 'true' : 'false');
+        chip.addEventListener('click', () => {
+          if (this.filter.category === category) return;
+          this.filter.category = category;
+          this.persistFilter();
+          audio.click();
+          this.render();
+        });
+        chips.appendChild(chip);
+      }
+      bar.appendChild(chips);
+
+      const search = document.createElement('input');
+      search.type = 'search';
+      search.className = 'bag-search';
+      search.placeholder = t('hudChrome.bags.searchPlaceholder');
+      search.setAttribute('aria-label', t('hudChrome.bank.searchAria'));
+      search.value = this.filter.search;
+      search.addEventListener('input', () => {
+        this.filter.search = search.value;
+        this.persistFilter();
+        this.refreshGrid();
+      });
+      tools.appendChild(search);
+
+      const sort = document.createElement('select');
+      sort.className = 'bag-sort';
+      sort.setAttribute('aria-label', t('hudChrome.bank.sortAria'));
+      for (const option of BAG_SORTS) {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.textContent = t(BANK_SORT_LABEL_KEYS[option]);
+        if (this.filter.sort === option) opt.selected = true;
+        sort.appendChild(opt);
+      }
+      sort.addEventListener('change', () => {
+        this.filter.sort = sort.value as BagSort;
+        this.persistFilter();
+        audio.click();
+        this.render();
+      });
+      tools.appendChild(sort);
+    }
+
+    // Deposit all materials: one click banks every material stack that fully fits.
+    // Disabled when the bags hold no material stack; a full bank is still actionable
+    // (the click reports it), so it does not disable here.
+    const deposit = document.createElement('button');
+    deposit.type = 'button';
+    deposit.className = 'bank-deposit-all';
+    deposit.textContent = t('hudChrome.bank.depositAll');
+    deposit.disabled =
+      this.depositAllPending ||
+      !hasDepositableMaterials(this.deps.world().inventory, (id) => ITEMS[id]);
+    deposit.addEventListener('click', () => this.onDepositAll());
+    tools.appendChild(deposit);
+
+    bar.appendChild(tools);
+    return bar;
+  }
+
+  private persistFilter(): void {
+    try {
+      localStorage.setItem(BANK_FILTER_KEY, serializeBagFilter(this.filter));
+    } catch {
+      /* storage unavailable (private mode); the filter still works in-session */
+    }
+  }
+
+  // Deposit every fully-fitting material stack in one go. The plan is computed against
+  // ONE snapshot (inventory + bank at click time) and every command is sent without
+  // re-reading state mid-run, because the online mirror lags the authoritative world by
+  // ~1 tick; sending against a mid-run mirror would double-count or mis-index.
+  private onDepositAll(): void {
+    const world = this.deps.world();
+    const info = world.bankInfo;
+    if (!info) return; // walked away between render and click
+    const plan = planDepositAllMaterials(
+      world.inventory,
+      info.slots,
+      info.capacity,
+      (id) => ITEMS[id],
+    );
+    if (plan.sends.length === 0 && !plan.full) return; // nothing to do (button was disabled)
+    for (const send of plan.sends) world.bankDeposit(send.slot, send.count);
+    if (plan.sends.length > 0) {
+      audio.coin();
+      // Hold the button disabled until the data echoes back (see the field comment);
+      // the timer only backstops a lost echo so the button can never wedge shut.
+      this.depositAllPending = true;
+      if (this.depositAllTimer !== null) window.clearTimeout(this.depositAllTimer);
+      this.depositAllTimer = window.setTimeout(() => {
+        this.depositAllTimer = null;
+        if (!this.depositAllPending) return;
+        this.depositAllPending = false;
+        if (this.opened) this.render();
+      }, DEPOSIT_STATUS_MS);
+    }
+    this.setDepositStatus(plan);
+    this.render();
+  }
+
+  // Compose the transient summary from the PLAN (not post-facto state, which the online
+  // mirror has not caught up to yet) and arm the self-expire.
+  private setDepositStatus(plan: DepositAllPlan): void {
+    let text: string;
+    if (plan.stacks === 0) {
+      // Materials existed (the button was enabled) but none fit: the bank is full.
+      text = t('hudChrome.bank.depositAllNone');
+    } else if (plan.full) {
+      text = t('hudChrome.bank.depositAllFull', { count: this.fmt(plan.stacks) });
+    } else {
+      text = t('hudChrome.bank.depositAllDone', { count: this.fmt(plan.stacks) });
+    }
+    this.depositStatus = { text, at: performance.now() };
+  }
+
+  // Build the polite aria-live summary line if one is still fresh, and arm a single timer
+  // to clear it and repaint so it never lingers across later data-driven rebuilds.
+  private buildDepositStatus(): HTMLElement | null {
+    const s = this.depositStatus;
+    if (!s) return null;
+    const age = performance.now() - s.at;
+    if (age >= DEPOSIT_STATUS_MS) {
+      this.clearDepositStatus();
+      return null;
+    }
+    const status = document.createElement('div');
+    status.className = 'bank-status';
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    status.textContent = s.text;
+    if (this.statusTimer !== null) window.clearTimeout(this.statusTimer);
+    this.statusTimer = window.setTimeout(() => {
+      this.statusTimer = null;
+      this.depositStatus = null;
+      if (this.opened) this.render();
+    }, DEPOSIT_STATUS_MS - age);
+    return status;
   }
 
   // Plain click withdraws the whole stack; shift-click on a splittable stack opens a

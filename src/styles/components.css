@@ -3162,6 +3162,52 @@
     font-size: 12px;
     text-align: right;
   }
+  /* Phase 6 search/category/sort toolbar. It reuses the bags filter-bar classes
+     (.bag-filter-bar/.bag-chips/.bag-chip/.bag-tools/.bag-search/.bag-sort), so most
+     styling carries over; only the flex-none pin (so the toolbar never stretches in the
+     column), the deposit-all action button, and the transient status line are bank
+     specific. */
+  #bank-window .bag-filter-bar {
+    flex: none;
+  }
+  .bank-deposit-all {
+    flex: none;
+    font-family: var(--ui-font);
+    font-size: 12px;
+    padding: 4px 9px;
+    border-radius: 4px;
+    border: 1px solid #6a5320;
+    background: linear-gradient(#8a6a26, #5a4413 55%, #473409);
+    color: #ffe6a8;
+    cursor: var(--cursor-point);
+    white-space: nowrap;
+  }
+  .bank-deposit-all:hover:not(:disabled) {
+    filter: brightness(1.12);
+  }
+  .bank-deposit-all:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .bank-deposit-all:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
+  }
+  body.mobile-touch .bank-deposit-all {
+    min-height: 40px;
+  }
+  /* Transient deposit-all summary: a polite aria-live line just under the toolbar. */
+  .bank-status {
+    flex: none;
+    margin: 0 0 6px;
+    padding: 4px 7px;
+    border-radius: 4px;
+    border: 1px solid #463a1c;
+    background: #1c1812;
+    color: var(--gold-dim);
+    font-family: var(--ui-font);
+    font-size: 12px;
+  }
   .bank-grid {
     flex: 1 1 auto;
     min-height: 0;

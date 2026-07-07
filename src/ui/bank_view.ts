@@ -6,9 +6,10 @@
 // UI_PURE_CORES; unit-tested against both Sim- and ClientWorld-shaped inputs in
 // tests/bank_view.test.ts. Mirrors the bags_view / mailbox_view pure-core split.
 
-import { BANK_EXPANSION_SLOTS } from '../sim/bank';
-import type { InvSlot } from '../sim/types';
+import { BANK_EXPANSION_SLOTS, moveBetweenContainers } from '../sim/bank';
+import { cloneInvSlot, type InvSlot } from '../sim/types';
 import type { BankInfo } from '../world_api';
+import { type ItemLookup, matchesCategory } from './bag_filter';
 import { bagQualityKey } from './bags_view';
 
 /** The item facts the bank grid needs from the item table: just the quality, so
@@ -114,4 +115,83 @@ export function bankSlotAction(
     return { kind: 'withdrawPartial', slotIndex, max: slot.count };
   }
   return { kind: 'withdraw', slotIndex };
+}
+
+/** One planned deposit: the ORIGINAL inventory slot index plus the whole-stack count
+ *  to send. `count` equals the source stack size (a whole-stack deposit); bankDeposit
+ *  (slotIndex, count) with count === the live stack splices it out, exactly like an
+ *  undefined count would. */
+export interface DepositAllSend {
+  slot: number;
+  count: number;
+}
+
+/** The deposit-all-materials plan: the ordered whole-stack sends, how many stacks
+ *  they move (=== sends.length), and whether the bank ran out of room for a material
+ *  that did not fit (drives the "bank filled" summary variant). */
+export interface DepositAllPlan {
+  sends: DepositAllSend[];
+  stacks: number;
+  full: boolean;
+}
+
+/** Plan a "deposit all materials" run WITHOUT mutating the live world: it simulates
+ *  each candidate deposit on deep clones using the sim's OWN moveBetweenContainers, so
+ *  capacity + stacking + instanced-slot behavior is byte-identical to what the server
+ *  resolves, then returns the ordered sends the caller replays via bankDeposit.
+ *
+ *  Selection: every fungible OR instanced material stack (matchesCategory 'material' =
+ *  junk/tool), NEVER a quest item (excluded by matchesCategory and re-guarded here).
+ *  Each send is a WHOLE-stack deposit (the sim's all-or-nothing rule): a stack that
+ *  does not FULLY fit is skipped, not partially deposited, and sets `full`. Partial
+ *  deposits would have to re-derive the sim's countFit stacking math, which this must
+ *  never do; the sim's bankDeposit already refuses a whole-stack move that does not
+ *  fully fit (moveBetweenContainers' countFit gate), so whole-stack-or-skip matches it
+ *  exactly. Iteration is DESCENDING by index so each successful move's source splice
+ *  only shifts indices ABOVE the one just removed (already processed): every recorded
+ *  slot index stays valid when the caller replays the sends IN THIS ORDER against the
+ *  live world.
+ *
+ *  ONLINE latency: the whole plan is computed against ONE snapshot (the inventory +
+ *  bank at click time); the caller sends every command without re-reading state
+ *  mid-run, because the ClientWorld mirror lags the authoritative world by ~1 tick. */
+export function planDepositAllMaterials(
+  inventory: readonly InvSlot[],
+  bankSlots: readonly InvSlot[],
+  capacity: number,
+  lookup: ItemLookup,
+): DepositAllPlan {
+  const invClone = inventory.map(cloneInvSlot);
+  const bankClone = bankSlots.map(cloneInvSlot);
+  const sends: DepositAllSend[] = [];
+  let full = false;
+  for (let i = invClone.length - 1; i >= 0; i--) {
+    const slot = invClone[i];
+    const item = lookup(slot.itemId);
+    if (!item) continue; // unknown id: not a known material, leave it in the bags
+    if (item.kind === 'quest') continue; // never bank quest items (matchesCategory also excludes them)
+    if (!matchesCategory(item, 'material')) continue;
+    const count = slot.count;
+    const result = moveBetweenContainers(invClone, i, count, bankClone, capacity);
+    if (result.refusal === 'no_fit') {
+      full = true;
+      continue; // the bank could not take this whole stack; a smaller one may still fit
+    }
+    if (result.refusal) continue; // 'invalid': malformed slot (should not happen); skip
+    sends.push({ slot: i, count });
+  }
+  return { sends, stacks: sends.length, full };
+}
+
+/** True when the carried inventory holds at least one depositable material stack (a
+ *  junk/tool item, never a quest item, which matchesCategory('material') excludes):
+ *  the deposit-all button's enabled state. */
+export function hasDepositableMaterials(
+  inventory: readonly InvSlot[],
+  lookup: ItemLookup,
+): boolean {
+  return inventory.some((s) => {
+    const item = lookup(s.itemId);
+    return !!item && matchesCategory(item, 'material');
+  });
 }

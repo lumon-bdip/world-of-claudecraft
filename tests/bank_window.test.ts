@@ -194,3 +194,116 @@ describe('bank_window: static window element is wired in both game entries', () 
     expect(playHtml).toContain('id="bank-window"');
   });
 });
+
+describe('bank_window: Phase 6 search / sort / deposit-all', () => {
+  it('mounts the toolbar between the capacity counter and the grid, always in bank state', () => {
+    const capIdx = painter.indexOf("capacity.setAttribute('aria-label'");
+    const barIdx = painter.indexOf('el.appendChild(this.buildFilterBar(model.empty));');
+    const gridIdx = painter.indexOf("grid.className = 'bank-grid';");
+    expect(capIdx).toBeGreaterThan(0);
+    expect(barIdx).toBeGreaterThan(capIdx);
+    expect(gridIdx).toBeGreaterThan(barIdx);
+  });
+
+  it('keeps the deposit-all button visible over an empty bank (filter controls gated)', () => {
+    // buildFilterBar drops chips/search/sort when the bank is empty but always appends
+    // the deposit-all button, so a fresh character can dump materials into an empty bank.
+    // The indentation proves the nesting: the search append sits at 6 spaces INSIDE the
+    // `if (!bankEmpty)` block, the deposit append at 4 spaces OUTSIDE it (unconditional).
+    expect(painter).toMatch(/private buildFilterBar\(bankEmpty: boolean\)/);
+    expect(painter).toContain('if (!bankEmpty) {');
+    expect(painter).toContain('\n      tools.appendChild(search);'); // 6 spaces: gated
+    expect(painter).toContain('\n    tools.appendChild(deposit);'); // 4 spaces: unconditional
+    expect(painter).toContain('bank-deposit-all');
+  });
+
+  it('persists the filter under the bank-specific key via the tolerant parse/serialize', () => {
+    expect(painter).toContain("const BANK_FILTER_KEY = 'woc_bank_filter'");
+    expect(painter).toContain('parseBagFilter(localStorage.getItem(BANK_FILTER_KEY))');
+    expect(painter).toContain('serializeBagFilter(this.filter)');
+  });
+
+  it('runs the pure bank filter core, never a re-derived bag filter', () => {
+    expect(painter).toContain('filterBankSlots(');
+    expect(painter).toContain('bankFilterIsDefault(');
+    expect(painter).not.toContain('applyBagFilter(');
+  });
+
+  it('shows the no-match line under a narrowing filter and suppresses the empty pad', () => {
+    expect(painter).toContain("t('hudChrome.bags.noMatch')");
+    expect(painter).toContain('this.appendEmptyCells(grid, isDefault ? emptyCells : 0)');
+  });
+
+  it('refreshes ONLY the grid on a search keystroke, preserving input focus/caret + scroll', () => {
+    expect(painter).toMatch(/addEventListener\('input',[\s\S]{0,140}this\.refreshGrid\(\)/);
+    const refreshBody = painter.slice(
+      painter.indexOf('private refreshGrid(): void {'),
+      painter.indexOf('private buildFilterBar(): HTMLElement {'),
+    );
+    expect(refreshBody).toContain(".bank-grid')");
+    expect(refreshBody).toContain('grid.scrollTop = prevScrollTop');
+  });
+
+  it('carries the ORIGINAL slotIndex through the filtered grid to the click handler', () => {
+    expect(painter).toContain('this.onSlotClick(slot.slotIndex, ev.shiftKey)');
+  });
+
+  it('gates the deposit-all button on hasDepositableMaterials and plans + sends on click', () => {
+    expect(painter).toContain("t('hudChrome.bank.depositAll')");
+    expect(painter).toContain('hasDepositableMaterials(this.deps.world().inventory');
+    expect(painter).toMatch(
+      /for \(const send of plan\.sends\) world\.bankDeposit\(send\.slot, send\.count\)/,
+    );
+  });
+
+  it('snapshots the plan against the click-time state (no mid-run re-read under mirror lag)', () => {
+    const body = painter.slice(
+      painter.indexOf('private onDepositAll(): void {'),
+      painter.indexOf('private setDepositStatus('),
+    );
+    expect(body).toContain('planDepositAllMaterials(');
+    expect(body).toContain('for (const send of plan.sends)');
+  });
+
+  it('renders the summary as a transient polite aria-live status line (no hud.ts toast dep)', () => {
+    expect(painter).toContain("status.setAttribute('role', 'status')");
+    expect(painter).toContain("status.setAttribute('aria-live', 'polite')");
+    expect(painter).toContain("t('hudChrome.bank.depositAllDone'");
+    expect(painter).toContain("t('hudChrome.bank.depositAllFull'");
+    expect(painter).toContain("t('hudChrome.bank.depositAllNone')");
+    expect(painter).toContain('DEPOSIT_STATUS_MS');
+  });
+
+  it('holds deposit-all disabled from send until the mirror echoes (double-click guard)', () => {
+    // A rapid second click online would re-plan from the STALE mirror and re-send slot
+    // indices the server already spliced, banking whatever shifted into them. The guard:
+    // the send path arms depositAllPending, the button's disabled expression reads it,
+    // a data-signature change in refreshIfChanged clears it (the echo arrived), and a
+    // fallback timer plus the close() teardown ensure it can never wedge shut.
+    expect(painter).toContain('this.depositAllPending = true;');
+    expect(painter).toMatch(
+      /deposit\.disabled =\s*\n\s*this\.depositAllPending \|\|\s*\n\s*!hasDepositableMaterials\(/,
+    );
+    const refresh = painter.slice(
+      painter.indexOf('refreshIfChanged(): void {'),
+      painter.indexOf('private fmt('),
+    );
+    expect(refresh).toContain('if (sig === this.lastSig) return;');
+    expect(refresh).toContain('this.clearDepositAllPending();');
+    const closeBody = painter.slice(
+      painter.indexOf('close(): void {'),
+      painter.indexOf('private clearDepositStatus('),
+    );
+    expect(closeBody).toContain('this.clearDepositAllPending();');
+    // The fallback timer only backstops a lost echo; it must not clear an already-cleared
+    // guard into a spurious render.
+    expect(painter).toContain('if (!this.depositAllPending) return;');
+  });
+
+  it('gives the deposit-all button a tokenized :focus-visible ring and pins the toolbar flex', () => {
+    expect(components).toMatch(
+      /\.bank-deposit-all:focus-visible \{\s*outline: 2px solid var\(--color-border-focus\);/,
+    );
+    expect(components).toContain('#bank-window .bag-filter-bar {');
+  });
+});
