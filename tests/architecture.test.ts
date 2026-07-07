@@ -139,6 +139,7 @@ const UI_PURE_CORES = [
   'src/ui/social_view.ts',
   'src/ui/bags_view.ts',
   'src/ui/item_set_tooltip_view.ts',
+  'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
   'src/ui/vendor_view.ts',
   'src/ui/crafting_view.ts',
@@ -160,6 +161,9 @@ const UI_PURE_CORES = [
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
   'src/ui/action_bar_view.ts',
+  'src/ui/mobile_action_page_view.ts',
+  'src/ui/consumable_bar_view.ts',
+  'src/ui/mobile_hud_layout.ts',
   'src/ui/auras_view.ts',
   'src/ui/minimap_markers.ts',
   'src/ui/gathering_view.ts',
@@ -187,6 +191,7 @@ const UI_PURE_CORES = [
 const RENDER_PURE_CORES = [
   'src/render/cast_bar.ts',
   'src/render/nameplate_view.ts',
+  'src/render/net_interp_core.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
 ].map((rel) => join(repoRoot, rel));
@@ -219,6 +224,7 @@ const BARE_NAMED = [
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
+  'src/ui/mobile_hud_layout.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
   'src/render/cast_bar.ts',
