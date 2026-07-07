@@ -1017,7 +1017,7 @@ export const ru_RU: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Администратор",
-        "coredevs": "Core Dev",
+        "coredevs": "Ведущий разработчик",
         "devs": "Разработчик",
         "mods": "Модератор",
         "artists": "Художник"
@@ -1226,6 +1226,20 @@ export const ru_RU: EnTranslations = {
       "mining": "Горное дело",
       "logging": "Лесозаготовка",
       "herbalism": "Травничество"
+    },
+    "archetypeTitle": {
+      "label": "Титул",
+      "none": "Нет",
+      "armorcrafting": "Бронник",
+      "weaponcrafting": "Оружейник",
+      "jewelcrafting": "Ювелир",
+      "alchemy": "Алхимик",
+      "engineering": "Механик",
+      "cooking": "Повар",
+      "inscription": "Писарь",
+      "enchanting": "Зачарователь",
+      "tailoring": "Портной",
+      "leatherworking": "Кожевник"
     },
     "crafting": {
       "title": "Крафт",
