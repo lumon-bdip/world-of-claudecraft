@@ -6,6 +6,7 @@ import {
   bagItemAction,
   bagQualityKey,
   bagShiftLinks,
+  bagsWindowShown,
   bagTooltipHintKey,
   buildBagGrid,
 } from '../src/ui/bags_view';
@@ -41,6 +42,24 @@ describe('bagShiftLinks', () => {
     expect(bagShiftLinks({ ...NO_MODE, marketSell: true })).toBe(true);
     expect(bagShiftLinks({ ...NO_MODE, petFeed: true })).toBe(true);
     expect(bagShiftLinks({ ...NO_MODE, vendorOpen: true })).toBe(false);
+  });
+});
+
+describe('bagsWindowShown', () => {
+  it('reads the cold-load empty display as NOT shown so the first toggle opens (issue #1538)', () => {
+    // The regression: the window is hidden by the .window CSS rule, so on a fresh
+    // page load the inline display is '' (never 'none'). The old `!== 'none'` check
+    // treated '' as shown and ran the close branch on the first press.
+    expect(bagsWindowShown('')).toBe(false);
+  });
+  it('reads an explicitly hidden window as NOT shown', () => {
+    expect(bagsWindowShown('none')).toBe(false);
+  });
+  it('reads a shown window as shown, for either shown value (flex, or the block pet-feed path)', () => {
+    expect(bagsWindowShown('flex')).toBe(true);
+    // The close() guard documents a 'block' pet-feed path; treat any non-hidden
+    // value as shown so a block-shown bags still closes on toggle.
+    expect(bagsWindowShown('block')).toBe(true);
   });
 });
 
