@@ -92,3 +92,11 @@ Produce a short report: overlaps read (Step 2), divergences mirrored (Step 3), i
 added (Step 4), bindings re-checked (Step 5), premises corrected (Step 6), each with file:line.
 Apply the fixes in the same change with a parity/regression test per divergence, then run the
 targeted suites plus `npx tsc --noEmit` (or `npm run gate` if the merge was large).
+
+One recurring merge-mechanics trap to check every time (it has reddened the gate twice, on the
+v0.22.0 merge before bank Phase 3 and the v0.23.0 merge before bank Phase 8 QA): when a merge
+conflicts on the generated i18n artifacts and BOTH sides changed catalog keys, taking either
+side of `src/ui/i18n.resolved.sha256` leaves a stale baseline, and `npm run i18n:gen` does NOT
+rewrite it (the merged union table hashes to a value neither parent had). After regenerating,
+run `node scripts/i18n_resolved_hash.mjs --write` and confirm
+`npx vitest run tests/i18n_resolved_equivalence.test.ts` is green, in the SAME merge commit.
