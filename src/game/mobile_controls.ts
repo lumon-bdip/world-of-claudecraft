@@ -599,16 +599,17 @@ export class MobileControls {
     }
   }
 
-  /** The single top-left Chat button now owns the whole open/read/reply cycle
-   * (issue 1577 uiux-overlap: the separate in-log reply pill overlapped the
-   * chatbox, so it was removed). A tap steps through: closed -> open in a
-   * read state -> reply mode (raises the keyboard) -> closed again. */
+  /** The single top-left Chat button owns a simple two-state toggle (issue
+   * 1577 uiux-overlap: the separate in-log reply pill overlapped the chatbox,
+   * so it was removed; a later round tried a three-state open/read/reply
+   * cycle, since simplified back to two): hidden, or shown, with the log AND
+   * the composer appearing together immediately, composer focused. There is
+   * no separate read-only step to tap through first. */
   private tapChat(): void {
+    // Two states only: hidden, or shown (log AND composer visible together,
+    // composer focused immediately). No separate read-only step in between.
     const open = document.body.classList.contains('mobile-chat-open');
-    const replying = document.body.classList.contains('mobile-chat-reply');
     if (!open) {
-      this.toggleChat();
-    } else if (!replying) {
       this.enterChatReply();
     } else {
       this.toggleChat();

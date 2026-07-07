@@ -193,8 +193,13 @@
     touch-action: none;
     z-index: 1;
   }
+  /* While chat is shown (both log and composer visible together), the movement
+     joystick is fully hidden rather than just ignoring touches: it frees the
+     screen space chat now occupies and avoids any accidental movement input
+     while the player is reading/typing. It reappears the instant chat is
+     toggled closed again. */
   body.mobile-touch.mobile-chat-open #mobile-move-zone {
-    pointer-events: none;
+    display: none;
   }
   body.mobile-touch #mobile-move-joystick {
     opacity: 0.5;
@@ -1301,15 +1306,22 @@
     display: none;
   }
   /* Issue uiux-overlap: the chatbox's .panel border reads as clutter on the
-     small touch viewport, so mobile drops it while keeping the desktop rule
-     (base.css .panel) untouched. */
+     small touch viewport, so mobile drops the hard line while keeping the
+     desktop rule (base.css .panel) untouched. Mobile border restyle adds a soft
+     outer glow in its place instead: richer than a flat line, but still no hard
+     edge competing with the world behind it. */
   body.mobile-touch #chatlog-frame {
     border: none;
     outline: none;
+    box-shadow:
+      0 0 12px #00000080,
+      0 0 0 1px color-mix(in srgb, var(--gold-dim) 35%, transparent);
   }
   body.mobile-touch #chatlog-wrap {
     left: max(10px, env(safe-area-inset-left));
-    bottom: calc(160px + env(safe-area-inset-bottom));
+    /* Shifted up from the action-bar area for a little more breathing room from
+       the bottom edge (was 160px). */
+    bottom: calc(180px + env(safe-area-inset-bottom));
     width: min(340px, calc(100vw - 20px));
     display: none;
     z-index: 24;
@@ -1347,7 +1359,8 @@
   }
   body.mobile-touch #chat-input {
     left: max(10px, env(safe-area-inset-left));
-    bottom: calc(296px + env(safe-area-inset-bottom));
+    /* Shifted up to match the log's new resting position above (was 296px). */
+    bottom: calc(316px + env(safe-area-inset-bottom));
     width: min(360px, calc(100vw - 20px));
     min-height: 40px;
     box-sizing: border-box;
@@ -1357,22 +1370,28 @@
      toggled by keyboard_viewport_applier.ts off the visualViewport resize
      event, the same signal main.ts/renderer.ts already use for the stable
      game viewport), the log + input abandon their normal bottom-anchored seats
-     -- which the keyboard would otherwise cover -- and recenter as a group in
-     the middle of whatever space is left ABOVE the keyboard
-     (--mobile-keyboard-visible-vh), so the player can read and type
-     comfortably instead of typing blind under the keyboard. */
+     -- which the keyboard would otherwise cover. The whole chatbox (log AND
+     composer, not just the composer) now expands to fill the space left above
+     the keyboard (--mobile-keyboard-visible-vh): the log docks near the top of
+     that visible area and grows to fill it, the input docks just above the
+     keyboard's top edge, so the player reads and types in a comfortably large
+     window instead of a small recentered strip. */
   body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-wrap {
-    top: calc(var(--mobile-keyboard-visible-vh, 100vh) * 0.5 - 100px);
+    top: max(6px, env(safe-area-inset-top));
     bottom: auto;
+    height: calc(var(--mobile-keyboard-visible-vh, 100vh) - 84px);
+  }
+  body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-frame {
+    height: 100%;
+    max-height: none;
   }
   body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chat-input {
-    top: calc(var(--mobile-keyboard-visible-vh, 100vh) * 0.5 + 30px);
-    bottom: auto;
+    top: auto;
+    bottom: calc(100vh - var(--mobile-keyboard-visible-vh, 100vh) + 8px);
   }
   /* Issue 1577 round 2 (8): while actively replying with the keyboard open,
-     expand the composer to a comfortable multi-line box (it recenters above the
-     keyboard via the round-1 keyboard_viewport rules above). Builds on that
-     seat, only growing the height/padding. */
+     expand the composer to a comfortable multi-line box within the now-expanded
+     chatbox above. Builds on that seat, only growing the height/padding. */
   body.mobile-touch.mobile-chat-reply.mobile-keyboard-open #chat-input {
     min-height: 84px;
     padding: 10px 12px;
@@ -1459,7 +1478,11 @@
     padding: 3px 6px;
     border-radius: 0;
     border-bottom-width: 1px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.35);
+    /* Mobile border restyle: keeps the interior shading, adds the same
+       double-line hairline treatment as the other mobile windows above. */
+    box-shadow:
+      inset 0 0 10px rgba(0, 0, 0, 0.35),
+      inset 0 0 0 1px var(--gold-dim);
   }
   /* Issue 1577 round 2 (1): the party frame's opaque black panel (the shared
      .uf-bars --panel-bg at ~0.95 alpha) reads as a heavy black slab on a phone.
@@ -1736,6 +1759,23 @@
        body-level windows OUTSIDE the zoomed #ui (the confirm/input dialog),
        which pin --window-scale to 1 (see the shell note in layout.css). */
     max-height: calc(var(--app-vh) / var(--window-scale, 1) - 40px);
+  }
+  /* Mobile border restyle: every mobile window (.window.panel covers bags,
+     character, talents, quest log, spellbook, loot, and every other modal window)
+     swaps the desktop's single flat 2px gold line (base.css .panel) for a richer
+     double-line, beveled look built purely from the existing gold/border tokens
+     (no new hardcoded colors): a thin dark outer hairline, a bright gold-dim inner
+     hairline one pixel in, an inner top highlight for the beveled edge, and a soft
+     drop shadow. Purely cosmetic (no layout change, box-shadow does not affect
+     box size) and fully static, no shimmer/animation, so prefers-reduced-motion
+     is a non-issue here. */
+  body.mobile-touch .window.panel {
+    border-color: var(--border);
+    box-shadow:
+      0 0 0 1px #000c,
+      inset 0 0 0 1px var(--gold-dim),
+      inset 0 1px 0 #ffffff1f,
+      0 3px 14px #000a;
   }
   /* The mobile close button is a 40x40 touch target pinned in the header's
      top-right corner (absolute, see the .window > .panel-title shell rule in
@@ -2663,14 +2703,20 @@
       gap: 18px;
       min-height: calc(var(--app-vh) - 96px);
     }
-    body.mobile-touch[data-start-panel="charselect-panel"] #hero-view,
-    body.mobile-touch[data-start-panel="charcreate-panel"] #hero-view,
     body.mobile-touch[data-start-panel="login-panel"] #hero-view,
     body.mobile-touch[data-start-panel="discord-choice-panel"] #hero-view,
     body.mobile-touch[data-start-panel="realm-panel"] #hero-view,
     body.mobile-touch[data-start-panel="offline-select"] #hero-view {
       justify-content: flex-start;
       min-height: calc(var(--app-vh) - 86px);
+    }
+    /* Charselect/charcreate float their header entirely out of flow (see
+       shell.css), so unlike the panels above they get the FULL viewport height
+       here, not height-minus-header. */
+    body.mobile-touch[data-start-panel="charselect-panel"] #hero-view,
+    body.mobile-touch[data-start-panel="charcreate-panel"] #hero-view {
+      justify-content: flex-start;
+      min-height: var(--app-vh);
     }
     /* Same treatment as charselect/charcreate above: on a short landscape
        phone viewport the marketing lockup costs more height than these
@@ -2878,7 +2924,9 @@
     }
     body.mobile-touch #chatlog-wrap {
       left: max(10px, env(safe-area-inset-left));
-      bottom: calc(112px + env(safe-area-inset-bottom));
+      /* Shifted up slightly for better breathing room from the bottom edge
+         (was 112px). */
+      bottom: calc(132px + env(safe-area-inset-bottom));
       width: min(330px, 44vw);
     }
     body.mobile-touch #chatlog-frame {
@@ -2887,7 +2935,8 @@
     }
     body.mobile-touch #chat-input {
       left: max(10px, env(safe-area-inset-left));
-      bottom: calc(213px + env(safe-area-inset-bottom));
+      /* Shifted up to match the log's new resting position (was 213px). */
+      bottom: calc(233px + env(safe-area-inset-bottom));
       width: min(330px, 44vw);
     }
     body.mobile-touch #player-frame {
@@ -3057,7 +3106,8 @@
      "a menu is open" without re-deriving that state. */
   body.mobile-touch.hud-mobile-compact #chatlog-wrap {
     width: min(240px, calc(100vw - 20px));
-    bottom: calc(140px + env(safe-area-inset-bottom));
+    /* Shifted up slightly to match the standard/landscape tiers above (was 140px). */
+    bottom: calc(160px + env(safe-area-inset-bottom));
   }
   body.mobile-touch.hud-mobile-compact #chatlog-frame {
     /* 4-line cap on compact phones too (issue 1577 round 2 (6)). */
@@ -3126,12 +3176,14 @@
      swingbar joined this rule alongside castbar (issue 1577 (6)): it was
      missing here, so on this tier it drifted 40px off the player frame's left
      edge even though its width already matched. */
+  /* Nudged further right (was -40px) to clear more of the left-side joystick
+     zone; castbar/swingbar move with it so they stay centred above it. */
   body.mobile-touch.hud-mobile-compact #player-frame {
-    left: calc(50% - 40px);
+    left: calc(50% - 15px);
   }
   body.mobile-touch.hud-mobile-compact #castbar,
   body.mobile-touch.hud-mobile-compact #swingbar {
-    left: calc(50% - 40px);
+    left: calc(50% - 15px);
   }
   /* Tablet: a large viewport can afford a bigger, easier-to-hit cluster than
      the standard baseline; reuses the ring's own sizing hooks (a tier value on

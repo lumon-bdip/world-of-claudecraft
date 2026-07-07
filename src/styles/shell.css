@@ -5841,6 +5841,8 @@
     width: 100%;
   }
 
+  /* The floating hamburger above reserves zero flow height, so the container and
+     #hero-view below get the FULL viewport height, not height-minus-header. */
   @media (orientation: landscape) {
     body.mobile-touch[data-start-panel="charselect-panel"] #homepage-views-container,
     body.mobile-touch[data-start-panel="charcreate-panel"] #homepage-views-container {
@@ -5849,7 +5851,7 @@
     }
     body.mobile-touch[data-start-panel="charselect-panel"] #hero-view,
     body.mobile-touch[data-start-panel="charcreate-panel"] #hero-view {
-      min-height: calc(var(--app-vh) - 86px);
+      min-height: var(--app-vh);
       justify-content: flex-start;
     }
     body.mobile-touch #charselect-panel,
@@ -5858,7 +5860,9 @@
         1040px,
         calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right))
       );
-      height: min(560px, calc(var(--app-vh) - 96px));
+      /* No header flow-height to subtract anymore (it floats out of flow above),
+         just this container's own top/bottom padding. */
+      height: min(560px, calc(var(--app-vh) - 20px));
       min-height: 0;
       max-height: none;
       display: flex;
@@ -6304,6 +6308,39 @@
   }
   body.mobile-touch .homepage-header.menu-open .header-menu-container {
     display: flex;
+  }
+  /* Charselect/charcreate are the tightest-on-height mobile screens: the header
+     collapses to JUST the hamburger toggle and is taken OUT of flow entirely
+     (fixed, floating over the corner, shrunk to fit only the toggle) rather than
+     shrunk-but-present, so it reserves zero layout height. The full viewport
+     height below goes to the roster, class details, and creation form. */
+  body.mobile-touch[data-start-panel="charselect-panel"] .homepage-header,
+  body.mobile-touch[data-start-panel="charcreate-panel"] .homepage-header {
+    position: fixed;
+    inset: 0 0 auto auto;
+    width: auto;
+    justify-content: flex-end;
+    padding: max(var(--spacing-xs), env(safe-area-inset-top))
+      max(var(--spacing-xs), env(safe-area-inset-right)) 0 0;
+    background: none;
+    box-shadow: none;
+    z-index: 130;
+  }
+  body.mobile-touch[data-start-panel="charselect-panel"] .homepage-header .header-logo-container,
+  body.mobile-touch[data-start-panel="charcreate-panel"] .homepage-header .header-logo-container {
+    display: none;
+  }
+  /* The dropdown menu the floating hamburger opens must not shrink to the
+     now-content-width header's box: anchor it under the toggle at a fixed,
+     comfortable width instead of stretching edge-to-edge off a full-width
+     parent that no longer exists here. */
+  body.mobile-touch[data-start-panel="charselect-panel"] .header-menu-container,
+  body.mobile-touch[data-start-panel="charcreate-panel"] .header-menu-container {
+    left: auto;
+    right: 0;
+    width: min(300px, calc(100vw - 24px));
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
   }
   body.mobile-touch .homepage-nav {
     width: 100%;

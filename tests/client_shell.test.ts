@@ -1089,7 +1089,13 @@ describe('client HTML shell', () => {
       '@media (orientation: landscape) {\n    body.mobile-touch[data-start-panel="charselect-panel"] #homepage-views-container,',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch[data-start-panel="charselect-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="charcreate-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="login-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="discord-choice-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="realm-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="offline-select"] #hero-view {\n      justify-content: flex-start;\n      min-height: calc(var(--app-vh) - 86px);',
+      'body.mobile-touch[data-start-panel="login-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="discord-choice-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="realm-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="offline-select"] #hero-view {\n      justify-content: flex-start;\n      min-height: calc(var(--app-vh) - 86px);',
+    );
+    // charselect/charcreate float their header out of flow entirely (a floating
+    // hamburger, not a shrunk-but-present header bar), so they get the FULL
+    // viewport height here instead of height-minus-header.
+    expect(hudMobileCss).toContain(
+      'body.mobile-touch[data-start-panel="charselect-panel"] #hero-view,\n    body.mobile-touch[data-start-panel="charcreate-panel"] #hero-view {\n      justify-content: flex-start;\n      min-height: var(--app-vh);',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch[data-start-panel="mode-select"] #title-logo {\n      width: min(176px, 24vw);\n      margin: 0;',
@@ -1097,7 +1103,9 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain(
       'body.mobile-touch[data-start-panel="charselect-panel"] #title-logo,\n    body.mobile-touch[data-start-panel="charcreate-panel"] #title-logo,\n    body.mobile-touch[data-start-panel="login-panel"] #title-logo,\n    body.mobile-touch[data-start-panel="discord-choice-panel"] #title-logo,\n    body.mobile-touch[data-start-panel="realm-panel"] #title-logo,\n    body.mobile-touch[data-start-panel="offline-select"] #title-logo {\n      display: none;',
     );
-    expect(shellCss).toContain('height: min(560px, calc(var(--app-vh) - 96px));');
+    // No header flow-height to subtract anymore: the floating hamburger reserves
+    // zero layout height, so only the panel's own top/bottom padding is left.
+    expect(shellCss).toContain('height: min(560px, calc(var(--app-vh) - 20px));');
     expect(shellCss).toContain(
       'body.mobile-touch #charselect-panel .cs-detail-col {\n      display: grid;\n      grid-template-columns: minmax(120px, 0.54fr) minmax(0, 1.46fr);',
     );
@@ -1514,11 +1522,13 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain('bottom: calc(68px + env(safe-area-inset-bottom));');
     expect(hudMobileCss).toContain('bottom: calc(62px + env(safe-area-inset-bottom));');
     expect(hudMobileCss).not.toContain('body.mobile-touch.mobile-left-handed #castbar');
+    // Nudged further right from the original -40px to clear more of the
+    // joystick zone; castbar/swingbar still move together with it.
     expect(hudMobileCss).toContain(
-      'body.mobile-touch.hud-mobile-compact #player-frame {\n    left: calc(50% - 40px);\n  }',
+      'body.mobile-touch.hud-mobile-compact #player-frame {\n    left: calc(50% - 15px);\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch.hud-mobile-compact #castbar,\n  body.mobile-touch.hud-mobile-compact #swingbar {\n    left: calc(50% - 40px);\n  }',
+      'body.mobile-touch.hud-mobile-compact #castbar,\n  body.mobile-touch.hud-mobile-compact #swingbar {\n    left: calc(50% - 15px);\n  }',
     );
     // Left-handed mode mirrors the satellite with the joystick (anchor swaps
     // to the right inset, the seat re-floors from the right edge), and the
