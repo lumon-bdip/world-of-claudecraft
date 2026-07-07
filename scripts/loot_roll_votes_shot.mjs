@@ -94,10 +94,24 @@ await sleep(400);
 await crop('tmp/loot_roll_votes_before.png');
 
 // Prompt row + live strip: stub the IWorld group-status read the HUD polls.
+// A full 10-person raid (RAID_MAX = 10) mid-vote, so the "N/M rolled" glance
+// line and the bounded, scrollable strip are exercised at the real ceiling.
 await page.evaluate(() => {
   const { world } = window.__game;
   const selfPid = world.playerId;
   const t = (world.time ?? 0) + 45;
+  const names = [
+    'Thane',
+    'Mirella',
+    'Ossric',
+    'Kaelis',
+    'Br128nlongname',
+    'Sable',
+    'Dregmaw',
+    'Yllowen',
+    'Pict',
+  ];
+  const choices = ['need', 'greed', 'pass', 'need', 'greed', 'pass', 'need', null, null];
   world.lootRollGroupStatus = () => [
     {
       rollId: 8001,
@@ -107,10 +121,7 @@ await page.evaluate(() => {
       expiresAt: t,
       entries: [
         { pid: selfPid, name: 'Rollwyn', choice: null },
-        { pid: 900001, name: 'Thane', choice: 'need' },
-        { pid: 900002, name: 'Mirella', choice: 'greed' },
-        { pid: 900003, name: 'Ossric', choice: 'pass' },
-        { pid: 900004, name: 'Kaelis', choice: null },
+        ...names.map((name, i) => ({ pid: 900001 + i, name, choice: choices[i] })),
       ],
     },
   ];

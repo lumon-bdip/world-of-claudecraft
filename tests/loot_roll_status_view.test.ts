@@ -43,6 +43,28 @@ describe('computeLootRollStatusRows', () => {
       expiresAt: 120,
     });
   });
+
+  it('counts answered vs total for the glance line, ignoring undecided', () => {
+    // 3 candidates, one still deciding: 2 of 3 rolled.
+    const [row] = computeLootRollStatusRows([status()], [], 1);
+    expect([row.answered, row.total]).toEqual([2, 3]);
+
+    // A full raid (RAID_MAX = 10) with nobody decided yet reads 0/10.
+    const full = computeLootRollStatusRows(
+      [
+        status({
+          entries: Array.from({ length: 10 }, (_, i) => ({
+            pid: i + 1,
+            name: `P${i + 1}`,
+            choice: null,
+          })),
+        }),
+      ],
+      [],
+      1,
+    );
+    expect([full[0].answered, full[0].total]).toEqual([0, 10]);
+  });
 });
 
 describe('lootRollStatusFingerprint', () => {

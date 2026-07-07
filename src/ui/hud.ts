@@ -9940,8 +9940,13 @@ export class Hud {
 
   // The per-candidate vote strip (the XLoot-style monitor): one chip per
   // candidate showing their live need/greed/pass choice, or an empty chip while
-  // they are still deciding. Roll numbers are never shown here; the sim
-  // broadcasts them as loot chat lines at resolution.
+  // they are still deciding, headed by an "N/M rolled" count so a full raid
+  // (RAID_MAX = 10) reads at a glance without scanning every chip. Roll numbers
+  // are never shown here; the sim broadcasts them as loot chat lines at
+  // resolution. The strip is aria-hidden: it re-renders on every vote, so
+  // leaving it in the #loot-rolls live region would spam a screen reader up to
+  // ten times per roll. The accessible surface is the prompt (announced once on
+  // show) plus the full per-roller reveal in the chat log at resolution.
   private lootRollVotesHtml(status: LootRollStatusRow): string {
     const votes = status.entries
       .map(
@@ -9952,7 +9957,14 @@ export class Hud {
         </span>`,
       )
       .join('');
-    return `<div class="loot-roll-votes">${votes}</div>`;
+    const count = t('itemUi.lootRoll.rolled', {
+      answered: formatNumber(status.answered, { maximumFractionDigits: 0 }),
+      total: formatNumber(status.total, { maximumFractionDigits: 0 }),
+    });
+    return `<div class="loot-roll-votes" aria-hidden="true">
+      <div class="loot-roll-votes-count">${esc(count)}</div>
+      <div class="loot-roll-votes-list">${votes}</div>
+    </div>`;
   }
 
   private renderLootRolls(): void {

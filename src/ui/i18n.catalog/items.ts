@@ -1980,6 +1980,7 @@ const itemNamesEn = {
       greedAria: 'Greed for {item}',
       passAria: 'Pass on {item}',
       everyonePassed: 'Everyone passed on {item}.',
+      rolled: '{answered}/{total} rolled',
     },
   },
   entities: {
@@ -2201,6 +2202,7 @@ export const itemNames = {
         greedAria: 'Codicia por {item}',
         passAria: 'Pasar por {item}',
         everyonePassed: 'Todos pasaron por {item}.',
+        rolled: '{answered}/{total} han tirado',
       },
     },
     entities: {
@@ -2420,6 +2422,7 @@ export const itemNames = {
         greedAria: 'Cupidité pour {item}',
         passAria: 'Passer pour {item}',
         everyonePassed: 'Tout le monde a passé pour {item}.',
+        rolled: '{answered}/{total} ont lancé',
       },
     },
     entities: {
@@ -2640,6 +2643,7 @@ export const itemNames = {
         greedAria: 'Brama per {item}',
         passAria: 'Passa su {item}',
         everyonePassed: 'Tutti hanno passato su {item}.',
+        rolled: '{answered}/{total} hanno tirato',
       },
     },
     entities: {
@@ -2858,6 +2862,7 @@ export const itemNames = {
         greedAria: 'Gier für {item}',
         passAria: 'Bei {item} passen',
         everyonePassed: 'Alle passen bei {item}.',
+        rolled: '{answered}/{total} gewürfelt',
       },
     },
     entities: {
@@ -3076,6 +3081,7 @@ export const itemNames = {
         greedAria: '贪婪 {item}',
         passAria: '放弃 {item}',
         everyonePassed: '所有人都放弃了 {item}。',
+        rolled: '{answered}/{total} 已投骰',
       },
     },
     entities: {
@@ -3294,6 +3300,7 @@ export const itemNames = {
         greedAria: '貪婪 {item}',
         passAria: '放棄 {item}',
         everyonePassed: '所有人都放棄了 {item}。',
+        rolled: '{answered}/{total} 已擲骰',
       },
     },
     entities: {
@@ -3512,6 +3519,7 @@ export const itemNames = {
         greedAria: '{item} 탐욕',
         passAria: '{item} 포기',
         everyonePassed: '모두 {item}을(를) 포기했습니다.',
+        rolled: '{answered}/{total} 굴림 완료',
       },
     },
     entities: {
@@ -3730,6 +3738,7 @@ export const itemNames = {
         greedAria: '{item}を強欲',
         passAria: '{item}をパス',
         everyonePassed: '全員が{item}をパスしました。',
+        rolled: '{answered}/{total} がロール済み',
       },
     },
     entities: {
@@ -3948,6 +3957,7 @@ export const itemNames = {
         greedAria: 'Ganância por {item}',
         passAria: 'Passar em {item}',
         everyonePassed: 'Todos passaram em {item}.',
+        rolled: '{answered}/{total} rolaram',
       },
     },
     entities: {
@@ -4166,6 +4176,7 @@ export const itemNames = {
         greedAria: 'Жадность: {item}',
         passAria: 'Пас: {item}',
         everyonePassed: 'Все отказались от {item}.',
+        rolled: '{answered}/{total} бросили',
       },
     },
     entities: {

@@ -24,6 +24,11 @@ export interface LootRollStatusRow {
   // true while the local player's need/greed/pass prompt for this roll is still
   // on screen (the strip rides the prompt row); false renders the watch-only row.
   hasPrompt: boolean;
+  // How many candidates have answered vs the total. Drives the "N/M rolled"
+  // glance line so a full raid (RAID_MAX = 10) is readable without scanning
+  // every chip for who is still deciding.
+  answered: number;
+  total: number;
   entries: LootRollStripEntry[];
 }
 
@@ -40,6 +45,8 @@ export function computeLootRollStatusRows(
     quality: status.quality,
     expiresAt: status.expiresAt,
     hasPrompt: shown.has(status.rollId),
+    answered: status.entries.filter((entry) => entry.choice !== null).length,
+    total: status.entries.length,
     entries: status.entries.map((entry) => ({
       pid: entry.pid,
       name: entry.name,

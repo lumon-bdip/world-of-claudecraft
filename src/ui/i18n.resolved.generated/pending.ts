@@ -23,7 +23,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "es_ES": [
     "entities.itemSets.necromancers.bonus4",
@@ -39,7 +40,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "fr_FR": [
     "entities.itemSets.necromancers.bonus4",
@@ -55,7 +57,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "fr_CA": [
     "entities.itemSets.necromancers.bonus4",
@@ -71,7 +74,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "en_CA": [],
   "it_IT": [
@@ -88,7 +92,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "de_DE": [
     "entities.itemSets.necromancers.bonus4",
@@ -104,7 +109,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "zh_CN": [
     "hudChrome.discord.roleTag.coredevs"
@@ -132,7 +138,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "ru_RU": [
     "hudChrome.discord.roleTag.coredevs"
@@ -161,7 +168,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "nl_NL": [
     "entities.itemSets.necromancers.bonus4",
@@ -177,7 +185,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "pl_PL": [
     "entities.itemSets.necromancers.bonus4",
@@ -193,7 +202,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "id_ID": [
     "entities.itemSets.necromancers.bonus4",
@@ -209,7 +219,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "tr_TR": [
     "entities.itemSets.necromancers.bonus4",
@@ -225,7 +236,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "sv_SE": [
     "entities.itemSets.necromancers.bonus4",
@@ -241,7 +253,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "vi_VN": [
     "entities.itemSets.necromancers.bonus4",
@@ -257,7 +270,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ],
   "da_DK": [
     "entities.itemSets.necromancers.bonus4",
@@ -273,6 +287,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.statInfo.desc.critRating",
     "hudChrome.statInfo.desc.hasteRating",
     "hudChrome.statInfo.names.critRating",
-    "hudChrome.statInfo.names.hasteRating"
+    "hudChrome.statInfo.names.hasteRating",
+    "itemUi.lootRoll.rolled"
   ]
 };
