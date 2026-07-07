@@ -185,6 +185,15 @@
 - Incidental find, pre-existing upstream, NOT ours: the opt-in axe browser suite's paperdoll test throws on a professionsState-less world stub (gathering HUD PR #1194, broken on release/v0.23.0 too; invisible to CI). Recorded for an upstream fix, not folded into bank commits.
 - Next: run docs/bank-system/phase-06-deposit-search.md in a fresh session.
 
+### Phase 6 (2026-07-06)
+
+- Preceded by the release/v0.23.0 merge 6b1e37ead (Core Dev role PR #1546 + the deliberate revert of the CI vitest de-flake #1560; conflicts only the generated i18n trio, regenerated; release-merge-audit CLEAN). Full record in state.md "Phase 6 outcomes".
+- The mode-chain order pin landed FIRST as its own commit (an all-modes-on cascade that forces any BagMode extension to declare its rung), then two parallel implementation agents (deposit mode / search + deposit-all) on disjoint files; the only shared files (catalog + five overlays) used distinct anchor regions and converged without collisions.
+- Deposit lands as the atomic three-place change (bags_view rung after vendor, bags_window isBankOpen read per click, one hud.ts dep line): click deposits the exact clicked stack by reference index (never first-match-by-itemId), shift-click opens the QA-hardened partial prompt (stopPropagation + stale-slot re-validate + clamp), a quest item pre-empts with the sim's own deny line via tSim.
+- Search/category/sort reuse the bag_filter vocabulary through a sibling pure bank_filter.ts that preserves original slot indices and matches the LOCALIZED name via an injected resolver (the recorded bags divergence); deposit-all is a pure planner over the sim's own moveBetweenContainers on clones, descending indices, one click-time snapshot, an in-flight double-click guard, and an in-window aria-live summary.
+- Two live bugs found and fixed same-session: the slow-band repaint stealing search focus mid-typing (render() now carries focus + caret across full rebuilds) and the dead depositPartialHint key (wired as the withdraw twin). qa-checklist READY 0 blocking; every finding applied; offline smoke 21/21 (probe gotcha: smoke character names must be letters-only or the game silently never starts).
+- Next: run docs/bank-system/phase-06-qa.md in a fresh session.
+
 ### Phase 4 QA (2026-07-06)
 
 - Verdict: PASS after fixes. 0 blocking + 5 should-fix + 5 INFO across six audit streams (correctness, test-coverage, dead-code, migration-safety, privacy-security-review, qa-checklist); every should-fix and four INFO applied same-session, one INFO adjudicated. Full record in state.md "Phase 4 QA outcomes".
