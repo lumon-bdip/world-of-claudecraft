@@ -62,6 +62,79 @@ describe('bagItemAction priority order', () => {
   });
 });
 
+describe('bag mode chain order pin (insertion guard)', () => {
+  // Pins the RELATIVE order between simultaneously-on modes, not just each mode
+  // alone (the priority-order test above flips one flag at a time, so a ladder
+  // reorder between two on-modes could survive it). The cascade peels every mode
+  // in ladder order and ends by proving it reached NO_MODE, so adding a BagMode
+  // flag without adding its peel step in the right rung fails here by type and
+  // by value. Extend this cascade in the SAME commit as any BagMode change.
+  const ALL_MODES: BagMode = {
+    tradeOpen: true,
+    mailAttach: true,
+    marketSell: true,
+    vendorOpen: true,
+    petFeed: true,
+  };
+
+  it('peels the action ladder one rung at a time: trade > mail-attach > market-sell > vendor > pet-feed > kind fallbacks', () => {
+    let mode = { ...ALL_MODES };
+    expect(bagItemAction(ITEMS.sword, mode)).toBe('trade');
+    mode = { ...mode, tradeOpen: false };
+    expect(bagItemAction(ITEMS.sword, mode)).toBe('mailAttach');
+    mode = { ...mode, mailAttach: false };
+    expect(bagItemAction(ITEMS.sword, mode)).toBe('marketSell');
+    mode = { ...mode, marketSell: false };
+    expect(bagItemAction(ITEMS.sword, mode)).toBe('vendorSell');
+    mode = { ...mode, vendorOpen: false };
+    expect(bagItemAction(ITEMS.bread, mode)).toBe('petFeed');
+    expect(bagItemAction(ITEMS.sword, mode)).toBe('petFeedBlocked');
+    mode = { ...mode, petFeed: false };
+    expect(mode).toEqual(NO_MODE);
+    expect(bagItemAction(ITEMS.questItem, mode)).toBe('discardQuest');
+    expect(bagItemAction(ITEMS.sword, mode)).toBe('use');
+  });
+
+  it('blocked variants block in place, they never fall through to a lower rung', () => {
+    // A mail-blocked item must NOT fall to market-sell even with that mode on.
+    expect(bagItemAction(ITEMS.questItem, { ...ALL_MODES, tradeOpen: false })).toBe(
+      'mailAttachBlocked',
+    );
+    expect(bagItemAction(ITEMS.bound, { ...ALL_MODES, tradeOpen: false })).toBe(
+      'mailAttachBlocked',
+    );
+    // A market-blocked item must NOT fall to vendor even with vendor on.
+    expect(
+      bagItemAction(ITEMS.questItem, { ...ALL_MODES, tradeOpen: false, mailAttach: false }),
+    ).toBe('marketSellBlockedQuest');
+    expect(bagItemAction(ITEMS.bound, { ...ALL_MODES, tradeOpen: false, mailAttach: false })).toBe(
+      'marketSellBlockedNoMarket',
+    );
+  });
+
+  it('peels the tooltip-hint ladder the same way (pet-feed contributes no hint)', () => {
+    let mode = { ...ALL_MODES };
+    expect(bagTooltipHintKey(ITEMS.sword, mode)).toBe('itemUi.tooltip.clickTradeOffer');
+    mode = { ...mode, tradeOpen: false };
+    expect(bagTooltipHintKey(ITEMS.sword, mode)).toBe('hudChrome.mailbox.clickAttach');
+    expect(bagTooltipHintKey(ITEMS.questItem, mode)).toBe('hudChrome.mailbox.cannotMail');
+    mode = { ...mode, mailAttach: false };
+    expect(bagTooltipHintKey(ITEMS.sword, mode)).toBe('itemUi.tooltip.clickMarketList');
+    mode = { ...mode, marketSell: false };
+    expect(bagTooltipHintKey(ITEMS.sword, mode)).toBe('itemUi.tooltip.clickSell');
+    mode = { ...mode, vendorOpen: false };
+    // Pet-feed has no tooltip hint: a weapon falls through to the kind branch.
+    expect(bagTooltipHintKey(ITEMS.sword, mode)).toBe('itemUi.tooltip.clickEquip');
+    mode = { ...mode, petFeed: false };
+    expect(mode).toEqual(NO_MODE);
+  });
+
+  it('shift-to-chat-link stays vendor-owned even with every mode on', () => {
+    expect(bagShiftLinks(ALL_MODES)).toBe(false);
+    expect(bagShiftLinks({ ...ALL_MODES, vendorOpen: false })).toBe(true);
+  });
+});
+
 describe('bagTooltipHintKey', () => {
   it('matches the mode-then-kind branch', () => {
     expect(bagTooltipHintKey(ITEMS.sword, { ...NO_MODE, tradeOpen: true })).toBe(
