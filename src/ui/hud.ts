@@ -68,6 +68,7 @@ import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
 import { requiredLevelFor } from '../sim/item_level_req';
 import type { Ante, PickAction } from '../sim/lockpick';
 import { PICK_ACTIONS } from '../sim/lockpick';
+import { FOCUS_POINT_BUDGET, isInTownZone } from '../sim/professions/focus';
 import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targets';
 import type { ResolvedAbility } from '../sim/sim';
 import type {
@@ -348,6 +349,8 @@ import { TalentsWindow } from './talents_window';
 import type { PresetId, ThemeKnob, ThemeState } from './theme';
 import { TOOLTIP_PEEK_MS, TouchPeekGuard } from './touch_peek';
 import { bindTouchDoubleTap, bindTouchTap } from './touch_tap';
+import { buildTownFocusView, stepTownFocus } from './town_focus_view';
+import { renderTownFocusWindow } from './town_focus_window';
 import { TutorialOverlay } from './tutorial';
 import { svgIcon } from './ui_icons';
 import { getUiScale } from './ui_scale';
@@ -1491,6 +1494,7 @@ export class Hud {
     $('#mm-char').addEventListener('click', () => this.toggleChar());
     $('#mm-spell').addEventListener('click', () => this.toggleSpellbook());
     $('#mm-talents')?.addEventListener('click', () => this.toggleTalents());
+    $('#mm-town-focus')?.addEventListener('click', () => this.toggleTownFocus());
     $('#mm-quest').addEventListener('click', () => this.toggleQuestLog());
     // Collapse/expand the on-screen quest tracker by clicking its header. The
     // overlay is click-through (pointer-events:none) except the header button, so
@@ -2103,6 +2107,9 @@ export class Hud {
       case 'vendor-window':
         this.closeVendor();
         this.closeHeroicVendor();
+        break;
+      case 'town-focus-window':
+        this.closeTownFocus();
         break;
       case 'crafting-window':
         this.closeCrafting();
@@ -3780,6 +3787,22 @@ export class Hud {
       const rect = el.getBoundingClientRect();
       showAt(rect.right, rect.top + rect.height / 2, 'focus');
     };
+    // A mouse click or a tap focuses the button as a side effect (the browser
+    // moves focus to whatever was pressed), which used to fire showNearElement
+    // on EVERY action-bar press, not just real keyboard (Tab) navigation. Flag
+    // the pointer press so the very next focusin it causes is skipped; Tab
+    // never fires pointerdown first, so keyboard users still get the tooltip.
+    let pointerFocusPending = false;
+    el.addEventListener('pointerdown', () => {
+      pointerFocusPending = true;
+    });
+    el.addEventListener('focusin', () => {
+      if (pointerFocusPending) {
+        pointerFocusPending = false;
+        return;
+      }
+      showNearElement();
+    });
     el.addEventListener('mouseenter', () => {
       if (mobile()) return;
       const rect = el.getBoundingClientRect();
@@ -3798,7 +3821,6 @@ export class Hud {
       clearTouchTimer();
       this.tooltipEl.style.display = 'none';
     });
-    el.addEventListener('focusin', showNearElement);
     el.addEventListener('focusout', () => {
       clearTouchTimer();
       this.tooltipEl.style.display = 'none';
@@ -3813,8 +3835,17 @@ export class Hud {
         y = e.clientY;
       touchTimer = window.setTimeout(() => showAt(x, y, 'touch'), TOOLTIP_PEEK_MS);
     });
-    el.addEventListener('pointerup', clearTouchTimer);
-    el.addEventListener('pointercancel', clearTouchTimer);
+    el.addEventListener('pointerup', () => {
+      clearTouchTimer();
+      // Safari desktop never focuses a button on click, so pointerdown's flag
+      // above would otherwise never get consumed by a focusin and could wrongly
+      // swallow a later, real keyboard-focus tooltip; drop it once the press ends.
+      pointerFocusPending = false;
+    });
+    el.addEventListener('pointercancel', () => {
+      clearTouchTimer();
+      pointerFocusPending = false;
+    });
   }
 
   hideTooltip(): void {
@@ -5280,38 +5311,12 @@ export class Hud {
       (pageToggle as HTMLElement).blur();
     });
 
-    // Long-press-to-inspect: the same attachTooltip wiring the desktop bar
-    // buttons get. This is what ARMS the peek guard the tap handlers above
-    // consume; without it a long press showed nothing and the release CAST
-    // the ability (burning cooldowns while trying to read a spell). The slot
-    // closures resolve the CURRENT page fresh, exactly like the view's.
-    this.attachTooltip(
-      attackBtn,
-      () =>
-        `<div class="tt-title">${esc(t('abilityUi.actionBar.attackName'))}</div><div class="tt-sub">${esc(t('abilityUi.actionBar.attackTooltip'))}</div>`,
-    );
-    slotBtns.forEach((btn, i) => {
-      this.attachTooltip(btn, () => {
-        const slot = sourceSlotForMobileButton(this.mobileActionPage, i);
-        const known = this.abilityForSlot(slot);
-        if (known) return this.abilityTooltip(known);
-        const item = this.itemForSlot(slot);
-        if (item) {
-          const count = this.inventoryCount(item.id);
-          return (
-            this.itemTooltip(item) +
-            `<div class="tt-sub">${esc(
-              count > 0
-                ? t('abilityUi.actionBar.itemInBags', {
-                    count: formatNumber(count, { maximumFractionDigits: 0 }),
-                  })
-                : t('abilityUi.actionBar.itemNoneInBags'),
-            )}</div>`
-          );
-        }
-        return `<div class="tt-sub">${esc(t('abilityUi.actionBar.emptySlot'))}</div>`;
-      });
-    });
+    // No tooltip on the mobile ring: a long-press-to-inspect wiring lived here
+    // (mirroring the desktop bar's attachTooltip), but it read as a stray
+    // popup box appearing over the world on an ordinary tap/hold rather than a
+    // deliberate inspect gesture, so it is removed entirely on touch. The tap
+    // handlers above no longer need a peek guard armed by attachTooltip's
+    // showAt (nothing to peek at), so a long hold just casts like a normal tap.
 
     this.mobileActionRingView = createActionBarView(
       {
@@ -6200,6 +6205,16 @@ export class Hud {
     document.getElementById('mm-talents')?.classList.toggle('has-points', talGlow);
     document.getElementById('mobile-talents')?.classList.toggle('has-points', talGlow);
 
+    // Town Focus (#1143): the minimap button (and, if open, the panel's live
+    // gate) only ever shows/works while standing in a town hub. Cheap zone
+    // check, gated to the slow tier since it changes only on foot travel.
+    if (slowHud) {
+      const inTown = this.isInTown();
+      const townFocusBtn = document.getElementById('mm-town-focus');
+      if (townFocusBtn) townFocusBtn.style.display = inTown ? '' : 'none';
+      if (this.townFocusOpen) this.renderTownFocus();
+    }
+
     // player frame: the first instance of the unit_frame family. Build a
     // player-shaped descriptor and paint it. The absorb overlay + the resource-type
     // class fold into the painter's elided writers (no more raw updateAbsorb /
@@ -6646,7 +6661,7 @@ export class Hud {
       this.updateFiestaHud();
       // Vale Cup surfaces (mediumHud like the arena/fiesta ones): the indicator
       // button, the in-match strip, and the open window redraw.
-      this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo));
+      this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo, atSowfield));
       this.vcupMatchHud.update(buildVcupHudView(this.sim.cupInfo));
       this.vcupBriefing.update(buildVcupBriefingView(this.sim.cupInfo));
       this.vcupBetting.update(buildVcupBettingView(this.sim.cupInfo));
@@ -10872,6 +10887,69 @@ export class Hud {
   }
 
   // -------------------------------------------------------------------------
+  // Town Focus (#1143): persistent per-player harvest-component focus,
+  // settable only while standing in the current zone's town hub (the
+  // lightweight town-tag stand-in; see professions/focus.ts). The panel shows
+  // the allocation and lets it be edited even out of town (so a player can see
+  // what they have), but disables the steppers/save outside town: the real
+  // gate is server-side in Sim.setTownFocus, this is a cosmetic usability gate.
+  // -------------------------------------------------------------------------
+
+  private townFocusDraft: Record<string, number> | null = null;
+
+  private isInTown(): boolean {
+    const pos = this.sim.player.pos;
+    return isInTownZone(pos, zoneAt(pos.z));
+  }
+
+  toggleTownFocus(): void {
+    const el = $('#town-focus-window');
+    if (el.style.display === 'block') {
+      this.closeTownFocus();
+      return;
+    }
+    this.closeOtherWindows('#town-focus-window');
+    this.townFocusDraft = { ...this.sim.townFocus };
+    this.renderTownFocus();
+  }
+
+  private renderTownFocus(): void {
+    const inTown = this.isInTown();
+    const allocation = this.townFocusDraft ?? this.sim.townFocus;
+    renderTownFocusWindow(
+      $('#town-focus-window'),
+      buildTownFocusView(allocation, FOCUS_POINT_BUDGET, inTown),
+      {
+        onStep: (component, delta) => {
+          this.townFocusDraft = stepTownFocus(
+            this.townFocusDraft ?? this.sim.townFocus,
+            component,
+            delta,
+            FOCUS_POINT_BUDGET,
+          );
+          this.renderTownFocus();
+        },
+        onSave: () => {
+          this.sim.setTownFocus(this.townFocusDraft ?? {});
+          this.townFocusDraft = null;
+          this.closeTownFocus();
+        },
+        onClose: () => this.closeTownFocus(),
+      },
+    );
+  }
+
+  closeTownFocus(): void {
+    $('#town-focus-window').style.display = 'none';
+    this.townFocusDraft = null;
+    this.hideTooltip();
+  }
+
+  get townFocusOpen(): boolean {
+    return $('#town-focus-window').style.display === 'block';
+  }
+
+  // -------------------------------------------------------------------------
   // Crafting (#1127): a minimal common-tier crafting window. Anywhere,
   // anytime (no vendor/NPC gate): lists every known recipe with a Craft
   // button enabled only when the player holds every required reagent.
@@ -10911,7 +10989,6 @@ export class Hud {
     $('#crafting-window').style.display = 'none';
     this.hideTooltip();
   }
-
   // -------------------------------------------------------------------------
   // The World Market — the Merchant's auction house
   // -------------------------------------------------------------------------

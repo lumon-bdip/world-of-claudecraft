@@ -1441,11 +1441,19 @@
     justify-content: center;
     font-size: 18px;
   }
+  /* The composer used to inherit the log's left-edge seat (left: max(10px,
+     ...)), which read as parked in the corner rather than the centered
+     typing box a player expects when they actually tap Chat to type (the log
+     itself stays left-anchored above the world nameplates; only the active
+     composer centers). Centered horizontally instead, independent of the
+     safe-area inset the left-anchored log still needs. */
   body.mobile-touch #chat-input {
-    left: max(10px, env(safe-area-inset-left));
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
     /* Shifted up to match the log's new resting position above (was 296px). */
     bottom: calc(316px + env(safe-area-inset-bottom));
-    width: min(calc(360px * var(--mobile-chrome-scale, 1)), calc(100vw - 20px));
+    width: min(calc(360px * var(--mobile-chrome-scale, 1)), calc(100vw - 40px));
     min-height: 40px;
     box-sizing: border-box;
     font-size: 16px;
@@ -1472,13 +1480,14 @@
     justify-content: center;
     right: auto;
     /* Seated at the COMPOSER's right corner (not the screen edge): the composer is
-       left max(10px,...) wide min(360px, 100vw-20px), so its right edge is
-       (left + width); park the 40px chevron just inside that, aligned with the composer's
-       keyboard-open bottom (docked just above the keyboard's top edge, matching #chat-input
-       below). It reads as the composer's own dismiss affordance. */
+       centered (left:50%, translateX(-50%)) at width min(360px * chrome-scale,
+       100vw-40px), so its right edge is 50% + half that width; park the 40px chevron
+       just inside that, aligned with the composer's keyboard-open bottom (docked just
+       above the keyboard's top edge, matching #chat-input below). It reads as the
+       composer's own dismiss affordance rather than a disconnected button. */
     left: calc(
-      max(10px, env(safe-area-inset-left)) +
-      min(calc(360px * var(--mobile-chrome-scale, 1)), 100vw - 20px) -
+      50% +
+      min(calc(360px * var(--mobile-chrome-scale, 1)), 100vw - 40px) / 2 -
       40px
     );
     top: auto;
@@ -2167,7 +2176,8 @@
   body.mobile-touch #valecup-window,
   body.mobile-touch #delve-board,
   body.mobile-touch #leaderboard-window,
-  body.mobile-touch #loot-settings-window {
+  body.mobile-touch #loot-settings-window,
+  body.mobile-touch #town-focus-window {
     left: 10px;
     right: 10px;
     top: 10px;
@@ -3275,13 +3285,31 @@
     }
     body.mobile-touch #mobile-extra-controls {
       left: 50%;
-      top: 50%;
-      bottom: auto;
+      /* True vertical centering (the base rule's top:50%/translate(-50%,-50%))
+         let this 4-row, 16-pill grid grow tall enough on a short landscape
+         viewport to overlap the fixed bottom control row (Autorun/Jump/combat
+         cluster), which reserves no layout space of its own. Anchor from the
+         top instead so the drawer's height is measured against the space
+         actually free above that row, not the whole viewport.
+         !important: the shared window-drag code (hud.ts, pointerdown on any
+         .panel-title) freezes a window's CURRENT computed inset/transform into
+         an inline style the first time its title bar is pressed, same as any
+         desktop window; that inline style otherwise wins over this rule and
+         reintroduces the overlap it exists to prevent. This panel is not meant
+         to be draggable on mobile at all (it is excluded from the resize grip
+         via window_resize.ts's NON_RESIZABLE_WINDOW_IDS), so pinning its
+         landscape position here is correct regardless. */
+      top: max(8px, env(safe-area-inset-top)) !important;
+      bottom: auto !important;
+      transform: translateX(-50%) !important;
       --window-pad: 8px;
-      /* No --ui-scale division: body-level window outside the zoomed #ui. */
+      /* No --ui-scale division: body-level window outside the zoomed #ui.
+         120px clears the bottom control row (Autorun/Jump/combat cluster +
+         labels), which sits outside normal layout flow so nothing else
+         reserves space for it. */
       max-height: calc(
         var(--app-vh) -
-        28px -
+        120px -
         env(safe-area-inset-top) -
         env(safe-area-inset-bottom)
       );
@@ -3292,6 +3320,17 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
       grid-auto-rows: calc(34px * var(--mobile-chrome-scale, 1));
       gap: 5px;
+    }
+    /* The base rule's min(46vw, 330px) square map, vertically centered at 46%,
+       is tall enough on a short landscape phone (the map-canvas keeps a 1:1
+       aspect ratio via width:100%/height:auto) to dip its bottom edge into the
+       fixed Jump/Interact/combat-cluster row, which reserves no layout space
+       of its own. Shrink it to fit the room actually free above that row
+       instead of a fraction of the whole (short) viewport height. */
+    body.mobile-touch #map-window {
+      top: max(10px, env(safe-area-inset-top));
+      transform: translateX(-50%);
+      width: min(46vw, 300px, calc(var(--app-vh) - 140px));
     }
     body.mobile-touch.mobile-left-handed #mobile-extra-controls {
       left: 50%;
@@ -3363,14 +3402,31 @@
       height: calc(11px * var(--chat-font-scale, 1) * 1.4 * 4 + 8px);
     }
     body.mobile-touch #chat-input {
-      left: max(10px, env(safe-area-inset-left));
-      /* Seated a clear gap ABOVE the resting log (the composer stacks over the log on
-         mobile). The log wrap here docks at bottom 132px and stands ~110px tall (40px
-         tab strip + the 4-line frame), so its top edge is ~242px up; 250px keeps the
-         composer's bottom edge a ~8px gap clear of it (was 233px, which dipped ~8px into
-         the tab strip). The compact tier raises the log further and re-seats this below. */
+      /* Centered horizontally, same rationale as the portrait rule above:
+         the log stays left-anchored, only the active composer centers. Seated a
+         clear gap ABOVE the resting log (the composer stacks over the log on
+         mobile). The log wrap here docks at bottom 132px and stands ~110px tall
+         (40px tab strip + the 4-line frame), so its top edge is ~242px up; 250px
+         keeps the composer's bottom edge a ~8px gap clear of it (was 233px, which
+         dipped ~8px into the tab strip). The compact tier raises the log further
+         and re-seats this below. */
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
       bottom: calc(250px + env(safe-area-inset-bottom));
       width: min(calc(330px * var(--mobile-chrome-scale, 1)), 44vw);
+    }
+    /* Follows the landscape composer's own centered width (330px * chrome-scale,
+       44vw): re-seat only the chevron's horizontal position; the keyboard-docked
+       bottom from the portrait-level rule still applies (the chevron only shows
+       while the keyboard is up). Same three-class selector as that rule so this
+       later landscape override wins the left seat. */
+    body.mobile-touch.mobile-chat-open.mobile-keyboard-open #chat-dismiss {
+      left: calc(
+        50% +
+        min(calc(330px * var(--mobile-chrome-scale, 1)), 44vw) / 2 -
+        40px
+      );
     }
     body.mobile-touch #player-frame {
       left: 50%;

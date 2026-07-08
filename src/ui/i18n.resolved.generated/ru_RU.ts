@@ -401,7 +401,7 @@ export const ru_RU: EnTranslations = {
     },
     "vcup": {
       "title": "Кубок Долины",
-      "shootPower": "POWER",
+      "shootPower": "СИЛА",
       "close": "Закрыть окно Кубка Долины",
       "offlineNote": "Книга матчей закрыта. Кубок Долины сейчас недоступен.",
       "recordLine": "Ваш счёт: побед {wins}, поражений {losses}, ничьих {draws}.",
@@ -459,7 +459,7 @@ export const ru_RU: EnTranslations = {
       "guildRecordLine": "Счёт вашей гильдии: {wins} побед, {losses} поражений.",
       "guildBoardHeading": "Знамёна гильдий",
       "guildBoardEmpty": "Пока ни одна гильдия не вышла на поле. Поднимите своё знамя!",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins} побед, {losses} поражений",
       "practice": "Тренировка с ботами",
       "practiceNote": "Немедленно начинает полный матч с ботами на Свином поле.",
       "practicingNow": "Сейчас тренируются ({count}):",
@@ -625,6 +625,7 @@ export const ru_RU: EnTranslations = {
         "jitter": "Джиттер",
         "predLead": "Упреждение прогноза",
         "snapshot": "Частота снимков",
+        "serverTick": "Частота тиков сервера",
         "connection": "Соединение",
         "drawCalls": "Вызовы отрисовки",
         "triangles": "Треугольники",
@@ -920,6 +921,15 @@ export const ru_RU: EnTranslations = {
         "horn": "Рог",
         "tusk": "Бивень"
       }
+    },
+    "townFocus": {
+      "title": "Фокус города",
+      "hint": "Очки фокуса добавляют бонус поверх базового выхода каждого компонента. Компоненты без фокуса остаются на базовом уровне.",
+      "budgetLabel": "Осталось очков: {remaining} / {budget}",
+      "saveButton": "Сохранить фокус",
+      "notInTownHint": "Чтобы задать фокус, нужно находиться в городе.",
+      "increaseAria": "Увеличить фокус на {component}",
+      "decreaseAria": "Уменьшить фокус на {component}"
     },
     "party": {
       "promoteLeader": "Назначить лидером",
@@ -6158,6 +6168,24 @@ export const ru_RU: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Солнцелепестковый серп"
+      },
+      "thorium_ore": {
+        "name": "Ториевая руда"
+      },
+      "arcanite_bar": {
+        "name": "Слиток аркана"
+      },
+      "ashwood_log": {
+        "name": "Бревно пепельного дерева"
+      },
+      "elderwood_log": {
+        "name": "Бревно древней бузины"
+      },
+      "goldleaf_herb": {
+        "name": "Трава золотолист"
+      },
+      "sunpetal_herb": {
+        "name": "Трава солнцелепест"
       },
       "bristleback_maul": {
         "name": "Молот Гэллоугласа"
