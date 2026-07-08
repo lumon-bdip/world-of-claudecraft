@@ -73,6 +73,15 @@ export interface IWorldProfessions {
   // localized text, per the string-free IWorld seam: the ten title names live in
   // src/ui/i18n.catalog/hud_chrome.ts (`archetypeTitle.<craftId>`).
   archetypeTitle: string | null;
+  // The hobby craft (#1294): the opposite craft on CRAFT_RING from the active
+  // archetype, empowered up to rare rather than common (see archetype.ts
+  // `archetypeCeilingFor`/`getHobbyCraft`). `null` before the acceptance quest
+  // has ever been completed (no active archetype means no opposite craft to
+  // be a hobby of). An identifier, same string-free-seam rule as
+  // `archetypeTitle`: localized text lives in
+  // src/ui/i18n.catalog/hud_chrome.ts (`archetypeTitle.<craftId>`, reused as
+  // the hobby's display name too since a hobby id IS a craft id).
+  hobbyCraft: string | null;
   // Stub entry point for the zone-1 acceptance quest's completion: sets the
   // chosen craft as the active archetype (first time only). See archetype.ts.
   acceptArchetypeQuest(craftId: string): void;

@@ -1378,6 +1378,7 @@ export const en_XA: EnTranslations = {
     "archetypeTitle": {
       "label": "[Ţíţļé]",
       "none": "[Ñóñé]",
+      "hobbyLabel": "[Ĥóƀƀý]",
       "armorcrafting": "[Áŕɱóŕéŕ]",
       "weaponcrafting": "[Ŵéáþóñšɱíţĥ]",
       "jewelcrafting": "[Ĵéŵéļéŕ]",

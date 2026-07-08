@@ -1378,6 +1378,7 @@ export const zh_CN: EnTranslations = {
     "archetypeTitle": {
       "label": "称号",
       "none": "无",
+      "hobbyLabel": "爱好",
       "armorcrafting": "锻甲师",
       "weaponcrafting": "武器匠",
       "jewelcrafting": "珠宝匠",

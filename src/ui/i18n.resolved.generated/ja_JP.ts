@@ -1378,6 +1378,7 @@ export const ja_JP: EnTranslations = {
     "archetypeTitle": {
       "label": "称号",
       "none": "なし",
+      "hobbyLabel": "趣味",
       "armorcrafting": "防具鍛冶師",
       "weaponcrafting": "武器鍛冶師",
       "jewelcrafting": "宝石職人",

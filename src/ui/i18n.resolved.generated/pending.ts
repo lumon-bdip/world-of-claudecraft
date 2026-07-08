@@ -9,18 +9,32 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "es_ES": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "fr_FR": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "fr_CA": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "de_DE": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
   "ru_RU": [],
   "cs_CZ": [
     "entities.items.arcanite_bar.name",
@@ -28,13 +42,28 @@ export const pending: Record<string, readonly string[]> = {
     "entities.items.elderwood_log.name",
     "entities.items.goldleaf_herb.name",
     "entities.items.sunpetal_herb.name",
-    "entities.items.thorium_ore.name"
+    "entities.items.thorium_ore.name",
+    "hudChrome.archetypeTitle.hobbyLabel"
   ],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "nl_NL": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "pl_PL": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "id_ID": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "tr_TR": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "sv_SE": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "vi_VN": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ],
+  "da_DK": [
+    "hudChrome.archetypeTitle.hobbyLabel"
+  ]
 };

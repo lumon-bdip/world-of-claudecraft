@@ -6277,6 +6277,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': 'Травничество',
   'hudChrome.archetypeTitle.label': 'Титул',
   'hudChrome.archetypeTitle.none': 'Нет',
+  'hudChrome.archetypeTitle.hobbyLabel': 'Хобби',
   'hudChrome.archetypeTitle.armorcrafting': 'Бронник',
   'hudChrome.archetypeTitle.weaponcrafting': 'Оружейник',
   'hudChrome.archetypeTitle.jewelcrafting': 'Ювелир',

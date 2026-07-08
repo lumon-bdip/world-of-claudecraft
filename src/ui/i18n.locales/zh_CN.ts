@@ -5831,6 +5831,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': '草药学',
   'hudChrome.archetypeTitle.label': '称号',
   'hudChrome.archetypeTitle.none': '无',
+  'hudChrome.archetypeTitle.hobbyLabel': '爱好',
   'hudChrome.archetypeTitle.armorcrafting': '锻甲师',
   'hudChrome.archetypeTitle.weaponcrafting': '武器匠',
   'hudChrome.archetypeTitle.jewelcrafting': '珠宝匠',

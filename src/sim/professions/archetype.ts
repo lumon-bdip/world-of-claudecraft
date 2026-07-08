@@ -129,6 +129,32 @@ export function archetypeTitleFor(ctx: SimContext, pid: number): string | null {
   return getArchetypeTitle(archetypeStateFor(ctx, pid).activeArchetype);
 }
 
+// Issue #1294 (the hobby): one opposite craft, empowered up to rare, is the
+// player's "hobby" alongside their active archetype's majors. Per #1129/the
+// design doc's rules card, the hobby is not independently chosen: it is
+// simply THE opposite craft on CRAFT_RING (`oppositeCraft`), the same craft
+// `archetypeCeilingFor` above already caps at rare rather than common. This
+// is a pure read/derivation over that existing state, not a new mechanic:
+// there is exactly one opposite craft per active archetype today (a
+// standalone hobby-switch quest letting a player flip which craft on the
+// opposite side is empowered is content work, #1293, out of scope here).
+
+/** The player's current hobby craft id: the opposite craft on CRAFT_RING from
+ *  their active archetype, empowered up to rare per `archetypeCeilingFor`.
+ *  `null` before any archetype has ever been chosen (there is no hobby
+ *  without a major to be opposite of). */
+export function getHobbyCraft(activeArchetype: string | null): string | null {
+  if (activeArchetype === null || !isCraftId(activeArchetype)) return null;
+  return oppositeCraft(activeArchetype).id;
+}
+
+/** Read surface: the hobby craft id for a player's CURRENT active archetype.
+ *  Backs the IWorld `hobbyCraft` read (professions facet). Updates
+ *  immediately when switchArchetype changes the active archetype. */
+export function hobbyCraftFor(ctx: SimContext, pid: number): string | null {
+  return getHobbyCraft(archetypeStateFor(ctx, pid).activeArchetype);
+}
+
 // #1129/#1203 empowerment ceiling: this is the composition point that makes the
 // active archetype matter, not just track it. The reachable ceiling for a craft
 // is min(tierCapability from #1128/#1203, archetypeCapability derived from this

@@ -1378,6 +1378,7 @@ export const vi_VN: EnTranslations = {
     "archetypeTitle": {
       "label": "Danh hiệu",
       "none": "Không có",
+      "hobbyLabel": "Hobby",
       "armorcrafting": "Thợ Giáp",
       "weaponcrafting": "Thợ Rèn Vũ Khí",
       "jewelcrafting": "Thợ Kim Hoàn",

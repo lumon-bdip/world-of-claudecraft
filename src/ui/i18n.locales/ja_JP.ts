@@ -6160,6 +6160,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': '薬草学',
   'hudChrome.archetypeTitle.label': '称号',
   'hudChrome.archetypeTitle.none': 'なし',
+  'hudChrome.archetypeTitle.hobbyLabel': '趣味',
   'hudChrome.archetypeTitle.armorcrafting': '防具鍛冶師',
   'hudChrome.archetypeTitle.weaponcrafting': '武器鍛冶師',
   'hudChrome.archetypeTitle.jewelcrafting': '宝石職人',

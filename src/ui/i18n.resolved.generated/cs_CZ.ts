@@ -1378,6 +1378,7 @@ export const cs_CZ: EnTranslations = {
     "archetypeTitle": {
       "label": "Titul",
       "none": "Žádný",
+      "hobbyLabel": "Hobby",
       "armorcrafting": "Zbrojíř",
       "weaponcrafting": "Kovář zbraní",
       "jewelcrafting": "Klenotník",

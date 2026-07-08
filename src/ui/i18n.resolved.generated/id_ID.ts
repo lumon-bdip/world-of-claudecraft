@@ -1378,6 +1378,7 @@ export const id_ID: EnTranslations = {
     "archetypeTitle": {
       "label": "Gelar",
       "none": "Tidak Ada",
+      "hobbyLabel": "Hobby",
       "armorcrafting": "Pandai Zirah",
       "weaponcrafting": "Pandai Senjata",
       "jewelcrafting": "Perajin Permata",

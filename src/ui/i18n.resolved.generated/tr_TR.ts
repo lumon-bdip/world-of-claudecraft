@@ -1378,6 +1378,7 @@ export const tr_TR: EnTranslations = {
     "archetypeTitle": {
       "label": "Unvan",
       "none": "Yok",
+      "hobbyLabel": "Hobby",
       "armorcrafting": "Zırhçı",
       "weaponcrafting": "Silah Ustası",
       "jewelcrafting": "Kuyumcu",

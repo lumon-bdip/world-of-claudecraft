@@ -1378,6 +1378,7 @@ export const ko_KR: EnTranslations = {
     "archetypeTitle": {
       "label": "칭호",
       "none": "없음",
+      "hobbyLabel": "취미",
       "armorcrafting": "방어구 장인",
       "weaponcrafting": "무기 장인",
       "jewelcrafting": "보석 세공사",

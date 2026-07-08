@@ -62,6 +62,10 @@ export interface BattlefieldXpObservation {
   itemId: string;
   instance: BattlefieldXpInstance | undefined;
   observerName: string;
+  // The observer's active archetype (#1129/#1203: professions/archetype.ts
+  // `archetypeStateFor`), or null before the acceptance quest. Threads the
+  // manifesto's "active specialty only" gate below.
+  observerActiveArchetype: string | null;
 }
 
 /** Resolve one Battlefield Experience observation into a skill-progress
@@ -76,30 +80,29 @@ export interface BattlefieldXpObservation {
  *    issue; this PR never grants anything but the self-observation trickle.
  *  - the item was not produced by any known recipe (no craft to attribute
  *    to, e.g. a non-crafted drop that was somehow signed): 0.
+ *  - the recipe's craft is not the observer's active archetype (the
+ *    manifesto's anti alt/breadth lever, see the gate comment below): 0.
  *  Only ever mutates skill via gainCraftSkill (never a drain primitive). */
 export function battlefieldExperienceTrickle(
   craftSkills: CraftSkills,
   observation: BattlefieldXpObservation,
 ): number {
-  const { itemId, instance, observerName } = observation;
+  const { itemId, instance, observerName, observerActiveArchetype } = observation;
   const rarity = instance?.rolled?.quality as MaterialRarity | undefined;
   if (!rarity || !isSignableMaterialRarity(rarity)) return 0;
   if (!instance?.signer || instance.signer !== observerName) return 0;
   const recipe = recipeForResultItem(itemId);
   if (!recipe) return 0;
-  // TODO(#1149/#1205): the manifesto scopes Battlefield Experience to the
-  // observer's ACTIVE archetype/specialty only ("a potion drunk or meal
-  // eaten feeds nothing unless alchemy or cooking is your specialty"), the
-  // anti alt/breadth lever. The active-archetype state and its empowerment
-  // ceiling landed in professions/archetype.ts (#1129/#1203:
-  // `archetypeStateFor`/`archetypeCeilingFor`/`craftCeiling`), but this
-  // module still has no gate wired: whoever picks this up next must thread
-  // the observer's `activeArchetype` in here and deny the trickle unless
-  // `recipe.professionId` is that active archetype (this is a narrower,
-  // binary "is this THE specialty" check per the manifesto quote above, not
-  // the three-tier common/rare/unlimited ceiling `craftCeiling` composes for
-  // ordinary crafting). Not gating today is a known gap, not a design
-  // decision: no such gate exists ANYWHERE in this stack yet.
+  // #1149/#1205 "active specialty only" gate: the manifesto scopes
+  // Battlefield Experience to the observer's ACTIVE archetype/specialty only
+  // ("a potion drunk or meal eaten feeds nothing unless alchemy or cooking is
+  // your specialty"), the anti alt/breadth lever. This is deliberately a
+  // narrower, BINARY "is this THE specialty" check, not the three-tier
+  // common/rare/unlimited ceiling `craftCeiling` (archetype.ts) composes for
+  // ordinary crafting: no archetype set, or the recipe's craft is anything
+  // other than the observer's one active archetype (including their hobby),
+  // grants nothing here.
+  if (recipe.professionId !== observerActiveArchetype) return 0;
   gainCraftSkill(craftSkills, recipe.professionId, BATTLEFIELD_XP_TRICKLE);
   return BATTLEFIELD_XP_TRICKLE;
 }

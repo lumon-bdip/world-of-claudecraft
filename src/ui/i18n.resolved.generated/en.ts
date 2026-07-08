@@ -1378,6 +1378,7 @@ export const en: EnTranslations = {
     "archetypeTitle": {
       "label": "Title",
       "none": "None",
+      "hobbyLabel": "Hobby",
       "armorcrafting": "Armorer",
       "weaponcrafting": "Weaponsmith",
       "jewelcrafting": "Jeweler",

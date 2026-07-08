@@ -1378,6 +1378,7 @@ export const ru_RU: EnTranslations = {
     "archetypeTitle": {
       "label": "Титул",
       "none": "Нет",
+      "hobbyLabel": "Хобби",
       "armorcrafting": "Бронник",
       "weaponcrafting": "Оружейник",
       "jewelcrafting": "Ювелир",

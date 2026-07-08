@@ -1610,6 +1610,10 @@ export const hudChromeStrings = {
   archetypeTitle: {
     label: 'Title',
     none: 'None',
+    // The hobby craft (#1294): one opposite craft empowered up to rare
+    // alongside the active archetype's majors. Reuses the same per-craft
+    // name table below (a hobby id IS a craft id on the ring).
+    hobbyLabel: 'Hobby',
     armorcrafting: 'Armorer',
     weaponcrafting: 'Weaponsmith',
     jewelcrafting: 'Jeweler',

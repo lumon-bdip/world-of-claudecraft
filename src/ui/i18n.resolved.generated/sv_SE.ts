@@ -1378,6 +1378,7 @@ export const sv_SE: EnTranslations = {
     "archetypeTitle": {
       "label": "Titel",
       "none": "Ingen",
+      "hobbyLabel": "Hobby",
       "armorcrafting": "Rustningssmed",
       "weaponcrafting": "Vapensmed",
       "jewelcrafting": "Juvelerare",

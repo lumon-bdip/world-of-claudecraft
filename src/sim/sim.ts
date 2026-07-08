@@ -207,6 +207,7 @@ import {
   archetypeStateFor,
   archetypeTitleFor,
   emptyArchetypeState,
+  hobbyCraftFor,
   normalizeArchetypeState,
   requiredAmendsProgress,
   switchArchetype as switchArchetypeImpl,
@@ -6830,6 +6831,18 @@ export class Sim {
 
   get archetypeTitle(): string | null {
     return this.archetypeTitleFor(this.primaryId);
+  }
+
+  /** The hobby craft granted by the CURRENTLY-ACTIVE archetype (#1294): the
+   *  opposite craft on CRAFT_RING, empowered up to rare. See
+   *  professions/archetype.ts getHobbyCraft for the "no hobby before an
+   *  archetype is chosen" rule. */
+  hobbyCraftFor(pid: number): string | null {
+    return hobbyCraftFor(this.ctx, pid);
+  }
+
+  get hobbyCraft(): string | null {
+    return this.hobbyCraftFor(this.primaryId);
   }
 
   /** Stub entry point for the zone-1 acceptance quest's completion (see

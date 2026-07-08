@@ -6150,6 +6150,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': '약초학',
   'hudChrome.archetypeTitle.label': '칭호',
   'hudChrome.archetypeTitle.none': '없음',
+  'hudChrome.archetypeTitle.hobbyLabel': '취미',
   'hudChrome.archetypeTitle.armorcrafting': '방어구 장인',
   'hudChrome.archetypeTitle.weaponcrafting': '무기 장인',
   'hudChrome.archetypeTitle.jewelcrafting': '보석 세공사',
