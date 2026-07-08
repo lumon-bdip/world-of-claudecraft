@@ -4591,6 +4591,7 @@ export const ja_JP: EnTranslations = {
       "offGlobalCooldown": "グローバルクールダウン外",
       "friendlyTarget": "味方対象",
       "enemyTarget": "敵対象",
+      "selfOnly": "Self only",
       "damageRange": "{min}から{max}",
       "finisherDamage": "{base}にコンボポイントごと{perCombo}"
     },

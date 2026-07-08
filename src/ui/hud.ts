@@ -13734,7 +13734,29 @@ function abilityCastLine(known: ResolvedAbility, spellHaste = 0): string {
   return t('abilityUi.tooltip.instant');
 }
 
-function abilityRequirementLines(def: AbilityDef): string[] {
+// Effect types that only ever act on the caster (a beneficial self-buff, a
+// self-inflicted cost, a weapon imbue, a pet summon/dismiss). Distinguishing
+// these from a hostile self-centered AoE (Thunder Clap, Frost Nova, Arcane
+// Explosion) is why this can't be inferred from `requiresTarget` alone: both
+// shapes leave it false. A ground-targeted cast (`targetMode: 'position'`) is
+// never self-only even if its effect types would otherwise qualify.
+const SELF_ONLY_EFFECT_TYPES = new Set<AbilityEffect['type']>([
+  'selfBuff',
+  'absorb',
+  'imbue',
+  'lifeTap',
+  'gainResource',
+  'selfDamagePctMax',
+  'summonDemon',
+  'dismissPet',
+]);
+
+export function isSelfOnlyAbility(def: AbilityDef): boolean {
+  if (def.requiresTarget || def.targetMode === 'position') return false;
+  return def.effects.every((eff) => SELF_ONLY_EFFECT_TYPES.has(eff.type));
+}
+
+export function abilityRequirementLines(def: AbilityDef): string[] {
   const lines: string[] = [];
   if (def.requiresForm)
     lines.push(t('abilityUi.tooltip.requiresForm', { form: t(FORM_LABEL_KEYS[def.requiresForm]) }));
@@ -13753,6 +13775,7 @@ function abilityRequirementLines(def: AbilityDef): string[] {
   if (def.offGcd) lines.push(t('abilityUi.tooltip.offGlobalCooldown'));
   if (def.targetType === 'friendly') lines.push(t('abilityUi.tooltip.friendlyTarget'));
   else if (def.requiresTarget) lines.push(t('abilityUi.tooltip.enemyTarget'));
+  else if (isSelfOnlyAbility(def)) lines.push(t('abilityUi.tooltip.selfOnly'));
   return lines;
 }
 

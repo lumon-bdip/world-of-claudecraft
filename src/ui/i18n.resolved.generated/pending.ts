@@ -10,6 +10,7 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -217,6 +218,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "es_ES": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -424,6 +426,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "fr_FR": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -631,6 +634,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "fr_CA": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -839,6 +843,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -1046,6 +1051,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "de_DE": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -1253,22 +1259,27 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "zh_CN": [
+    "abilityUi.tooltip.selfOnly",
     "hudChrome.vcup.guildBoardWl",
     "hudChrome.vcup.shootPower"
   ],
   "zh_TW": [
+    "abilityUi.tooltip.selfOnly",
     "hudChrome.vcup.guildBoardWl",
     "hudChrome.vcup.shootPower"
   ],
   "ko_KR": [
+    "abilityUi.tooltip.selfOnly",
     "hudChrome.vcup.guildBoardWl",
     "hudChrome.vcup.shootPower"
   ],
   "ja_JP": [
+    "abilityUi.tooltip.selfOnly",
     "hudChrome.vcup.guildBoardWl",
     "hudChrome.vcup.shootPower"
   ],
   "pt_BR": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -1476,10 +1487,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "ru_RU": [
+    "abilityUi.tooltip.selfOnly",
     "hudChrome.vcup.guildBoardWl",
     "hudChrome.vcup.shootPower"
   ],
   "cs_CZ": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -1688,6 +1701,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "nl_NL": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -1895,6 +1909,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "pl_PL": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -2102,6 +2117,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "id_ID": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -2309,6 +2325,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "tr_TR": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -2516,6 +2533,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "sv_SE": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -2723,6 +2741,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "vi_VN": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",
@@ -2930,6 +2949,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.vcup.walkUp"
   ],
   "da_DK": [
+    "abilityUi.tooltip.selfOnly",
     "entities.abilities.sport_boot.description",
     "entities.abilities.sport_boot.name",
     "entities.abilities.sport_dive.description",

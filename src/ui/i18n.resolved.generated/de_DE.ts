@@ -4591,6 +4591,7 @@ export const de_DE: EnTranslations = {
       "offGlobalCooldown": "Außerhalb der globalen Abklingzeit",
       "friendlyTarget": "Freundliches Ziel",
       "enemyTarget": "Feindliches Ziel",
+      "selfOnly": "Self only",
       "damageRange": "{min} bis {max}",
       "finisherDamage": "{base} plus {perCombo} pro Combopunkt"
     },

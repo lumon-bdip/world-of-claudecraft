@@ -4591,6 +4591,7 @@ export const it_IT: EnTranslations = {
       "offGlobalCooldown": "Fuori dal recupero globale",
       "friendlyTarget": "Bersaglio amico",
       "enemyTarget": "Bersaglio nemico",
+      "selfOnly": "Self only",
       "damageRange": "{min} a {max}",
       "finisherDamage": "{base} più {perCombo} per punto combo"
     },
