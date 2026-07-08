@@ -622,6 +622,7 @@ export const vi_VN: EnTranslations = {
         "jitter": "Nhiễu Động",
         "predLead": "Prediction Lead",
         "snapshot": "Tốc Độ Ảnh Chụp",
+        "serverTick": "Tốc Độ Nhịp Máy Chủ",
         "connection": "Kết Nối",
         "drawCalls": "Lệnh Vẽ",
         "triangles": "Tam Giác",

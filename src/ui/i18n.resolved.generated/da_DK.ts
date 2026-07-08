@@ -622,6 +622,7 @@ export const da_DK: EnTranslations = {
         "jitter": "Jitter",
         "predLead": "Prediction Lead",
         "snapshot": "Snapshothastighed",
+        "serverTick": "Servertickhastighed",
         "connection": "Forbindelse",
         "drawCalls": "Tegnekald",
         "triangles": "Trekanter",

@@ -622,6 +622,7 @@ export const fr_CA: EnTranslations = {
         "jitter": "Gigue",
         "predLead": "Prediction Lead",
         "snapshot": "Fréquence d'instantanés",
+        "serverTick": "Fréquence de tick serveur",
         "connection": "Connexion",
         "drawCalls": "Appels de rendu",
         "triangles": "Triangles",

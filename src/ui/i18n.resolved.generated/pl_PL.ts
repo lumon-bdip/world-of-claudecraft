@@ -622,6 +622,7 @@ export const pl_PL: EnTranslations = {
         "jitter": "Drżenie",
         "predLead": "Prediction Lead",
         "snapshot": "Częstotliwość migawek",
+        "serverTick": "Częstotliwość tików serwera",
         "connection": "Połączenie",
         "drawCalls": "Wywołania rysowania",
         "triangles": "Trójkąty",

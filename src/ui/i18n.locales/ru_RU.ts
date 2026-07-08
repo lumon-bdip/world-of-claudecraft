@@ -334,6 +334,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.jitter': 'Джиттер',
   'hudChrome.perf.labels.predLead': 'Упреждение прогноза',
   'hudChrome.perf.labels.snapshot': 'Частота снимков',
+  'hudChrome.perf.labels.serverTick': 'Частота тиков сервера',
   'hudChrome.perf.labels.connection': 'Соединение',
   'hudChrome.perf.labels.drawCalls': 'Вызовы отрисовки',
   'hudChrome.perf.labels.triangles': 'Треугольники',

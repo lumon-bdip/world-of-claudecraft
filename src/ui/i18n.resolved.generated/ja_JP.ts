@@ -622,6 +622,7 @@ export const ja_JP: EnTranslations = {
         "jitter": "ジッター",
         "predLead": "予測リード",
         "snapshot": "スナップショットレート",
+        "serverTick": "サーバーティックレート",
         "connection": "接続",
         "drawCalls": "ドローコール",
         "triangles": "三角形",

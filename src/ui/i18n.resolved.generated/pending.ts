@@ -1561,6 +1561,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.keybinds.valecup",
     "hudChrome.mobile.dailyRewards",
     "hudChrome.perf.labels.predLead",
+    "hudChrome.perf.labels.serverTick",
     "hudChrome.townFocus.budgetLabel",
     "hudChrome.townFocus.decreaseAria",
     "hudChrome.townFocus.hint",

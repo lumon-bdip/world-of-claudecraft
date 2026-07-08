@@ -622,6 +622,7 @@ export const ru_RU: EnTranslations = {
         "jitter": "Джиттер",
         "predLead": "Упреждение прогноза",
         "snapshot": "Частота снимков",
+        "serverTick": "Частота тиков сервера",
         "connection": "Соединение",
         "drawCalls": "Вызовы отрисовки",
         "triangles": "Треугольники",

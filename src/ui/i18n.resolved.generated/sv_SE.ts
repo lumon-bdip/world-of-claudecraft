@@ -622,6 +622,7 @@ export const sv_SE: EnTranslations = {
         "jitter": "Jitter",
         "predLead": "Prediction Lead",
         "snapshot": "Ögonblicksfrekvens",
+        "serverTick": "Servertickfrekvens",
         "connection": "Anslutning",
         "drawCalls": "Ritanrop",
         "triangles": "Trianglar",

@@ -4853,6 +4853,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.programs': 'Shader',
   'hudChrome.perf.labels.renderScale': 'Tỷ Lệ Kết Xuất',
   'hudChrome.perf.labels.snapshot': 'Tốc Độ Ảnh Chụp',
+  'hudChrome.perf.labels.serverTick': 'Tốc Độ Nhịp Máy Chủ',
   'hudChrome.perf.labels.textures': 'Vân Bề Mặt',
   'hudChrome.perf.labels.triangles': 'Tam Giác',
   'hudChrome.perf.opacity': 'Độ Mờ Nền',

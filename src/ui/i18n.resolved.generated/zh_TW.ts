@@ -622,6 +622,7 @@ export const zh_TW: EnTranslations = {
         "jitter": "抖動",
         "predLead": "預測提前量",
         "snapshot": "快照速率",
+        "serverTick": "伺服器刻率",
         "connection": "連線",
         "drawCalls": "繪製呼叫",
         "triangles": "三角形",

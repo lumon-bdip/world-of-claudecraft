@@ -1111,6 +1111,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.ping': 'Ping',
   'hudChrome.perf.labels.jitter': 'Jitter',
   'hudChrome.perf.labels.snapshot': 'Snapshot-Rate',
+  'hudChrome.perf.labels.serverTick': 'Server-Tickrate',
   'hudChrome.perf.labels.connection': 'Verbindung',
   'hudChrome.perf.labels.drawCalls': 'Draw Calls',
   'hudChrome.perf.labels.triangles': 'Dreiecke',

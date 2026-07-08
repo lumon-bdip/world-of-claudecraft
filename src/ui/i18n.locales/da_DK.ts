@@ -4813,6 +4813,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.programs': 'Shaders',
   'hudChrome.perf.labels.renderScale': 'Renderingsskala',
   'hudChrome.perf.labels.snapshot': 'Snapshothastighed',
+  'hudChrome.perf.labels.serverTick': 'Servertickhastighed',
   'hudChrome.perf.labels.textures': 'Teksturer',
   'hudChrome.perf.labels.triangles': 'Trekanter',
   'hudChrome.perf.opacity': 'Baggrundsgennemsigtighed',

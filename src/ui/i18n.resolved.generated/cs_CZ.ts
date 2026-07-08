@@ -622,6 +622,7 @@ export const cs_CZ: EnTranslations = {
         "jitter": "Jitter",
         "predLead": "Prediction Lead",
         "snapshot": "Frekvence snapshotů",
+        "serverTick": "Server Tick Rate",
         "connection": "Připojení",
         "drawCalls": "Draw cally",
         "triangles": "Trojúhelníky",

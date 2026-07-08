@@ -622,6 +622,7 @@ export const id_ID: EnTranslations = {
         "jitter": "Jitter",
         "predLead": "Prediction Lead",
         "snapshot": "Laju Snapshot",
+        "serverTick": "Laju Tick Server",
         "connection": "Koneksi",
         "drawCalls": "Panggilan Gambar",
         "triangles": "Segitiga",

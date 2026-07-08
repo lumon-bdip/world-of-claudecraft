@@ -622,6 +622,7 @@ export const tr_TR: EnTranslations = {
         "jitter": "Titreme",
         "predLead": "Prediction Lead",
         "snapshot": "Anlık Görüntü Hızı",
+        "serverTick": "Sunucu Tik Hızı",
         "connection": "Bağlantı",
         "drawCalls": "Çizim Çağrıları",
         "triangles": "Üçgenler",

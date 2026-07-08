@@ -622,6 +622,7 @@ export const ko_KR: EnTranslations = {
         "jitter": "지터",
         "predLead": "예측 리드",
         "snapshot": "스냅샷 전송률",
+        "serverTick": "서버 틱 속도",
         "connection": "연결",
         "drawCalls": "드로우 콜",
         "triangles": "삼각형",

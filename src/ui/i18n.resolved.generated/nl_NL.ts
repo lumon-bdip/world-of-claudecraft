@@ -622,6 +622,7 @@ export const nl_NL: EnTranslations = {
         "jitter": "Jitter",
         "predLead": "Prediction Lead",
         "snapshot": "Snapshotfrequentie",
+        "serverTick": "Servertickfrequentie",
         "connection": "Verbinding",
         "drawCalls": "Draw Calls",
         "triangles": "Driehoeken",

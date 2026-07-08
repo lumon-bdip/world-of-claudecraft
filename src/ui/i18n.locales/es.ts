@@ -1092,6 +1092,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.ping': 'Ping',
   'hudChrome.perf.labels.jitter': 'Fluctuación',
   'hudChrome.perf.labels.snapshot': 'Tasa de instantáneas',
+  'hudChrome.perf.labels.serverTick': 'Tasa de ticks del servidor',
   'hudChrome.perf.labels.connection': 'Conexión',
   'hudChrome.perf.labels.drawCalls': 'Llamadas de dibujado',
   'hudChrome.perf.labels.triangles': 'Triángulos',
