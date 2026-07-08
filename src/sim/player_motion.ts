@@ -318,13 +318,13 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
   // ground and on flat instanced floors.
   if (p.onGround && !isSwimming(p, deps.seed)) {
     const s = terrainWallStandoff(p.pos.x, p.pos.z, deps.seed, BODY_RADIUS, MAX_CLIMB_SLOPE);
-    if (
-      (s.x !== p.pos.x || s.z !== p.pos.z) &&
-      terrainSteepnessAt(s.x, s.z, deps.seed) <= MAX_CLIMB_SLOPE
-    ) {
-      p.pos.x = s.x;
-      p.pos.z = s.z;
-      p.pos.y = groundHeight(s.x, s.z, deps.seed);
+    if (s.x !== p.pos.x || s.z !== p.pos.z) {
+      const resolved = deps.resolveMove(p.pos.x, p.pos.z, s.x, s.z, BODY_RADIUS, p, false);
+      if (terrainSteepnessAt(resolved.x, resolved.z, deps.seed) <= MAX_CLIMB_SLOPE) {
+        p.pos.x = resolved.x;
+        p.pos.z = resolved.z;
+        p.pos.y = groundHeight(resolved.x, resolved.z, deps.seed);
+      }
     }
   }
 }

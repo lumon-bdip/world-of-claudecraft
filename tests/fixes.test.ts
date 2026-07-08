@@ -245,6 +245,7 @@ describe('collision & terrain', () => {
   it('does not scatter trees or rocks onto cliff faces', () => {
     // A prop on a wall steeper than the climb limit floats off the face and
     // (for large rocks / trunks) plants an invisible collider there.
+    expect(DECORATION_MAX_SLOPE).toBe(1.5);
     const onCliffs = generateDecorations(SEED)
       .filter((d) => terrainSteepness(d.x, d.z, SEED) > DECORATION_MAX_SLOPE)
       .map((d) => `${d.kind}@${d.x.toFixed(0)},${d.z.toFixed(0)}`);
