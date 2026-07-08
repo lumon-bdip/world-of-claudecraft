@@ -4735,6 +4735,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.programs': 'Shadery',
   'hudChrome.perf.labels.renderScale': 'Skala renderowania',
   'hudChrome.perf.labels.snapshot': 'Częstotliwość migawek',
+  'hudChrome.perf.labels.serverTick': 'Częstotliwość tików serwera',
   'hudChrome.perf.labels.textures': 'Tekstury',
   'hudChrome.perf.labels.triangles': 'Trójkąty',
   'hudChrome.perf.opacity': 'Krycie tła',

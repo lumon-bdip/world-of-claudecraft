@@ -4778,6 +4778,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.programs': 'Shader',
   'hudChrome.perf.labels.renderScale': 'Skala Render',
   'hudChrome.perf.labels.snapshot': 'Laju Snapshot',
+  'hudChrome.perf.labels.serverTick': 'Laju Tick Server',
   'hudChrome.perf.labels.textures': 'Tekstur',
   'hudChrome.perf.labels.triangles': 'Segitiga',
   'hudChrome.perf.opacity': 'Keburaman Latar',

@@ -470,7 +470,7 @@ export const id_ID: EnTranslations = {
         "ping": "Ping",
         "jitter": "Jitter",
         "snapshot": "Laju Snapshot",
-        "serverTick": "Server Tick Rate",
+        "serverTick": "Laju Tick Server",
         "connection": "Koneksi",
         "drawCalls": "Panggilan Gambar",
         "triangles": "Segitiga",

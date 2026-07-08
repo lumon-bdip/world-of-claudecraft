@@ -470,7 +470,7 @@ export const tr_TR: EnTranslations = {
         "ping": "Ping",
         "jitter": "Titreme",
         "snapshot": "Anlık Görüntü Hızı",
-        "serverTick": "Server Tick Rate",
+        "serverTick": "Sunucu Tik Hızı",
         "connection": "Bağlantı",
         "drawCalls": "Çizim Çağrıları",
         "triangles": "Üçgenler",

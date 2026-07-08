@@ -4709,6 +4709,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.programs': 'Shaders',
   'hudChrome.perf.labels.renderScale': 'Renderingsskala',
   'hudChrome.perf.labels.snapshot': 'Ögonblicksfrekvens',
+  'hudChrome.perf.labels.serverTick': 'Servertickfrekvens',
   'hudChrome.perf.labels.textures': 'Texturer',
   'hudChrome.perf.labels.triangles': 'Trianglar',
   'hudChrome.perf.opacity': 'Bakgrundsopacitet',

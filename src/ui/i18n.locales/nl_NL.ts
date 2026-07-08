@@ -4766,6 +4766,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.programs': 'Shaders',
   'hudChrome.perf.labels.renderScale': 'Renderschaal',
   'hudChrome.perf.labels.snapshot': 'Snapshotfrequentie',
+  'hudChrome.perf.labels.serverTick': 'Servertickfrequentie',
   'hudChrome.perf.labels.textures': 'Texturen',
   'hudChrome.perf.labels.triangles': 'Driehoeken',
   'hudChrome.perf.opacity': 'Achtergronddoorzichtigheid',

@@ -9,52 +9,24 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "es_ES": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "fr_FR": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "fr_CA": [
-    "hudChrome.perf.labels.serverTick"
-  ],
+  "es": [],
+  "es_ES": [],
+  "fr_FR": [],
+  "fr_CA": [],
   "en_CA": [],
-  "it_IT": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "de_DE": [
-    "hudChrome.perf.labels.serverTick"
-  ],
+  "it_IT": [],
+  "de_DE": [],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [
-    "hudChrome.perf.labels.serverTick"
-  ],
+  "pt_BR": [],
   "ru_RU": [],
-  "nl_NL": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "pl_PL": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "id_ID": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "tr_TR": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "sv_SE": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "vi_VN": [
-    "hudChrome.perf.labels.serverTick"
-  ],
-  "da_DK": [
-    "hudChrome.perf.labels.serverTick"
-  ]
+  "nl_NL": [],
+  "pl_PL": [],
+  "id_ID": [],
+  "tr_TR": [],
+  "sv_SE": [],
+  "vi_VN": [],
+  "da_DK": []
 };

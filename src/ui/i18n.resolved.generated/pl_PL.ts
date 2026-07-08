@@ -470,7 +470,7 @@ export const pl_PL: EnTranslations = {
         "ping": "Ping",
         "jitter": "Drżenie",
         "snapshot": "Częstotliwość migawek",
-        "serverTick": "Server Tick Rate",
+        "serverTick": "Częstotliwość tików serwera",
         "connection": "Połączenie",
         "drawCalls": "Wywołania rysowania",
         "triangles": "Trójkąty",

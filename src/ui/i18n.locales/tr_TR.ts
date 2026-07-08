@@ -4711,6 +4711,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.programs': 'Gölgelendiriciler',
   'hudChrome.perf.labels.renderScale': 'İşleme Ölçeği',
   'hudChrome.perf.labels.snapshot': 'Anlık Görüntü Hızı',
+  'hudChrome.perf.labels.serverTick': 'Sunucu Tik Hızı',
   'hudChrome.perf.labels.textures': 'Dokular',
   'hudChrome.perf.labels.triangles': 'Üçgenler',
   'hudChrome.perf.opacity': 'Arka Plan Saydamlığı',
