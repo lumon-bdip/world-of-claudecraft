@@ -322,7 +322,8 @@ export const tr_TR: EnTranslations = {
       "targetCycle": "Hedefi değiştir",
       "targetCycleShort": "Hedef",
       "spellbookPageLabel": "Sayfa {page}",
-      "hideKeyboard": "Hide keyboard"
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Hareket etmek için hareket çubuğunu kullan ve etrafa bakmak için ekranı sürükle. Başlamak için birkaç adım at.",

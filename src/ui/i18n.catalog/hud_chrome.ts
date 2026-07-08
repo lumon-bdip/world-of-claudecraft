@@ -280,6 +280,13 @@ export const hudChromeStrings = {
     // consecutive-lowercase run), so the five non-Latin overlays carry real fills and
     // the Latin overlays stay pending, exactly like the other wordy chrome labels.
     hideKeyboard: 'Hide keyboard',
+    // The mobile chat composer's placeholder. The desktop hud.core.chatPlaceholder
+    // packs the full slash-command legend (/s, /w, /r, ...), which overflows the
+    // compact touch composer strip, so the touch HUD shows this short prompt instead
+    // (activeChatPlaceholder branches on the mobile layout). WORDY by M16
+    // ("something" is a four-plus consecutive-lowercase run), so the five non-Latin
+    // overlays carry real fills and the Latin overlays stay pending.
+    chatPlaceholder: 'Say something...',
   },
   // New-adventurer tutorial copy for the touch interface. The default tutorial
   // bodies (hud.tutorial.*Body) reference keyboard/mouse ("W/A/S/D", "press F"),

@@ -322,7 +322,8 @@ export const vi_VN: EnTranslations = {
       "targetCycle": "Hoán đổi mục tiêu",
       "targetCycleShort": "Mục tiêu",
       "spellbookPageLabel": "Trang {page}",
-      "hideKeyboard": "Hide keyboard"
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Dùng cần di chuyển để đi và kéo màn hình để nhìn quanh. Bước vài bước để bắt đầu.",

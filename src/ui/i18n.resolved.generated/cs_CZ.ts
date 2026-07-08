@@ -322,7 +322,8 @@ export const cs_CZ: EnTranslations = {
       "targetCycle": "Přepnout cíl",
       "targetCycleShort": "Cíl",
       "spellbookPageLabel": "Strana {page}",
-      "hideKeyboard": "Hide keyboard"
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Pohybuj se páčkou pohybu a tažením po obrazovce se rozhlížej. Udělej pár kroků a začni.",

@@ -347,7 +347,7 @@ import { localizeTalentTitle, roleLabel, tTalent } from './talent_i18n';
 import { TalentsWindow } from './talents_window';
 import type { PresetId, ThemeKnob, ThemeState } from './theme';
 import { TOOLTIP_PEEK_MS, TouchPeekGuard } from './touch_peek';
-import { bindTouchTap } from './touch_tap';
+import { bindTouchDoubleTap, bindTouchTap } from './touch_tap';
 import { TutorialOverlay } from './tutorial';
 import { svgIcon } from './ui_icons';
 import { getUiScale } from './ui_scale';
@@ -1281,6 +1281,10 @@ export class Hud {
   private meters: Meters;
   private tutorial = new TutorialOverlay();
   private lastPetBarSig = '';
+  // Value-diffed body-class flag: true while a live pet bar is shown. The mobile
+  // top-band layout reads body.mobile-pet-active to yield the top-centre line to the
+  // pet bar (the sideways consumables row and the Vale Cup indicator drop a band).
+  private lastPetPresent = false;
   // Ravenpost envelope indicator (slow-band, value-diffed; see updateMailIndicator).
   private mailIndicatorEl: HTMLElement | null = null;
   private lastMailUnread = -1;
@@ -1469,31 +1473,16 @@ export class Hud {
     // classic MMOs: the player interaction menu opens from the target portrait
     $('#target-frame').addEventListener('contextmenu', (ev) => {
       ev.preventDefault();
-      const tid = this.sim.player.targetId;
-      const t = tid !== null ? this.sim.entities.get(tid) : null;
-      if (t && t.kind === 'player' && t.id !== this.sim.playerId) {
-        this.openContextMenu(t.id, t.name, (ev as MouseEvent).clientX, (ev as MouseEvent).clientY);
-      } else if (t && t.kind === 'mob' && t.ownerId === this.sim.playerId) {
-        this.openPetMenu(
-          t.id,
-          t.name,
-          t.dead,
-          (ev as MouseEvent).clientX,
-          (ev as MouseEvent).clientY,
-        );
-      } else if (
-        t &&
-        t.kind === 'mob' &&
-        !t.dead &&
-        t.hostile &&
-        t.ownerId === null &&
-        this.sim.partyInfo
-      ) {
-        // classic MMOs: right-click an enemy's unit frame to set a raid marker.
-        // Mirror Sim.setMarker's markable criteria (live wild hostile mob) so the
-        // menu never appears for a pet/non-hostile mob where it would be a no-op.
-        this.openMarkerMenu(t.id, t.name, (ev as MouseEvent).clientX, (ev as MouseEvent).clientY);
-      }
+      this.openTargetFrameMenuAt((ev as MouseEvent).clientX, (ev as MouseEvent).clientY);
+    });
+    // Touch has no right-click, so a double-tap on the target frame opens the same
+    // unit menu (slop-guarded, so dragging the movable frame never triggers it).
+    // Mobile-gated: bindTouchDoubleTap already ignores mouse pointers, and the
+    // desktop path above owns the contextmenu case.
+    bindTouchDoubleTap($('#target-frame'), (ev) => {
+      if (!this.isMobileLayout()) return;
+      const pe = ev as PointerEvent;
+      this.openTargetFrameMenuAt(pe.clientX, pe.clientY);
     });
     $('#player-frame').addEventListener('contextmenu', (ev) => {
       ev.preventDefault();
@@ -2027,6 +2016,35 @@ export class Hud {
     const maxTop = window.innerHeight / z - reserveBottom;
     el.style.left = `${Math.max(minLeft, Math.min(maxLeft, x / z))}px`;
     el.style.top = `${Math.max(minTop, Math.min(maxTop, y / z))}px`;
+  }
+
+  // Second-pass clamp for a popup that is TALLER (or wider) than the reserve
+  // placePopupAt was given: measure the real rendered box and pull it back on-screen.
+  // The unit context menu with the 40px mobile-floor items can exceed a fixed reserve
+  // on a short landscape phone; getBoundingClientRect reflects the laid-out box (so it
+  // is reliable even on the first open, where an offset read can still be stale), and
+  // this only ever moves the popup UP/LEFT, never past the top/left edge.
+  private keepPopupOnScreen(el: HTMLElement): void {
+    const clamp = () => {
+      const z = getUiScale();
+      const r = el.getBoundingClientRect();
+      const overBottom = r.bottom - window.innerHeight;
+      if (overBottom > 0) {
+        const top = Number.parseFloat(el.style.top) || 0;
+        el.style.top = `${Math.max(0, top - overBottom / z)}px`;
+      }
+      const overRight = r.right - window.innerWidth;
+      if (overRight > 0) {
+        const left = Number.parseFloat(el.style.left) || 0;
+        el.style.left = `${Math.max(0, left - overRight / z)}px`;
+      }
+    };
+    clamp();
+    // A popup shown for the FIRST time can report a stale (pre-layout) box on this
+    // synchronous pass, so re-clamp once the browser has laid it out. Subsequent
+    // opens are already correct above; this only ever nudges a still-overflowing
+    // menu up/left by a frame, never off the top/left edge.
+    requestAnimationFrame(clamp);
   }
 
   private topmostOpenWindow(): HTMLElement | null {
@@ -2745,8 +2763,12 @@ export class Hud {
     if (this.activeChatTab === WHISPER_TAB)
       return t('hud.core.chatChannels.sendingTo', { channel: t(WHISPER_TAB_LABEL_KEY) });
     const ch = this.chatSendChannel();
-    return ch
-      ? t('hud.core.chatChannels.sendingTo', { channel: t(CHANNEL_LABEL_KEYS[ch]) })
+    if (ch) return t('hud.core.chatChannels.sendingTo', { channel: t(CHANNEL_LABEL_KEYS[ch]) });
+    // The compact touch composer has no room for the desktop slash-command legend
+    // (/s, /w, /r, ...), so use a short prompt on the mobile HUD. The channel-aware
+    // "Message {channel}" variants above are already short and stay as-is.
+    return this.isMobileLayout()
+      ? t('hudChrome.mobile.chatPlaceholder')
       : t('hud.core.chatPlaceholder');
   }
 
@@ -5741,6 +5763,13 @@ export class Hud {
   private renderPetBar(): void {
     const bar = $('#petbar') as HTMLElement;
     const pet = this.ownPet();
+    // Value-diffed body-class flag the mobile top-band layout reads (see field doc):
+    // toggled only on a real transition so the per-frame path stays write-free.
+    const petPresent = !!pet && !pet.dead;
+    if (petPresent !== this.lastPetPresent) {
+      this.lastPetPresent = petPresent;
+      document.body.classList.toggle('mobile-pet-active', petPresent);
+    }
     if (!pet || pet.dead) {
       bar.style.display = 'none';
       if (this.lastPetBarSig !== '') {
@@ -12582,6 +12611,30 @@ export class Hud {
     });
   }
 
+  // Open the target-frame unit menu at a viewport point, shared by the desktop
+  // right-click (contextmenu) and the touch double-tap. A friendly player (not
+  // you) gets the social/party menu; your own pet gets the pet menu; a live wild
+  // hostile mob (in a party) gets the raid-marker menu, mirroring Sim.setMarker's
+  // markable criteria so the menu never appears where it would be a no-op.
+  private openTargetFrameMenuAt(x: number, y: number): void {
+    const tid = this.sim.player.targetId;
+    const t = tid !== null ? this.sim.entities.get(tid) : null;
+    if (t && t.kind === 'player' && t.id !== this.sim.playerId) {
+      this.openContextMenu(t.id, t.name, x, y);
+    } else if (t && t.kind === 'mob' && t.ownerId === this.sim.playerId) {
+      this.openPetMenu(t.id, t.name, t.dead, x, y);
+    } else if (
+      t &&
+      t.kind === 'mob' &&
+      !t.dead &&
+      t.hostile &&
+      t.ownerId === null &&
+      this.sim.partyInfo
+    ) {
+      this.openMarkerMenu(t.id, t.name, x, y);
+    }
+  }
+
   openContextMenu(pid: number, name: string, x: number, y: number): void {
     const el = $('#ctx-menu');
     const party = this.sim.partyInfo;
@@ -12634,8 +12687,16 @@ export class Hud {
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
     hydratePortraits(el);
-    this.placePopupAt(el, x, y, 170, 240);
     el.style.display = 'block';
+    // Reserve the menu's own height (title + one row per item) so placePopupAt seats
+    // it fully on-screen. Computed from the item count, not measured, so it is right
+    // even on the very first open (a fresh display:none -> block box can read stale).
+    // The mobile 40px item floor makes this menu tall enough to matter on a short
+    // landscape phone; over-reserving only nudges it higher, never off the top.
+    const ctxItemCount = (html.match(/class="ctx-item"/g) ?? []).length;
+    const ctxReserveBottom = 80 + ctxItemCount * (this.isMobileLayout() ? 44 : 28);
+    this.placePopupAt(el, x, y, 170, ctxReserveBottom);
+    this.keepPopupOnScreen(el);
     this.bindContextMenuActions((act) => {
       if (act === 'inspect') this.openInspect(pid);
       else if (act === 'whisper') this.startWhisper(name);
@@ -12961,8 +13022,9 @@ export class Hud {
       html += `<div class="ctx-item" data-act="abandon">${esc(t('hud.pet.abandon'))}</div>`;
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.pet.cancel'))}</div>`;
     el.innerHTML = html;
-    this.placePopupAt(el, x, y, 170, 240);
     el.style.display = 'block';
+    this.placePopupAt(el, x, y, 170, 240);
+    this.keepPopupOnScreen(el);
     el.querySelectorAll('.ctx-item').forEach((item) => {
       item.addEventListener('click', () => {
         const act = (item as HTMLElement).dataset.act;
@@ -13025,8 +13087,9 @@ export class Hud {
       inspectHtml +
       actions.map((a) => `<div class="ctx-item" data-act="${a.id}">${esc(a.label)}</div>`).join('');
     hydratePortraits(el);
-    this.placePopupAt(el, x, y, 170, 240);
     el.style.display = 'block';
+    this.placePopupAt(el, x, y, 170, 240);
+    this.keepPopupOnScreen(el);
     this.bindContextMenuActions((act) => {
       const livePid = this.playerPidByName(name);
       if (act === 'inspect') {

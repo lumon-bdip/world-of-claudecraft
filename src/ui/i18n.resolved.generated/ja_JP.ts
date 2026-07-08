@@ -322,7 +322,8 @@ export const ja_JP: EnTranslations = {
       "targetCycle": "ターゲット切替",
       "targetCycleShort": "標的",
       "spellbookPageLabel": "ページ{page}",
-      "hideKeyboard": "キーボードを隠す"
+      "hideKeyboard": "キーボードを隠す",
+      "chatPlaceholder": "発言する..."
     },
     "tutorial": {
       "moveBodyTouch": "移動スティックで移動し、画面をドラッグして周囲を見回します。数歩進んで始めましょう。",

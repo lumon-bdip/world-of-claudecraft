@@ -930,22 +930,33 @@
   body.mobile-touch.mobile-consumables-open #mobile-consumables-toggle .ui-icon {
     transform: rotate(90deg);
   }
-  /* The open row drops BELOW the chip line rather than extending along the top
-     band: the top-centre band belongs to the pet bar (pet classes) and #ui
-     (z 80) paints ABOVE #mobile-controls (z 60), so a row up there would sit
-     UNDER the pet command buttons, which would steal its taps. Below the
-     chrome line the band is open world; a crowded row wraps further down. */
+  /* The open row extends RIGHTWARD from the toggle chip along the top band
+     (restored by owner request; v0.23.0 had dropped it BELOW the chip to leave the
+     top-centre band to the pet bar). It is a single nowrap line so it never wraps
+     down over the world. The two pet classes still own the top-centre line while a
+     pet is out (body.mobile-pet-active), so the row then drops one band to clear the
+     pet bar; overlap in every state is gated by the pet-bar top-band probe. */
   body.mobile-touch #mobile-consumables-row {
     display: none;
     position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    right: 0;
+    top: 0;
+    /* Anchor to the RIGHT edge of the 40px toggle (its first child), not the
+       container: #mobile-consumables is a wide stretched band (left..right:260px),
+       so `left: 100%` would fling the row to the far right edge and off a 740px
+       viewport. 40px (toggle width) + 6px gap flows it just past the toggle. */
+    left: calc(40px + 6px);
+    right: auto;
     gap: 8px;
+  }
+  /* Pet classes: the pet bar sits on the top-centre line, so the row (which flows
+     right across the centre) drops below the toggle while a pet is out. Still
+     sideways + nowrap, just one band lower. */
+  body.mobile-touch.mobile-pet-active #mobile-consumables-row {
+    top: calc(100% + 6px);
   }
   body.mobile-touch.mobile-consumables-open #mobile-consumables-row {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
   body.mobile-touch .mobile-consumable-slot {
     position: relative;
@@ -1342,8 +1353,12 @@
   body.mobile-touch #chatlog-wrap {
     left: max(10px, env(safe-area-inset-left));
     /* Shifted up from the action-bar area for a little more breathing room from
-       the bottom edge (was 160px). */
-    bottom: calc(180px + env(safe-area-inset-bottom));
+       the bottom edge (was 160px, then 180px). The tab strip below now meets the
+       40px touch floor (was a 0.92-scaled ~20px), which adds ~18px of tab height
+       ABOVE the frame (tabs sit above the bottom-anchored log), so the seat drops
+       back to 162px to keep the tab strip's TOP, and thus its clearance from the
+       composer above, exactly where it sat with the short tabs. */
+    bottom: calc(162px + env(safe-area-inset-bottom));
     width: min(340px, calc(100vw - 20px));
     display: none;
     z-index: 24;
@@ -1371,13 +1386,30 @@
     height: calc(11px * var(--chat-font-scale, 1) * 1.4 * 4 + 10px);
   }
   body.mobile-touch #chatlog-tabs {
-    transform: scale(0.92);
-    transform-origin: left bottom;
+    /* No down-scale on touch: the desktop 0.92 shrank the 22px tabs to ~20px, far
+       below the 40px tap floor. The tabs are sized up to the floor instead (below),
+       so the strip renders at its natural (unscaled) size here. */
+    transform: none;
     /* The chat-box move gesture is desktop-only (onChatBoxMoveStart bails on mobile),
        so allow a horizontal touch-pan here to reach tabs that overflow the strip
        (its scrollbar is hidden for the classic look). */
     touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
+  }
+  /* Chat tabs meet the 40px touch floor on mobile (they were the desktop 22px tabs
+     scaled 0.92). Larger text too, and the strip stays a single nowrap pan-x row
+     with the sticky + button (base rules in hud.css, pinned by
+     tests/chat_tab_strip.test.ts). */
+  body.mobile-touch .chat-tab {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 16px;
+  }
+  body.mobile-touch .chat-tab-add {
+    min-width: 40px;
+    justify-content: center;
+    font-size: 18px;
   }
   body.mobile-touch #chat-input {
     left: max(10px, env(safe-area-inset-left));
@@ -1902,6 +1934,76 @@
     text-align: center;
     white-space: normal;
     overflow-wrap: anywhere;
+  }
+  /* Vale Cup notification compaction (mobile). The desktop indicator (top:70px) and
+     in-match strip (top:64px, min-width 260px, 24px score) carry no touch rules, so
+     on a short landscape phone they float as a large upper-middle band. Compact both
+     hard and seat them against the very top edge (the #banner recipe above is the
+     precedent) so they hug the frame. Behaviour is unchanged: no dismissal is added
+     and the strip stays pointer-events:none (components.css). The arena-status
+     stacking exception (components.css #arena-status[style*="block"] ~ #vcup-indicator)
+     keeps a higher specificity, so when an arena match is live it still nudges the
+     compacted indicator below the arena banner. */
+  body.mobile-touch #vcup-indicator {
+    top: calc(env(safe-area-inset-top) + 6px);
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+  body.mobile-touch #vcup-indicator .vcupi-title {
+    font-size: 10px;
+    letter-spacing: 0.2px;
+  }
+  body.mobile-touch #vcup-indicator .vcupi-score {
+    font-size: 12px;
+  }
+  body.mobile-touch #vcup-indicator .vcupi-clock {
+    font-size: 9.5px;
+  }
+  body.mobile-touch #vcup-match-hud {
+    top: calc(env(safe-area-inset-top) + 6px);
+    min-width: auto;
+    gap: 1px;
+    padding: 3px 10px 2px;
+  }
+  body.mobile-touch #vcup-match-hud .vcuph-row {
+    gap: 8px;
+  }
+  body.mobile-touch #vcup-match-hud .vcuph-side {
+    min-width: 0;
+    gap: 4px;
+  }
+  body.mobile-touch #vcup-match-hud .vcuph-name {
+    font-size: 10px;
+  }
+  body.mobile-touch #vcup-match-hud .vcuph-score {
+    font-size: 16px;
+    min-width: 16px;
+  }
+  body.mobile-touch #vcup-match-hud .vcuph-colon {
+    margin: 0 3px;
+    font-size: 13px;
+  }
+  body.mobile-touch #vcup-match-hud .vcuph-clock {
+    font-size: 10px;
+  }
+  body.mobile-touch #vcup-match-hud .vcuph-phase {
+    font-size: 10px;
+  }
+  /* The Vale Cup indicator/strip hug the top edge, but they yield the top-centre
+     line to whatever else needs it: the sideways consumables row when it is open
+     (no pet), and the pet bar when a pet is out. Drop one band in either case; drop
+     a second band when BOTH a pet is out (pet bar on the top line) AND the row is
+     open (it took the pet bar's usual second band), so the three never stack. */
+  body.mobile-touch.mobile-consumables-open #vcup-indicator,
+  body.mobile-touch.mobile-pet-active #vcup-indicator,
+  body.mobile-touch.mobile-consumables-open #vcup-match-hud,
+  body.mobile-touch.mobile-pet-active #vcup-match-hud {
+    top: calc(env(safe-area-inset-top) + 64px);
+  }
+  body.mobile-touch.mobile-pet-active.mobile-consumables-open #vcup-indicator,
+  body.mobile-touch.mobile-pet-active.mobile-consumables-open #vcup-match-hud {
+    top: calc(env(safe-area-inset-top) + 122px);
   }
   body.mobile-touch .window {
     max-width: calc(100vw - 20px);
@@ -3148,8 +3250,10 @@
     }
     body.mobile-touch #petbar {
       top: max(6px, env(safe-area-inset-top));
-      transform: translateX(-50%) scale(0.88);
-      transform-origin: center top;
+      /* No scale(0.88) on landscape: it shrank the 40px pet command buttons to
+         ~35px, below the 40px touch floor. Keep them full-size (the two-group bar
+         still fits the top-centre band on the narrowest 740px landscape phone). */
+      transform: translateX(-50%);
     }
     body.mobile-touch #chatlog-wrap {
       left: max(10px, env(safe-area-inset-left));

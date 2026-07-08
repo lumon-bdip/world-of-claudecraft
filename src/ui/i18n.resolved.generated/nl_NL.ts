@@ -322,7 +322,8 @@ export const nl_NL: EnTranslations = {
       "targetCycle": "Wissel van doel",
       "targetCycleShort": "Doel",
       "spellbookPageLabel": "Pagina {page}",
-      "hideKeyboard": "Hide keyboard"
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Gebruik de bewegingsstick om te bewegen en sleep over het scherm om rond te kijken. Zet een paar stappen om te beginnen.",

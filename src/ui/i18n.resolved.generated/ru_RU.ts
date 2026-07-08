@@ -322,7 +322,8 @@ export const ru_RU: EnTranslations = {
       "targetCycle": "Сменить цель",
       "targetCycleShort": "Цель",
       "spellbookPageLabel": "Страница {page}",
-      "hideKeyboard": "Скрыть клавиатуру"
+      "hideKeyboard": "Скрыть клавиатуру",
+      "chatPlaceholder": "Напишите сообщение..."
     },
     "tutorial": {
       "moveBodyTouch": "Используйте джойстик передвижения, чтобы двигаться, и проведите по экрану, чтобы осмотреться. Сделайте несколько шагов, чтобы начать.",

@@ -322,7 +322,8 @@ export const zh_TW: EnTranslations = {
       "targetCycle": "切換目標",
       "targetCycleShort": "目標",
       "spellbookPageLabel": "頁{page}",
-      "hideKeyboard": "隱藏鍵盤"
+      "hideKeyboard": "隱藏鍵盤",
+      "chatPlaceholder": "說點什麼..."
     },
     "tutorial": {
       "moveBodyTouch": "使用搖桿移動，拖曳螢幕環顧四周。先走幾步開始吧。",

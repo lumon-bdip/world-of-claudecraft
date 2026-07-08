@@ -322,7 +322,8 @@ export const de_DE: EnTranslations = {
       "targetCycle": "Ziel tauschen",
       "targetCycleShort": "Ziel",
       "spellbookPageLabel": "Seite {page}",
-      "hideKeyboard": "Hide keyboard"
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Nutze den Bewegungsstick zum Bewegen und zieh über den Bildschirm, um dich umzusehen. Mach ein paar Schritte, um zu beginnen.",

@@ -322,7 +322,8 @@ export const ko_KR: EnTranslations = {
       "targetCycle": "대상 전환",
       "targetCycleShort": "대상",
       "spellbookPageLabel": "페이지 {page}",
-      "hideKeyboard": "키보드 숨기기"
+      "hideKeyboard": "키보드 숨기기",
+      "chatPlaceholder": "메시지 입력..."
     },
     "tutorial": {
       "moveBodyTouch": "이동 스틱으로 이동하고 화면을 끌어 주위를 둘러보세요. 몇 걸음 움직여 시작하세요.",

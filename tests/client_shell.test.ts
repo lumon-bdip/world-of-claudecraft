@@ -897,11 +897,18 @@ describe('client HTML shell', () => {
     expect(readFileSync(new URL('../src/game/touch_router.ts', import.meta.url), 'utf8')).toContain(
       "'#mobile-consumables',",
     );
-    // The open row drops BELOW the chip line: the top-centre band belongs to
-    // the pet bar, and #ui (z 80) paints above #mobile-controls (z 60), so a
-    // row along the top band would sit UNDER the pet buttons and lose taps.
+    // The open row extends RIGHTWARD from the toggle along the top band (restored
+    // by owner request; v0.23.0 had dropped it below the chip). top:0 + a left offset
+    // past the 40px toggle flow it sideways; the pet classes drop it a band so it
+    // clears the pet bar (mobile-pet-active). Overlap is gated by the mobile HUD audit.
+    const consumRowStart = hudMobileCss.indexOf('body.mobile-touch #mobile-consumables-row {');
+    const consumRow = hudMobileCss.slice(consumRowStart, hudMobileCss.indexOf('}', consumRowStart));
+    expect(consumRow).toMatch(/top: 0;/);
+    expect(consumRow).toMatch(/left: calc\(40px \+ 6px\);/);
+    expect(consumRow).toMatch(/right: auto;/);
+    // Pet classes drop the sideways row one band so it never overlaps the pet bar.
     expect(hudMobileCss).toMatch(
-      /#mobile-consumables-row \{\n {4}display: none;\n {4}position: absolute;\n {4}top: calc\(100% \+ 6px\);/,
+      /body\.mobile-touch\.mobile-pet-active #mobile-consumables-row \{\n {4}top: calc\(100% \+ 6px\);/,
     );
     // The id list is snapshotted at OPEN time and stays frozen while open, so
     // slots never shift under the thumb the frame a stack depletes: exactly one

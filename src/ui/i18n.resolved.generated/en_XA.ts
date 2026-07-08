@@ -322,7 +322,8 @@ export const en_XA: EnTranslations = {
       "targetCycle": "[Šŵáþ ţáŕĝéţ]",
       "targetCycleShort": "[Ţáŕĝéţ]",
       "spellbookPageLabel": "[Þáĝé {page}]",
-      "hideKeyboard": "[Ĥíðé ķéýƀóáŕð]"
+      "hideKeyboard": "[Ĥíðé ķéýƀóáŕð]",
+      "chatPlaceholder": "[Šáý šóɱéţĥíñĝ...]"
     },
     "tutorial": {
       "moveBodyTouch": "[Úšé ţĥé ɱóʋéɱéñţ šţíçķ ţó ɱóʋé áñð ðŕáĝ ţĥé šçŕééñ ţó ļóóķ áŕóúñð. Ţáķé á ƒéŵ šţéþš ţó ƀéĝíñ.]",

@@ -6278,6 +6278,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.actionPageIndicator': 'Стр. {page}',
   'hudChrome.mobile.spellbookPageLabel': 'Страница {page}',
   'hudChrome.mobile.hideKeyboard': 'Скрыть клавиатуру',
+  'hudChrome.mobile.chatPlaceholder': 'Напишите сообщение...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': 'Кубок Долины',
   'hudChrome.vcup.title': 'Кубок Долины',

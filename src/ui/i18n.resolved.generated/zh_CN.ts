@@ -322,7 +322,8 @@ export const zh_CN: EnTranslations = {
       "targetCycle": "切换目标",
       "targetCycleShort": "目标",
       "spellbookPageLabel": "页{page}",
-      "hideKeyboard": "隐藏键盘"
+      "hideKeyboard": "隐藏键盘",
+      "chatPlaceholder": "说点什么..."
     },
     "tutorial": {
       "moveBodyTouch": "使用摇杆移动，拖动屏幕环顾四周。先走几步开始吧。",

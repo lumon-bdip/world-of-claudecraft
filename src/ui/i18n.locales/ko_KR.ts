@@ -6151,6 +6151,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.actionPageIndicator': '{page}페이지',
   'hudChrome.mobile.spellbookPageLabel': '페이지 {page}',
   'hudChrome.mobile.hideKeyboard': '키보드 숨기기',
+  'hudChrome.mobile.chatPlaceholder': '메시지 입력...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': '베일 컵',
   'hudChrome.vcup.title': '베일 컵',

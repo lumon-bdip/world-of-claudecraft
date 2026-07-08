@@ -322,7 +322,8 @@ export const id_ID: EnTranslations = {
       "targetCycle": "Tukar sasaran",
       "targetCycleShort": "Target",
       "spellbookPageLabel": "Halaman {page}",
-      "hideKeyboard": "Hide keyboard"
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Gunakan tuas gerak untuk berpindah dan seret layar untuk melihat sekeliling. Ambil beberapa langkah untuk memulai.",
