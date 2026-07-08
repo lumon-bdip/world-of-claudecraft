@@ -238,7 +238,10 @@ export function castAbility(
   if (p.castingAbility) {
     // classic-era spell queue: a press during the tail of the current cast
     // queues instead of erroring, and updateCasting fires it on cast completion.
-    if (p.castRemaining <= CAST_QUEUE_WINDOW_SEC) {
+    // Fishing is exempt (like the silence/lockout guards above): completeFishing
+    // never calls fireQueuedCast, so a press queued against it would strand and
+    // misfire on a later, unrelated cast.
+    if (p.castRemaining <= CAST_QUEUE_WINDOW_SEC && p.castingAbility !== FISHING_CAST_ID) {
       p.queuedCastAbility = abilityId;
       p.queuedCastAim = aim ?? null;
       return;
@@ -246,6 +249,9 @@ export function castAbility(
     ctx.error(p.id, 'You are busy.');
     return;
   }
+  // note: a queued press fires here, re-running the full castAbility gate set
+  // (including this GCD check). A cast shorter than the GCD can complete while
+  // the GCD is still running, silently dropping the queued press with no error.
   if (!ability.offGcd && p.gcdRemaining > 0) return; // silent, classic spams this
   const togglingOff = isToggleBuff(ability) && p.auras.some((a) => a.id === ability.id);
   const sharedCooldown = isShamanShock(ability.id)

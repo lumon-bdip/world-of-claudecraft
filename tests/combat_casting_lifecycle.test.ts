@@ -23,6 +23,7 @@ import {
   CAST_PUSHBACK_SEC,
   CAST_QUEUE_WINDOW_SEC,
   CHANNEL_PUSHBACK_FRACTION,
+  FISHING_CAST_ID,
 } from '../src/sim/types';
 
 type AnySim = Sim & Record<string, any>;
@@ -310,14 +311,31 @@ describe('casting_lifecycle: spell queue (#1360)', () => {
 
   it('keeps only a single queued slot: a later press overwrites the earlier one', () => {
     const { sim, p } = makeSim('priest', 12);
+    spawnTarget(sim, p); // smite (the second queued press) requires a hostile target
     p.hp = Math.max(1, p.maxHp - 500);
     castAbility(sim.ctx, 'lesser_heal', p.id);
     while (p.castRemaining > CAST_QUEUE_WINDOW_SEC) sim.tick();
 
     castAbility(sim.ctx, 'lesser_heal', p.id);
     expect(p.queuedCastAbility).toBe('lesser_heal');
-    castAbility(sim.ctx, 'lesser_heal', p.id); // a second press replaces the queued slot
-    expect(p.queuedCastAbility).toBe('lesser_heal');
+    castAbility(sim.ctx, 'smite', p.id); // a distinct second press replaces the queued slot
+    expect(p.queuedCastAbility).toBe('smite'); // not 'lesser_heal': proves overwrite, not keep-first
+  });
+
+  it('drops a press queued in the tail of a fishing cast instead of stranding it', () => {
+    const { sim, p, meta } = makeSim('mage', 12);
+    p.castingAbility = FISHING_CAST_ID;
+    p.castTotal = 10;
+    p.castRemaining = CAST_QUEUE_WINDOW_SEC; // inside the queue window
+    p.channeling = false;
+
+    castAbility(sim.ctx, 'fireball', p.id); // pressed during the fishing tail
+    expect(p.queuedCastAbility).toBeNull(); // never queued against fishing
+
+    p.castRemaining = 0;
+    updateCasting(sim.ctx, p, meta); // fishing completes via ctx.completeFishing
+    expect(p.castingAbility).toBeNull();
+    expect(p.queuedCastAbility).toBeNull(); // still nothing lingering to misfire later
   });
 
   it('drops the queued cast when the current cast is interrupted, not completed', () => {
