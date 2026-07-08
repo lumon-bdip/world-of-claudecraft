@@ -291,6 +291,7 @@ export const id_ID: EnTranslations = {
       "targetLabel": "Sasaran Anda",
       "targetAnnounce": "Tandai {name}",
       "partyLabel": "Kelompok Anda",
+      "partyChip": "Party",
       "partyGroup": "Grup {n}",
       "durationUnitSeconds": "d",
       "durationUnitMinutes": "m",
@@ -320,7 +321,9 @@ export const id_ID: EnTranslations = {
       "actionPageIndicator": "Hal. {page}",
       "targetCycle": "Tukar sasaran",
       "targetCycleShort": "Target",
-      "spellbookPageLabel": "Halaman {page}"
+      "spellbookPageLabel": "Halaman {page}",
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Gunakan tuas gerak untuk berpindah dan seret layar untuk melihat sekeliling. Ambil beberapa langkah untuk memulai.",
