@@ -1105,7 +1105,7 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain('body.mobile-touch #party-frames.below-target {');
     expect(hudMobileCss).toContain('top: calc(max(8px, env(safe-area-inset-top)) + 135px);');
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #party-frames .party-frame {\n    width: 112px;\n    min-height: 40px;',
+      'body.mobile-touch #party-frames .party-frame {\n    width: calc(112px * var(--mobile-chrome-scale, 1));\n    min-height: 40px;',
     );
     // Keyed on :first-of-type (not :first-child): the collapse chip is now the
     // container's first child, so the top member row is selected by :first-of-type.
@@ -1116,7 +1116,7 @@ describe('client HTML shell', () => {
       'body.mobile-touch #party-frames #party-leave {\n    grid-column: 1;\n    grid-row: 3;\n    justify-self: start;\n    width: auto;\n    min-width: 0;\n    min-height: 40px;',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #party-frames .party-frame {\n      width: 100px;\n      min-height: 40px;',
+      'body.mobile-touch #party-frames .party-frame {\n      width: calc(100px * var(--mobile-chrome-scale, 1));\n      min-height: 40px;',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #target-frame {\n      left: max(6px, env(safe-area-inset-left));\n      top: calc(max(6px, env(safe-area-inset-top)) + 56px);',
@@ -1710,7 +1710,9 @@ describe('client HTML shell', () => {
     // The arc is a single quarter-circle: every slot offset is derived from the
     // shared radius var and stays non-negative (nothing can leave the screen,
     // the regression the redesign fixed).
-    expect(hudMobileCss).toContain('--mobile-ring-radius: 190px;');
+    expect(hudMobileCss).toContain(
+      '--mobile-ring-radius: calc(190px * var(--mobile-chrome-scale, 1));',
+    );
     expect(hudMobileCss).not.toContain('calc(0px -');
     // The equal-chord arc factors (cos/sin of 157.5 and 112.5 deg) on the two
     // asymmetric slots, right-handed and mirrored: corrupting one angle breaks
@@ -1734,8 +1736,12 @@ describe('client HTML shell', () => {
     // their seats in the left-handed mirror. Pin the literal cos/sin factors:
     // corrupting one breaks the even spacing without moving anything
     // off-screen, so only a literal pin catches it.
-    expect(hudMobileCss).toContain('--mobile-ring-hollow: 104px;');
-    expect(hudMobileCss).toContain('--mobile-ring-toggle-size: 52px;');
+    expect(hudMobileCss).toContain(
+      '--mobile-ring-hollow: calc(104px * var(--mobile-chrome-scale, 1));',
+    );
+    expect(hudMobileCss).toContain(
+      '--mobile-ring-toggle-size: calc(52px * var(--mobile-chrome-scale, 1));',
+    );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #mobile-target-cycle {\n    right: calc(\n      var(--mobile-ring-attack-size) /\n      2 +\n      var(--mobile-ring-hollow) *\n      0.7071 -',
     );
@@ -1759,24 +1765,24 @@ describe('client HTML shell', () => {
     // swapped between selectors.
     expect(hudMobileCss).toContain(
       'body.mobile-touch.hud-mobile-compact #mobile-action-ring {\n' +
-        '    --mobile-ring-attack-size: 84px;\n' +
-        '    --mobile-ring-action-size: 54px;\n' +
-        '    --mobile-ring-radius: 160px;\n' +
-        '    --mobile-ring-toggle-size: 46px;\n' +
-        '    --mobile-ring-secondary-size: 50px;\n' +
-        '    --mobile-ring-hollow: 88px;\n' +
+        '    --mobile-ring-attack-size: calc(84px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-action-size: calc(54px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-radius: calc(160px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-toggle-size: max(40px, calc(46px * var(--mobile-chrome-scale, 1)));\n' +
+        '    --mobile-ring-secondary-size: calc(50px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-hollow: calc(88px * var(--mobile-chrome-scale, 1));\n' +
         '    right: max(14px, env(safe-area-inset-right));\n' +
         '    bottom: calc(10px + env(safe-area-inset-bottom));\n' +
         '  }',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch.hud-mobile-tablet #mobile-action-ring {\n' +
-        '    --mobile-ring-attack-size: 116px;\n' +
-        '    --mobile-ring-action-size: 76px;\n' +
-        '    --mobile-ring-radius: 226px;\n' +
-        '    --mobile-ring-toggle-size: 56px;\n' +
-        '    --mobile-ring-secondary-size: 60px;\n' +
-        '    --mobile-ring-hollow: 123px;\n' +
+        '    --mobile-ring-attack-size: calc(116px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-action-size: calc(76px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-radius: calc(226px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-toggle-size: calc(56px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-secondary-size: calc(60px * var(--mobile-chrome-scale, 1));\n' +
+        '    --mobile-ring-hollow: calc(123px * var(--mobile-chrome-scale, 1));\n' +
         '  }',
     );
     expect(hudMobileCss).toContain(
@@ -1785,7 +1791,9 @@ describe('client HTML shell', () => {
     // The compact minimap shrink keeps the arc's vertical budget on a
     // 360px-tall phone holding (the daily-chest rail was folded into the
     // mobile More tray, issue #1577, so it no longer needs a coupled offset).
-    expect(hudMobileCss).toContain('transform: scale(0.44);');
+    expect(hudMobileCss).toContain(
+      'transform: scale(calc(0.44 * var(--mobile-chrome-scale, 1)));',
+    );
   });
 
   it('gates the camera joystick behind its opt-in setting (swipe-look is the primary camera)', () => {

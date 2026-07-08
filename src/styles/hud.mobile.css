@@ -26,6 +26,14 @@
     --mobile-glass-bg: linear-gradient(160deg, #201d13b8, #0b0a08c7);
     --mobile-glass-border: #cba43d8c;
     --mobile-glass-blur: 8px;
+    /* Mobile chrome-scale: shrink the persistent HUD chrome (unit frames, minimap,
+       cast/swing bars, buff/debuff, party, the thumb clusters) to 0.85x so more of
+       the game world shows through. It composes multiplicatively WITH the user's own
+       Options sliders (--btn-scale / --joy-scale, both default 1.0), never replaces
+       them, and is folded into each sizing calc below. The 40px interactive touch
+       floor is never scaled: where 0.85x would dip a control under 40px, the calc is
+       clamped with max()/clamp() so the effective size holds at 40px. */
+    --mobile-chrome-scale: 0.85;
   }
   /* ---------- mobile touch controls (runtime-gated with body.mobile-touch + game-active) ---------- */
   #mobile-controls {
@@ -160,7 +168,7 @@
     /* Joystick Size setting: grow/shrink from the anchored bottom corner so the
        pad stays in the same screen position while resizing. --joy-scale is set
        on #mobile-controls by applySetting('joystickScale'). */
-    transform: scale(var(--joy-scale, 1));
+    transform: scale(calc(var(--joy-scale, 1) * var(--mobile-chrome-scale, 1)));
     transform-origin: left bottom;
   }
   body.mobile-touch .mobile-joystick.active {
@@ -297,7 +305,7 @@
     position: absolute;
     left: max(12px, env(safe-area-inset-left));
     top: max(8px, env(safe-area-inset-top));
-    transform: scale(var(--btn-scale, 1));
+    transform: scale(calc(var(--btn-scale, 1) * var(--mobile-chrome-scale, 1)));
     transform-origin: left top;
     display: grid;
     /* Chat + Social + More: the low-priority trio sits alone at TOP-LEFT,
@@ -362,7 +370,7 @@
       calc(var(--mobile-joy-radius) + 46px),
       calc(var(--mobile-joy-radius) * var(--joy-scale, 1) + 46px * var(--btn-scale, 1))
     );
-    --mobile-utility-size: 56px;
+    --mobile-utility-size: calc(56px * var(--mobile-chrome-scale, 1));
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -496,12 +504,16 @@
      (actionButtonScale) and --touch-opacity (touchOpacity) are reused
      directly, not forked. */
   body.mobile-touch #mobile-action-ring {
-    --mobile-ring-attack-size: 100px;
-    --mobile-ring-action-size: 64px;
-    --mobile-ring-radius: 190px;
-    --mobile-ring-toggle-size: 52px;
-    --mobile-ring-secondary-size: 56px;
-    --mobile-ring-hollow: 104px;
+    /* Chrome-scale folded into every ring size var (the arc offsets below are
+       expressed in these vars, so the whole cluster shrinks proportionally and keeps
+       its equal-chord geometry). Standard-tier sizes all stay >= 40px at 0.85x
+       (smallest: toggle 52 * 0.85 = 44.2), so no clamp is needed here. */
+    --mobile-ring-attack-size: calc(100px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-action-size: calc(64px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-radius: calc(190px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-toggle-size: calc(52px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-secondary-size: calc(56px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-hollow: calc(104px * var(--mobile-chrome-scale, 1));
     position: absolute;
     right: max(18px, env(safe-area-inset-right));
     bottom: calc(20px + env(safe-area-inset-bottom));
@@ -871,7 +883,13 @@
      anchor so a grown --btn-scale never slides the trio under the chip. */
   body.mobile-touch #mobile-consumables {
     position: absolute;
-    left: calc(max(12px, env(safe-area-inset-left)) + 198px * var(--btn-scale, 1) + 10px);
+    left: calc(
+      max(12px, env(safe-area-inset-left)) +
+      198px *
+      var(--btn-scale, 1) *
+      var(--mobile-chrome-scale, 1) +
+      10px
+    );
     top: max(8px, env(safe-area-inset-top));
     /* Right reservation sized for the WORST-CASE visual overhang: flex-wrap
        decides on the untransformed layout width, but the container then scales
@@ -893,8 +911,11 @@
     z-index: 30;
   }
   body.mobile-touch #mobile-consumables-toggle {
+    /* Width stays a hard 40px (the touch floor is never scaled); only the height
+       folds in chrome-scale (54 * 0.85 = 45.9, still >= 40). The portrait override
+       below keeps its own 44px height. */
     width: 40px;
-    height: 54px;
+    height: calc(54px * var(--mobile-chrome-scale, 1));
     padding: 0;
     display: inline-flex;
     flex: none;
@@ -960,8 +981,9 @@
   }
   body.mobile-touch .mobile-consumable-slot {
     position: relative;
-    width: 48px;
-    height: 48px;
+    /* 48 * 0.85 = 40.8, still clear of the 40px touch floor. */
+    width: calc(48px * var(--mobile-chrome-scale, 1));
+    height: calc(48px * var(--mobile-chrome-scale, 1));
     padding: 0;
     flex: none;
     pointer-events: auto;
@@ -1087,12 +1109,12 @@
   body.mobile-touch #mobile-extra-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: 36px;
+    grid-auto-rows: calc(36px * var(--mobile-chrome-scale, 1));
     gap: 6px;
   }
   body.mobile-touch #mobile-extra-controls .mobile-btn {
     width: 100%;
-    height: 36px;
+    height: calc(36px * var(--mobile-chrome-scale, 1));
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1220,7 +1242,7 @@
        left-strip seat now belongs to Jump's hollow seat around the joystick
        (a cast bar rendered behind a button, z 19 vs 30, was unreadable). */
     bottom: calc(68px + env(safe-area-inset-bottom));
-    width: calc(300px * 0.82);
+    width: calc(300px * 0.82 * var(--mobile-chrome-scale, 1));
     min-width: 0;
     height: 6px;
     transform: translateX(-50%);
@@ -1242,7 +1264,7 @@
     position: fixed;
     left: 50%;
     bottom: calc(76px + env(safe-area-inset-bottom));
-    width: calc(300px * 0.82);
+    width: calc(300px * 0.82 * var(--mobile-chrome-scale, 1));
     min-width: 0;
     height: 5px;
     transform: translateX(-50%);
@@ -1359,7 +1381,7 @@
        back to 162px to keep the tab strip's TOP, and thus its clearance from the
        composer above, exactly where it sat with the short tabs. */
     bottom: calc(162px + env(safe-area-inset-bottom));
-    width: min(340px, calc(100vw - 20px));
+    width: min(calc(340px * var(--mobile-chrome-scale, 1)), calc(100vw - 20px));
     display: none;
     z-index: 24;
   }
@@ -1415,7 +1437,7 @@
     left: max(10px, env(safe-area-inset-left));
     /* Shifted up to match the log's new resting position above (was 296px). */
     bottom: calc(316px + env(safe-area-inset-bottom));
-    width: min(360px, calc(100vw - 20px));
+    width: min(calc(360px * var(--mobile-chrome-scale, 1)), calc(100vw - 20px));
     min-height: 40px;
     box-sizing: border-box;
     font-size: 16px;
@@ -1440,7 +1462,11 @@
        (left + width); park the 40px chevron just inside that, vertically aligned with
        the composer's resting bottom (316px). It reads as the composer's own dismiss
        affordance rather than a disconnected far-right button. */
-    left: calc(max(10px, env(safe-area-inset-left)) + min(360px, 100vw - 20px) - 40px);
+    left: calc(
+      max(10px, env(safe-area-inset-left)) +
+      min(calc(360px * var(--mobile-chrome-scale, 1)), 100vw - 20px) -
+      40px
+    );
     bottom: calc(316px + env(safe-area-inset-bottom));
     width: 40px;
     height: 40px;
@@ -1534,7 +1560,7 @@
     margin: 0;
     display: flex;
     justify-content: flex-start;
-    transform: translateX(-50%) scale(0.82);
+    transform: translateX(-50%) scale(calc(0.82 * var(--mobile-chrome-scale, 1)));
     transform-origin: center bottom;
   }
   body.mobile-touch #player-frame .portrait-wrap {
@@ -1550,7 +1576,7 @@
   body.mobile-touch #target-frame {
     left: max(20px, calc(env(safe-area-inset-left) + 10px));
     top: calc(max(8px, env(safe-area-inset-top)) + 72px);
-    transform: scale(0.82);
+    transform: scale(calc(0.82 * var(--mobile-chrome-scale, 1)));
     transform-origin: left top;
   }
   /* Issue 1577 (1): party frames used to stack in a single column no matter the
@@ -1584,7 +1610,7 @@
      Width is trimmed from the old single-column 132px to compensate for the new
      double-stack layout (issue 1577 (2)) so two columns still fit a phone width. */
   body.mobile-touch #party-frames .party-frame {
-    width: 112px;
+    width: calc(112px * var(--mobile-chrome-scale, 1));
     min-height: 40px;
     padding: 3px 6px;
     border-radius: 0;
@@ -1733,23 +1759,23 @@
   body.mobile-touch #buff-bar {
     right: max(10px, env(safe-area-inset-right));
     top: max(140px, env(safe-area-inset-top));
-    max-width: 180px;
+    max-width: calc(180px * var(--mobile-chrome-scale, 1));
   }
   body.mobile-touch #debuff-bar {
     right: max(20px, calc(env(safe-area-inset-right) + 10px));
     top: calc(max(140px, env(safe-area-inset-top)) + 36px);
-    max-width: 180px;
+    max-width: calc(180px * var(--mobile-chrome-scale, 1));
   }
   body.mobile-touch #minimap-wrap {
     right: max(20px, calc(env(safe-area-inset-right) + 10px));
     top: max(8px, env(safe-area-inset-top));
-    transform: scale(0.72);
+    transform: scale(calc(0.72 * var(--mobile-chrome-scale, 1)));
     transform-origin: right top;
   }
   body.mobile-touch #right-tracker-stack {
     right: max(10px, env(safe-area-inset-right));
     top: max(150px, env(safe-area-inset-top));
-    width: 190px;
+    width: calc(190px * var(--mobile-chrome-scale, 1));
   }
   body.mobile-touch #quest-tracker {
     font-size: 11px;
@@ -1929,7 +1955,7 @@
   body.mobile-touch #banner {
     top: 18%;
     max-width: calc(100vw - 24px);
-    font-size: 26px;
+    font-size: calc(26px * var(--mobile-chrome-scale, 1));
     line-height: 1.12;
     text-align: center;
     white-space: normal;
@@ -2993,6 +3019,12 @@
 
   @media (orientation: portrait) {
     body.mobile-touch #mobile-combat-controls {
+      /* Portrait resets JUST this trio back to btn-scale only (no chrome-scale): its
+         42x44 buttons already sit on the 40px floor, so the 0.85 shrink would drop
+         them under it. The rest of the chrome still scales via the token in portrait;
+         web in-game is landscape-locked regardless, so the trio never actually renders
+         portrait in play. */
+      transform: scale(var(--btn-scale, 1));
       grid-template-columns: repeat(3, 42px);
       gap: 6px;
     }
@@ -3157,7 +3189,13 @@
     /* Landscape trio is 3x54px + 2x10px gaps = 182px wide; keep the chip docked
        just past it on the same compressed top line. */
     body.mobile-touch #mobile-consumables {
-      left: calc(max(12px, env(safe-area-inset-left)) + 182px * var(--btn-scale, 1) + 10px);
+      left: calc(
+        max(12px, env(safe-area-inset-left)) +
+        182px *
+        var(--btn-scale, 1) *
+        var(--mobile-chrome-scale, 1) +
+        10px
+      );
       top: max(6px, env(safe-area-inset-top));
     }
     /* Landscape joystick is 128px and re-anchored (above), so the satellite
@@ -3194,7 +3232,7 @@
       /* 4 columns in landscape too (issue 1577 round 2 (4)), matching the base
          tier so each More-tray pill stays narrow on a wide landscape phone. */
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-auto-rows: 34px;
+      grid-auto-rows: calc(34px * var(--mobile-chrome-scale, 1));
       gap: 5px;
     }
     body.mobile-touch.mobile-left-handed #mobile-extra-controls {
@@ -3203,7 +3241,7 @@
     }
     body.mobile-touch #mobile-extra-controls .mobile-btn {
       width: 100%;
-      height: 34px;
+      height: calc(34px * var(--mobile-chrome-scale, 1));
       font-size: 13px;
       padding: 0 7px;
       border-radius: 17px;
@@ -3236,7 +3274,7 @@
          notch lower to match the shorter landscape frame band. Width matches
          the landscape #player-frame's rendered width (300px * 0.6 below). */
       bottom: calc(62px + env(safe-area-inset-bottom));
-      width: calc(300px * 0.6);
+      width: calc(300px * 0.6 * var(--mobile-chrome-scale, 1));
       min-width: 0;
       height: 5px;
     }
@@ -3244,7 +3282,7 @@
       /* Same landscape notch as #castbar above, stacked one bar-height higher
          so the two never overlap when both are active. */
       bottom: calc(70px + env(safe-area-inset-bottom));
-      width: calc(300px * 0.6);
+      width: calc(300px * 0.6 * var(--mobile-chrome-scale, 1));
       min-width: 0;
       height: 4px;
     }
@@ -3260,7 +3298,7 @@
       /* Shifted up slightly for better breathing room from the bottom edge
          (was 112px). */
       bottom: calc(132px + env(safe-area-inset-bottom));
-      width: min(330px, 44vw);
+      width: min(calc(330px * var(--mobile-chrome-scale, 1)), 44vw);
     }
     body.mobile-touch #chatlog-frame {
       /* 4-line cap in landscape too (issue 1577 round 2 (6)). */
@@ -3270,14 +3308,14 @@
       left: max(10px, env(safe-area-inset-left));
       /* Shifted up to match the log's new resting position (was 213px). */
       bottom: calc(233px + env(safe-area-inset-bottom));
-      width: min(330px, 44vw);
+      width: min(calc(330px * var(--mobile-chrome-scale, 1)), 44vw);
     }
     body.mobile-touch #player-frame {
       left: 50%;
       top: auto;
       bottom: calc(10px + env(safe-area-inset-bottom));
       width: 300px;
-      transform: translateX(-50%) scale(0.6);
+      transform: translateX(-50%) scale(calc(0.6 * var(--mobile-chrome-scale, 1)));
     }
     body.mobile-touch #player-frame .uf-bars {
       width: 224px;
@@ -3286,7 +3324,7 @@
     body.mobile-touch #target-frame {
       left: max(6px, env(safe-area-inset-left));
       top: calc(max(6px, env(safe-area-inset-top)) + 56px);
-      transform: scale(0.6);
+      transform: scale(calc(0.6 * var(--mobile-chrome-scale, 1)));
     }
     body.mobile-touch #party-frames {
       left: max(6px, env(safe-area-inset-left));
@@ -3302,7 +3340,7 @@
        base double-stack tier (issue 1577 (2), a further trim from the old
        single-column 118px so two columns stay comfortably on-screen). */
     body.mobile-touch #party-frames .party-frame {
-      width: 100px;
+      width: calc(100px * var(--mobile-chrome-scale, 1));
       min-height: 40px;
       padding: 2px 5px;
     }
@@ -3326,20 +3364,20 @@
       right: calc(98px + env(safe-area-inset-right));
       top: max(8px, env(safe-area-inset-top));
       max-width: 160px;
-      transform: scale(0.85);
+      transform: scale(calc(0.85 * var(--mobile-chrome-scale, 1)));
       transform-origin: right top;
     }
     body.mobile-touch #debuff-bar {
       right: calc(98px + env(safe-area-inset-right));
       top: calc(max(8px, env(safe-area-inset-top)) + 32px);
       max-width: 160px;
-      transform: scale(0.85);
+      transform: scale(calc(0.85 * var(--mobile-chrome-scale, 1)));
       transform-origin: right top;
     }
     body.mobile-touch #minimap-wrap {
       right: max(6px, env(safe-area-inset-right));
       top: max(6px, env(safe-area-inset-top));
-      transform: scale(0.46);
+      transform: scale(calc(0.46 * var(--mobile-chrome-scale, 1)));
     }
     body.mobile-touch #quest-tracker {
       display: none;
@@ -3358,7 +3396,7 @@
     body.mobile-touch #banner {
       top: 18%;
       max-width: calc(100vw - 24px);
-      font-size: 26px;
+      font-size: calc(26px * var(--mobile-chrome-scale, 1));
       line-height: 1.12;
       text-align: center;
       white-space: normal;
@@ -3441,7 +3479,7 @@
      (the applier reads those to build its input) so a tier rule can react to
      "a menu is open" without re-deriving that state. */
   body.mobile-touch.hud-mobile-compact #chatlog-wrap {
-    width: min(240px, calc(100vw - 20px));
+    width: min(calc(240px * var(--mobile-chrome-scale, 1)), calc(100vw - 20px));
     /* Shifted up slightly to match the standard/landscape tiers above (was 140px). */
     bottom: calc(160px + env(safe-area-inset-bottom));
   }
@@ -3450,7 +3488,7 @@
     height: calc(11px * var(--chat-font-scale, 1) * 1.4 * 4 + 6px);
   }
   body.mobile-touch.hud-mobile-compact #right-tracker-stack {
-    width: 148px;
+    width: calc(148px * var(--mobile-chrome-scale, 1));
     top: max(96px, env(safe-area-inset-top));
   }
   body.mobile-touch.hud-mobile-compact #quest-tracker {
@@ -3462,7 +3500,7 @@
        combat arc's top button on a 360px-tall phone, where the vertical budget
        is wrap bottom (~120px) + arc run (bottom inset + attack/2 + radius +
        action/2, ~239px) against the full viewport height. */
-    transform: scale(0.44);
+    transform: scale(calc(0.44 * var(--mobile-chrome-scale, 1)));
   }
   /* A short landscape phone (the compact tier's primary trigger) has too little
      vertical room for a full chat log AND the action ring at once; drop the log
@@ -3480,15 +3518,16 @@
      attack button clear the top-right minimap/chest strip even on a 360px-tall
      viewport (the 0.44 minimap above is the other half of that budget). The
      radius keeps the equal-chord arc rule: 160 * 2 * sin(11.25deg) = 62.4 =
-     action-size 54 + an 8.4px edge gap. Every control still clears the 40px
-     touch floor with margin (smallest: toggle 46 / target and use 50). */
+     action-size 54 + an 8.4px edge gap. Every var also folds in the 0.85
+     mobile-chrome-scale; the toggle (46 * 0.85 = 39.1) is clamped back to the 40px
+     touch floor with max(), and target/use (50 * 0.85 = 42.5) clear it. */
   body.mobile-touch.hud-mobile-compact #mobile-action-ring {
-    --mobile-ring-attack-size: 84px;
-    --mobile-ring-action-size: 54px;
-    --mobile-ring-radius: 160px;
-    --mobile-ring-toggle-size: 46px;
-    --mobile-ring-secondary-size: 50px;
-    --mobile-ring-hollow: 88px;
+    --mobile-ring-attack-size: calc(84px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-action-size: calc(54px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-radius: calc(160px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-toggle-size: max(40px, calc(46px * var(--mobile-chrome-scale, 1)));
+    --mobile-ring-secondary-size: calc(50px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-hollow: calc(88px * var(--mobile-chrome-scale, 1));
     right: max(14px, env(safe-area-inset-right));
     bottom: calc(10px + env(safe-area-inset-bottom));
   }
@@ -3500,10 +3539,10 @@
      (compact 50 / standard 56 / tablet 60), so it always matches the
      Target/Use/Jump buttons it is the left-thumb mirror of. */
   body.mobile-touch.hud-mobile-compact #mobile-utility-cluster {
-    --mobile-utility-size: 50px;
+    --mobile-utility-size: calc(50px * var(--mobile-chrome-scale, 1));
   }
   body.mobile-touch.hud-mobile-tablet #mobile-utility-cluster {
-    --mobile-utility-size: 60px;
+    --mobile-utility-size: calc(60px * var(--mobile-chrome-scale, 1));
   }
   /* Compact phones: Jump's ring-row seat reaches to ~437px from the left on a
      740px viewport, into the centred player frame's right tail (280..460).
@@ -3547,15 +3586,15 @@
      top of the settings scale, not a fork of it). Radius keeps the same chord
      rule: 226 * 2 * sin(11.25deg) = 88 = action-size 76 + a 12px edge gap. */
   body.mobile-touch.hud-mobile-tablet #mobile-action-ring {
-    --mobile-ring-attack-size: 116px;
-    --mobile-ring-action-size: 76px;
-    --mobile-ring-radius: 226px;
-    --mobile-ring-toggle-size: 56px;
-    --mobile-ring-secondary-size: 60px;
-    --mobile-ring-hollow: 123px;
+    --mobile-ring-attack-size: calc(116px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-action-size: calc(76px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-radius: calc(226px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-toggle-size: calc(56px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-secondary-size: calc(60px * var(--mobile-chrome-scale, 1));
+    --mobile-ring-hollow: calc(123px * var(--mobile-chrome-scale, 1));
   }
   body.mobile-touch.hud-mobile-tablet #right-tracker-stack {
-    width: 220px;
+    width: calc(220px * var(--mobile-chrome-scale, 1));
   }
   /* Tablet: unlike compact, the frame has no left nudge here, so on a 4:3 tablet
      (1024x768) the centred frame's right edge (~602) grazes the tablet-tier Jump
