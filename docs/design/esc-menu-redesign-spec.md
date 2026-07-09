@@ -13,6 +13,15 @@ lessons only (persistent category navigation, preset-then-detail, uniform row
 grammar, conflict surfacing, scoped resets, controller-first operation); nothing is
 copied. The expression is native to this game's token system.
 
+Revision v1.1 (approved-direction iteration): the layout, dark-fantasy styling,
+left rail, gold treatment, footer actions, and gamepad legend are APPROVED and
+unchanged. This revision adds, per user direction: (a) a true GLOBAL search field
+in the menu shell as the primary search; (b) an Overview landing category as the
+default entry (never open straight into Graphics); (c) a DEDICATED mobile
+experience (back-stack model, not a shrunk desktop layout); (d) full HUD-variant
+coverage plus per-setting required / not-required implementation tiers for this
+sprint (section 13).
+
 ## 1. Vision
 
 The window reads as a forged codex bound in dark iron with a gilded spine: a
@@ -32,7 +41,10 @@ categories live permanently on the left, content is always in view.
   `NON_RESIZABLE_WINDOW_IDS` and exclude its titlebar from the drag predicate).
 - Zones top to bottom: `.window-titlebar` (40px desktop / 48px touch; title
   "Settings" in `--font-display` `--text-lg` gold; `.window-close` with 40px hit
-  area) / body grid / `.window-footer` (48px sticky).
+  area) / **the SHELL SEARCH strip** (40px; a full-width `.search-field` that is
+  the PRIMARY, GLOBAL search over every category; see section 7) / body grid /
+  `.window-footer` (48px sticky). The former per-pane search field is removed;
+  its "This section" behavior survives as a scope chip on the shell field.
 - Body: `display: grid; grid-template-columns: var(--opt-rail-w) 1fr;
   min-height: 0`. New structural token `--opt-rail-w: 208px` (`:root` only).
   Two INDEPENDENT scrollers: the rail and the detail pane each own
@@ -55,7 +67,7 @@ categories live permanently on the left, content is always in view.
 
 ## 3. Category tree (the IA of record)
 
-Nine categories under three rail groups. **Every `SETTING_RANGES` and
+Ten categories: a standalone Overview landing plus nine under three rail groups. **Every `SETTING_RANGES` and
 `BOOL_SETTINGS` key is assigned exactly once**; a new pure module
 `options_ia.ts` owns this tree plus a category-to-keys map (drives rendering AND
 scoped reset), and an exhaustiveness test fails on any unassigned or
@@ -63,6 +75,21 @@ double-assigned key. Explicit exclusion allowlist (never rendered):
 `graphicsDefaultApplied` (internal first-run flag), `questTrackerCollapsed`
 (toggled from the tracker header). (T) = touch environment only; (online) =
 online mode only.
+
+LANDING (above the groups, first rail item, DEFAULT on open)
+0. **Overview**: the menu always opens here; it is the main entry point.
+   - Quick actions: Resume (close), Report a Bug (online), Log out (online),
+     Reset all settings, mirroring the footer for discoverability.
+   - Alerts: if any keybind conflict or fully-unbound action exists, an
+     `.error-banner` row linking to Keybinds; if a reload-required change is
+     pending, its "Restart" row.
+   - Pinned essentials (MIRROR rows, not second homes: each writes the SAME
+     settings key and jumps nowhere; the exhaustiveness test counts only the
+     HOME assignment, and mirrors are marked as pins in options_ia):
+     graphicsPreset, uiScale, theme preset, language, musicVolume, sfxVolume,
+     reduceMotion, interfaceMode.
+   - Status: version readout, online/offline mode, total "N settings changed
+     from defaults" summary.
 
 RAIL GROUP "Display"
 1. **Graphics**: Quality: `graphicsPreset` (segmented Low/Medium/High/Ultra/
@@ -175,8 +202,12 @@ and pointer all converge on a single `setActiveCategory(id)` path so behavior
 cannot drift. The rail is a vertical roving tablist with
 **aria-selected-follows-focus** (arrowing live-swaps the pane, no Enter).
 
+Default entry (v1.1): the menu ALWAYS opens on Overview with focus on the
+Overview rail tab; it never opens straight into Graphics or any last-visited
+category.
+
 Keyboard:
-- Tab order: active rail tab (one roving stop) -> detail search field -> detail
+- Tab order: shell search field -> active rail tab (one roving stop) -> detail
   rows top-to-bottom -> footer actions -> close. FocusManager traps Tab only
   when focus is already inside (Tab stays the game's target-nearest key
   outside) and returns focus to the opener on close. Esc stays with `closeAll`.
@@ -251,11 +282,15 @@ focus to the originating cap/dropdown after a rebind.
 - Divergence hints: a muted "N settings changed from defaults" line under each
   category header (drives the scoped-reset decision); the count also renders in
   the future portrait master list.
-- Search: a `.search-field` at the top of the detail pane, first in the body
-  Tab order. Scope toggle chip: "This section" (default; live-filters the
-  current category, hiding non-matching rows and empty sections) and "All
-  settings" (a synthetic results view of matching rows grouped by home
-  category, each row fully interactive with a muted category breadcrumb).
+- Search (GLOBAL-FIRST, v1.1): ONE `.search-field` lives in the shell strip
+  under the titlebar, visually part of the Settings interface as a whole, and
+  is first in the body Tab order. Default scope is "All settings": typing from
+  ANY category switches the detail pane to the synthetic results view (matching
+  rows grouped by home category, each row fully interactive with a muted
+  category breadcrumb and a "Go to section" affordance that jumps to the home
+  category with the row given a steady `.is-active-row` highlight). A "This
+  section" scope chip narrows to the active category (live row filtering,
+  empty sections hidden) for players who want the old behavior.
   **The search index is STRUCTURAL**: built from the same descriptor list the
   panes render (localized label + category + section), with a tiny explicit
   synonym overlay only where genuinely needed ("fps" -> showFps); a test
@@ -293,21 +328,37 @@ focus to the originating cap/dropdown after a rebind.
   border geometry); focus = system Highlight ring; conflict dot pairs with the
   banner text.
 
-## 9. Mobile behavior
+## 9. Mobile behavior (v1.1: a dedicated experience, not a shrunk desktop)
 
-- Landscape phone (first-class now): full-screen modal presentation (existing
-  hud.mobile.css pattern); rail at 160px (icon + label) with the degrade ladder
-  of section 2; titlebar 48px; all controls at 44px touch size (switch track,
-  segment buttons, key caps, 20px slider thumb); inputs inherit the 16px
-  base.css floor (search field, bug-report textarea). Footer stacks full-width
-  primary-on-top when crowded.
-- Portrait (structure-ready; the rotate gate stands today): the view-model
-  exposes `renderRailModel()` and `renderCategory(id)` independently, so the
-  future bottom-sheet host consumes the SAME two functions: the rail model IS
-  the master list (48px rows: icon + label + changed-count + conflict dot),
-  each category a pushed detail panel with a back chevron; bug report and
-  keybind capture already behave as pushed sub-views one level deeper. Search
-  moves to the sheet header. Zero IA change, chrome swap only.
+Under `body.mobile-touch` (BOTH orientations) the menu abandons the two-pane
+grid entirely and presents as a full-screen BACK-STACK shell, fed by the same
+view-model (`renderRailModel()` / `renderCategory(id)`); the desktop rail and
+its degrade ladder never render on touch.
+
+- Level 0, the mobile landing: sticky header (48px, "Settings" + close) with
+  the GLOBAL search field directly beneath it; then the Overview quick actions
+  and alert rows; then the STACKED CATEGORY LIST (the rail model as full-width
+  56px rows: icon + label + "N changed" count + conflict dot + chevron); the
+  pinned-essentials mirrors render between quick actions and the list.
+- Level 1, a category page: pushed full-screen; sticky header with back
+  chevron + category title + scoped "Reset" action; stacked sections and rows
+  at touch sizing (44px controls, 48px rows, 20px slider thumbs, 16px input
+  floor). Search results also push as a level-1 page.
+- Level 2, sub-views: bug report and keybind capture push one deeper with the
+  same back semantics. Android/system back and controller B pop one level;
+  popping at level 0 closes the menu. Swipe-back is NOT claimed (it collides
+  with camera-drag gestures); the back chevron is the affordance.
+- Desktop-only features are HIDDEN on touch rather than shrunk (env-gated in
+  options_ia, mirroring how the Touch category gates on touch): the Keybinds
+  category (keyboard bindings), and the mouse-specific Controls rows
+  (mouseCamera, cameraSpeed, invertLookY, lockCursorOnRotate, clickToMove,
+  clickToMoveButton). The Controller category STAYS on mobile (Bluetooth
+  pads are real). Every remaining player-required setting is reachable.
+- Footer: replaced by the level-0 quick actions plus a sticky bottom "Done"
+  bar on every level; the gamepad legend renders only while a pad is
+  connected, above the Done bar.
+- The future bottom-sheet host remains the upgrade path: the back-stack levels
+  map 1:1 onto sheet pushes when it lands (chrome swap, zero IA change).
 
 ## 10. Footer actions and close semantics
 
@@ -370,18 +421,96 @@ focus-trap + return (existing suites extended), forced-colors non-color cues
 unchanged), theme contrast across all four presets for any new structural
 token, per-entry parity, css corpus/validity.
 
+v1.1 additions to the map: options_ia also carries the Overview category, the
+pin/mirror marker set (mirrors write the same key; exhaustiveness counts only
+the home), the desktop-only env-gating markers (Keybinds category and the
+mouse-specific Controls rows hidden on touch), and the per-setting sprint tier
+flags of section 13. The shell search strip is part of the P2 chrome; the
+mobile back-stack shell is its own thin painter (`options_mobile_shell`, cold
+path) consuming renderRailModel/renderCategory, replacing the old P5 landscape
+two-pane pass.
+
 Phasing (after the in-flight vendor fix wave closes, since hud.ts and grammar
 CSS overlap): P1 options_ia + exhaustiveness test (pure, zero visual risk);
-P2 window-frame adoption + rail/detail chrome + row grammar (desktop);
-P3 navigation (keyboard + focus model + vertical roving), then controller mode;
-P4 rebind UX + conflicts + search; P5 mobile landscape pass + polish + the
+P2 window-frame adoption + shell search strip + rail/detail chrome + row
+grammar + Overview landing (desktop); P3 navigation (keyboard + focus model +
+vertical roving), then controller mode; P4 rebind UX + conflicts + global
+search results view; P5 the dedicated mobile back-stack shell + polish + the
 full QA matrix (all four themes, fx tiers, forced-colors, reduced motion,
 ui_scale extremes, long-string locale).
+
+## 12a. HUD variant coverage and sprint implementation tiers (v1.1)
+
+### Variant behavior (the menu accounts for every HUD type)
+| Variant | Behavior |
+|---|---|
+| Desktop full-screen | The two-pane Codex, XL centered, non-draggable |
+| Compact (ui_scale 0.8 to 1.15; narrow viewports) | Same layout; rail icon-collapses under 900px effective width; verify no clipping at both scale extremes |
+| Mobile portrait AND landscape (body.mobile-touch) | The dedicated back-stack shell (section 9); never the shrunk two-pane |
+| Combat | The menu opens identically; the world keeps running (MMO rule, no pause); it is a full-attention modal the player chose, same as today; zero combat-state coupling in the menu itself |
+| Non-combat | Identical; no state-dependent styling |
+| Specialized HUDs (yumi match, arena/fiesta, vale cup, delve, spectate, tutorial) | The menu renders above them unchanged; event HUD elements keep updating beneath; no specialized variant alters the menu |
+| FX tiers / themes / forced-colors / reduced motion | Per sections 8 and 12; low tier drops ornaments and the capture breathe only |
+
+### Sprint implementation tiers (every rendered setting flagged)
+Interpretation of record: ALL settings remain reachable in the new menu (a
+settings surface cannot drop audio), so NOT REQUIRED never means omitted. It
+means: mechanically migrated rows whose correctness is covered by the dispatch
+byte-parity tests only; no bespoke per-variant QA this sprint. REQUIRED means:
+the row is relevant to the current UI/HUD work and gets full new-grammar
+treatment plus per-variant verification (section 12a table). Design-proposed
+rows with no existing backing store are CUT from this sprint unless a
+dependency exists.
+
+REQUIRED (UI/HUD-relevant): the entire Interface category (uiScale,
+tooltipScale, hudOpacity, frostedPanels, playerFrameScale, targetFrameScale,
+aurasOnPlayerFrame, showOwnNameplate, showSecondaryActionBar, chatFontScale,
+chatOpacity, compactChat, fctScale, showItemLevel, showOverflowXp,
+showWalletOnCharacterScreen, showWalletOnPlayerCard, showDevBadges,
+showDailyRewardsChest, theme preset, language); the entire Accessibility
+category (reduceMotion, highContrastText, landingHighContrast,
+filterProfanity); graphicsPreset + effectsQuality + browserEffects (they gate
+the fx tiers our grammar ornaments/grain key on); interfaceMode (drives the
+mobile shell); showFps (perf chip surface); the Overview landing and its
+mirrors; the whole Keybinds UI and the Controller Buttons remap UI (the rebind
+experience is sprint work; the underlying bindings are unchanged); the global
+search; scoped and global resets.
+
+NOT REQUIRED (mechanically migrated, dispatch-parity tested only):
+renderScale, shadowQuality, terrainDetail, foliageDensity, weather,
+brightness, fullscreen, cameraFov; all Audio rows (sfxVolume, musicVolume,
+voiceVolume, music toggle, voiceEnabled, footstepSfx); the Controls camera /
+movement / combat rows (mouseCamera, cameraSpeed, invertLookY,
+lockCursorOnRotate, clickToMove, clickToMoveButton, attackMove,
+startAttackOnAbilityUse, groundReticle, walkByAutoloot, clickFeedback); the
+Controller feel rows (gamepadEnabled, gamepadInvertY, gamepadStickDeadzone,
+gamepadCameraSpeed, gamepadVibration); all Touch rows (joystickScale,
+joystickDeadzone, leftHandedTouch, mobileCameraJoystick, touchLookSpeed,
+touchInvertLook, actionButtonScale, touchOpacity); the performance overlay
+panel delegation; the bug report form body (existing sub-view, re-chromed
+only).
+
+CONDITIONAL: chat timestamps show + 12h/24h format rows exist as a real
+interface option (src/ui/chat_timestamp.ts store, not settings.ts); they are
+REQUIRED only if the wiring is a plain read/write of that existing store,
+otherwise deferred. Any other row the implementers find without a backing
+store is cut and reported.
+
+The options_ia module carries these flags as data (`sprintTier: 'required' |
+'migrated' | 'conditional'`), and reviewers treat a NOT REQUIRED row that
+received bespoke visual work, or a REQUIRED row that did not, as a scope
+finding, mirroring the sprint-1 scope-matrix discipline.
 
 ## 12. Acceptance criteria
 
 - [ ] Every settings key assigned exactly once or explicitly allowlisted
-      (exhaustiveness test red otherwise).
+      (exhaustiveness test red otherwise); Overview mirrors marked as pins and
+      excluded from the uniqueness count; every row carries a sprint tier flag.
+- [ ] The menu always opens on Overview; the shell search is global-first and
+      reachable as the first body Tab stop; results jump to home categories.
+- [ ] Under body.mobile-touch the back-stack shell renders (never the two-pane);
+      desktop-only rows are hidden, not shrunk; back pops levels; level-0 pop
+      closes; all player-required settings reachable on touch.
 - [ ] Full keyboard operation: every row reachable and adjustable without a
       pointer; trap + focus return green in the existing suites.
 - [ ] Full controller operation behind hasActiveTrap(): all verbs, consumed
