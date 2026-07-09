@@ -3118,14 +3118,37 @@
     --window-pad: 8px;
     transform: translate(-50%, -50%);
   }
+  body.mobile-touch.mobile-map-quest-open {
+    --mobile-map-quest-stack-top: max(10px, env(safe-area-inset-top));
+    --mobile-map-quest-log-max-height: clamp(
+      88px,
+      calc(var(--app-vh) / var(--ui-scale, 1) - 150px),
+      118px
+    );
+    --mobile-map-quest-stack-gap: 8px;
+  }
   body.mobile-touch.mobile-map-quest-open #quest-log-window {
-    max-height: clamp(88px, calc(var(--app-vh) / var(--ui-scale, 1) - 150px), 118px);
+    top: var(--mobile-map-quest-stack-top);
+    max-height: var(--mobile-map-quest-log-max-height);
     overflow: auto;
   }
   body.mobile-touch.mobile-map-quest-open #map-window {
-    top: calc(max(10px, env(safe-area-inset-top)) + 118px);
+    top: calc(
+      var(--mobile-map-quest-stack-top) +
+      var(--mobile-map-quest-log-max-height) +
+      var(--mobile-map-quest-stack-gap)
+    );
     transform: translateX(-50%);
-    width: min(46vw, 300px, calc(var(--app-vh) - 140px));
+    width: min(
+      46vw,
+      300px,
+      calc(
+        var(--app-vh) -
+        var(--mobile-map-quest-log-max-height) -
+        var(--mobile-map-quest-stack-gap) -
+        22px
+      )
+    );
   }
   body.mobile-touch #map-canvas {
     width: 100%;
@@ -3599,8 +3622,21 @@
       width: min(46vw, 300px, calc(var(--app-vh) - 140px));
     }
     body.mobile-touch.mobile-map-quest-open #map-window {
-      top: calc(max(10px, env(safe-area-inset-top)) + 118px);
-      width: min(46vw, 300px, calc(var(--app-vh) - 140px));
+      top: calc(
+        var(--mobile-map-quest-stack-top) +
+        var(--mobile-map-quest-log-max-height) +
+        var(--mobile-map-quest-stack-gap)
+      );
+      width: min(
+        46vw,
+        300px,
+        calc(
+          var(--app-vh) -
+          var(--mobile-map-quest-log-max-height) -
+          var(--mobile-map-quest-stack-gap) -
+          22px
+        )
+      );
     }
     body.mobile-touch.mobile-left-handed #mobile-extra-controls {
       left: 50%;

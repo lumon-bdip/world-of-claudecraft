@@ -2041,12 +2041,15 @@ describe('client HTML shell', () => {
     expect(hudTs).toContain("'mobile-map-quest-open'");
     expect(hudTs).toContain('this.isWindowVisible(mapWindow)');
     expect(hudTs).toContain('this.isWindowVisible(questLogWindow)');
-    expect(hudMobileCss).toContain('body.mobile-touch.mobile-map-quest-open #quest-log-window');
     expect(hudMobileCss).toContain(
-      'max-height: clamp(88px, calc(var(--app-vh) / var(--ui-scale, 1) - 150px), 118px);',
+      '--mobile-map-quest-stack-top: max(10px, env(safe-area-inset-top));',
     );
+    expect(hudMobileCss).toContain('body.mobile-touch.mobile-map-quest-open #quest-log-window');
+    expect(hudMobileCss).toContain('top: var(--mobile-map-quest-stack-top);');
+    expect(hudMobileCss).toContain('max-height: var(--mobile-map-quest-log-max-height);');
     expect(hudMobileCss).toContain('body.mobile-touch.mobile-map-quest-open #map-window');
-    expect(hudMobileCss).toContain('top: calc(max(10px, env(safe-area-inset-top)) + 118px);');
+    expect(hudMobileCss).toContain('var(--mobile-map-quest-stack-gap)');
+    expect(hudMobileCss).toContain('22px');
   });
 
   it('caps mobile quest and NPC panels instead of stretching them edge to edge', () => {
