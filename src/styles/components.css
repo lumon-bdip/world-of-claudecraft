@@ -6057,6 +6057,14 @@
   .opt-row:hover {
     background: color-mix(in srgb, var(--color-text-light) 6%, transparent);
   }
+  /* The authoritative focus / controller-cursor cue (spec section 4): a token inset
+     border on the inline-start edge (zero layout shift) plus the hover tint. Set by
+     the focus model on focusin, NOT derived from :focus-visible (programmatic and
+     controller focus do not reliably light it), so it is always visible. */
+  .opt-row.is-active-row {
+    box-shadow: inset 2px 0 0 var(--focus-ring-color);
+    background: color-mix(in srgb, var(--color-text-light) 6%, transparent);
+  }
   .opt-row-label {
     min-width: 0;
     overflow: hidden;

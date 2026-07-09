@@ -205,6 +205,85 @@ describe('options_window: keybind rebind dispatch (unchanged until P4)', () => {
   });
 });
 
+describe('options_window: keyboard navigation (P3)', () => {
+  const components = readFileSync(new URL('../src/styles/components.css', import.meta.url), 'utf8');
+
+  it('makes the rail a VERTICAL roving tablist: Up/Down/Home/End move + auto-activate', () => {
+    const rail = painter.slice(painter.indexOf('private onRailKeydown'));
+    const body = rail.slice(0, rail.indexOf('\n  private onBodyKeydown'));
+    // roving via the shared core in the 'vertical' orientation (leaves Left/Right free).
+    expect(body).toContain("rovingTarget(e.key, current, tabs.length, 'vertical')");
+    // aria-selected-follows-focus: activate the roved category, preserving the rail node.
+    expect(body).toContain('this.setActiveCategory(id, { preserveRailFocus: true })');
+    expect(body).toContain('tab.focus()');
+  });
+
+  it('auto-activation re-renders the DETAIL only (the rail tab element survives)', () => {
+    const set = painter.slice(painter.indexOf('private setActiveCategory'));
+    const body = set.slice(0, set.indexOf('\n  /** Update the rail'));
+    // The preserve path updates the rail in place + repaints the detail, never render().
+    expect(body).toContain('if (opts.preserveRailFocus) {');
+    expect(body).toContain('this.syncRailActive();');
+    expect(body).toContain('this.renderDetail();');
+    // syncRailActive toggles the tab state without rebuilding the rail (no replaceChildren).
+    const sync = painter.slice(painter.indexOf('private syncRailActive'));
+    const syncBody = sync.slice(0, sync.indexOf('\n  /**'));
+    expect(syncBody).toContain("tab.classList.toggle('is-active', active)");
+    expect(syncBody).not.toContain('replaceChildren');
+    expect(syncBody).toContain('tab.tabIndex = active ? 0 : -1');
+  });
+
+  it('cycles categories with Ctrl+Tab / Ctrl+Shift+Tab from the body', () => {
+    const body = painter.slice(painter.indexOf('private onBodyKeydown'));
+    const fn = body.slice(0, body.indexOf('\n  /** In-row value keys'));
+    expect(fn).toContain("if (e.key !== 'Tab' || !e.ctrlKey) return;");
+    expect(fn).toContain('wrapIndex(visible.length, current, e.shiftKey ? -1 : 1)');
+    expect(fn).toContain('preserveRailFocus: true');
+  });
+
+  it('routes in-row value keys through the pure model per control kind', () => {
+    const detail = painter.slice(painter.indexOf('private onDetailKeydown'));
+    const fn = detail.slice(0, detail.indexOf('\n  /** The authoritative'));
+    expect(fn).toContain('const kind = this.controlKindOf(target);');
+    expect(fn).toContain('const intent = rowKeyIntent(kind, e.key);');
+    expect(fn).toContain('this.applyAdjustToControl(target, intent);');
+  });
+
+  it('applies the adjust to the focused control reusing its existing dispatch', () => {
+    const apply = painter.slice(painter.indexOf('private applyAdjustToControl'));
+    const fn = apply.slice(0, apply.indexOf('\n  // ----'));
+    // slider: pure step math + a synthetic input/change so the commit is byte-identical.
+    expect(fn).toContain('sliderStepValue(');
+    expect(fn).toContain("slider.dispatchEvent(new Event('input', { bubbles: true }))");
+    expect(fn).toContain("slider.dispatchEvent(new Event('change', { bubbles: true }))");
+    // switch: Left = off, Right = on, driven through the switch's own click dispatch.
+    expect(fn).toContain("const want = intent === 'adjustInc';");
+    expect(fn).toContain('if (on !== want) el.click();');
+    // segmented: pure index math + selection-follows-focus.
+    expect(fn).toContain('segIndexForIntent(radios.length');
+  });
+
+  it('sets .is-active-row on focusin (authoritative, not :focus-visible-derived)', () => {
+    // The painter drives the cursor imperatively on focusin (covers programmatic /
+    // controller focus that :focus-visible does not reliably light).
+    expect(painter).toContain("detailScroll.addEventListener('focusin', (e) => this.markActiveRow");
+    const mark = painter.slice(painter.indexOf('private markActiveRow'));
+    const fn = mark.slice(0, mark.indexOf('\n  /**'));
+    expect(fn).toContain("closest<HTMLElement>('.opt-row')");
+    expect(fn).toContain("row.classList.add('is-active-row')");
+    // The CSS cue is a token inset (zero layout shift), never a :focus-visible rule.
+    const cue = components.slice(components.indexOf('.opt-row.is-active-row {'));
+    const block = cue.slice(0, cue.indexOf('}'));
+    expect(block).toContain('box-shadow: inset 2px 0 0 var(--focus-ring-color)');
+    expect(components).not.toContain('.opt-row:focus-visible');
+  });
+
+  it('gives the segmented radiogroup a single roving Tab stop', () => {
+    // The selected radio is tabIndex 0, the rest -1, so the group is one Tab stop.
+    expect(painter).toContain('btn.tabIndex = selected ? 0 : -1;');
+  });
+});
+
 describe('options_window: forced-colors selection cue (P2 review item 5)', () => {
   const components = readFileSync(new URL('../src/styles/components.css', import.meta.url), 'utf8');
   it('gives the selected segment a system-colour outline under forced-colors', () => {

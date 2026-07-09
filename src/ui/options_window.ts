@@ -44,6 +44,7 @@ import type { IWorld } from '../world_api';
 import { appVersionInfo } from './app_version';
 import type { ChatClock } from './chat_timestamp';
 import { esc } from './esc';
+import { FOCUSABLE_SELECTOR } from './focus_manager';
 import type { BugReportHooks, OptionsHooks } from './hud';
 import {
   formatNumber,
@@ -54,6 +55,16 @@ import {
   t,
 } from './i18n';
 import type { TranslationKey } from './i18n.catalog';
+import {
+  clampIndex,
+  type FocusIntent,
+  type RowControlKind,
+  rowKeyIntent,
+  SLIDER_PAGE_STEPS,
+  segIndexForIntent,
+  sliderStepValue,
+  wrapIndex,
+} from './options_focus_model';
 import {
   buildSearchIndex,
   CATEGORIES,
@@ -86,6 +97,7 @@ import {
   totalChangedCount,
 } from './options_view';
 import { PerfOverlaySettingsPanel, type PerfSettingsHost } from './perf_overlay_settings';
+import { rovingTarget } from './roving_index';
 import {
   PRESET_ORDER,
   type PresetId,
@@ -362,6 +374,10 @@ export class OptionsWindow {
     const mount = document.createElement('div');
     const parts = renderWindowFrame(mount, OPTIONS_FRAME, { onClose: () => this.close() });
     root.replaceChildren(mount);
+    // Ctrl+Tab / Ctrl+Shift+Tab cycle categories from anywhere in the body (spec
+    // section 5). Attached once on the persistent body node so it survives every
+    // pane repaint (the rail/detail listeners re-attach per render below).
+    parts.body.addEventListener('keydown', (e) => this.onBodyKeydown(e));
     return parts;
   }
 
@@ -378,6 +394,15 @@ export class OptionsWindow {
     detailScroll.appendChild(detailInner);
     grid.append(rail, detailScroll);
     body.appendChild(grid);
+    // Navigation wiring (spec section 5): vertical roving on the rail, the in-row
+    // value keys on the detail, and the authoritative .is-active-row cursor set on
+    // focusin (NOT derived from :focus-visible, so it lights for programmatic and
+    // controller focus too). These live on the persistent rail/detail scrollers, so
+    // a detail-only repaint (renderDetail) keeps them; a full render re-creates the
+    // nodes and re-binds fresh, so there is no leak.
+    rail.addEventListener('keydown', (e) => this.onRailKeydown(e));
+    detailScroll.addEventListener('keydown', (e) => this.onDetailKeydown(e));
+    detailScroll.addEventListener('focusin', (e) => this.markActiveRow(e.target));
     this.renderRail();
     this.renderDetail();
     if (footer) this.renderFooter(footer);
@@ -414,6 +439,7 @@ export class OptionsWindow {
     const mkScope = (scope: SearchScope, labelKey: TranslationKey) => {
       const btn = el('button', 'opt-scope');
       btn.type = 'button';
+      btn.dataset.scope = scope;
       btn.textContent = t(labelKey);
       btn.setAttribute('aria-pressed', String(this.searchScope === scope));
       // "This section" is meaningless on the Overview landing.
@@ -464,6 +490,7 @@ export class OptionsWindow {
     const btn = el('button', 'opt-tab');
     btn.type = 'button';
     btn.setAttribute('role', 'tab');
+    btn.dataset.category = tab.id;
     const active = this.activeCategory === tab.id && this.subView === 'none';
     btn.classList.toggle('is-active', active);
     btn.setAttribute('aria-selected', String(active));
@@ -489,8 +516,11 @@ export class OptionsWindow {
     return btn;
   }
 
-  private setActiveCategory(id: CategoryId): void {
-    audio.click();
+  private setActiveCategory(id: CategoryId, opts: { preserveRailFocus?: boolean } = {}): void {
+    // Arrow-roving the rail (and Ctrl+Tab) plays no click and, per spec section 5,
+    // re-renders the DETAIL pane only: the rail node (and thus the focused tab) must
+    // survive. A pointer click keeps the full-render path (audio + rebuild).
+    if (!opts.preserveRailFocus) audio.click();
     this.activeCategory = id;
     this.subView = 'none';
     this.searchQuery = '';
@@ -498,7 +528,176 @@ export class OptionsWindow {
     this.keybindNote = '';
     // Perf-overlay drag placement is gated to the System category being open.
     this.deps.options()?.perfOverlay.setPlacement(id === 'system');
-    this.render();
+    if (opts.preserveRailFocus) {
+      this.syncRailActive();
+      this.syncSearchStrip();
+      this.renderDetail();
+    } else {
+      this.render();
+    }
+  }
+
+  /** Update the rail tabs' active state IN PLACE (no rebuild), so an arrow-roved or
+   *  Ctrl+Tab-switched tab keeps its focus and the trap is never dropped. */
+  private syncRailActive(): void {
+    for (const tab of this.railEl().querySelectorAll<HTMLElement>('[role="tab"]')) {
+      const active = tab.dataset.category === this.activeCategory && this.subView === 'none';
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+    }
+  }
+
+  /** Re-sync the shell search strip after an in-place category switch: clear the
+   *  reset query in the live input and re-evaluate the "This section" scope gate
+   *  (meaningless on Overview), without rebuilding the strip (or the rail). */
+  private syncSearchStrip(): void {
+    const root = this.deps.root();
+    const input = root.querySelector<HTMLInputElement>('.search-input');
+    if (input) input.value = this.searchQuery;
+    const sectionScope = root.querySelector<HTMLButtonElement>('.opt-scope[data-scope="section"]');
+    if (sectionScope) sectionScope.disabled = this.activeCategory === 'overview';
+  }
+
+  /** The visible rail category ids, in rail order (Overview + the env-visible group
+   *  tabs), read from the rendered rail so keyboard + controller cycling match it. */
+  private visibleCategoryIds(): CategoryId[] {
+    return [...this.railEl().querySelectorAll<HTMLElement>('[role="tab"]')]
+      .map((t) => t.dataset.category as CategoryId | undefined)
+      .filter((id): id is CategoryId => !!id);
+  }
+
+  // -------------------------------------------------------------------------
+  // Keyboard navigation (spec section 5). The pure decisions live in
+  // options_focus_model; these thin handlers apply them to the live DOM.
+  // -------------------------------------------------------------------------
+
+  /** Rail = a vertical roving tablist: Up/Down move focus AND auto-activate,
+   *  Home/End jump. Left/Right are left free (in-row value adjust). Ctrl+Tab is
+   *  owned by the body handler, so ignore any modified key here. */
+  private onRailKeydown(e: KeyboardEvent): void {
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    const tabs = [...this.railEl().querySelectorAll<HTMLElement>('[role="tab"]')];
+    const active = document.activeElement;
+    const current = active instanceof HTMLElement ? tabs.indexOf(active) : -1;
+    if (current < 0) return;
+    const next = rovingTarget(e.key, current, tabs.length, 'vertical');
+    if (next === null) return;
+    e.preventDefault();
+    const tab = tabs[next];
+    tab.focus();
+    const id = tab.dataset.category as CategoryId | undefined;
+    // Auto-activation: aria-selected-follows-focus. The rail node survives (in-place
+    // rail sync + detail-only render), so `tab` stays focused across the swap.
+    if (id) this.setActiveCategory(id, { preserveRailFocus: true });
+  }
+
+  /** Ctrl+Tab / Ctrl+Shift+Tab cycle categories from anywhere in the body. */
+  private onBodyKeydown(e: KeyboardEvent): void {
+    if (e.key !== 'Tab' || !e.ctrlKey) return;
+    e.preventDefault();
+    const visible = this.visibleCategoryIds();
+    const current = visible.indexOf(this.activeCategory);
+    if (current < 0) return;
+    const next = wrapIndex(visible.length, current, e.shiftKey ? -1 : 1);
+    this.setActiveCategory(visible[next], { preserveRailFocus: true });
+    // Land focus on the now-active rail tab so subsequent arrows keep roving.
+    this.railEl().querySelector<HTMLElement>('.opt-tab.is-active')?.focus();
+  }
+
+  /** In-row value keys: switch Left/Right, segmented Left/Right + Home/End, slider
+   *  Page (Left/Right/Home/End on a slider stay native to the range input). */
+  private onDetailKeydown(e: KeyboardEvent): void {
+    const target = e.target;
+    if (!(target instanceof HTMLElement)) return;
+    const kind = this.controlKindOf(target);
+    const intent = rowKeyIntent(kind, e.key);
+    if (!intent) return;
+    e.preventDefault();
+    this.applyAdjustToControl(target, intent);
+  }
+
+  /** The authoritative .is-active-row cursor: set on focusin (so it lights for
+   *  keyboard, programmatic, AND controller focus, never :focus-visible-derived). */
+  private markActiveRow(target: EventTarget | null): void {
+    const scope = this.deps.root().querySelector<HTMLElement>('.opt-detail');
+    if (!scope) return;
+    for (const r of scope.querySelectorAll<HTMLElement>('.is-active-row'))
+      r.classList.remove('is-active-row');
+    const row = target instanceof HTMLElement ? target.closest<HTMLElement>('.opt-row') : null;
+    if (row) row.classList.add('is-active-row');
+  }
+
+  /** Classify a focused element into the value-bearing control kind its row presents. */
+  private controlKindOf(el: HTMLElement): RowControlKind {
+    if (el.classList.contains('opt-slider')) return 'slider';
+    if (el.classList.contains('opt-switch')) return 'switch';
+    if (el.classList.contains('opt-seg-btn') || el.closest('.opt-seg')) return 'segmented';
+    if (el.classList.contains('kb-key')) return 'keybind';
+    return 'other';
+  }
+
+  /** Apply a value FocusIntent (from a keyboard key OR a controller adjust verb) to
+   *  the focused control, reusing its existing dispatch so the write stays
+   *  byte-identical. Shared by the keyboard and controller paths. */
+  private applyAdjustToControl(el: HTMLElement, intent: FocusIntent): void {
+    const kind = this.controlKindOf(el);
+    if (kind === 'slider') {
+      const slider = el as HTMLInputElement;
+      const dir = intent === 'adjustInc' || intent === 'adjustPageInc' ? 1 : -1;
+      if (
+        intent !== 'adjustDec' &&
+        intent !== 'adjustInc' &&
+        intent !== 'adjustPageDec' &&
+        intent !== 'adjustPageInc'
+      )
+        return; // Home/End on a slider stay native
+      const steps =
+        intent === 'adjustPageInc' || intent === 'adjustPageDec' ? SLIDER_PAGE_STEPS : 1;
+      const next = sliderStepValue(
+        Number(slider.value),
+        Number(slider.min),
+        Number(slider.max),
+        Number(slider.step) || 1,
+        dir,
+        steps,
+      );
+      if (next === Number(slider.value)) return;
+      slider.value = String(next);
+      // Reuse the existing input/change listeners so the commit is byte-identical
+      // (a commit-on-change slider needs the change event; a live one needs input).
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+      slider.dispatchEvent(new Event('change', { bubbles: true }));
+      return;
+    }
+    if (kind === 'switch') {
+      if (intent !== 'adjustDec' && intent !== 'adjustInc') return;
+      const on = el.getAttribute('aria-checked') === 'true';
+      const want = intent === 'adjustInc'; // Left = off, Right = on
+      if (on !== want) el.click(); // reuse the switch's own toggle dispatch
+      return;
+    }
+    if (kind === 'segmented') {
+      const seg = el.closest<HTMLElement>('.opt-seg') ?? el;
+      const radios = [...seg.querySelectorAll<HTMLElement>('[role="radio"]')];
+      if (radios.length === 0) return;
+      const current = radios.findIndex((r) => r.getAttribute('aria-checked') === 'true');
+      const target = segIndexForIntent(radios.length, current < 0 ? 0 : current, intent);
+      if (target === null) return;
+      const rowKey = el.closest<HTMLElement>('.opt-row')?.dataset.key;
+      const btn = radios[target];
+      if (btn.getAttribute('aria-checked') !== 'true') btn.click(); // select (may re-render)
+      // Selection-follows-focus: re-resolve the selected radio (the pane may have
+      // re-rendered for a preset/interface-mode change) and move focus onto it.
+      const selected = rowKey
+        ? this.deps
+            .root()
+            .querySelector<HTMLElement>(
+              `.opt-row[data-key="${rowKey}"] [role="radio"][aria-checked="true"]`,
+            )
+        : null;
+      (selected ?? radios[target]).focus();
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -796,6 +995,9 @@ export class OptionsWindow {
         const selected = Number(btn.dataset.value) === current;
         btn.classList.toggle('is-selected', selected);
         btn.setAttribute('aria-checked', String(selected));
+        // Roving tabindex: the selected radio is the group's single Tab stop
+        // (selection-follows-focus), so the radiogroup is one stop, not one per option.
+        btn.tabIndex = selected ? 0 : -1;
       }
     };
     for (const option of c.options) {
