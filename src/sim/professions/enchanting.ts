@@ -132,7 +132,7 @@ export interface ApplyEnchantResult {
  *  On success: consumes exactly one plain copy (removeFungibleItem, so an
  *  already-enchanted copy of the same item is never silently overwritten)
  *  and every reagent, then grants a freshly-instanced copy carrying the
- *  enchant's stat bonus (ctx.addItemInstance) — equipping THAT copy is what
+ *  enchant's stat bonus (ctx.addItemInstance): equipping THAT copy is what
  *  carries the bonus into recalcPlayerStats (see items.ts equipItem). */
 export function resolveApplyEnchant(
   ctx: SimContext,

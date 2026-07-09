@@ -2017,7 +2017,8 @@ const itemNamesEn = {
   },
   entities: {
     ...classAbilityNamesEn.entities,
-    items: itemTranslations([      'Pitted Shortsword',
+    items: itemTranslations([
+      'Pitted Shortsword',
       'Bogoak Staff',
       'Rusty Dagger',
       'Training Mace',
@@ -2223,7 +2224,7 @@ const itemNamesEn = {
       'Elderwood Log',
       'Goldleaf Herb',
       'Sunpetal Herb',
-]),
+    ]),
   },
 };
 
@@ -2247,7 +2248,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.es.entities,
-      items: itemTranslations([        'Espada corta desgastada',
+      items: itemTranslations([
+        'Espada corta desgastada',
         'Bastón nudoso',
         'Daga oxidada',
         'Maza de entrenamiento',
@@ -2453,7 +2455,7 @@ export const itemNames = {
         'Tronco de Saúco',
         'Hierba Hoja de Oro',
         'Hierba Pétalo de Sol',
-]),
+      ]),
     },
   },
   es_ES: {} as typeof itemNamesEn,
@@ -2475,7 +2477,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.fr_FR.entities,
-      items: itemTranslations([        'Épée courte usée',
+      items: itemTranslations([
+        'Épée courte usée',
         'Bâton noueux',
         'Dague rouillée',
         "Masse d'entraînement",
@@ -2681,7 +2684,7 @@ export const itemNames = {
         'Bûche de Sureau Ancien',
         "Herbe Feuille d'Or",
         'Herbe Pétale de Soleil',
-]),
+      ]),
     },
   },
   fr_CA: {} as typeof itemNamesEn,
@@ -2704,7 +2707,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.it_IT.entities,
-      items: itemTranslations([        'Spada corta logora',
+      items: itemTranslations([
+        'Spada corta logora',
         'Bastone nodoso',
         'Pugnale arrugginito',
         'Mazza da addestramento',
@@ -2910,7 +2914,7 @@ export const itemNames = {
         'Tronco di Sambuco Antico',
         'Erba Fogliadoro',
         'Erba Petalosole',
-]),
+      ]),
     },
   },
   de_DE: {
@@ -2931,7 +2935,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.de_DE.entities,
-      items: itemTranslations([        'Abgenutztes Kurzschwert',
+      items: itemTranslations([
+        'Abgenutztes Kurzschwert',
         'Knorriger Stab',
         'Rostiger Dolch',
         'Übungsstreitkolben',
@@ -3137,7 +3142,7 @@ export const itemNames = {
         'Altholunderscheit',
         'Goldblattkraut',
         'Sonnenblütenkraut',
-]),
+      ]),
     },
   },
   zh_CN: {
@@ -3158,7 +3163,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.zh_CN.entities,
-      items: itemTranslations([        '破旧短剑',
+      items: itemTranslations([
+        '破旧短剑',
         '多节法杖',
         '生锈匕首',
         '训练钉锤',
@@ -3364,7 +3370,7 @@ export const itemNames = {
         '古老接骨木原木',
         '金叶草',
         '阳瓣草',
-]),
+      ]),
     },
   },
   zh_TW: {
@@ -3385,7 +3391,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.zh_TW.entities,
-      items: itemTranslations([        '破舊短劍',
+      items: itemTranslations([
+        '破舊短劍',
         '多節法杖',
         '生鏽匕首',
         '訓練釘錘',
@@ -3591,7 +3598,7 @@ export const itemNames = {
         '古老接骨木原木',
         '金葉草',
         '陽瓣草',
-]),
+      ]),
     },
   },
   ko_KR: {
@@ -3612,7 +3619,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.ko_KR.entities,
-      items: itemTranslations([        '낡은 쇼트소드',
+      items: itemTranslations([
+        '낡은 쇼트소드',
         '옹이진 지팡이',
         '녹슨 단검',
         '훈련용 철퇴',
@@ -3818,7 +3826,7 @@ export const itemNames = {
         '고대 딱총나무 통나무',
         '금빛잎 약초',
         '태양꽃잎 약초',
-]),
+      ]),
     },
   },
   ja_JP: {
@@ -3839,7 +3847,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.ja_JP.entities,
-      items: itemTranslations([        '擦り切れたショートソード',
+      items: itemTranslations([
+        '擦り切れたショートソード',
         '節くれだった杖',
         '錆びたダガー',
         '訓練用メイス',
@@ -4045,7 +4054,7 @@ export const itemNames = {
         'エルダーウッドの丸太',
         'ゴールドリーフ草',
         'サンペタル草',
-]),
+      ]),
     },
   },
   pt_BR: {
@@ -4066,7 +4075,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.pt_BR.entities,
-      items: itemTranslations([        'Espada curta gasta',
+      items: itemTranslations([
+        'Espada curta gasta',
         'Cajado nodoso',
         'Adaga enferrujada',
         'Maça de treino',
@@ -4272,7 +4282,7 @@ export const itemNames = {
         'Tora de Sabugueiro Antigo',
         'Erva Folha Dourada',
         'Erva Pétala Solar',
-]),
+      ]),
     },
   },
   ru_RU: {
@@ -4293,7 +4303,8 @@ export const itemNames = {
     },
     entities: {
       ...classAbilityNames.ru_RU.entities,
-      items: itemTranslations([        'Изношенный короткий меч',
+      items: itemTranslations([
+        'Изношенный короткий меч',
         'Сучковатый посох',
         'Ржавый кинжал',
         'Учебная булава',
@@ -4499,7 +4510,7 @@ export const itemNames = {
         'Бревно древней бузины',
         'Трава золотолист',
         'Трава солнцелепест',
-]),
+      ]),
     },
   },
 };
