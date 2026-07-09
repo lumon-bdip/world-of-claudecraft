@@ -397,9 +397,23 @@ describe('Guide deeds spoiler safety', () => {
   });
 
   it('bakes no trigger or desc field (criteria and internals stay off the wiki)', () => {
+    // Exact field allowlist: ANY smuggled field (trigger, desc, the internal border slug,
+    // or anything a future generator edit adds) fails here by name.
+    const allowedFields = new Set([
+      'id',
+      'name',
+      'category',
+      'renown',
+      'feat',
+      'rewardTitle',
+      'rewardBorder',
+    ]);
     for (const gd of GUIDE_DEEDS) {
       expect('trigger' in gd, `deed "${gd.id}" leaked its trigger`).toBe(false);
       expect('desc' in gd, `deed "${gd.id}" leaked its desc`).toBe(false);
+      for (const k of Object.keys(gd)) {
+        expect(allowedFields.has(k), `deed "${gd.id}" emitted unexpected field "${k}"`).toBe(true);
+      }
     }
   });
 
@@ -508,10 +522,23 @@ describe('Guide deeds spoiler safety', () => {
     expect(t('guide.deedsPage.catHeading' as never, { label: 'Combat', count: '7' })).toBe(
       'Combat (7)',
     );
+    // The two cell labels are pinned as English literals so the render test's
+    // t()-on-both-sides checks stay anchored to real values, not just key resolution.
+    expect(t('guide.deedsPage.rewardBorder' as never)).toBe('Border');
+    expect(t('guide.deedsPage.featTag' as never)).toBe('Feat');
+  });
+
+  it('pins the deeds route wiring to literals', () => {
+    const route = GUIDE_ROUTES.find((r) => r.id === 'deeds');
+    expect(route?.sub).toBe('deeds');
+    expect(route?.navKey).toBe('guide.nav.deeds');
+    expect(route?.group).toBe('compendium');
   });
 
   it('renders the whole page: correct per-category counts, no hidden or boss leak', () => {
     setLanguage('en');
+    // GuidePage.render requires a PageContext; this page renders the same for any ctx
+    // (the route wiring itself is pinned in its own test above).
     const html = deedsPage.render({ params: [], sub: 'deeds', titleKey: 'guide.nav.deeds' });
     expect(html.length).toBeGreaterThan(0);
     expect((html.match(/<h1>/g) ?? []).length).toBe(1);

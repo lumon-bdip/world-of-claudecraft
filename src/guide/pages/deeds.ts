@@ -29,7 +29,20 @@ const CATEGORY_ORDER = [
   'feat',
 ] as const;
 
-const catLabelKey = (cat: string): TranslationKey => `guide.deedsPage.cat.${cat}` as TranslationKey;
+// A literal map (not key interpolation) so every category label key is checked against
+// the catalog at compile time; a renamed or dropped key fails tsc, not just the render test.
+const CATEGORY_LABEL_KEYS: Record<(typeof CATEGORY_ORDER)[number], TranslationKey> = {
+  progression: 'guide.deedsPage.cat.progression',
+  combat: 'guide.deedsPage.cat.combat',
+  dungeon: 'guide.deedsPage.cat.dungeon',
+  delve: 'guide.deedsPage.cat.delve',
+  chronicle: 'guide.deedsPage.cat.chronicle',
+  collection: 'guide.deedsPage.cat.collection',
+  pvp: 'guide.deedsPage.cat.pvp',
+  social: 'guide.deedsPage.cat.social',
+  exploration: 'guide.deedsPage.cat.exploration',
+  feat: 'guide.deedsPage.cat.feat',
+};
 
 // One catalog row: the deed name, then its Renown (or a Feat tag for zero-Renown feats),
 // then the cosmetic reward (title text, the word Border, or nothing). Names and reward
@@ -52,25 +65,27 @@ function deedRow(d: GuideDeed): string {
 
 // A whole category subsection: heading with its count, then a table of its deeds. Returns
 // an empty string when the category holds no public deeds, so it self-omits.
-function categorySection(cat: string, list: GuideDeed[]): string {
+function categorySection(cat: (typeof CATEGORY_ORDER)[number], list: GuideDeed[]): string {
   const rows = list.filter((d) => d.category === cat);
   if (!rows.length) return '';
   const heading = t('guide.deedsPage.catHeading', {
-    label: t(catLabelKey(cat)),
+    label: t(CATEGORY_LABEL_KEYS[cat]),
     count: formatNumber(rows.length),
   });
   return `<section class="guide-block guide-deed-cat">
         <h3 class="guide-deed-cat-h">${esc(heading)}</h3>
-        <table class="guide-deed-table">
-          <thead>
-            <tr>
-              <th scope="col">${esc(t('guide.deedsPage.colName'))}</th>
-              <th scope="col">${esc(t('guide.deedsPage.colRenown'))}</th>
-              <th scope="col">${esc(t('guide.deedsPage.colReward'))}</th>
-            </tr>
-          </thead>
-          <tbody>${rows.map(deedRow).join('')}</tbody>
-        </table>
+        <div class="guide-table-scroll">
+          <table class="guide-keytable guide-deed-table">
+            <thead>
+              <tr>
+                <th scope="col">${esc(t('guide.deedsPage.colName'))}</th>
+                <th scope="col">${esc(t('guide.deedsPage.colRenown'))}</th>
+                <th scope="col">${esc(t('guide.deedsPage.colReward'))}</th>
+              </tr>
+            </thead>
+            <tbody>${rows.map(deedRow).join('')}</tbody>
+          </table>
+        </div>
       </section>`;
 }
 

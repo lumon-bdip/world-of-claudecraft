@@ -2702,3 +2702,24 @@ a.guide-poi:hover {
   color: var(--g-text-muted);
   font-size: var(--g-text-sm);
 }
+
+/* Book of Deeds catalog tables: reuse .guide-keytable; these style the name,
+   Renown, and reward columns. The .guide-table-scroll wrapper supplies the
+   horizontal scroll on phones instead of letting the name column crush. */
+.guide-deed-name {
+  color: var(--g-text);
+  font-weight: 600;
+}
+.guide-deed-renown,
+.guide-deed-reward {
+  white-space: nowrap;
+}
+.guide-deed-reward {
+  color: var(--g-gold-dim);
+}
+.guide-deed-feat {
+  font-size: var(--g-text-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--g-text-muted);
+}
