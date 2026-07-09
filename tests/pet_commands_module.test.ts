@@ -153,7 +153,7 @@ describe('pet_commands module (P1b)', () => {
     expect(pet.autoAttack).toBe(false);
   });
 
-  it('warlock demon swap: answers vs fades-into-the-void + Demon Heal tick', () => {
+  it('warlock demon swap: fresh demon answers on swap + resummon + Demon Heal tick', () => {
     const sim = new Sim({ seed: 13, playerClass: 'warlock', noPlayer: true }) as AnySim;
     const wpid = sim.addPlayer('warlock', 'Demonist') as number;
     sim.setPlayerLevel(12, wpid);
