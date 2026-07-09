@@ -5,6 +5,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { ENCHANTS } from '../src/sim/content/enchants';
+import { characterDerivedStats } from '../src/sim/entity';
 import {
   disenchantItem,
   disenchantYield,
@@ -13,6 +14,7 @@ import {
   resolveDisenchant,
 } from '../src/sim/professions/enchanting';
 import { Sim } from '../src/sim/sim';
+import { xpForLevel } from '../src/sim/types';
 
 function makeSim(seed = 7) {
   return new Sim({ seed, playerClass: 'warrior', autoEquip: false });
@@ -54,16 +56,21 @@ describe('disenchant', () => {
     }
   });
 
-  it('yield scales with rarity: a higher-quality item never yields less than a lower one, all else equal', () => {
+  it('yield scales with rarity: the qualityIdx term makes an epic strictly outyield a common with the same rng draw', () => {
+    // Same seed for both, so the rng draws (the +0/+1 bonus term) line up
+    // identically; only quality differs, so the whole gap must be the
+    // qualityIdx term (common=1, epic=4 in QUALITY_ORDER -> delta 3). A
+    // toBeGreaterThanOrEqual pin would still pass if that term were deleted;
+    // this pins the exact delta so it cannot.
     const low = disenchantYield(
       { id: 'a', name: 'a', sellValue: 0, quality: 'common', kind: 'weapon' } as never,
-      makeSim().ctx.rng,
+      makeSim(11).ctx.rng,
     );
     const high = disenchantYield(
       { id: 'b', name: 'b', sellValue: 0, quality: 'epic', kind: 'weapon' } as never,
-      makeSim().ctx.rng,
+      makeSim(11).ctx.rng,
     );
-    expect(high).toBeGreaterThanOrEqual(low);
+    expect(high - low).toBe(3);
   });
 
   it('the disenchantItem command entry point resolves the caller and stashes nothing extra beyond the result', () => {
@@ -72,6 +79,29 @@ describe('disenchant', () => {
     sim.disenchantItem('eastbrook_arming_sword');
     expect(sim.lastDisenchantResult?.ok).toBe(true);
     expect(disenchantItem(sim.ctx, 'nonexistent_item_id').ok).toBe(false);
+  });
+
+  // Regression for review #1712 point 2: crafting.ts grants every rare-or-better
+  // single-copy craft as an instanced copy (signer + rolled.quality, no
+  // rolled.stats) for Battlefield Experience attribution. The fungible-only gate
+  // this replaced (countFungibleItem) excluded ALL instanced slots, so a crafted
+  // rare could never be disenchanted even though it carries no enchant yet.
+  it('a crafted rare instanced copy (signer + rolled.quality, no rolled.stats) can still be disenchanted', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    // Simulate crafting.ts's single-copy rare+ grant directly, matching its
+    // exact instance shape (no rolled.stats: that only appears once an enchant
+    // is applied).
+    sim.ctx.addItemInstance(
+      'moggers_copper_cudgel',
+      { signer: 'Tester', rolled: { quality: 'rare' } },
+      pid,
+    );
+    expect(sim.ctx.countFungibleItem('moggers_copper_cudgel', pid)).toBe(0);
+    expect(sim.ctx.countEnchantableItem('moggers_copper_cudgel', pid)).toBe(1);
+    const result = resolveDisenchant(sim.ctx, pid, 'moggers_copper_cudgel');
+    expect(result.ok).toBe(true);
+    expect(sim.countItem('moggers_copper_cudgel', pid)).toBe(0);
   });
 });
 
@@ -147,8 +177,14 @@ describe('applyEnchant', () => {
     );
     expect(applied.ok).toBe(true);
 
+    // Pin the enchant's own magnitude to a literal ONCE here, so the
+    // assertions below compare against baseStr + 5 directly rather than
+    // reading the bonus back out of the same ENCHANTS constant the resolver
+    // consumed (which would leave the magnitude itself unprotected).
+    expect(ENCHANTS.enchant_weapon_might.statBonus.str).toBe(5);
+
     sim.equipItem('eastbrook_arming_sword');
-    expect(sim.player.stats.str).toBe(baseStr + (ENCHANTS.enchant_weapon_might.statBonus.str ?? 0));
+    expect(sim.player.stats.str).toBe(baseStr + 5);
 
     expect(sim.unequipItem('mainhand')).toBe(true);
     // The enchant bonus is gone once unequipped...
@@ -159,7 +195,7 @@ describe('applyEnchant', () => {
     // Re-equipping the same (still-enchanted) copy restores the bonus, proving
     // the enchant round-trips through bags rather than being a one-shot buff.
     sim.equipItem('eastbrook_arming_sword');
-    expect(sim.player.stats.str).toBe(baseStr + (ENCHANTS.enchant_weapon_might.statBonus.str ?? 0));
+    expect(sim.player.stats.str).toBe(baseStr + 5);
   });
 
   it('swapping in a plain (unenchanted) replacement drops the enchant bonus, and the enchanted piece returns to bags intact', () => {
@@ -186,6 +222,45 @@ describe('applyEnchant', () => {
     expect(sim.ctx.countFungibleItem('eastbrook_arming_sword', pid)).toBe(0);
   });
 
+  // Regression for review #1712 point 2, apply-enchant direction: a crafted
+  // rare instanced copy (no rolled.stats) is eligible; an already-enchanted
+  // instanced copy (rolled.stats present) is correctly excluded, so an
+  // enchant can never silently overwrite an existing one.
+  it('a crafted rare instanced copy can be enchanted; an already-enchanted copy cannot be enchanted again', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    sim.ctx.addItemInstance(
+      'moggers_copper_cudgel',
+      { signer: 'Tester', rolled: { quality: 'rare' } },
+      pid,
+    );
+    sim.addItem('arcane_dust', 5, pid);
+    expect(sim.ctx.countEnchantableItem('moggers_copper_cudgel', pid)).toBe(1);
+    const result = resolveApplyEnchant(
+      sim.ctx,
+      pid,
+      'moggers_copper_cudgel',
+      'enchant_weapon_might',
+    );
+    expect(result.ok).toBe(true);
+    // The crafted (unenchanted) instance was consumed and replaced by a
+    // freshly-enchanted one; nothing fungible was ever involved.
+    expect(sim.ctx.countFungibleItem('moggers_copper_cudgel', pid)).toBe(0);
+    expect(sim.countItem('moggers_copper_cudgel', pid)).toBe(1);
+
+    // The now-enchanted copy (rolled.stats present) is no longer eligible.
+    expect(sim.ctx.countEnchantableItem('moggers_copper_cudgel', pid)).toBe(0);
+    sim.addItem('arcane_dust', 5, pid);
+    const second = resolveApplyEnchant(
+      sim.ctx,
+      pid,
+      'moggers_copper_cudgel',
+      'enchant_weapon_might',
+    );
+    expect(second.ok).toBe(false);
+    expect(second.reason).toBe('not_held');
+  });
+
   it('the applyEnchant command entry point resolves the caller and stashes the result', () => {
     const sim = makeSim();
     const pid = sim.playerId;
@@ -193,5 +268,84 @@ describe('applyEnchant', () => {
     sim.addItem('arcane_dust', 5, pid);
     sim.applyEnchant('eastbrook_arming_sword', 'enchant_weapon_might');
     expect(sim.lastEnchantResult?.ok).toBe(true);
+  });
+
+  // Regression for review #1712 point 1: recalcPlayerStats gained equipmentInstance
+  // as an optional 5th argument, and several call sites outside professions/
+  // enchanting.ts and items.ts (level-up, buff expiry, talent spend, stance
+  // toggle, self-buff cast, and the Arena/Vale Cup/Fiesta restore paths) never
+  // passed it, so an equipped enchant silently dropped on the next stat recalc
+  // through any of those untouched paths. Exercises the level-up path
+  // specifically (src/sim/combat/damage.ts grantXp), the easiest to reproduce.
+  it('an equipped enchant bonus survives a level-up, not just the equip/unequip cycle', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    sim.addItem('eastbrook_arming_sword', 1, pid);
+    sim.addItem('arcane_dust', 5, pid);
+    const applied = resolveApplyEnchant(
+      sim.ctx,
+      pid,
+      'eastbrook_arming_sword',
+      'enchant_weapon_might',
+    );
+    expect(applied.ok).toBe(true);
+    sim.equipItem('eastbrook_arming_sword');
+
+    const meta = sim.meta(pid)!;
+    const levelBefore = sim.player.level;
+    const baseStrBeforeLevel = characterDerivedStats(meta.cls, levelBefore, {}).stats.str;
+    expect(sim.player.stats.str).toBe(baseStrBeforeLevel + 5);
+
+    sim.grantXp(xpForLevel(levelBefore));
+    expect(sim.player.level).toBe(levelBefore + 1);
+
+    const baseStrAfterLevel = characterDerivedStats(meta.cls, sim.player.level, {}).stats.str;
+    expect(sim.player.stats.str).toBe(baseStrAfterLevel + 5);
+  });
+
+  it('an equipped enchant bonus survives a save/reload round-trip (the "permanent" claim)', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    sim.addItem('eastbrook_arming_sword', 1, pid);
+    sim.addItem('arcane_dust', 5, pid);
+    const applied = resolveApplyEnchant(
+      sim.ctx,
+      pid,
+      'eastbrook_arming_sword',
+      'enchant_weapon_might',
+    );
+    expect(applied.ok).toBe(true);
+    sim.equipItem('eastbrook_arming_sword');
+    // Compare the actual equipped state before/after reload rather than a
+    // freshly-derived no-gear baseline, since the starter kit's other slots
+    // also contribute stats this reload must reproduce exactly.
+    const boostedStr = sim.player.stats.str;
+
+    const state = sim.serializeCharacter(pid);
+    expect(state).not.toBeNull();
+    expect(state!.equipmentInstance?.mainhand?.rolled?.stats?.str).toBe(5);
+
+    const reloadedSim = new Sim({ seed: 7, playerClass: 'warrior', noPlayer: true });
+    const reloadedPid = reloadedSim.addPlayer('warrior', 'Reload', { state: state! });
+    const reloadedMeta = reloadedSim.meta(reloadedPid)!;
+    const reloadedEntity = reloadedSim.entities.get(reloadedPid)!;
+    expect(reloadedMeta.equipmentInstance.mainhand?.rolled?.stats?.str).toBe(5);
+    expect(reloadedEntity.stats.str).toBe(boostedStr);
+  });
+
+  it('loading a pre-Enchanting save missing equipmentInstance does not crash and grants no bonus', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const state = sim.serializeCharacter(pid)!;
+    // Simulate an old save recorded before this feature existed: the key is
+    // absent entirely, not just empty.
+    // biome-ignore lint/performance/noDelete: simulating a legacy record shape.
+    delete (state as { equipmentInstance?: unknown }).equipmentInstance;
+
+    const reloadedSim = new Sim({ seed: 7, playerClass: 'warrior', noPlayer: true });
+    expect(() => reloadedSim.addPlayer('warrior', 'Legacy', { state })).not.toThrow();
+    const reloadedPid = reloadedSim.addPlayer('warrior', 'Legacy2', { state });
+    const meta = reloadedSim.meta(reloadedPid)!;
+    expect(meta.equipmentInstance).toEqual({});
   });
 });

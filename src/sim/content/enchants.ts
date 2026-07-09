@@ -105,5 +105,3 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     statBonus: { spi: 4 },
   },
 };
-
-export const ENCHANT_IDS: string[] = Object.keys(ENCHANTS);

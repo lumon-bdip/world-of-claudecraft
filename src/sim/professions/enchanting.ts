@@ -3,8 +3,12 @@
 // SPECIFIC held copy of an item (not the character, not the item id in the
 // abstract). An enchanted piece is a fresh, non-stacking instanced copy
 // (types.ts ItemInstancePayload.rolled.stats), so it survives equip/unequip
-// (src/sim/items.ts) and stays a distinct, tradeable good like any other
-// instanced item, separate from a plain copy of the same item id.
+// (src/sim/items.ts) and stays a distinct good, separate from a plain copy of
+// the same item id. sellItem/discardItem/trade's drop arm now prefer a
+// fungible copy over this one (items.ts removePreferFungible), but market
+// listing, mail, and trade do not yet carry the instance payload end to end
+// (#1165-style gap): a fully "tradeable good" is a known follow-up, not yet
+// true here.
 //
 // Layered on top of, not a replacement for, the existing everyone-can-salvage
 // system (./salvage.ts, issue #1300): salvage still yields the same generic
@@ -31,7 +35,7 @@ import { ENCHANTS } from '../content/enchants';
 import { ITEMS } from '../data';
 import type { Rng } from '../rng';
 import type { SimContext } from '../sim_context';
-import type { EquipSlot, ItemDef } from '../types';
+import type { ItemDef } from '../types';
 
 const QUALITY_ORDER: readonly NonNullable<ItemDef['quality']>[] = [
   'poor',
@@ -86,16 +90,19 @@ export interface DisenchantResult {
 }
 
 /** Resolve one disenchant attempt: denies (no side effect) if the item id is
- *  unknown, ineligible, or the player does not hold a fungible (unenchanted)
- *  copy. Consumes exactly one plain copy on success (never an already-
- *  enchanted instanced copy, via removeFungibleItem) and grants the rolled
- *  arcane material yield. */
+ *  unknown, ineligible, or the player does not hold an eligible copy (a plain
+ *  fungible copy, OR an instanced copy that has NOT itself been enchanted -
+ *  e.g. crafting.ts's single-copy rare+ craft grant, which instances every
+ *  rare-or-better craft for its signer/rolled-quality payload without
+ *  applying an enchant; see countEnchantableItem). Consumes exactly one such
+ *  copy on success (never an already-enchanted copy, via removeEnchantableItem)
+ *  and grants the rolled arcane material yield. */
 export function resolveDisenchant(ctx: SimContext, pid: number, itemId: string): DisenchantResult {
   const def = ITEMS[itemId];
   if (!def) return { ok: false, itemId, reason: 'unknown_item' };
   if (!isDisenchantable(def)) return { ok: false, itemId, reason: 'not_disenchantable' };
-  if (ctx.countFungibleItem(itemId, pid) < 1) return { ok: false, itemId, reason: 'not_held' };
-  ctx.removeFungibleItem(itemId, 1, pid);
+  if (ctx.countEnchantableItem(itemId, pid) < 1) return { ok: false, itemId, reason: 'not_held' };
+  ctx.removeEnchantableItem(itemId, 1, pid);
   const materialItemId = DISENCHANT_MATERIAL_BY_QUALITY[def.quality ?? 'common'] ?? 'arcane_dust';
   const count = disenchantYield(def, ctx.rng);
   ctx.addItem(materialItemId, count, pid);
@@ -125,12 +132,14 @@ export interface ApplyEnchantResult {
 }
 
 /** Resolve one apply-enchant attempt against a HELD (bagged, not currently
- *  equipped) plain copy of `itemId`. Denies (no side effect) if the item or
- *  enchant id is unknown, the enchant does not target this item's slot, the
- *  player holds no fungible copy, or any reagent is short (all-or-nothing,
- *  same reagent-availability discipline crafting.ts's craftItem uses).
- *  On success: consumes exactly one plain copy (removeFungibleItem, so an
- *  already-enchanted copy of the same item is never silently overwritten)
+ *  equipped) eligible copy of `itemId`: a plain fungible copy, or an
+ *  instanced copy that has NOT itself been enchanted yet (crafted rare+ gear;
+ *  see countEnchantableItem). Denies (no side effect) if the item or enchant
+ *  id is unknown, the enchant does not target this item's slot, the player
+ *  holds no eligible copy, or any reagent is short (all-or-nothing, same
+ *  reagent-availability discipline crafting.ts's craftItem uses).
+ *  On success: consumes exactly one eligible copy (removeEnchantableItem, so
+ *  an already-enchanted copy of the same item is never silently overwritten)
  *  and every reagent, then grants a freshly-instanced copy carrying the
  *  enchant's stat bonus (ctx.addItemInstance): equipping THAT copy is what
  *  carries the bonus into recalcPlayerStats (see items.ts equipItem). */
@@ -147,7 +156,7 @@ export function resolveApplyEnchant(
   if (itemDef.slot !== enchant.itemSlot) {
     return { ok: false, itemId, enchantId, reason: 'wrong_slot' };
   }
-  if (ctx.countFungibleItem(itemId, pid) < 1) {
+  if (ctx.countEnchantableItem(itemId, pid) < 1) {
     return { ok: false, itemId, enchantId, reason: 'not_held' };
   }
   for (const reagent of enchant.reagents) {
@@ -155,7 +164,7 @@ export function resolveApplyEnchant(
       return { ok: false, itemId, enchantId, reason: 'insufficient_materials' };
     }
   }
-  ctx.removeFungibleItem(itemId, 1, pid);
+  ctx.removeEnchantableItem(itemId, 1, pid);
   for (const reagent of enchant.reagents) ctx.removeItem(reagent.itemId, reagent.count, pid);
   ctx.addItemInstance(itemId, { rolled: { stats: { ...enchant.statBonus } } }, pid);
   return { ok: true, itemId, enchantId };
@@ -171,11 +180,4 @@ export function applyEnchant(
   const r = ctx.resolve(pid);
   if (!r) return { ok: false, itemId, enchantId, reason: 'unknown_item' };
   return resolveApplyEnchant(ctx, r.meta.entityId, itemId, enchantId);
-}
-
-/** Enchants whose itemSlot matches an equipped/held item's own def.slot,
- *  for a future UI's "what can I enchant this with" listing. Pure lookup,
- *  no ctx needed. */
-export function enchantsForSlot(slot: EquipSlot | 'ring'): (typeof ENCHANTS)[string][] {
-  return Object.values(ENCHANTS).filter((e) => e.itemSlot === slot);
 }

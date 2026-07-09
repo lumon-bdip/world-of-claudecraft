@@ -195,8 +195,8 @@ export function recalcPlayerStats(
   e: Entity,
   cls: PlayerClass,
   equipment: PlayerEquipment,
-  mods?: TalentModifiers,
-  equipmentInstance?: Partial<Record<EquipSlot, ItemInstancePayload>>,
+  mods: TalentModifiers | undefined,
+  equipmentInstance: Partial<Record<EquipSlot, ItemInstancePayload>>,
 ): void {
   const def = CLASSES[cls];
   const lvl = e.level;
@@ -500,7 +500,7 @@ export function characterDerivedStats(
 ): DerivedCharacterStats {
   const e = createPlayer(0, cls, { x: 0, y: 0, z: 0 }, '');
   e.level = Math.max(1, Math.floor(level));
-  recalcPlayerStats(e, cls, equipment, mods, equipmentInstance);
+  recalcPlayerStats(e, cls, equipment, mods, equipmentInstance ?? {});
   return {
     stats: e.stats,
     maxHp: e.maxHp,

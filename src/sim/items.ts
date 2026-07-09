@@ -33,11 +33,34 @@ import {
   type EquipSlot,
   FISHING_CAST_ID,
   INTERACT_RANGE,
+  type ItemInstancePayload,
   POTION_COOLDOWN,
 } from './types';
 import { vendorStackSize } from './vendor_stack';
 
 const VENDOR_BUYBACK_LIMIT = 12;
+
+// Fungible-preferring removal: consumes plain (non-instanced) copies first and
+// only reaches for an instanced copy (an enchanted or otherwise signed/rolled
+// piece) once no fungible copy remains. removeItem's own ordering (sim.ts) scans
+// highest-index-first, which is exactly where applyEnchant's addItemInstance
+// pushes a freshly-enchanted copy (professions/enchanting.ts), so a plain
+// ctx.removeItem there would eat the enchanted copy first when both exist.
+// sellItem/discardItem below and trade.ts's drop arm route through this instead
+// so "sell/discard/trade one" prefers the plain copy a player almost always means.
+export function removePreferFungible(
+  ctx: SimContext,
+  itemId: string,
+  count: number,
+  pid?: number,
+): ItemInstancePayload[] {
+  const fungibleAvailable = ctx.countFungibleItem(itemId, pid);
+  const fungibleTake = Math.min(fungibleAvailable, count);
+  if (fungibleTake > 0) ctx.removeFungibleItem(itemId, fungibleTake, pid);
+  const remaining = count - fungibleTake;
+  if (remaining <= 0) return [];
+  return ctx.removeItem(itemId, remaining, pid);
+}
 
 export function discardItem(ctx: SimContext, itemId: string, count = 1, pid?: number): void {
   const r = ctx.resolve(pid);
@@ -52,7 +75,7 @@ export function discardItem(ctx: SimContext, itemId: string, count = 1, pid?: nu
   if (def.noDiscard) return;
   const discardCount = Number.isFinite(count) ? Math.min(Math.floor(count), available) : 0;
   if (discardCount <= 0) return;
-  ctx.removeItem(itemId, discardCount, meta.entityId);
+  removePreferFungible(ctx, itemId, discardCount, meta.entityId);
   ctx.emit({
     type: 'log',
     // biome-ignore lint/style/useTemplate: keep this scanner-friendly shape for i18n extraction.
@@ -84,8 +107,12 @@ export function equipItem(ctx: SimContext, itemId: string, pid?: number): void {
   const oldInstance = meta.equipmentInstance?.[slot];
   // removeItem scans from the highest inventory index down (sim.ts), so a
   // freshly-enchanted copy (pushed onto the end by addItemInstance,
-  // src/sim/professions/enchanting.ts applyEnchant) is exactly what this picks
-  // up first when both a plain and an enchanted copy of the same item exist.
+  // src/sim/professions/enchanting.ts applyEnchant) is what this picks up first
+  // when both a plain and an enchanted copy of the same item exist and nothing
+  // else has been looted since. That only holds while the enchanted copy stays
+  // the highest-index match: loot another plain copy afterward and the plain
+  // one gets equipped instead. Deterministic, acceptable for v1, but a future
+  // picker UI should not assume the enchanted copy is always favored.
   const consumed = ctx.removeItem(itemId, 1, meta.entityId);
   if (old) {
     // Return the piece that was worn: if it carried an enchant, give it back
@@ -356,7 +383,7 @@ export function sellItem(ctx: SimContext, itemId: string, count = 1, pid?: numbe
     ctx.error(meta.entityId, 'You cannot sell quest items.');
     return;
   }
-  ctx.removeItem(itemId, sellCount, meta.entityId);
+  removePreferFungible(ctx, itemId, sellCount, meta.entityId);
   recordVendorBuyback(meta, itemId, sellCount);
   const payout = def.sellValue * sellCount;
   meta.copper += payout;
