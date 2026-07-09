@@ -142,6 +142,70 @@ function attackAbilityId(nameOrId: string | null): string | undefined {
 // tornado) instead of a normal swing. Bladestorm keeps its held channel spin.
 const SPIN_ATTACK_ABILITIES: ReadonlySet<string> = new Set(['whirlwind']);
 
+// Warrior shout shockwave colours (spellfx fx:'shout'): one hue per shout so
+// they read differently at a glance. Iron Bellow is the blood-red reference
+// ring; unmapped shouts fall back to that red.
+const SHOUT_WAVE_COLORS: Record<string, number> = {
+  battle_shout: 0xff2a1a, // Iron Bellow: blood red
+  commanding_shout: 0xffc94d, // Bolstering Cry: rallying gold
+  demoralizing_shout: 0x9a5df0, // Direhowl: cowing violet
+  emboldening_roar: 0xff5470, // Emboldening Roar: hot crimson
+  defiant_bellow: 0xff8c2a, // Defiant Bellow: ember orange
+  rallying_cry: 0xffe9a0, // Rallying Cry: warm gold-white
+  intimidating_shout: 0x7f8ad0, // Intimidating Shout: cold dread blue
+};
+// Visual footprint of the shout wave (yards): the embers travel about this far.
+const SHOUT_RING_RADIUS = 8;
+
+// Recklessness overhead skull: seconds the sprite lives above the caster.
+const RECKLESS_SKULL_LIFETIME = 1.0;
+
+// The red skull sprite for the Recklessness cast, drawn once on a canvas (the
+// repo's procedural-texture pattern: no image asset) and shared by every spawn.
+let recklessSkullTex: THREE.CanvasTexture | null = null;
+function recklessSkullTexture(): THREE.CanvasTexture {
+  if (recklessSkullTex) return recklessSkullTex;
+  const s = 96;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = s;
+  const g = canvas.getContext('2d')!;
+  g.clearRect(0, 0, s, s);
+  // fiery glow behind everything
+  g.shadowColor = '#ff2210';
+  g.shadowBlur = 14;
+  // cranium: rounded dome with slightly pinched cheeks
+  g.fillStyle = '#ff2a18';
+  g.beginPath();
+  g.arc(s / 2, s * 0.42, s * 0.3, Math.PI * 0.98, Math.PI * 0.02); // dome
+  g.quadraticCurveTo(s * 0.8, s * 0.62, s * 0.68, s * 0.66); // right cheek
+  g.lineTo(s * 0.32, s * 0.66); // chin line of the upper skull
+  g.quadraticCurveTo(s * 0.2, s * 0.62, s * 0.2, s * 0.42); // left cheek
+  g.closePath();
+  g.fill();
+  // jaw: small rounded block under the cranium
+  g.fillRect(s * 0.36, s * 0.68, s * 0.28, s * 0.14);
+  g.shadowBlur = 0;
+  // eye sockets: two big punched-out holes (destination-out keeps the glow edge)
+  g.globalCompositeOperation = 'destination-out';
+  g.beginPath();
+  g.arc(s * 0.38, s * 0.44, s * 0.085, 0, Math.PI * 2);
+  g.arc(s * 0.62, s * 0.44, s * 0.085, 0, Math.PI * 2);
+  g.fill();
+  // nasal cavity: a small triangle
+  g.beginPath();
+  g.moveTo(s * 0.5, s * 0.5);
+  g.lineTo(s * 0.455, s * 0.6);
+  g.lineTo(s * 0.545, s * 0.6);
+  g.closePath();
+  g.fill();
+  // teeth gaps in the jaw
+  for (let i = 0; i < 3; i++) g.fillRect(s * (0.415 + i * 0.075), s * 0.68, s * 0.02, s * 0.13);
+  g.globalCompositeOperation = 'source-over';
+  recklessSkullTex = new THREE.CanvasTexture(canvas);
+  recklessSkullTex.colorSpace = THREE.SRGBColorSpace;
+  return recklessSkullTex;
+}
+
 // Entities further than this from the player are hidden entirely: their rigs
 // are several draw calls each and read as sub-pixel specks long before this.
 const ENTITY_DRAW_RANGE = 80;
@@ -603,6 +667,9 @@ export interface EntityView {
   // hidden until its shader programs finish linking off-thread (async-compile gate)
   compilePending: boolean;
   lastOverheadEmoteKey: string | null;
+  // Recklessness imbue latch: true while the buff_reckless body-flame loop runs,
+  // so the 1s overhead skull edge-triggers exactly once per buff application.
+  recklessOn?: boolean;
   // render-space position last frame, for true u/s locomotion speed
   lastX: number;
   lastZ: number;
@@ -812,6 +879,9 @@ export class Renderer {
   private clickMarkerNext = 0;
   // ground-targeted AoE impact rings (see aoe_ring.ts), pooled like click markers
   private aoeRings: AoeRingSlot[] = [];
+  // Live Recklessness overhead skulls: sprite parented to the entity group so it
+  // tracks the caster; 1s lifetime with a fade tail (see updateSkullFx).
+  private skullFx: { sprite: THREE.Sprite; parent: THREE.Group; elapsed: number }[] = [];
   private aoeRingNext = 0;
   private groundAimReticle: GroundAimReticle | null = null;
   raycaster = new THREE.Raycaster();
@@ -2933,6 +3003,21 @@ export class Renderer {
           this.triggerAttack(ev.sourceId);
           break;
         }
+        if (ev.fx === 'shout') {
+          // A warrior shout: the caster roars (the cheer one-shot reads as a
+          // battle cry at speed) while a per-shout coloured shockwave ring rolls
+          // out along the ground from their feet.
+          this.playShoutFx(ev.targetId, ev.ability);
+          break;
+        }
+        if (ev.fx === 'weaponAura' || ev.fx === 'flourish') {
+          // A pure cast gesture: play the ability's mapped one-shot clip
+          // (manifest attackByAbility: Sanguine Aura raises the blade skyward,
+          // Raised Guard plants behind the shield). No particles by owner
+          // request; Sanguine's green mainhand imbue stays aura-driven.
+          this.triggerAttack(ev.sourceId, ev.ability);
+          break;
+        }
         if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'beam') this.vfx.beam(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'chainHeal') this.vfx.chainHealArc(ev.sourceId, ev.targetId);
@@ -3697,6 +3782,22 @@ export class Renderer {
     if (v) this.activeVisual(v)?.playHit();
   }
 
+  // A warrior shout (spellfx fx:'shout'): the caster plays the cheer one-shot
+  // sped up (arms thrown up, reads as a roar) and a shout-coloured ember
+  // shockwave rolls outward along the ground, with the terrain-draped ring flash
+  // marking the wave's footprint (the reference look: an expanding fiery ring).
+  private playShoutFx(entityId: number, abilityId?: string): void {
+    const e = this.sim.entities.get(entityId);
+    if (!e) return;
+    const color = SHOUT_WAVE_COLORS[abilityId ?? ''] ?? 0xff3220;
+    this.vfx.shoutwave(entityId, color);
+    this.spawnAoeRing(e.pos.x, e.pos.z, SHOUT_RING_RADIUS, 'physical', color);
+    const v = this.views.get(entityId);
+    const vis = v && this.activeVisual(v);
+    // One single arms-up pump: the chat /cheer double-pumps, a war shout roars once.
+    if (vis && !vis.isMidOneShot) vis.playEmote('cheer', 1);
+  }
+
   private isHostileSelectionTarget(target: Entity): boolean {
     // A controlled pet inherits its owner's reaction (a player's pet is hostile
     // only in PvP), so route mobs through the owner-aware helper; everything
@@ -4451,6 +4552,7 @@ export class Renderer {
         v.offhandItemId = e.offhandItemId;
         v.visual.setWeapons(e.mainhandItemId, e.offhandItemId);
       }
+      v.visual.setWeaponAura(e.auras.some((a) => a.id === 'sanguine_aura'));
 
       // live body-size buffs (Fiesta power-ups): scale the whole group so the
       // rig, click proxy, and any form visual grow/shrink together.
@@ -4665,6 +4767,18 @@ export class Renderer {
       if (e.auras.some((a) => a.id === 'nythraxis_soul_rend')) {
         this.vfx.castSparkle(e.id, 'shadow', dt * 3.2);
       }
+      // Recklessness: the body burns red for the whole buff, and the cast pops a
+      // 1s skull over the head (edge-triggered on the buff appearing, so it works
+      // identically for the local player and mirrored online players).
+      if (e.auras.some((a) => a.kind === 'buff_reckless')) {
+        this.vfx.recklessFlame(e.id, dt);
+        if (!v.recklessOn) {
+          v.recklessOn = true;
+          this.spawnRecklessSkull(v, e);
+        }
+      } else if (v.recklessOn) {
+        v.recklessOn = false;
+      }
       // The graveyard angel: a soft, constant golden shimmer rising off the Spirit Healer.
       if (e.templateId === 'spirit_healer') this.vfx.castSparkle(e.id, 'holy', dt * 0.6);
       if (swimming) this.vfx.swimRipple(v.group.position, moving ? dt * 3 : dt);
@@ -4738,6 +4852,7 @@ export class Renderer {
     }
     this.updateClickMarkers(dt);
     this.updateAoeRings(dt);
+    this.updateSkullFx(dt);
     this.updateGroundAimReticle(dt);
     // dev-only Tab-target cone overlay: re-drape the front cone on the terrain
     // under the local player, oriented to the model's rendered facing.
@@ -5692,7 +5807,7 @@ export class Renderer {
 
   // Flash a school-colored AoE ring on the terrain at a ground-targeted blast's
   // landing spot, sized to the blast radius (see aoe_ring.ts for the curves).
-  spawnAoeRing(x: number, z: number, radius: number, school: string): void {
+  spawnAoeRing(x: number, z: number, radius: number, school: string, colorHex?: number): void {
     if (this.aoeRings.length === 0) return;
     const slot = this.aoeRings[this.aoeRingNext];
     this.aoeRingNext = (this.aoeRingNext + 1) % this.aoeRings.length;
@@ -5700,7 +5815,8 @@ export class Renderer {
     slot.ring.position.set(x, y, z);
     slot.radius = radius;
     slot.elapsed = 0;
-    slot.mat.color.setHex(SCHOOL_COLORS[school] ?? 0xffffff);
+    // An explicit colour (the per-shout shockwave hue) beats the school palette.
+    slot.mat.color.setHex(colorHex ?? SCHOOL_COLORS[school] ?? 0xffffff);
     if (!this.lowGfx) slot.mat.color.multiplyScalar(SELECTION_RING_BOOST);
     slot.ring.visible = true;
   }
@@ -5734,6 +5850,41 @@ export class Renderer {
       }
       slot.ring.scale.setScalar(slot.radius * a.ringScale);
       slot.mat.opacity = a.ringAlpha;
+    }
+  }
+
+  // Recklessness cast flourish: a red skull sprite popping up over the caster's
+  // head for RECKLESS_SKULL_LIFETIME, riding the entity group so it tracks them.
+  private spawnRecklessSkull(v: EntityView, e: Entity): void {
+    const vis = this.activeVisual(v);
+    const sprite = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: recklessSkullTexture(),
+        transparent: true,
+        depthWrite: false,
+        opacity: 1,
+      }),
+    );
+    sprite.position.set(0, (vis?.height ?? 1.8) * e.scale + 1.05, 0);
+    sprite.scale.setScalar(0.9);
+    v.group.add(sprite);
+    this.skullFx.push({ sprite, parent: v.group, elapsed: 0 });
+  }
+
+  private updateSkullFx(dt: number): void {
+    for (let i = this.skullFx.length - 1; i >= 0; i--) {
+      const fx = this.skullFx[i];
+      fx.elapsed += dt;
+      if (fx.elapsed >= RECKLESS_SKULL_LIFETIME) {
+        fx.parent.remove(fx.sprite);
+        fx.sprite.material.dispose(); // the map texture is the shared singleton: keep it
+        this.skullFx.splice(i, 1);
+        continue;
+      }
+      // drift up, hold bright, then fade out over the last 40%
+      fx.sprite.position.y += dt * 0.45;
+      const t = fx.elapsed / RECKLESS_SKULL_LIFETIME;
+      fx.sprite.material.opacity = t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4;
     }
   }
 

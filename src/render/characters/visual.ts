@@ -104,6 +104,8 @@ export class CharacterVisual {
   private shadowProxy: THREE.Mesh | null = null;
   private casters: THREE.Mesh[] = [];
   private originalMaterials = new Map<THREE.Mesh, THREE.Material | THREE.Material[]>();
+  private weaponAuraMeshes: THREE.Mesh[] = [];
+  private weaponAuraOn = false;
   private ghostMaterials = new Map<THREE.Material, THREE.Material>();
   private soulRendMaterials = new Map<THREE.Material, THREE.Material>();
   private formTintMaterials = new Map<string, Map<THREE.Material, THREE.Material>>();
@@ -363,12 +365,14 @@ export class CharacterVisual {
     this.playOneShot(clips[Math.floor(Math.random() * clips.length)], 1.2);
   }
 
-  playEmote(id: OverheadEmoteId): void {
+  playEmote(id: OverheadEmoteId, repeatsOverride?: number): void {
     if (this.deadLock) return;
     const spec = this.def.clips.emote?.[id];
     const clip = firstLoadedEmoteClip(spec, (name) => this.action(name));
     if (!clip) return;
-    this.playOneShot(clip, spec?.timeScale ?? 1, spec?.repeats ?? 1, id);
+    // A caller may cap the repeats (the warrior shout roars ONCE; the chat
+    // /cheer keeps its double pump from the spec).
+    this.playOneShot(clip, spec?.timeScale ?? 1, repeatsOverride ?? spec?.repeats ?? 1, id);
   }
 
   // -------------------------------------------------------------------------
@@ -549,6 +553,54 @@ export class CharacterVisual {
     this.originalMaterials.clear();
     this.rebuildCasters();
     this.applyVisualMaterials();
+    this.rebuildWeaponAura();
+  }
+
+  /** Adds a lightweight additive overlay to the equipped mainhand only. */
+  setWeaponAura(on: boolean): void {
+    if (on === this.weaponAuraOn) return;
+    this.weaponAuraOn = on;
+    this.rebuildWeaponAura();
+  }
+
+  private rebuildWeaponAura(): void {
+    for (const mesh of this.weaponAuraMeshes) {
+      mesh.removeFromParent();
+      (mesh.material as THREE.Material).dispose();
+    }
+    this.weaponAuraMeshes.length = 0;
+    if (!this.weaponAuraOn) return;
+
+    const weaponHolders: THREE.Object3D[] = [];
+    this.model.traverse((o) => {
+      if (o.userData.swapWeaponHolder) weaponHolders.push(o);
+    });
+    // Pick the MAINHAND holder by its stamped held slot (0 = mainhand): traverse
+    // order is not slot order, so "first found" used to land the glow on the
+    // offhand shield. Legacy holders without the stamp fall back to first-found.
+    const mainhand = weaponHolders.find((o) => o.userData.heldSlot === 0) ?? weaponHolders[0];
+    if (!mainhand) return;
+    mainhand.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (!mesh.isMesh || !mesh.userData.weaponMesh || !mesh.parent) return;
+      const aura = new THREE.Mesh(
+        mesh.geometry,
+        new THREE.MeshBasicMaterial({
+          color: 0x45ff9a,
+          transparent: true,
+          opacity: 0.42,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          side: THREE.DoubleSide,
+        }),
+      );
+      aura.position.copy(mesh.position);
+      aura.quaternion.copy(mesh.quaternion);
+      aura.scale.copy(mesh.scale).multiplyScalar(1.08);
+      aura.renderOrder = 3;
+      mesh.parent.add(aura);
+      this.weaponAuraMeshes.push(aura);
+    });
   }
 
   /** Rebuild the shadow-caster list and original-material snapshot after the model
@@ -568,6 +620,11 @@ export class CharacterVisual {
 
   dispose(): void {
     this.disposed = true;
+    for (const mesh of this.weaponAuraMeshes) {
+      mesh.removeFromParent();
+      (mesh.material as THREE.Material).dispose();
+    }
+    this.weaponAuraMeshes.length = 0;
     this.mixer.stopAllAction();
     this.mixer.uncacheRoot(this.model);
     this.root.removeFromParent();

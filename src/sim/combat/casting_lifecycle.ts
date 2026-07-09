@@ -935,6 +935,18 @@ function applyAbility(
 
   spendAbilityCost(ctx, p, meta, res);
   armAbilityCooldown(p, ability.id, res.cooldown, togglingOff, res.charges ?? 1);
+  // A shout announces itself: world-visible cue so the caster roars and the
+  // shockwave ring reads for everyone nearby (renderer-only; no mechanic).
+  if (ability.castFx && !togglingOff) {
+    ctx.emit({
+      type: 'spellfx',
+      sourceId: p.id,
+      targetId: p.id,
+      school: ability.school,
+      fx: ability.castFx,
+      ability: ability.id,
+    });
+  }
   ctx.runEffects(p, meta, target, res, echoOpts);
   // 'spellCast' means SPELLS: physical specials (a cat/bear weapon strike from a
   // cloth-capable druid) and toggle-offs fall through here and must not roll.

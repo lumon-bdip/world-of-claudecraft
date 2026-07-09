@@ -437,6 +437,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   battle_shout: {
     id: 'battle_shout',
+    castFx: 'shout',
     name: 'Iron Bellow',
     class: 'warrior',
     learnLevel: 1,
@@ -452,6 +453,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   commanding_shout: {
     id: 'commanding_shout',
+    castFx: 'shout',
     name: 'Bolstering Cry',
     class: 'warrior',
     learnLevel: 14,
@@ -475,6 +477,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   demoralizing_shout: {
     id: 'demoralizing_shout',
+    castFx: 'shout',
     name: 'Direhowl',
     class: 'warrior',
     learnLevel: 12,
@@ -809,6 +812,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   // overridden-not-skipped crit rolls; combat/sure_crit.ts).
   emboldening_roar: {
     id: 'emboldening_roar',
+    castFx: 'shout',
     name: 'Emboldening Roar',
     class: 'warrior',
     learnLevel: 16,
@@ -829,6 +833,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   // combat/damage.ts fold but gated on the school being physical).
   raised_guard: {
     id: 'raised_guard',
+    castFx: 'flourish',
     name: 'Raised Guard',
     class: 'warrior',
     learnLevel: 8,
@@ -902,6 +907,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   // to the top of its table + forced onto the caster), the fan-out of Goad.
   defiant_bellow: {
     id: 'defiant_bellow',
+    castFx: 'shout',
     name: 'Defiant Bellow',
     class: 'warrior',
     learnLevel: 12,
@@ -4142,6 +4148,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   rallying_cry: {
     id: 'rallying_cry',
+    castFx: 'shout',
     name: 'Rallying Cry',
     class: 'warrior',
     learnLevel: 18,
@@ -4179,6 +4186,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   intimidating_shout: {
     id: 'intimidating_shout',
+    castFx: 'shout',
     name: 'Intimidating Shout',
     class: 'warrior',
     learnLevel: 14,
@@ -4318,6 +4326,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   sanguine_aura: {
     id: 'sanguine_aura',
+    castFx: 'weaponAura',
     name: 'Sanguine Aura',
     class: 'warrior',
     learnLevel: 20,

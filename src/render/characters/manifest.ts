@@ -458,6 +458,10 @@ export const VISUALS: Record<string, VisualDef> = {
         overpower: '1H_Melee_Attack_Slice_Diagonal',
         rend: '1H_Melee_Attack_Slice_Diagonal',
         hamstring: '1H_Melee_Attack_Slice_Diagonal',
+        // Cast flourishes (castFx-driven, not damage swings): Sanguine Aura
+        // raises the blade skyward; Raised Guard plants behind the shield.
+        sanguine_aura: 'Spellcast_Raise',
+        raised_guard: 'Block',
       },
     },
     show: ['Knight_Helmet', 'Knight_Cape'], // v2 knight dropped the built-in Badge_Shield mesh

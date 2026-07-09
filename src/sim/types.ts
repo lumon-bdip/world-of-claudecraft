@@ -1692,6 +1692,12 @@ export interface AbilityDef {
   // unchanged): 'lightning' draws a jagged electric bolt from caster to target
   // instead of the default glowing bolt. Renderer-only; the sim just forwards it.
   projectileFx?: 'lightning';
+  // Instant-cast VISUAL cue (renderer-only; the sim just emits a spellfx with it):
+  // 'shout' plays the caster's roar one-shot + an expanding ground shockwave ring
+  // (the warrior shouts); 'flourish' plays the ability-mapped one-shot clip
+  // (manifest attackByAbility) with no particles: a pure cast gesture. Emitted on
+  // the successful instant resolution.
+  castFx?: 'shout' | 'weaponAura' | 'flourish';
   school: 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature';
   // Damage scaling source for the flat directDamage / DoT / AoE riders. Default:
   // non-physical damage scales with Spell Power; physical damage scales with melee
@@ -2582,7 +2588,20 @@ export type SimEvent = { pid?: number } & (
       sourceId: number;
       targetId: number;
       school: string;
-      fx: 'projectile' | 'beam' | 'tick' | 'nova' | 'chainHeal' | 'windup' | 'lightning';
+      fx:
+        | 'projectile'
+        | 'beam'
+        | 'tick'
+        | 'nova'
+        | 'chainHeal'
+        | 'windup'
+        | 'lightning'
+        | 'shout'
+        | 'weaponAura'
+        | 'flourish';
+      // The casting ability's id, carried only by fx kinds whose visual varies per
+      // ability (shouts pick their wave colour; weapon auras identify the buff).
+      ability?: string;
     }
   // visual-only cue anchored to a WORLD POINT rather than an entity: a
   // ground-targeted spell's impact (the burst/nova lands where it was aimed, not

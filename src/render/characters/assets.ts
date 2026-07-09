@@ -253,12 +253,19 @@ function attachProp(
   bone: THREE.Object3D,
   att: AttachDef,
   markSwap = false,
+  heldSlot?: number,
 ): void {
   const payload = flattenWeaponScene(cloneSkinned(resolvedGltf(att.url).scene));
   payload.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) o.userData.weaponMesh = true;
   });
-  if (markSwap) payload.userData[SWAP_WEAPON_TAG] = true;
+  if (markSwap) {
+    payload.userData[SWAP_WEAPON_TAG] = true;
+    // Which held slot this holder carries (0 = mainhand, 1 = offhand), so a
+    // weapon-only overlay (the Sanguine weapon aura) can target the mainhand
+    // instead of guessing by traverse order (which found the shield first).
+    if (heldSlot !== undefined) payload.userData.heldSlot = heldSlot;
+  }
   const variantGrip = isHandslotBone(att.bone) ? variantGripFor(att.url) : null;
   if (variantGrip) {
     applyVariantGrip(payload, att.bone, variantGrip);
@@ -530,7 +537,7 @@ export function assembleModel(
     // so the authored "handslot.r" arrives as "handslotr" — try both
     const bone = resolveBone(root, att.bone);
     if (!bone) continue; // manifest/bone mismatch — ship without the prop
-    attachProp(root, bone, att, isSwap);
+    attachProp(root, bone, att, isSwap, swapIndex >= 0 ? swapIndex : undefined);
   }
   // Re-orient mis-baked built-in weapon nodes (e.g. the golem axe) in place.
   for (const fix of def.weaponFix ?? []) {
@@ -569,7 +576,7 @@ export function setHeldItems(
     if (!att) continue;
     const bone = resolveBone(root, att.bone);
     if (!bone) continue;
-    attachProp(root, bone, att, true);
+    attachProp(root, bone, att, true, slot);
   }
 }
 
