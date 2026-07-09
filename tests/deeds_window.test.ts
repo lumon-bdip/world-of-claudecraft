@@ -226,6 +226,16 @@ describe('touch long-press peek', () => {
         /if \(this\.deps\.consumePeek\(\)\) \{\s*this\.deps\.hideTooltip\(\);\s*return;\s*\}/g,
       )?.length,
     ).toBe(2);
+    // Association, not just count: the guard is the FIRST statement of the
+    // [data-watch] handler AND of the [data-title] handler specifically.
+    for (const selector of ['data-watch', 'data-title']) {
+      expect(painter).toMatch(
+        new RegExp(
+          `\\('\\[${selector}\\]'\\)\\)\\s*\\{\\s*btn\\.addEventListener\\('click', \\(\\) => \\{\\s*` +
+            `if \\(this\\.deps\\.consumePeek\\(\\)\\)`,
+        ),
+      );
+    }
     expect(hud).toMatch(
       /new DeedsWindow\(\{[\s\S]{0,600}?consumePeek: \(\) => this\.peekGuard\.consume\(\),/,
     );

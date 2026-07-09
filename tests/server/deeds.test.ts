@@ -4,6 +4,7 @@
 // block (the shared normalizer every serving arm calls).
 process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_deeds_units';
 
+import { readFileSync } from 'node:fs';
 import type * as http from 'node:http';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -74,6 +75,17 @@ describe('deeds route table', () => {
     expect(toggle?.surface).toBe('api');
     // The mutation bearer gate + body parser.
     expect(toggle?.middleware).toHaveLength(2);
+  });
+
+  it('mounts the READ-scope gate on the GET (source pin: a scope swap must red)', () => {
+    // The middleware array only holds opaque functions, so the scope tier is
+    // pinned at the source: the read gate is built with scope 'read' and the
+    // GET route mounts exactly that gate.
+    const src = readFileSync(new URL('../../server/deeds.ts', import.meta.url), 'utf8');
+    expect(src).toContain("const readAccount = requireAccount({ scope: 'read' });");
+    expect(src).toMatch(
+      /method: 'GET',\s*path: '\/api\/deeds\/broadcasts',\s*surface: 'api',\s*middleware: \[readAccount\]/,
+    );
   });
 });
 

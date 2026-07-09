@@ -61,6 +61,24 @@ describe('deed broadcast row', () => {
     expect(toggle.getAttribute('aria-pressed')).toBe('false');
   });
 
+  it('the server echo wins over the optimistic flip when they differ', async () => {
+    // A server that refuses the change echoes the OLD value; the row must
+    // settle on the echo, not the optimistic flip (deleting the echo
+    // application would leave the row lying until the next open).
+    const set = vi.fn(async (): Promise<boolean> => false);
+    const { toggle } = mount({ get: async () => false, set });
+    await settled();
+    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    toggle.click();
+    // Optimistic flip to true...
+    expect(toggle.getAttribute('aria-pressed')).toBe('true');
+    await settled();
+    // ...but the echo said false, so false is what renders.
+    expect(set).toHaveBeenCalledWith(true);
+    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(toggle.disabled).toBe(false);
+  });
+
   it('reverts to the last known state when the write fails', async () => {
     const set = vi.fn(async (): Promise<boolean> => {
       throw new Error('offline');
