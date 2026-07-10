@@ -6,6 +6,7 @@ import { QUEST_LETTERS } from '../src/sim/content/letters';
 import {
   ABILITIES,
   CLASSES,
+  DEEDS,
   DELVES,
   DUNGEONS,
   ITEMS,
@@ -16,6 +17,7 @@ import {
 } from '../src/sim/data';
 import type { PlayerClass } from '../src/sim/types';
 import { abilityBuffValue } from '../src/ui/ability_damage';
+import { deedDesc, deedName, deedTitleText, deedTranslationManifest } from '../src/ui/deed_i18n';
 import {
   assertEntityTranslationsReady,
   entityTranslationFallbackLog,
@@ -1150,6 +1152,58 @@ describe('i18n Localization Key Coverage', () => {
         ),
       ).toContain('생명력');
     }
+
+    setLanguage('en');
+  });
+
+  it('should provide deed content translations for every supported locale', () => {
+    const deedEntries = deedTranslationManifest();
+    expect(deedEntries.length).toBe(Object.keys(DEEDS).length * 2 + 19);
+
+    for (const lang of supportedLanguages) {
+      setLanguage(lang);
+      for (const entry of deedEntries) {
+        const rendered =
+          entry.field === 'name'
+            ? deedName(entry.id)
+            : entry.field === 'desc'
+              ? deedDesc(entry.id)
+              : deedTitleText(entry.id);
+        expect(rendered.trim().length, `${lang}.${entry.id}.${entry.field}`).toBeGreaterThan(0);
+        // RELEASE-TIER ONLY (copied-English deed prose): an unfilled deed desc
+        // renders the authored English fallback, which is legal on a PR (the
+        // English-only contributor rule) and blocked only at the release gate.
+        if (RELEASE_TIER && lang !== 'en' && lang !== 'en_CA' && entry.field === 'desc') {
+          expect(
+            copiedEnglishComparable(rendered),
+            `${lang}.${entry.id}.desc should not copy canonical English deed prose`,
+          ).not.toBe(copiedEnglishComparable(entry.source));
+        }
+      }
+      // The five milestone titles are locked to the established game.milestone.*
+      // renderings in every locale (milestones unified into deeds: one prestige
+      // system, one vocabulary).
+      for (const [deedId, milestoneKey] of [
+        ['prog_veteran', 'game.milestone.veteran'],
+        ['prog_champion', 'game.milestone.champion'],
+        ['prog_paragon', 'game.milestone.paragon'],
+        ['prog_mythic', 'game.milestone.mythic'],
+        ['prog_eternal', 'game.milestone.eternal'],
+      ] as [string, TranslationKey][]) {
+        expect(deedTitleText(deedId), `${lang} ${deedId} title`).toBe(t(milestoneKey));
+      }
+    }
+
+    // Real-translation spot pins (these would render the English fill if the
+    // locale tables were dropped or the language wiring broke).
+    setLanguage('de_DE');
+    expect(deedName('prog_first_steps')).toBe('Erste Schritte');
+    setLanguage('ja_JP');
+    expect(deedName('prog_first_steps')).toBe('はじめの一歩');
+    setLanguage('zh_CN');
+    expect(deedName('prog_first_steps')).toBe('千里之行');
+    setLanguage('ru_RU');
+    expect(deedTitleText('prog_veteran')).toBe('Ветеран');
 
     setLanguage('en');
   });

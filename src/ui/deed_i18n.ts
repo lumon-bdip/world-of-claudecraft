@@ -1,13 +1,13 @@
 // Deed name / description / title localization (the talent_i18n entity-style
 // pattern scoped to the Book of Deeds). The English source of truth is the
 // DEEDS content table itself (name/desc on the def, the title string on its
-// reward); this module adds the locale plumbing so the release-time fill
-// lands entirely in DEED_LOCALES without touching a single call site.
-// English-only today by design: an absent locale table or field falls back to
-// the authored English (clean English is preferable to a broken guess; the
-// release fill covers every locale at once).
+// reward); this module adds the locale plumbing, and the release fill lives
+// in DEED_LOCALE_TABLES (deed_i18n.newlocales.ts) without touching a single
+// call site. An absent locale table or field still falls back to the
+// authored English (clean English is preferable to a broken guess).
 
 import { DEEDS } from '../sim/data';
+import { DEED_LOCALE_TABLES } from './deed_i18n.newlocales';
 import { getLanguage, type SupportedLanguage, t } from './i18n';
 
 export type DeedTranslationField = 'name' | 'desc' | 'title';
@@ -22,10 +22,16 @@ export interface DeedLocaleEntry {
 
 export type DeedLocaleTable = Record<string, DeedLocaleEntry>;
 
-// The release-fill hook table (the TALENT_NEW newlocales shape): one
-// DeedLocaleTable per non-English locale, keyed by deed id. Deliberately
-// empty until the end-of-project translation pass.
-const DEED_LOCALES: Partial<Record<SupportedLanguage, DeedLocaleTable>> = {};
+// The release-fill table (the TALENT_NEW newlocales shape): one
+// DeedLocaleTable per base locale, assembled here with es_ES and fr_CA as
+// pure dialect aliases of their base locale (the talent_i18n localeText
+// dialect model); en and en_CA resolve to the authored English in
+// localeEntry before this map is consulted.
+const DEED_LOCALES: Partial<Record<SupportedLanguage, DeedLocaleTable>> = {
+  ...DEED_LOCALE_TABLES,
+  es_ES: DEED_LOCALE_TABLES.es,
+  fr_CA: DEED_LOCALE_TABLES.fr_FR,
+};
 
 function localeEntry(id: string): DeedLocaleEntry | undefined {
   const lang = getLanguage();

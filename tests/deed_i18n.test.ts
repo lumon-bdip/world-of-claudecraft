@@ -4,6 +4,7 @@
 // hide entirely on ''), and the release-fill manifest shape.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { DEEDS } from '../src/sim/data';
 import {
   deedBroadcastLine,
   deedDesc,
@@ -13,6 +14,8 @@ import {
   titledDisplayName,
   titledNameDecoration,
 } from '../src/ui/deed_i18n';
+import { DEED_LOCALE_TABLES } from '../src/ui/deed_i18n.newlocales';
+import { setLanguage } from '../src/ui/i18n';
 
 describe('deed_i18n English resolution', () => {
   it('resolves name and desc from the catalog def', () => {
@@ -114,5 +117,75 @@ describe('titledDisplayName + titledNameDecoration (the name-plus-title pattern)
     expect(fn.slice(0, 1600)).toContain('this.openChatPlayerContextMenu(name, ev.clientX');
     const toWhisperArm = hudSrc.slice(hudSrc.indexOf('CHAT_TEMPLATE_KEYS.toWhisper') - 200);
     expect(toWhisperArm.slice(0, 400)).not.toContain('ev.fromTitle');
+  });
+});
+
+describe('DEED_LOCALE_TABLES (the release fill)', () => {
+  const tableLocales = Object.keys(DEED_LOCALE_TABLES) as (keyof typeof DEED_LOCALE_TABLES)[];
+
+  it('covers every manifest row in all 18 base locale tables', () => {
+    expect(tableLocales.length).toBe(18);
+    const manifest = deedTranslationManifest();
+    for (const lang of tableLocales) {
+      const table = DEED_LOCALE_TABLES[lang];
+      for (const row of manifest) {
+        const value = table[row.id]?.[row.field];
+        expect(
+          value !== undefined && value.trim().length > 0,
+          `${lang}.${row.id}.${row.field}`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('carries only real catalog ids, and a title exactly where the deed rewards one', () => {
+    for (const lang of tableLocales) {
+      for (const [id, entry] of Object.entries(DEED_LOCALE_TABLES[lang])) {
+        const def = DEEDS[id];
+        expect(def, `${lang}.${id} is not a catalog deed`).toBeDefined();
+        if (entry.title !== undefined) {
+          expect(def?.reward?.kind, `${lang}.${id} carries a title but the deed rewards none`).toBe(
+            'title',
+          );
+        }
+      }
+    }
+  });
+
+  it('keeps every value free of em/en dashes and emoji (this file sits outside the overlay copy-scan exemption)', () => {
+    const forbidden =
+      /[–—―]|[\u{1F000}-\u{1FAFF}]|[\u{1F1E6}-\u{1F1FF}]|[\u{2600}-\u{27BF}]|\u{FE0F}/u;
+    for (const lang of tableLocales) {
+      for (const [id, entry] of Object.entries(DEED_LOCALE_TABLES[lang])) {
+        for (const field of ['name', 'desc', 'title'] as const) {
+          const value = entry[field];
+          if (value !== undefined) {
+            expect(forbidden.test(value), `${lang}.${id}.${field}: "${value}"`).toBe(false);
+          }
+        }
+      }
+    }
+  });
+
+  it('resolves per language, with es_ES and fr_CA as pure aliases of their base locale', () => {
+    try {
+      setLanguage('de_DE');
+      expect(deedName('prog_first_steps')).toBe('Erste Schritte');
+      expect(deedTitleText('prog_veteran')).toBe('Veteran');
+      // Dialect aliasing: es_ES resolves byte-identically to es (the
+      // talent_i18n localeText dialect model, one shared table object).
+      setLanguage('es_ES');
+      const dialectName = deedName('prog_first_steps');
+      const dialectDesc = deedDesc('col_discovery_250');
+      setLanguage('es');
+      expect(deedName('prog_first_steps')).toBe(dialectName);
+      expect(deedDesc('col_discovery_250')).toBe(dialectDesc);
+      // en_CA resolves to the authored English before the table is consulted.
+      setLanguage('en_CA');
+      expect(deedName('prog_first_steps')).toBe('First Steps');
+      expect(deedTitleText('prog_veteran')).toBe('Veteran');
+    } finally {
+      setLanguage('en');
+    }
   });
 });
