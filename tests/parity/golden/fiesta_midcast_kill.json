@@ -31,7 +31,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 409,
-      "state": "f4f59613",
+      "state": "f7583617",
       "events": "b8e63708",
       "rng": {
         "draws": 0,
@@ -42,7 +42,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 409,
-      "state": "4369556a",
+      "state": "6b799172",
       "events": "90b217f1",
       "rng": {
         "draws": 28,
@@ -53,7 +53,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 409,
-      "state": "776f203e",
+      "state": "f8b39d86",
       "events": "d13b86f9",
       "rng": {
         "draws": 138,
@@ -64,7 +64,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 409,
-      "state": "6ecc3e29",
+      "state": "a2eccbad",
       "events": "669c1069",
       "rng": {
         "draws": 294,
@@ -75,7 +75,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 409,
-      "state": "ec964119",
+      "state": "bcf347d1",
       "events": "21143105",
       "rng": {
         "draws": 300,
@@ -110,6 +110,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -172,6 +173,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -241,6 +243,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -303,6 +306,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -575,7 +579,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 409,
-      "state": "3024310e",
+      "state": "eaf778d2",
       "events": "09d8010d",
       "rng": {
         "draws": 300,
@@ -610,6 +614,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -672,6 +677,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -741,6 +747,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -803,6 +810,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1073,7 +1081,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 409,
-      "state": "a1e088c4",
+      "state": "7c742df8",
       "events": "a5541b1d",
       "rng": {
         "draws": 300,
@@ -1109,6 +1117,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1171,6 +1180,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1241,6 +1251,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1303,6 +1314,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1573,7 +1585,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 409,
-      "state": "f2bed706",
+      "state": "ee1ba2c2",
       "events": "741638a5",
       "rng": {
         "draws": 429,
@@ -1584,7 +1596,7 @@
       "tick": 142,
       "time": 7.1,
       "nextId": 409,
-      "state": "3bd91a7d",
+      "state": "cc5716b5",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1620,6 +1632,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1682,6 +1695,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1752,6 +1766,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -1814,6 +1829,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {

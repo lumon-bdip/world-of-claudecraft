@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "c34f2af6",
+      "state": "3cf6ed35",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -49,6 +49,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -140,7 +141,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 407,
-      "state": "7981c40b",
+      "state": "d40a2ed0",
       "events": "2ce1c7a7",
       "rng": {
         "draws": 12,
@@ -151,7 +152,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 407,
-      "state": "30c32ba8",
+      "state": "d4141869",
       "events": "d79475a7",
       "rng": {
         "draws": 21,
@@ -162,7 +163,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 407,
-      "state": "f216419e",
+      "state": "d54e40d7",
       "events": "e3502640",
       "rng": {
         "draws": 98,
@@ -173,7 +174,7 @@
       "tick": 72,
       "time": 3.6,
       "nextId": 407,
-      "state": "eb3e78e4",
+      "state": "52e341fd",
       "events": "741638a5",
       "rng": {
         "draws": 151,
@@ -210,6 +211,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

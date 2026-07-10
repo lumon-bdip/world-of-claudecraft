@@ -860,7 +860,13 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
           // re-runs recalc when the aura fades, bloodbath being a buff* kind...
           // it is NOT: 'bloodbath' does not start with 'buff', so the expiry
           // pass must know it. See the expiry arm in combat/auras.ts.
-          recalcPlayerStats(creditEntity, meta.cls, meta.equipment, ctx.playerMods(meta));
+          recalcPlayerStats(
+            creditEntity,
+            meta.cls,
+            meta.equipment,
+            ctx.playerMods(meta),
+            meta.equipmentInstance,
+          );
         }
         // Victory Rush (choice row): a credited kill opens the window in which
         // the granted strike is usable. A normal self aura (rides the aura
@@ -943,7 +949,7 @@ export function grantXp(
     meta.xp -= xpForLevel(p.level);
     p.level++;
     meta.counters.levelUps++;
-    recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+    recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
     p.hp = p.maxHp;
     if (p.resourceType === 'mana') p.resource = p.maxResource;
     ctx.emit({ type: 'levelup', level: p.level, pid: p.id });

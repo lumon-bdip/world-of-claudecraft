@@ -28,7 +28,7 @@
       "tick": 3,
       "time": 0.15,
       "nextId": 408,
-      "state": "00bc85b6",
+      "state": "55e5c508",
       "events": "dc5c470f",
       "rng": {
         "draws": 2,
@@ -61,6 +61,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -113,6 +114,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

@@ -227,10 +227,10 @@ describe('shared combat primitives', () => {
       sourceId: p.id,
       school: 'physical',
     });
-    recalcPlayerStats(p, meta.cls, meta.equipment, meta.talentMods);
+    recalcPlayerStats(p, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
     expect(p.critChance).toBeCloseTo(base + 0.2);
     p.auras.pop();
-    recalcPlayerStats(p, meta.cls, meta.equipment, meta.talentMods);
+    recalcPlayerStats(p, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
     expect(p.critChance).toBeCloseTo(base);
   });
 });

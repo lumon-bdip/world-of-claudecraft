@@ -202,6 +202,7 @@ export function characterSheet(input: CharacterSheetInput): CharacterSheet {
       level,
       state.equipment ?? {},
       talentMods(cls, state),
+      state.equipmentInstance ?? {},
     );
     sheet.stats = { ...derived.stats };
     sheet.vitals = {

@@ -58,7 +58,8 @@ import type { Entity } from '../types';
 function recomputeTalents(ctx: SimContext, meta: PlayerMeta): void {
   meta.talentMods = computeModifiersWithRows(meta.cls, meta.talents, meta.rowPicks);
   const e = ctx.entities.get(meta.entityId);
-  if (e) recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta));
+  if (e)
+    recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
   ctx.refreshKnownAbilities(meta, false);
 }
 

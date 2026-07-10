@@ -29,7 +29,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 409,
-      "state": "fa0d6247",
+      "state": "9b728865",
       "events": "1359f9d6",
       "rng": {
         "draws": 0,
@@ -40,7 +40,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 409,
-      "state": "8705d35a",
+      "state": "c130a914",
       "events": "90b217f1",
       "rng": {
         "draws": 54,
@@ -51,7 +51,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 409,
-      "state": "345929c6",
+      "state": "8f21f1d0",
       "events": "d13b86f9",
       "rng": {
         "draws": 152,
@@ -62,7 +62,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 409,
-      "state": "2110c56d",
+      "state": "857d664b",
       "events": "669c1069",
       "rng": {
         "draws": 276,
@@ -73,7 +73,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 409,
-      "state": "39145d1e",
+      "state": "619e4848",
       "events": "af6137dd",
       "rng": {
         "draws": 280,
@@ -106,6 +106,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -154,6 +155,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -207,6 +209,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -255,6 +258,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -507,7 +511,7 @@
       "tick": 102,
       "time": 5.1,
       "nextId": 409,
-      "state": "c0e1b3ab",
+      "state": "448c69c9",
       "events": "dcb84347",
       "rng": {
         "draws": 281,
@@ -540,6 +544,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -588,6 +593,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -643,6 +649,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -691,6 +698,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -943,7 +951,7 @@
       "tick": 103,
       "time": 5.15,
       "nextId": 409,
-      "state": "981ec16e",
+      "state": "a976dc4c",
       "events": "4a2a1595",
       "rng": {
         "draws": 284,
@@ -977,6 +985,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1026,6 +1035,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1082,6 +1092,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1133,6 +1144,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1385,7 +1397,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 409,
-      "state": "35d2d0ee",
+      "state": "eb0633cc",
       "events": "741638a5",
       "rng": {
         "draws": 411,
@@ -1396,7 +1408,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 409,
-      "state": "27ec1c8e",
+      "state": "59b1a76c",
       "events": "741638a5",
       "rng": {
         "draws": 548,
@@ -1407,7 +1419,7 @@
       "tick": 175,
       "time": 8.75,
       "nextId": 409,
-      "state": "9c994151",
+      "state": "f3f6fa6b",
       "events": "741638a5",
       "rng": {
         "draws": 712,
@@ -1418,7 +1430,7 @@
       "tick": 200,
       "time": 10,
       "nextId": 409,
-      "state": "dfc95003",
+      "state": "f4decbfd",
       "events": "741638a5",
       "rng": {
         "draws": 902,
@@ -1429,7 +1441,7 @@
       "tick": 225,
       "time": 11.25,
       "nextId": 409,
-      "state": "6d04106e",
+      "state": "2a27bb4c",
       "events": "bb18edca",
       "rng": {
         "draws": 1011,
@@ -1440,7 +1452,7 @@
       "tick": 243,
       "time": 12.15,
       "nextId": 409,
-      "state": "cbe226f9",
+      "state": "a0343e73",
       "events": "741638a5",
       "rng": {
         "draws": 1088,
@@ -1474,6 +1486,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1523,6 +1536,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1579,6 +1593,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1630,6 +1645,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1887,7 +1903,7 @@
       "tick": 243,
       "time": 12.15,
       "nextId": 409,
-      "state": "cbe226f9",
+      "state": "a0343e73",
       "events": "741638a5",
       "rng": {
         "draws": 1088,
@@ -1921,6 +1937,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1970,6 +1987,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2026,6 +2044,7 @@
             "mainhand": "rusty_dagger",
             "offhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2077,6 +2096,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

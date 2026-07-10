@@ -29,7 +29,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "9cfb4633",
+      "state": "716cd64d",
       "events": "f5b83c99",
       "rng": {
         "draws": 0,
@@ -62,6 +62,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -110,6 +111,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -259,7 +261,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "9cfb4633",
+      "state": "716cd64d",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -292,6 +294,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -340,6 +343,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -489,7 +493,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "9cfb4633",
+      "state": "716cd64d",
       "events": "d6bb8261",
       "rng": {
         "draws": 0,
@@ -522,6 +526,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -570,6 +575,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -719,7 +725,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "dc8647af",
+      "state": "1b2e50c9",
       "events": "2b9e34cf",
       "rng": {
         "draws": 0,
@@ -752,6 +758,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -800,6 +807,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -961,7 +969,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "9cfb4633",
+      "state": "716cd64d",
       "events": "23ac4037",
       "rng": {
         "draws": 0,
@@ -994,6 +1002,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1042,6 +1051,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1191,7 +1201,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 407,
-      "state": "19724ac5",
+      "state": "039ae97f",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1224,6 +1234,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1272,6 +1283,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

@@ -31,7 +31,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "7693a77e",
+      "state": "d9967737",
       "events": "70235950",
       "rng": {
         "draws": 5,
@@ -68,6 +68,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -394,7 +395,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 411,
-      "state": "9d7c9ec2",
+      "state": "2a5e388f",
       "events": "f12cc41d",
       "rng": {
         "draws": 8,
@@ -431,6 +432,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -810,7 +812,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 411,
-      "state": "9047a7b5",
+      "state": "a93d1012",
       "events": "7bbdb84b",
       "rng": {
         "draws": 9,
@@ -848,6 +850,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1228,7 +1231,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 413,
-      "state": "e2709b0a",
+      "state": "924e1827",
       "events": "533e3bec",
       "rng": {
         "draws": 15,
@@ -1266,6 +1269,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1689,7 +1693,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 414,
-      "state": "b42f603d",
+      "state": "fc2265da",
       "events": "cd900bf4",
       "rng": {
         "draws": 20,
@@ -1727,6 +1731,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2211,7 +2216,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 414,
-      "state": "b42f603d",
+      "state": "fc2265da",
       "events": "741638a5",
       "rng": {
         "draws": 20,
@@ -2249,6 +2254,7 @@
             "mainhand": "worn_sword",
             "offhand": "eastbrook_buckler"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
