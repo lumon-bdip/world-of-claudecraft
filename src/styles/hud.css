@@ -4140,6 +4140,14 @@
     color: #887c5c;
     margin-top: 8px;
   }
+  /* Primary action row (Accept / Cancel): one wrapper so the pair lays out as a
+     row on desktop (matching the old inline-button flow) and can ride sticky at
+     the window bottom on touch (hud.mobile.css). */
+  .trade-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
 
   /* ---------- elite target frame ---------- */
   #target-frame.elite .portrait {

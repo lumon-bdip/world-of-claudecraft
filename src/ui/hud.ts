@@ -1990,6 +1990,13 @@ export class Hud {
       (el.id === 'bank-window' || el.id === 'bags')
     )
       return;
+    // The market pairs its bags companion the same way on touch (body.market-open,
+    // 50/50 dock): a baked cascade inset on either half would beat the dock CSS.
+    if (
+      document.body.classList.contains('market-open') &&
+      (el.id === 'market-window' || el.id === 'bags')
+    )
+      return;
     const openCount = [...document.querySelectorAll<HTMLElement>('.window.panel')].filter(
       (win) => win !== el && this.isWindowVisible(win),
     ).length;
@@ -3572,6 +3579,11 @@ export class Hud {
     showError: (text) => this.showError(text),
     slotName: (slot) => itemSlotName(slot),
     syncBags: (open) => {
+      // The market-open body class drives the touch 50/50 dock (market left,
+      // bags right, the vendor-open/bank-open pairing pattern): without it both
+      // sheets edge-pin to the SAME full-screen rect on mobile and the bags
+      // window stacks directly on top of the market (live bug, PR #1736).
+      document.body.classList.toggle('market-open', open);
       if (open) {
         this.renderBags();
         $('#bags').style.display = 'flex';
@@ -14065,7 +14077,13 @@ export class Hud {
     cancelBtn.className = 'btn';
     cancelBtn.textContent = t('hud.trade.cancel');
     cancelBtn.addEventListener('click', () => this.sim.tradeCancel());
-    el.append(acceptBtn, cancelBtn);
+    // One wrapper row for the primary actions: on touch it rides sticky at the
+    // window bottom so Accept/Cancel never sit below the fold of the root
+    // scroller on a short landscape phone (live bug, PR #1736 audit).
+    const actions = document.createElement('div');
+    actions.className = 'trade-actions';
+    actions.append(acceptBtn, cancelBtn);
+    el.append(actions);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.sim.tradeCancel());
     el.querySelectorAll('.trade-item.mine').forEach((row) => {
       row.addEventListener('click', () => {

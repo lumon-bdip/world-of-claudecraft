@@ -2887,6 +2887,42 @@
   body.mobile-touch.bank-open #bank-window .panel-title .x-btn {
     display: none;
   }
+  /* Market 50/50 dock (body.market-open, set by the hud syncBags dep): the World
+     Market pairs its bags companion exactly like the bank, market LEFT and bags
+     RIGHT, because the Sell tab stages an item by tapping it in the bags window.
+     Without this both sheets edge-pin to the SAME full-screen rect on touch and
+     bags stacks directly on top of the market (Bags title over The World Market
+     title, grid over the Browse filters: live bug, PR #1736 audit). The market
+     is a flex column with its own internal listing scroll (#market-body), so the
+     panel stays overflow:hidden, mirroring the bank half. */
+  body.mobile-touch.market-open #market-window,
+  body.mobile-touch.market-open #bags {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+    max-height: none;
+    transform: none;
+    box-sizing: border-box;
+    z-index: 95;
+  }
+  body.mobile-touch.market-open #market-window {
+    left: max(10px, env(safe-area-inset-left));
+    right: calc(var(--app-vw) / var(--ui-scale, 1) / 2);
+    overflow: hidden;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-width: 1px;
+  }
+  body.mobile-touch.market-open #bags {
+    left: calc(var(--app-vw) / var(--ui-scale, 1) / 2);
+    right: max(10px, env(safe-area-inset-right));
+    overflow: hidden;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+  }
   /* Short landscape phones: the six category chips wrap to two rows at half-viewport
      width and eat the grid (a sub-row sliver at 360px tall). Keep them one
      horizontally scrollable row INSIDE the bank cluster only (both panels, so the
@@ -3156,7 +3192,14 @@
   body.mobile-touch #report-window {
     left: 10px !important;
     right: 10px !important;
+    top: 10px !important;
     width: auto !important;
+    /* transform: none is load-bearing: without it the desktop centering
+       translate(-50%, -50%) still applies to the edge-pinned sheet and shifts
+       the whole window half its width off the LEFT screen edge (rect x =
+       10 - width/2 measured live), leaving the title and half the reason
+       dropdown unreachable on every mobile viewport. */
+    transform: none !important;
     box-sizing: border-box;
   }
   body.mobile-touch #report-window select,
@@ -4264,6 +4307,113 @@
      Generalizes the #options-menu-only fix that predated the bug's diagnosis. */
   body.mobile-touch .window-frame {
     background-color: var(--color-panel-l2-base);
+  }
+  /* One scroller per window: the vendor sheet scrolls on its ROOT (the dock rule
+     re-asserts overflow-y:auto there), so the framed tab panels must not open a
+     SECOND nested scrollport (root 969/338 AND panel 916/243 measured live: two
+     scrollers fight the same touch gesture). The panels give their height back to
+     the root scroller on touch. */
+  body.mobile-touch #vendor-window [id^="vendor-window-panel-"] {
+    overflow: visible;
+    max-height: none;
+  }
+  /* Floating top-right chrome (minimap cluster, mail badge) sits above the
+     edge-pinned sheets and covered their top strip (the leaderboard's Daily
+     Leaderboard tab, the town-focus first stepper row: audit shots). While any
+     window is open on touch the world chrome is dimmed behind the backdrop and
+     not actionable anyway, so hide the floaters instead of fighting z-order. */
+  body.mobile-touch.mobile-window-open #minimap-wrap,
+  body.mobile-touch.mobile-window-open #mail-indicator {
+    display: none;
+  }
+  /* The More drawer is a modal list, so it takes the same L2 never-see-through
+     base as the framed windows (its bespoke glass gradient stayed mildly
+     transparent over the world), and its 15 menu pills grow from 36px to the
+     44px comfortable touch height (the 40px floor plus breathing room; the
+     drawer body already scrolls when the list outgrows the sheet). */
+  body.mobile-touch #mobile-extra-controls {
+    background: var(--color-panel-l2-base);
+  }
+  body.mobile-touch #mobile-extra-controls .mobile-btn {
+    height: 44px;
+  }
+  /* Touch-floor sweep (PR #1736 audit): every interactive control the audit
+     measured under the 40x40 mobile floor, lifted per window. The harvest
+     checkbox keeps a 22px visual box: its wrapping label row is the real tap
+     target and takes the floor. */
+  body.mobile-touch #char-window .skin-swatch {
+    width: 40px;
+    height: 40px;
+  }
+  body.mobile-touch #bags .chip,
+  body.mobile-touch .window-frame .chip {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  body.mobile-touch .vcup-bracket {
+    min-height: 40px;
+  }
+  body.mobile-touch .tf-step {
+    width: 40px;
+    height: 40px;
+  }
+  body.mobile-touch .corpse-harvest-row {
+    min-height: 40px;
+    align-items: center;
+  }
+  body.mobile-touch .corpse-harvest-check {
+    width: 22px;
+    height: 22px;
+  }
+  body.mobile-touch .mkt-search {
+    min-height: 40px;
+  }
+  body.mobile-touch #delve-board .btn {
+    min-height: 40px;
+  }
+  body.mobile-touch #options-menu .opt-scope {
+    min-height: 40px;
+  }
+  body.mobile-touch #options-menu .opt-slider {
+    min-height: 40px;
+  }
+  /* Trade actions ride sticky at the bottom of the root scroller so Accept and
+     Cancel never sit below the fold on a short landscape phone; the solid strip
+     covers content scrolling beneath. */
+  body.mobile-touch #trade-window .trade-actions {
+    position: sticky;
+    bottom: 0;
+    background: var(--color-panel-l2-base);
+    padding: 8px 0;
+    margin-top: 4px;
+  }
+  /* Wide-touch clamp (tablets, folded landscape 1200px+): the edge-pinned sheets
+     stretched their content across the full 1580px width (a 1560px queue button,
+     28px steppers a screen away from their labels). Clamp the sheet windows to a
+     comfortable reading width and center them between the insets; the options
+     menu (full-bleed shell by spec), the market and its bags dock (50/50
+     pairing), and the char/talents full-screen overlays keep their bespoke
+     layouts. The dock body classes exempt #bags/#vendor-window while paired. */
+  @media (min-width: 1200px) {
+    body.mobile-touch:not(.vendor-open) #vendor-window,
+    body.mobile-touch #quest-log-window,
+    body.mobile-touch #spellbook,
+    body.mobile-touch #quest-dialog,
+    body.mobile-touch #calendar-window,
+    body.mobile-touch #crafting-window,
+    body.mobile-touch #mailbox-window,
+    body.mobile-touch #emote-editor,
+    body.mobile-touch #arena-window,
+    body.mobile-touch #valecup-window,
+    body.mobile-touch #delve-board,
+    body.mobile-touch #leaderboard-window,
+    body.mobile-touch #loot-settings-window,
+    body.mobile-touch #town-focus-window,
+    body.mobile-touch #inspect-window,
+    body.mobile-touch:not(.vendor-open):not(.bank-open):not(.market-open) #bags {
+      max-width: 900px;
+      margin-inline: auto;
+    }
   }
 
   /* ---------- dedicated mobile settings shell (spec section 9 v1.1) ---------- */
