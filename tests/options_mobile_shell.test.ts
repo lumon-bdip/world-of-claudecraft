@@ -48,8 +48,8 @@ describe('options_mobile_shell: painter chrome', () => {
   it('carries no literal hex color in TS (tokens/stylesheet only)', () => {
     const hex = painter.match(/#[0-9a-fA-F]{3,8}\b/g) ?? [];
     expect(hex, `hex colors must move to tokens/CSS: ${hex.join(', ')}`).toEqual([]);
-    expect(painter.includes('—'), 'em dash').toBe(false);
-    expect(painter.includes('–'), 'en dash').toBe(false);
+    expect(painter.includes(String.fromCharCode(0x2014)), 'em dash').toBe(false);
+    expect(painter.includes(String.fromCharCode(0x2013)), 'en dash').toBe(false);
   });
 });
 

@@ -3771,7 +3771,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.controller.resetButtons': 'Сбросить раскладку кнопок',
   'hudChrome.controller.menuAction': 'Игровое меню',
   'hudChrome.controller.help':
-    'Левый стик — движение, правый — камера. Откройте окно, чтобы использовать экранный указатель.',
+    'Левый стик отвечает за движение, правый наводит камеру. Откройте окно, чтобы использовать экранный указатель.',
   'hud.tutorial.title': 'Новый искатель приключений',
   'hud.tutorial.stepLabel': 'Шаг {current} из {total}',
   'hud.tutorial.skip': 'Пропустить обучение',
