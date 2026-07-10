@@ -393,3 +393,87 @@ feature/achievements at 5f7da7ae6.
       that only eases them (a requirement can never grow), so no action is
       needed now or then.
     - Steam map headroom: 72 of 100 entries, unchanged.
+
+## Assembly resolutions, recheck QA (2026-07-10)
+
+The paired QA session for the second recheck. Its pre-work merge brought in
+the one release merge resolution 22 recorded as post-tip, so the range audit
+extends over it here, and the session's independent re-verification produced
+one correction to the standing record. This section APPENDS to the
+resolutions above and never rewrites them. Tree audited: feature/achievements
+at b08b1bebd plus the two fix commits it produced (b88576f95, 832ba54de).
+
+26. PR #1689 (mobile HUD fixes, release tip cf57f4b0a, merged here as
+    b08b1bebd) is judged and closed: ZERO deeds added, removed, or edited.
+    The second-parent enumeration (b08b1bebd^2 minus 69150d670, the
+    resolution 22 lesson) shows exactly cf57f4b0a and its fifteen PR-branch
+    ancestors; no other upstream change rode in. The delta carries zero
+    src/sim, server, or world_api files (diff-tree verified); the
+    substantive changes are pinch-zoom deadzone and sensitivity, app
+    viewport sizing, map plus quest-log window stacking, generic mobile
+    window safe-area padding, character-select compaction, and the
+    rotate-to-landscape gate now covering web mobile in-game portrait (an
+    access-mode removal aligned with the standing landscape-only policy; no
+    countable outcome). The resolution 23 QoL rejection class applies. The
+    two changed catalog keys are shell chrome (a mobilePreflight.rotateSub
+    reword; its non-English staleness is upstream release-fill territory,
+    not deeds scope). Live set re-verified by scripted recount at this
+    tree: 192 deeds with the resolution 14 category split, 2,365 Renown, 19
+    titles, 3 borders, 72 Steam entries; every pre-existing DEED_ORDER
+    position byte-identical. Two merge interactions with the feature's own
+    mobile surfaces were fixed test-first the same day (code, not catalog,
+    recorded for the ledger): the managed-window close path stamped an
+    inline display none on the always-rendered More tray, killing the only
+    mobile entry point to the Book of Deeds (b88576f95), and the new
+    generic bottom safe-area padding double-counted inside the inset-pinned
+    deeds window (832ba54de).
+
+27. col_discovery_250 baseline correction (surfaced by this QA session's
+    adversarial recount; the shortfall predates the audited range):
+    resolution 13's construction (253 sub-rare items plus the 10
+    deterministic Heroic Quartermaster epics = 263, clearing the 250
+    threshold with headroom) overcounts attainability. At this tree, twelve
+    of the counted sub-rare defs have no gameplay acquisition path: the two
+    arcane materials (pending disenchant wiring, resolution 21);
+    bramblehide_jerkin, retired with the old Brightwood and kept
+    deliberately as a feat_brightwood_relic target under hard rule 5; eight
+    items whose Brightwood wildlife sources were removed in 626bd9a40 on
+    2026-06-23, before the catalog was authored (soft_down, amber_hide,
+    stag_antler, brightwood_venison, bristlehide_spaulders, sableweb_cord,
+    crossroads_saber, wanderers_chestguard); and the never-referenced
+    ancient_crypt_door def. The eight mech chroma plates are out-of-game
+    swag grants besides. The strictly luck-free floor is therefore roughly
+    236 attainable sub-rare plus 10 quartermaster epics plus the four
+    deterministic delve-shop rares, landing at about the 250 threshold with
+    little or no headroom rather than the documented 13. The deed stays
+    comfortably earnable in practice (rare, epic, and heroic-variant
+    discoveries all feed the meter, a heroic variant marks BOTH itself and
+    its base id, and World Market purchases count as acquisition); the
+    correction is to the rule 2 justification prose, not to earnability,
+    and nothing in the audited range removed a source, so resolution 23's
+    no-shrink conclusion stands. No catalog action (the threshold is frozen
+    by resolution 15). MAINTAINER FLAG: the luck-free construction now has
+    zero-to-thin headroom, so any future retirement of a deterministic
+    source silently drops it below the threshold; recompute exactly at the
+    next content removal and consider restoring deliberate headroom with
+    future additions.
+
+28. Minor register from the same verification pass, each point verified in
+    code, none changing a standing verdict:
+    - hid_keepers_toll_twice nuance on resolution 24: a prisoner jailed
+      while ALREADY carrying The Keeper's Toll can have the qualifying
+      death happen inside the jail (the aura survives the teleport and the
+      death). One-time idempotent grant, and the jail itself can never
+      generate the sickness (its revive never applies it), so no loop
+      exists and the acceptance stands as written.
+    - Dev hosts only: dev_teleport (ALLOW_DEV_COMMANDS=1, never production)
+      can place a body inside the cage geometry; the intruder never gains
+      the jailed flag, so no brawl hostility and no deed surface follows.
+    - The mailAttachmentsSent counter is named per-attachment but bumps
+      exactly once per send, which is what keeps soc_by_ravens_wing safe
+      under resolution 23; any future change to count attachments would
+      silently retune the deed. Name-level hazard only.
+    - The jail lockout cited by resolution 23 lives entirely server-side
+      (JAILED_BLOCKED_COMMANDS in server/game.ts covering arena, Vale Cup,
+      dungeon, crypt, delve, and duel commands); no sim file carries a jail
+      gate. Location note only; the lockout itself re-verified complete.
