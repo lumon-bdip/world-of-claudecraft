@@ -38,8 +38,7 @@ export function parseBrowserslistFloors(text) {
   for (const physicalLine of text.split(/\r?\n/)) {
     // Strip a '#' comment FIRST, so a comment that happens to contain a comma is
     // not split into a bogus floor entry by the comma handling below.
-    const commentAt = physicalLine.indexOf('#');
-    const code = commentAt >= 0 ? physicalLine.slice(0, commentAt) : physicalLine;
+    const code = physicalLine.replace(/#.*$/, '');
     for (const raw of code.split(',')) {
       const entry = raw.trim();
       if (!entry) continue;
