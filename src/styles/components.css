@@ -5848,6 +5848,19 @@
      level deeper inside a .heroic-shop wrapper so copper's reuse rule never
      matches it and the shared root stays pristine either way. Tokens only. */
 
+  /* Market: chrome-only. The reference drag/resize window keeps its structure and
+     its flush sticky .panel-title; only the title font + a bottom edge line adopt
+     the AAA titlebar look (a full frame wrap would fight its .window-padding /
+     flush-header geometry, so this is the titlebar-restyle boundary). */
+  #market-window .panel-title {
+    min-height: var(--window-titlebar-h);
+    border-bottom: 1px solid var(--panel-edge);
+  }
+  #market-window .panel-title > span:first-child {
+    font-family: var(--font-display);
+    color: var(--window-title-color);
+  }
+
   /* Leaderboard + Daily Rewards: root-scroll frame windows. Neutralize the legacy
      .panel chrome (the inner frame draws its own), re-enable the vertical root
      scroll the global .window:has(> .window-frame) rule turns off, and pin the
