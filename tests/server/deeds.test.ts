@@ -16,7 +16,7 @@ vi.mock('../../server/deeds_db', () => ({
   recentDeedsForCharacter: vi.fn(async () => []),
 }));
 
-import { characterSheet, SHEET_RECENT_DEEDS } from '../../server/character_sheet';
+import { characterSheet, SHEET_RECENT_DEEDS, sheetTitleText } from '../../server/character_sheet';
 import { type CharacterRow, SCHEMA } from '../../server/db';
 import { configureDeedsRuntime, resetDeedsRuntimeForTests, routes } from '../../server/deeds';
 import { getDeedBroadcasts, setDeedBroadcasts } from '../../server/deeds_db';
@@ -339,6 +339,15 @@ describe('characterSheet deeds summary', () => {
   it('a pre-deeds save reads as zeros and untitled, never undefined', () => {
     const sheet = buildSheet({ level: 12 });
     expect(sheet.deeds).toEqual({ renown: 0, earnedCount: 0, activeTitle: null, recent: [] });
+  });
+
+  it('sheetTitleText resolves the English title text, null for stale/non-title/unset ids', () => {
+    expect(sheetTitleText('prog_veteran')).toBe('Veteran');
+    expect(sheetTitleText('hid_saul_footnote')).toBe('the Footnote');
+    expect(sheetTitleText(null)).toBeNull();
+    expect(sheetTitleText('removed_deed')).toBeNull(); // content drift in an old blob
+    expect(sheetTitleText('prog_first_steps')).toBeNull(); // no reward
+    expect(sheetTitleText('prog_prestige_10')).toBeNull(); // border, not a title
   });
 
   it('the shared recent bound is the contracted five', () => {

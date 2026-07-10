@@ -15,6 +15,7 @@ vi.mock('../server/db', () => ({
 
 import { type ClientSession, GameServer } from '../server/game';
 import { ClientWorld } from '../src/net/online';
+import { grantDeed } from '../src/sim/deeds';
 import type { PlayerClass } from '../src/sim/types';
 import type { FriendInfo, SocialInfo } from '../src/world_api/social_graph';
 
@@ -110,7 +111,15 @@ describe('W9 socialInfo via the social/socialpos frames (non-snapshot)', () => {
   it('the `social` frame sets socialInfo and flips consumeSocialChanged exactly once', () => {
     const c = bareClient(7);
     const friends: FriendInfo[] = [
-      { id: 2, name: 'Ally', cls: 'mage', level: 5, realm: 'R1', online: true },
+      {
+        id: 2,
+        name: 'Ally',
+        cls: 'mage',
+        level: 5,
+        realm: 'R1',
+        activeTitle: 'prog_veteran',
+        online: true,
+      },
     ];
     feed(c, {
       t: 'social',
@@ -209,8 +218,24 @@ describe('W9 socialInfo via the social/socialpos frames (non-snapshot)', () => {
     const c = bareClient(7);
     const social: SocialInfo = {
       friends: [
-        { id: 2, name: 'Ally', cls: 'mage', level: 5, realm: 'R1', online: false },
-        { id: 5, name: 'Stale', cls: 'rogue', level: 3, realm: 'R1', online: false },
+        {
+          id: 2,
+          name: 'Ally',
+          cls: 'mage',
+          level: 5,
+          realm: 'R1',
+          activeTitle: null,
+          online: false,
+        },
+        {
+          id: 5,
+          name: 'Stale',
+          cls: 'rogue',
+          level: 3,
+          realm: 'R1',
+          activeTitle: null,
+          online: false,
+        },
       ],
       blocks: [],
       guild: {
@@ -224,6 +249,7 @@ describe('W9 socialInfo via the social/socialpos frames (non-snapshot)', () => {
             cls: 'priest',
             level: 9,
             realm: 'R1',
+            activeTitle: null,
             online: false,
             rank: 'member',
             lastLogin: null,
@@ -317,5 +343,36 @@ describe('W9 fiesta via the events queue + the arena_augment command', () => {
     spy.mockClear();
     server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'arena_augment' }));
     expect(spy).not.toHaveBeenCalled();
+  });
+});
+
+describe('guild/officer relay sender title (Book of Deeds)', () => {
+  // actorFor stamps the LIVE sim meta's activeTitle onto the SocialActor, so
+  // the guild/officer relay (which composes its own frames, sim-ignorant) can
+  // ride the sender's title as `fromTitle`. Both the /g and /o dispatch arms
+  // go through the one actorFor, so this covers them together.
+  it('actorFor carries the live activeTitle to SocialService, and null once cleared', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Titled');
+    const sim = (server as any).sim;
+    const meta = sim.players.get(session.pid)!;
+    grantDeed(sim.ctx, meta, 'prog_veteran');
+    sim.setActiveTitle('prog_veteran', session.pid);
+
+    const spy = vi.spyOn((server as any).social, 'guildChat').mockResolvedValue(false as never);
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'chat', text: '/g hail' }));
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Titled', activeTitle: 'prog_veteran' }),
+      'hail',
+    );
+
+    spy.mockClear();
+    sim.setActiveTitle(null, session.pid);
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'chat', text: '/g plain' }));
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Titled', activeTitle: null }),
+      'plain',
+    );
   });
 });

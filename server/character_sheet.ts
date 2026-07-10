@@ -96,6 +96,17 @@ export interface SheetDeeds {
   recent: SheetDeedRecent[];
 }
 
+/** English display text for a selected title (sheet.deeds.activeTitle, a deed
+ *  id from the state blob), or null when unset, stale/content-drifted, or not
+ *  a title reward. English by design: the only consumer is the
+ *  English-by-design /c/ SSR page; client surfaces localize the id through
+ *  deed_i18n instead, and the JSON sheet keeps carrying the raw id. */
+export function sheetTitleText(activeTitle: string | null): string | null {
+  if (!activeTitle) return null;
+  const reward = DEEDS[activeTitle]?.reward;
+  return reward?.kind === 'title' ? reward.text : null;
+}
+
 export interface CharacterSheet {
   name: string;
   realm: string;

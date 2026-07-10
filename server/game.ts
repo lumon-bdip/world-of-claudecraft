@@ -1029,7 +1029,14 @@ export class GameServer {
   // -------------------------------------------------------------------------
 
   private actorFor(session: ClientSession): SocialActor {
-    return { characterId: session.characterId, name: session.name };
+    // activeTitle rides from the LIVE sim meta so the guild/officer relay can
+    // stamp the sender's Book of Deeds title (a deed id) without SocialService
+    // ever touching the sim; a session with no live meta stays untitled.
+    return {
+      characterId: session.characterId,
+      name: session.name,
+      activeTitle: this.sim.meta(session.pid)?.activeTitle ?? null,
+    };
   }
 
   private sessionByCharacterId(id: number): ClientSession | null {

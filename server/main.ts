@@ -377,6 +377,8 @@ async function refreshLeaderboard(scope: 'realm' | 'global'): Promise<Leaderboar
     virtualLevel: virtualLevel(r.lifetimeXp),
     lifetimeXp: r.lifetimeXp,
     prestigeRank: r.prestigeRank,
+    // a deed id (never display text); the client localizes via deed_i18n
+    title: r.activeTitle,
     ...(scope === 'global' ? { realm: r.realm } : {}),
   }));
   leaderboardCache[scope] = { at: Date.now(), entries };

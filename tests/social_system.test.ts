@@ -20,7 +20,7 @@ import type { SimEvent } from '../src/sim/types';
 // ---------------------------------------------------------------------------
 
 class FakeDb implements SocialDb {
-  private chars = new Map<number, CharInfo>();
+  private chars = new Map<number, CharInfo & { activeTitle: string | null }>();
   private friends = new Map<number, Set<number>>();
   blocks = new Map<number, Set<number>>();
   private guilds = new Map<number, string>();
@@ -28,7 +28,13 @@ class FakeDb implements SocialDb {
   private nextGuildId = 1;
 
   addChar(id: number, name: string, cls = 'warrior', level = 10, realm = 'Claudemoon'): void {
-    this.chars.set(id, { id, name, cls, level, realm });
+    this.chars.set(id, { id, name, cls, level, realm, activeTitle: null });
+  }
+
+  // Test helper mirroring the state->>'activeTitle' column read (a deed id or null).
+  setActiveTitle(id: number, deedId: string | null): void {
+    const c = this.chars.get(id);
+    if (c) c.activeTitle = deedId;
   }
 
   async findCharacterByName(name: string): Promise<CharInfo | null> {
@@ -50,7 +56,7 @@ class FakeDb implements SocialDb {
   async removeFriend(c: number, f: number): Promise<void> {
     this.friends.get(c)?.delete(f);
   }
-  async listFriends(c: number): Promise<CharInfo[]> {
+  async listFriends(c: number): Promise<(CharInfo & { activeTitle: string | null })[]> {
     return [...(this.friends.get(c) ?? [])].map((id) => this.chars.get(id)!).filter(Boolean);
   }
   async whoFriended(c: number): Promise<number[]> {
@@ -121,7 +127,9 @@ class FakeDb implements SocialDb {
   }
   async guildMembers(
     guildId: number,
-  ): Promise<(CharInfo & { rank: GuildRank; lastLogin: string | null })[]> {
+  ): Promise<
+    (CharInfo & { rank: GuildRank; lastLogin: string | null; activeTitle: string | null })[]
+  > {
     return [...this.members.entries()]
       .filter(([, m]) => m.guildId === guildId)
       .map(([cid, m]) => ({
@@ -617,6 +625,61 @@ describe('guilds', () => {
     ).toBe(true);
     expect(h.tx.eventsFor(2).some((e) => e.type === 'chat' && e.text === 'hello guild')).toBe(true);
     expect(h.tx.eventsFor(3)).toHaveLength(0); // Gimel is not in the guild
+  });
+
+  it('the snapshot carries each friend and roster member activeTitle (deed id or null)', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    await h.svc.friendAdd(h.actor(1), 'Gimel');
+    h.db.setActiveTitle(2, 'prog_veteran');
+    h.db.setActiveTitle(3, null);
+    const snap = await h.svc.snapshot(1);
+    const bet = snap.guild?.members.find((m) => m.name === 'Bet');
+    const aleph = snap.guild?.members.find((m) => m.name === 'Aleph');
+    expect(bet?.activeTitle).toBe('prog_veteran');
+    expect(aleph?.activeTitle).toBeNull();
+    const gimel = snap.friends.find((f) => f.name === 'Gimel');
+    expect(gimel?.activeTitle).toBeNull();
+    h.db.setActiveTitle(3, 'hid_saul_footnote');
+    const snap2 = await h.svc.snapshot(1);
+    expect(snap2.friends.find((f) => f.name === 'Gimel')?.activeTitle).toBe('hid_saul_footnote');
+  });
+
+  it('stamps the sender title (a deed id) on guild and officer chat, omitted when untitled', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    h.tx.clear();
+    // titled sender: the deed ID rides fromTitle on every delivered copy
+    const titled = { ...h.actor(1), activeTitle: 'prog_veteran' };
+    expect(await h.svc.guildChat(titled, 'hail')).toBe(true);
+    for (const id of [1, 2]) {
+      const line = h.tx.eventsFor(id).find((e) => e.type === 'chat')!;
+      expect(line.type === 'chat' && line.fromTitle).toBe('prog_veteran');
+    }
+    // untitled sender (null and absent alike): the key is omitted entirely
+    h.tx.clear();
+    expect(await h.svc.guildChat({ ...h.actor(1), activeTitle: null }, 'plain')).toBe(true);
+    const plain = h.tx.eventsFor(2).find((e) => e.type === 'chat')!;
+    expect('fromTitle' in plain).toBe(false);
+    // officer chat stamps the same way
+    await h.svc.guildSetRank(h.actor(1), 'Bet', 'officer');
+    h.tx.clear();
+    expect(await h.svc.officerChat(titled, 'ranks')).toBe(true);
+    const officer = h.tx.eventsFor(2).find((e) => e.type === 'chat')!;
+    expect(officer.type === 'chat' && officer.fromTitle).toBe('prog_veteran');
+  });
+
+  it('keeps the chat fromTitle field type identical across SocialEvent and SimEvent', () => {
+    // The guild/officer relay frame is its own union member (no fromPid), but
+    // the client casts it into the one SimEvent switch, so the title field
+    // must stay assignment-compatible in both directions.
+    type SocialTitle = Extract<SocialEvent, { type: 'chat' }>['fromTitle'];
+    type SimTitle = Extract<SimEvent, { type: 'chat' }>['fromTitle'];
+    const a: SocialTitle = 'prog_veteran' as SimTitle;
+    const b: SimTitle = 'prog_veteran' as SocialTitle;
+    expect(a).toBe(b);
   });
 
   it('suppresses guild chat from a player the recipient ignores', async () => {

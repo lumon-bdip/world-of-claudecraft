@@ -2272,6 +2272,9 @@ export interface LifetimeXpLeaderRow {
   realm: string;
   lifetimeXp: number;
   prestigeRank: number;
+  // The selected Book of Deeds title (a deed id the client localizes; never
+  // English), null when untitled. The charactersForDeedsBoard read shape.
+  activeTitle: string | null;
 }
 
 // `global: true` ranks across every realm (for the home-page board); otherwise
@@ -2288,7 +2291,8 @@ export async function topLifetimeXp(
     ? await pool.query(
         `SELECT name, class, level, realm,
                 COALESCE((state->>'lifetimeXp')::bigint, 0) AS lifetime_xp,
-                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank
+                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank,
+                state->>'activeTitle' AS active_title
            FROM characters
           WHERE state IS NOT NULL
             AND COALESCE((state->>'lifetimeXp')::bigint, 0) > 0
@@ -2301,7 +2305,8 @@ export async function topLifetimeXp(
     : await pool.query(
         `SELECT name, class, level, realm,
                 COALESCE((state->>'lifetimeXp')::bigint, 0) AS lifetime_xp,
-                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank
+                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank,
+                state->>'activeTitle' AS active_title
            FROM characters
           WHERE realm = $1 AND state IS NOT NULL
             AND COALESCE((state->>'lifetimeXp')::bigint, 0) > 0
@@ -2318,6 +2323,9 @@ export async function topLifetimeXp(
     realm: r.realm,
     lifetimeXp: Number(r.lifetime_xp),
     prestigeRank: Number(r.prestige_rank),
+    // Normalized like charactersForDeedsBoard: a non-empty string or null.
+    activeTitle:
+      typeof r.active_title === 'string' && r.active_title !== '' ? r.active_title : null,
   }));
 }
 

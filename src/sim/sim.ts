@@ -2460,6 +2460,8 @@ export class Sim {
         virtualLevel: virtualLevel(meta.lifetimeXp),
         lifetimeXp: meta.lifetimeXp,
         prestigeRank: meta.prestigeRank,
+        // the selected Book of Deeds title (a deed id), like the server fill
+        title: meta.activeTitle,
       }));
     return Promise.resolve(paginateLeaderboard(rows, page, pageSize));
   }
