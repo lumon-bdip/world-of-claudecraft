@@ -2112,6 +2112,11 @@ export type SimEvent = { pid?: number } & (
       type: 'chat';
       fromPid: number;
       from: string;
+      // The speaker's selected Book of Deeds title: a deed id the client
+      // localizes through deed_i18n, never display text. Stamped only at the
+      // PLAYER-sourced emitters (untitled players omit it); mob and boss
+      // yells never carry one.
+      fromTitle?: string;
       text: string;
       channel?:
         | 'say'

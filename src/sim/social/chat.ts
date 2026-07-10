@@ -37,6 +37,15 @@ const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
 const OVERHEAD_EMOTE_DURATION = 3.2;
 
+// The speaker's selected Book of Deeds title, spread into every PLAYER-sourced
+// chat emit as the optional `fromTitle` field: a deed id the client localizes
+// through deed_i18n, never display text. Untitled players omit the key
+// entirely (the event stays byte-identical to the pre-title shape), and the
+// mob/boss yell emitters (mob/yells.ts, encounters/*) never call this.
+function speakerTitle(meta: PlayerMeta): { fromTitle?: string } {
+  return meta.activeTitle ? { fromTitle: meta.activeTitle } : {};
+}
+
 // Predefined social emotes. Each entry maps a command (and its aliases) to the
 // third-person action text shown to everyone in /say range. `solo` is used with
 // no target; `target` (when present) is used when the emote names another
@@ -205,6 +214,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           text,
           channel: 'roll',
           pid: mPid,
@@ -218,6 +228,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           text,
           channel: 'roll',
           pid: meta.entityId,
@@ -641,6 +652,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           to: target.name,
           text: msg,
           channel: 'whisper',
@@ -661,6 +673,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: r.meta.entityId,
         from: r.meta.name,
+        ...speakerTitle(r.meta),
         text: msg,
         channel: 'whisper',
         pid: target.entityId,
@@ -669,6 +682,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
       to: target.name,
       text: msg,
       channel: 'whisper',
@@ -685,6 +699,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: target.entityId,
         from: target.name,
+        ...speakerTitle(target),
         text: reply,
         channel: 'whisper',
         pid: r.meta.entityId,
@@ -707,6 +722,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: r.meta.entityId,
         from: r.meta.name,
+        ...speakerTitle(r.meta),
         text: clean,
         channel: 'party',
         pid: mPid,
@@ -723,6 +739,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
       text: clean,
       channel: 'general',
     });
@@ -762,6 +779,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           text: clean,
           channel,
           pid: subPid,
@@ -839,6 +857,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
       text: clean,
       channel,
       entityId: r.e.id,
@@ -1048,6 +1067,7 @@ export function broadcastEmote(
       type: 'chat',
       fromPid: actor.entityId,
       from: actor.name,
+      ...speakerTitle(actor),
       text: body,
       channel: 'emote',
       entityId: actorEntity.id,
