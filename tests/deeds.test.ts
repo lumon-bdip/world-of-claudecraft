@@ -1074,6 +1074,20 @@ describe('active title selection (setActiveTitle)', () => {
     expect(e.title).toBe('prog_veteran');
   });
 
+  it('the offline leaderboard row carries the selected title (a deed id, null untitled)', async () => {
+    // The one-cache server fill is pinned in tests/server/title_reads.test.ts;
+    // this is the OFFLINE host's arm of the shared LeaderboardEntry shape.
+    const sim = makeSim();
+    const { meta } = primary(sim);
+    grantDeed(sim.ctx, meta, 'prog_veteran');
+    sim.setActiveTitle('prog_veteran');
+    const titled = await sim.leaderboard();
+    expect(titled.leaders.find((r) => r.name === meta.name)?.title).toBe('prog_veteran');
+    sim.setActiveTitle(null);
+    const cleared = await sim.leaderboard();
+    expect(cleared.leaders.find((r) => r.name === meta.name)?.title).toBeNull();
+  });
+
   it('null clears both the meta field and the entity wire field', () => {
     const sim = makeSim();
     const { meta, e } = primary(sim);

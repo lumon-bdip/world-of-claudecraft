@@ -253,3 +253,26 @@ describe('leaderboard_window: Renown (deeds) board tab', () => {
     );
   });
 });
+
+describe('players (lifetime-XP) board: the Book of Deeds title column', () => {
+  // The view-model carries the deed ID (leaderboard_view.test.ts); these pins
+  // hold the players-tab RENDER arm added alongside the Renown tab's: the id
+  // localizes through deed_i18n, '' (untitled/stale) renders an empty cell,
+  // and the row/header/sticky all ride the .lb-row-players six-column grid so
+  // the cells stay aligned. Deleting the cell, the guard, or the grid class
+  // reds here.
+  it('localizes the row title id and renders it in the trailing ellipsized cell', () => {
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the painter source literally contains this template expression
+    expect(code).toContain("const deedTitle = r.title ? deedTitleText(r.title) : '';");
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the painter source literally contains this template expression
+    expect(code).toContain('<span class="lb-deed-title">${esc(deedTitle)}</span>');
+    expect(code).not.toMatch(/\$\{deedTitle\}/);
+  });
+
+  it('header, rows, and the sticky standing all carry the players grid variant', () => {
+    expect(code.match(/lb-row-players/g)?.length).toBe(3);
+    expect(code).toContain("t('hudChrome.deeds.lbTitleCol')");
+    // the sticky standing row keeps an EMPTY title cell for grid alignment
+    expect(code).toContain('<span class="lb-deed-title"></span></div></div>');
+  });
+});

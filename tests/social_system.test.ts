@@ -663,12 +663,16 @@ describe('guilds', () => {
     expect(await h.svc.guildChat({ ...h.actor(1), activeTitle: null }, 'plain')).toBe(true);
     const plain = h.tx.eventsFor(2).find((e) => e.type === 'chat')!;
     expect('fromTitle' in plain).toBe(false);
-    // officer chat stamps the same way
+    // officer chat stamps the same way, and omits the key untitled
     await h.svc.guildSetRank(h.actor(1), 'Bet', 'officer');
     h.tx.clear();
     expect(await h.svc.officerChat(titled, 'ranks')).toBe(true);
     const officer = h.tx.eventsFor(2).find((e) => e.type === 'chat')!;
     expect(officer.type === 'chat' && officer.fromTitle).toBe('prog_veteran');
+    h.tx.clear();
+    expect(await h.svc.officerChat({ ...h.actor(1), activeTitle: null }, 'bare')).toBe(true);
+    const bareOfficer = h.tx.eventsFor(2).find((e) => e.type === 'chat')!;
+    expect('fromTitle' in bareOfficer).toBe(false);
   });
 
   it('keeps the chat fromTitle field type identical across SocialEvent and SimEvent', () => {
