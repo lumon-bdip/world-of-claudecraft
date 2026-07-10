@@ -3724,7 +3724,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '壯舉自成一類：它們是傳承與世界首創的記錄，是那些與逝去紀元相關、或只會發生一次的功績。它們不帶來任何名望，也不計入完成度，將作為對往昔功業的紀念被永久保存。',
   'guide.deedsPage.featsHeading': '壯舉',
   'guide.deedsPage.howBody':
-    '功績以單個角色為單位逐一贏得，並在你的整個帳號中展示，因此你所扮演的每一位英雄都會匯入同一份收藏。每個功績都在遊戲內的功績之書中清楚寫明它的要求，讓你始終知道該追求什麼。少數功績會保持隱密，只有在你贏得它們之後才會揭曉。',
+    '功績以單一角色為單位逐一贏得，並在你的整個帳號中展示，因此你所扮演的每一位英雄都會匯入同一份收藏。每個功績都在遊戲內的功績之書中清楚寫明它的要求，讓你始終知道該追求什麼；你也可以追蹤心儀的功績，讓它們在遊玩時常在眼前。少數功績會保持隱密，只有在你贏得它們之後才會揭曉。',
   'guide.deedsPage.howHeading': '功績如何運作',
   'guide.deedsPage.intro':
     '功績之書記錄著你在這個世界所做的一切，從走出新手山谷的第一步，到王國所能提供的最艱難的戰鬥。一邊遊玩一邊贏得功績，佩戴它們授予的頭銜，看著你的名望不斷攀升。',
@@ -3733,7 +3733,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.deedsPage.renownHeading': '名望',
   'guide.deedsPage.rewardBorder': '邊框',
   'guide.deedsPage.rewardsBody':
-    '這些獎勵純粹是為了炫耀，而這正是它們的意義所在。有些功績會授予你可佩戴的頭銜，或是為你的名字增添裝飾的邊框，絕不會給出任何讓你的英雄變強的東西。在功績之書中選擇你想要的頭銜，它便會顯示在你的銘牌上，供所有人觀看。',
+    '這些獎勵純粹是為了炫耀，而這正是它們的意義所在。有些功績會授予你可佩戴的頭銜，或是為你的名字增添裝飾的邊框，絕不會給出任何讓你的英雄變強的東西。在功績之書中選擇你想要的頭銜，它便會隨你出現在銘牌上、聊天中與排行榜上，供所有人觀看。',
   'guide.deedsPage.rewardsHeading': '頭銜與邊框',
   'guide.deedsPage.standingsNote':
     '各王國會統計所有帳號累積的名望。想知道誰位居何處，請在遊戲內打開功績之書並轉到名望排行；排名在那裡，而不在維基上。',
@@ -6121,7 +6121,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.chronicler_osric_fenn.title': '泥沼濕地編年史',
   'entities.npcs.chronicler_osric_fenn.greeting':
     '當心書頁受潮，{playerName}。沼澤吞掉的書可比讀者讀掉的多。',
-  'entities.npcs.chronicler_edda_hartwell.name': '編年史者艾達·哈特維爾',
+  'entities.npcs.chronicler_edda_hartwell.name': '編年史者贊西',
   'entities.npcs.chronicler_edda_hartwell.title': '荊峰高地編年史',
   'entities.npcs.chronicler_edda_hartwell.greeting':
     '高山什麼都不會忘記，{playerName}，我也一樣。讓我看看你都做過什麼吧。',
@@ -6272,4 +6272,12 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbSelf': '你的排名：第 {rank} 名，位居前 {percent}%',
   'hudChrome.deeds.lbEmpty': '尚無上榜的編年史家。',
   'hudChrome.deeds.broadcastsLabel': '與公會和好友分享功績達成',
+  'guide.deedsPage.catHeading': '{label}（{count}）',
+  'guide.deedsPage.colName': '功績',
+  'guide.deedsPage.featTag': '壯舉',
+  'hudChrome.deeds.featRibbon': '壯舉',
+  'hudChrome.deeds.filterAll': '全部',
+  'hudChrome.deeds.progressText': '{current}/{target}',
+  'hudChrome.deeds.titledName': '{name}【{title}】',
+  'hudChrome.steam.title': 'Steam',
 };

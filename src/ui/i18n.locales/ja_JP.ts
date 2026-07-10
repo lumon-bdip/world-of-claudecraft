@@ -3887,7 +3887,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '偉業は別格の棚です。それは伝承と世界初の記録であり、過ぎ去った時代に結びついた功績や、二度と起こらない一瞬の功績です。名声はなく、達成率にも数えられず、成し遂げられたことの記憶として永遠に残されます。',
   'guide.deedsPage.featsHeading': '偉業',
   'guide.deedsPage.howBody':
-    '功績はキャラクターごとに一つずつ獲得され、アカウント全体に表示されます。だからあなたが遊ぶすべての英雄が、同じ一つのコレクションに加わっていきます。それぞれの功績は、ゲーム内の功績の書で何を求めているかをはっきりと示すので、次に何を目指すべきかが常に分かります。ごく一部の功績は秘密のままで、獲得して初めて姿を現します。',
+    '功績はそれぞれ一人のキャラクターの手で獲得され、アカウント全体に表示されます。あなたが遊ぶどの英雄も、同じ一つのコレクションに加わっていくのです。それぞれの功績が何を求めているかは、ゲーム内の功績の書にはっきりと記されているので、次に何を追うべきかはいつでも分かります。狙っている功績を追跡リストに載せておけば、遊んでいる間もずっと視界に入れておけます。ごく一部の功績は秘密のままで、獲得して初めて姿を現します。',
   'guide.deedsPage.howHeading': '功績の仕組み',
   'guide.deedsPage.intro':
     '功績の書は、始まりの谷を出る最初の一歩から、この王国が用意する最も過酷な戦いまで、あなたが成し遂げたすべてを世界が記録する場所です。遊びながら功績を獲得し、授かった称号を身にまとい、名声が高まっていくのを見届けましょう。',
@@ -3896,7 +3896,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.deedsPage.renownHeading': '名声',
   'guide.deedsPage.rewardBorder': '枠飾り',
   'guide.deedsPage.rewardsBody':
-    '報酬はすべて見せびらかすためのもので、それこそが狙いです。一部の功績は、身につけられる称号や、名前を彩る枠飾りを授けますが、英雄を強くするものは決して与えません。功績の書で好きな称号を選べば、それがあなたのネームプレートに添えられ、誰の目にも映ります。',
+    '報酬はすべて見せびらかすためのもので、それこそが狙いです。一部の功績は、身につけられる称号や、名前を彩る枠飾りを授けますが、英雄を強くするものは決して与えません。功績の書で好きな称号を選べば、それはネームプレート、チャット、そして順位表にも添えられ、誰の目にも映ります。',
   'guide.deedsPage.rewardsHeading': '称号と枠飾り',
   'guide.deedsPage.standingsNote':
     '各ワールドは、すべてのアカウントにわたる名声の累計を記録しています。誰がどこに立っているかを見るには、ゲーム内で功績の書を開き、名声の順位表を開いてください。順位はそこにあり、ウィキにはありません。',
@@ -6455,7 +6455,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.chronicler_osric_fenn.title': 'マイアフェン湿地の年代記',
   'entities.npcs.chronicler_osric_fenn.greeting':
     'ページの湿気に気をつけることだ、{playerName}よ。沼は読者よりずっと多くの本を呑み込むのだ。',
-  'entities.npcs.chronicler_edda_hartwell.name': '年代記官エッダ・ハートウェル',
+  'entities.npcs.chronicler_edda_hartwell.name': '年代記官ゼンジー',
   'entities.npcs.chronicler_edda_hartwell.title': 'ソーンピーク高地の年代記',
   'entities.npcs.chronicler_edda_hartwell.greeting':
     '山は何ひとつ忘れない、{playerName}よ。私もだ。あなたの成したことを見せてもらおう。',
@@ -6611,4 +6611,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbSelf': 'あなたの順位：{rank} 位（上位 {percent}%）',
   'hudChrome.deeds.lbEmpty': 'ランク入りした年代記作家はまだいません。',
   'hudChrome.deeds.broadcastsLabel': '功績の達成をギルドとフレンドに共有する',
+  'guide.deedsPage.catHeading': '{label}（{count}）',
+  'guide.deedsPage.colName': '功績',
+  'guide.deedsPage.featTag': '偉業',
+  'hudChrome.deeds.featRibbon': '偉業',
+  'hudChrome.deeds.filterAll': 'すべて',
+  'hudChrome.deeds.progressText': '{current}/{target}',
+  'hudChrome.deeds.titledName': '{name}【{title}】',
+  'hudChrome.steam.title': 'Steam',
 };

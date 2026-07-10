@@ -3880,7 +3880,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '위업은 따로 놓인 선반입니다. 그것은 유산과 세계 최초의 기록이며, 지나간 시대에 얽힌 업적이거나 오직 한 번만 일어날 순간의 업적입니다. 명성을 지니지 않고 완료율에서도 빠져 있으며, 이루어진 일에 대한 기억으로 영원히 보관됩니다.',
   'guide.deedsPage.featsHeading': '위업',
   'guide.deedsPage.howBody':
-    '업적은 캐릭터마다 하나씩 얻으며 계정 전체에 걸쳐 표시되므로, 당신이 플레이하는 모든 영웅이 같은 수집에 보태집니다. 각 업적은 게임 내 업적의 서에서 무엇을 요구하는지 분명히 알려 주므로, 무엇을 좇아야 할지 언제나 알 수 있습니다. 소수의 업적은 비밀로 남아 있다가 당신이 얻은 뒤에야 모습을 드러냅니다.',
+    '업적은 캐릭터 한 명 한 명이 따로 얻지만 계정 전체에 걸쳐 표시되므로, 당신이 플레이하는 모든 영웅이 하나의 수집을 함께 채워 갑니다. 각 업적은 게임 내 업적의 서에서 무엇을 요구하는지 분명히 알려 주므로 무엇을 좇아야 할지 언제나 알 수 있고, 노리는 업적에 추적을 걸어 두면 플레이하는 동안 눈앞에서 놓치지 않을 수 있습니다. 소수의 업적은 비밀로 남아 있다가 당신이 얻은 뒤에야 모습을 드러냅니다.',
   'guide.deedsPage.howHeading': '업적의 작동 방식',
   'guide.deedsPage.intro':
     '업적의 서는 시작의 골짜기를 벗어나는 첫걸음부터 왕국이 내놓을 수 있는 가장 힘든 싸움까지, 당신이 이룬 모든 것을 세계가 기록해 두는 곳입니다. 플레이하며 업적을 얻고, 그것이 주는 칭호를 걸치고, 명성이 오르는 것을 지켜보세요.',
@@ -3889,7 +3889,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.deedsPage.renownHeading': '명성',
   'guide.deedsPage.rewardBorder': '테두리',
   'guide.deedsPage.rewardsBody':
-    '보상은 모두 과시를 위한 것이며, 바로 그것이 핵심입니다. 일부 업적은 걸칠 수 있는 칭호나 이름을 꾸미는 테두리를 주지만, 영웅을 더 강하게 만드는 것은 결코 주지 않습니다. 업적의 서에서 원하는 칭호를 고르면 그것이 당신의 이름표에 따라붙어 모두에게 보입니다.',
+    '보상은 모두 과시를 위한 것이며, 바로 그것이 핵심입니다. 일부 업적은 걸칠 수 있는 칭호나 이름을 꾸미는 테두리를 주지만, 영웅을 더 강하게 만드는 것은 결코 주지 않습니다. 업적의 서에서 원하는 칭호를 고르면 그것이 당신의 이름표와 채팅, 그리고 순위표에까지 따라붙어 모두의 눈에 보입니다.',
   'guide.deedsPage.rewardsHeading': '칭호와 테두리',
   'guide.deedsPage.standingsNote':
     '각 왕국은 모든 계정에 걸친 명성의 누계를 기록합니다. 누가 어디에 서 있는지 보려면 게임 내에서 업적의 서를 열고 명성 순위로 넘어가세요. 순위는 위키가 아니라 그곳에 있습니다.',
@@ -6440,7 +6440,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.chronicler_osric_fenn.title': '마이어펜 습지 연대기',
   'entities.npcs.chronicler_osric_fenn.greeting':
     '책장이 눅눅해지지 않게 조심하게, {playerName}. 늪은 독자보다 훨씬 많은 책을 삼킨다네.',
-  'entities.npcs.chronicler_edda_hartwell.name': '연대기 기록관 에다 하트웰',
+  'entities.npcs.chronicler_edda_hartwell.name': '연대기 기록관 젠지',
   'entities.npcs.chronicler_edda_hartwell.title': '쏜피크 고지 연대기',
   'entities.npcs.chronicler_edda_hartwell.greeting':
     '산은 아무것도 잊지 않네, {playerName}. 나도 마찬가지지. 자네가 이룬 일을 보여 주게.',
@@ -6598,4 +6598,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbSelf': '내 순위: {rank}위, 상위 {percent}%',
   'hudChrome.deeds.lbEmpty': '아직 순위에 오른 연대기 작가가 없습니다.',
   'hudChrome.deeds.broadcastsLabel': '업적 달성을 길드와 친구에게 공유',
+  'guide.deedsPage.catHeading': '{label} ({count})',
+  'guide.deedsPage.colName': '업적',
+  'guide.deedsPage.featTag': '위업',
+  'hudChrome.deeds.featRibbon': '위업',
+  'hudChrome.deeds.filterAll': '전체',
+  'hudChrome.deeds.progressText': '{current}/{target}',
+  'hudChrome.deeds.titledName': '{name} [{title}]',
+  'hudChrome.steam.title': 'Steam',
 };

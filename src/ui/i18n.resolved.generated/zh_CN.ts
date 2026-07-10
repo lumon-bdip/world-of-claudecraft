@@ -1505,7 +1505,7 @@ export const zh_CN: EnTranslations = {
       "recentLabel": "最近：",
       "nearestLabel": "即将达成：",
       "filterGroupAria": "筛选功绩",
-      "filterAll": "All",
+      "filterAll": "全部",
       "filterEarned": "已获得",
       "filterUnearned": "未获得",
       "filterNearly": "即将完成",
@@ -1526,7 +1526,7 @@ export const zh_CN: EnTranslations = {
       "progressAria": "进度：{current}/{target}",
       "renownChip": "{renown} 名望",
       "earnedDate": "获得于 {date}",
-      "featRibbon": "Feat",
+      "featRibbon": "壮举",
       "hiddenBadge": "隐藏",
       "titleChip": "头衔奖励",
       "watch": "追踪",
@@ -1555,7 +1555,7 @@ export const zh_CN: EnTranslations = {
       "lbSelf": "你的排名：第 {rank} 名，位居前 {percent}%",
       "lbEmpty": "暂无上榜的编年史家。",
       "broadcastsLabel": "与公会和好友分享功绩达成",
-      "titledName": "{name} [{title}]"
+      "titledName": "{name}【{title}】"
     }
   },
   "apiError": {
@@ -2377,11 +2377,11 @@ export const zh_CN: EnTranslations = {
     "deedsPage": {
       "intro": "功绩之书记录着你在这个世界所做的一切，从走出新手山谷的第一步，到王国所能提供的最艰难的战斗。一边游玩一边赢得功绩，佩戴它们授予的头衔，看着你的名望不断攀升。",
       "howHeading": "功绩如何运作",
-      "howBody": "功绩以单个角色为单位逐一赢得，并在你的整个账号中展示，因此你所扮演的每一位英雄都会汇入同一份收藏。每个功绩都在游戏内的功绩之书中清楚写明它的要求，让你始终知道该追求什么。少数功绩会保持隐秘，只有在你赢得它们之后才会揭晓。",
+      "howBody": "功绩以单个角色为单位逐一赢得，并在你的整个账号中展示，因此你所扮演的每一位英雄都会汇入同一份收藏。每个功绩都在游戏内的功绩之书中清楚写明它的要求，让你始终知道该追求什么。你还可以对心仪的功绩设置追踪，让它们在你游玩时时刻不离视线。少数功绩会保持隐秘，只有在你赢得它们之后才会揭晓。",
       "renownHeading": "名望",
       "renownBody": "名望是功绩之书背后的分数。你赢得的每个功绩都价值固定的点数，而你的总分只增不减，因此清闲的一周绝不会让你失去已有的成绩。少数功绩取决于运气而非技巧，而壮举则自成一份荣誉，因此这两者都不提供任何名望。",
       "rewardsHeading": "头衔与边框",
-      "rewardsBody": "这些奖励纯粹是为了炫耀，而这正是它们的意义所在。有些功绩会授予你可佩戴的头衔，或是为你的名字增添装饰的边框，绝不会给出任何让你的英雄变强的东西。在功绩之书中选择你想要的头衔，它便会显示在你的铭牌上，供所有人观看。",
+      "rewardsBody": "这些奖励纯粹是为了炫耀，而这正是它们的意义所在。有些功绩会授予你可佩戴的头衔，或是为你的名字增添装饰的边框，绝不会给出任何让你的英雄变强的东西。在功绩之书中选择你想要的头衔，它便会显示在你的铭牌上、聊天中和排行榜上，供所有人观看。",
       "chroniclesHeading": "编年史",
       "chroniclesBody": "每个区域都保有自己的编年史，这是一组由当地记录者收集的功绩，他们自愿承担起记录每一位过路旅人的责任。东溪谷的Saul是其中的第一位。一部编年史分为若干章节，你可以按任意顺序来完成它们。",
       "featsHeading": "壮举",
@@ -2389,11 +2389,11 @@ export const zh_CN: EnTranslations = {
       "catalogHeading": "功绩全录",
       "catalogBody": "这里列出了功绩之书所能容纳的每一个功绩，按类别整理。隐秘的功绩被特意略去，等待你自己去发现。在游戏内打开功绩之书，即可查看每个功绩的具体要求。",
       "standingsNote": "各王国会统计所有账号累积的名望。想知道谁位居何处，请在游戏内打开功绩之书并转到名望排行；排名在那里，而不在维基上。",
-      "catHeading": "{label} ({count})",
-      "colName": "Deed",
+      "catHeading": "{label}（{count}）",
+      "colName": "功绩",
       "colRenown": "名望",
       "colReward": "奖励",
-      "featTag": "Feat",
+      "featTag": "壮举",
       "rewardBorder": "边框",
       "cat": {
         "progression": "成长",
@@ -7647,7 +7647,7 @@ export const zh_CN: EnTranslations = {
         "greeting": "当心书页受潮，{playerName}。沼泽吞掉的书可比读者读掉的多。"
       },
       "chronicler_edda_hartwell": {
-        "name": "编年史者艾达·哈特维尔",
+        "name": "编年史者赞茜",
         "title": "荆峰高地编年史",
         "greeting": "高山什么都不会忘记，{playerName}，我也一样。让我看看你都做过什么吧。"
       },
