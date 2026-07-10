@@ -10,6 +10,9 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "entities.items.arcane_dust.name",
+    "entities.items.arcane_essence.name",
+    "entities.items.arcane_shard.name",
     "entities.items.chunk_of_ore.name",
     "entities.quests.q_prof_intro.completion",
     "entities.quests.q_prof_intro.objectives.0.label",
@@ -25,6 +28,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
   "es_ES": [
+    "entities.items.arcane_dust.name",
+    "entities.items.arcane_essence.name",
+    "entities.items.arcane_shard.name",
     "entities.items.chunk_of_ore.name",
     "entities.quests.q_prof_intro.completion",
     "entities.quests.q_prof_intro.objectives.0.label",
@@ -40,6 +46,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
   "fr_FR": [
+    "entities.items.arcane_dust.name",
+    "entities.items.arcane_essence.name",
+    "entities.items.arcane_shard.name",
     "entities.items.chunk_of_ore.name",
     "entities.quests.q_prof_intro.completion",
     "entities.quests.q_prof_intro.objectives.0.label",
@@ -55,6 +64,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
   "fr_CA": [
+    "entities.items.arcane_dust.name",
+    "entities.items.arcane_essence.name",
+    "entities.items.arcane_shard.name",
     "entities.items.chunk_of_ore.name",
     "entities.quests.q_prof_intro.completion",
     "entities.quests.q_prof_intro.objectives.0.label",
@@ -71,6 +83,9 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "entities.items.arcane_dust.name",
+    "entities.items.arcane_essence.name",
+    "entities.items.arcane_shard.name",
     "entities.items.chunk_of_ore.name",
     "entities.quests.q_prof_intro.completion",
     "entities.quests.q_prof_intro.objectives.0.label",
@@ -86,6 +101,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
   "de_DE": [
+    "entities.items.arcane_dust.name",
+    "entities.items.arcane_essence.name",
+    "entities.items.arcane_shard.name",
     "entities.items.chunk_of_ore.name",
     "entities.quests.q_prof_intro.completion",
     "entities.quests.q_prof_intro.objectives.0.label",
@@ -113,6 +131,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.itemHeroicTag"
   ],
   "pt_BR": [
+    "entities.items.arcane_dust.name",
+    "entities.items.arcane_essence.name",
+    "entities.items.arcane_shard.name",
     "entities.items.chunk_of_ore.name",
     "entities.quests.q_prof_intro.completion",
     "entities.quests.q_prof_intro.objectives.0.label",
