@@ -306,7 +306,6 @@ export const en_XA: EnTranslations = {
       "chat": "[Šķíþ ţó Çĥáţ]"
     },
     "mobile": {
-      "autorun": "[Áúţó]",
       "jump": "[Ĵúɱþ]",
       "leaderboard": "[Ŕáñķš]",
       "dailyRewards": "[Ŕéŵáŕðš]",
@@ -1068,6 +1067,26 @@ export const en_XA: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "[{name} ŕíšéš óʋéŕ Ţĥóŕñþéáķ Ĥéíĝĥţš!]"
+    },
+    "auth": {
+      "appleLoginCta": "[Çóñţíñúé ŵíţĥ Áþþļé]",
+      "appleError": "[Çóúļð ñóţ šíĝñ íñ ŵíţĥ Áþþļé. Þļéášé ţŕý áĝáíñ.]",
+      "appleChoiceIntro": "[Çŕéáţé á ñéŵ áççóúñţ, óŕ ļíñķ Áþþļé ţó óñé ýóú áļŕéáðý ĥáʋé.]",
+      "appleChoiceExpired": "[Ţĥáţ Áþþļé šíĝñ-íñ éẋþíŕéð. Þļéášé šíĝñ íñ ŵíţĥ Áþþļé áĝáíñ.]",
+      "forgotPrompt": "[Ƒóŕĝóţ þáššŵóŕð?]",
+      "forgotTitle": "[Ŕéšéţ ýóúŕ þáššŵóŕð]",
+      "forgotHint": "[Éñţéŕ ýóúŕ úšéŕñáɱé áñð ŵé ŵíļļ éɱáíļ á ŕéšéţ ļíñķ ţó ţĥé áððŕéšš óñ ƒíļé.]",
+      "forgotUsername": "[Úšéŕñáɱé]",
+      "forgotSubmit": "[Šéñð ŕéšéţ ļíñķ]",
+      "forgotSent": "[Íƒ áñ áççóúñţ ŵíţĥ ţĥáţ úšéŕñáɱé ĥáš áñ éɱáíļ óñ ƒíļé, ŵé ĥáʋé šéñţ á ŕéšéţ ļíñķ. Çĥéçķ ýóúŕ íñƀóẋ.]",
+      "forgotBack": "[Ɓáçķ ţó ļóĝ íñ]",
+      "resetTitle": "[Çĥóóšé á ñéŵ þáššŵóŕð]",
+      "resetNewPassword": "[Ñéŵ þáššŵóŕð]",
+      "resetConfirm": "[Çóñƒíŕɱ ñéŵ þáššŵóŕð]",
+      "resetSubmit": "[Úþðáţé þáššŵóŕð]",
+      "resetDone": "[Ýóúŕ þáššŵóŕð ĥáš ƀééñ úþðáţéð. Ýóú çáñ ñóŵ ļóĝ íñ.]",
+      "resetMismatch": "[Ţĥé þáššŵóŕðš ðó ñóţ ɱáţçĥ.]",
+      "resetErrInvalid": "[Ţĥíš ŕéšéţ ļíñķ íš íñʋáļíð óŕ ĥáš éẋþíŕéð. Ŕéɋúéšţ á ñéŵ óñé.]"
     },
     "loot": {
       "chestTitle": "[Çĥéšţ]"
@@ -5854,6 +5873,15 @@ export const en_XA: EnTranslations = {
       },
       "linen_scrap": {
         "name": "[Ļíñéñ Šçŕáþ]"
+      },
+      "arcane_dust": {
+        "name": "[Áŕçáñé Ðúšţ]"
+      },
+      "arcane_essence": {
+        "name": "[Áŕçáñé Éššéñçé]"
+      },
+      "arcane_shard": {
+        "name": "[Áŕçáñé Šĥáŕð]"
       },
       "fen_muster_order": {
         "name": "[Ƒéñƀŕíðĝé Ɱúšţéŕ Óŕðéŕ]"

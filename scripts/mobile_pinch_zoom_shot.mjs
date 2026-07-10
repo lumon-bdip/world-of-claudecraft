@@ -1,7 +1,7 @@
-// Mobile screenshot/check for the disabled two-finger pinch camera gesture.
+// Mobile screenshot/check for guarded two-finger camera zoom.
 // Drives the offline world in a phone-emulated viewport (no server/Postgres),
 // then dispatches REAL two-finger touch events on the game canvas via CDP to
-// prove a pinch no longer changes input.camDist.
+// prove small jitter is ignored while intentional pinch/spread changes camDist.
 //
 // Usage: node scripts/mobile_pinch_zoom_shot.mjs   (requires `npm run dev` on :5173)
 import { mkdirSync } from 'node:fs';
@@ -51,8 +51,8 @@ try {
   const camDist = () => page.evaluate(() => window.__game?.input?.camDist);
 
   // A two-finger pinch is a series of touchStart to touchMove(s) to touchEnd with
-  // two touch points. The mobile camera should ignore both spread and pinch
-  // directions; explicit controls can own zoom later.
+  // two touch points. Small gap changes should be ignored as hand jitter; larger
+  // gap changes should adjust camera distance.
   const cx = 422,
     cy = 195;
   const pinch = async (fromGap, toGap, steps = 12) => {
@@ -78,28 +78,42 @@ try {
     return input.camDist;
   });
   console.log('camDist (start):', start);
-  await page.screenshot({ path: `${OUT}/mobile-pinch-disabled-start.png` });
+  await page.screenshot({ path: `${OUT}/mobile-pinch-guarded-start.png` });
 
-  // Pinch fingers together. This used to zoom out.
+  // Small hand jitter under the gesture threshold should not move the camera.
+  await pinch(180, 181, 4);
+  await sleep(250);
+  const afterJitter = await camDist();
+  console.log('camDist (after jitter):', afterJitter);
+  await page.screenshot({ path: `${OUT}/mobile-pinch-guarded-after-jitter.png` });
+  console.log('saved mobile-pinch-guarded-after-jitter.png');
+
+  // Pinch fingers together, zooming out.
   await pinch(280, 60);
   await sleep(400);
   const afterPinchIn = await camDist();
   console.log('camDist (after pinch in):', afterPinchIn);
-  await page.screenshot({ path: `${OUT}/mobile-pinch-disabled-after-pinch-in.png` });
-  console.log('saved mobile-pinch-disabled-after-pinch-in.png');
+  await page.screenshot({ path: `${OUT}/mobile-pinch-guarded-after-pinch-in.png` });
+  console.log('saved mobile-pinch-guarded-after-pinch-in.png');
 
-  // Spread fingers apart. This used to zoom in.
-  await pinch(60, 320);
+  // Spread fingers apart, zooming in.
   await pinch(60, 320);
   await sleep(400);
   const afterSpread = await camDist();
   console.log('camDist (after spread):', afterSpread);
-  await page.screenshot({ path: `${OUT}/mobile-pinch-disabled-after-spread.png` });
-  console.log('saved mobile-pinch-disabled-after-spread.png');
+  await page.screenshot({ path: `${OUT}/mobile-pinch-guarded-after-spread.png` });
+  console.log('saved mobile-pinch-guarded-after-spread.png');
 
-  const maxDelta = Math.max(Math.abs(afterPinchIn - start), Math.abs(afterSpread - start));
-  if (maxDelta > 0.01) {
-    throw new Error(`pinch changed camera distance by ${maxDelta.toFixed(3)} yards`);
+  if (Math.abs(afterJitter - start) > 0.1) {
+    throw new Error(
+      `small pinch jitter changed camera distance by ${Math.abs(afterJitter - start).toFixed(3)} yards`,
+    );
+  }
+  if (afterPinchIn <= start + 0.1) {
+    throw new Error(`pinch-in did not zoom out enough (${start} -> ${afterPinchIn})`);
+  }
+  if (afterSpread >= afterPinchIn - 0.1) {
+    throw new Error(`spread did not zoom in enough (${afterPinchIn} -> ${afterSpread})`);
   }
 } finally {
   await browser.close();
