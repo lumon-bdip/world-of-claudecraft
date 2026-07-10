@@ -4127,4 +4127,195 @@
   body.mobile-touch .window-footer .btn {
     width: 100%;
   }
+
+  /* ---------- dedicated mobile settings shell (spec section 9 v1.1) ---------- */
+  /* Under body.mobile-touch the Esc menu renders the full-screen back-stack shell
+     (options_mobile_shell.ts) instead of the desktop two-pane: the window goes
+     full-bleed within the safe-area margins, the frame's own titlebar + footer
+     hide (the shell paints its own per-level sticky header + Done bar), and the
+     .window-body hosts the shell as a flex column whose middle content region is
+     the single scroller. Tokens only; this layer outranks components (no
+     !important), so it wins over the centered-sheet sizing declared above. */
+  body.mobile-touch #options-menu,
+  body.mobile-touch #options-menu.kb-wide,
+  body.mobile-touch #options-menu.perf-wide {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    top: max(10px, env(safe-area-inset-top));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    transform: none;
+    box-sizing: border-box;
+  }
+  body.mobile-touch #options-menu > .window-frame > .window-titlebar,
+  body.mobile-touch #options-menu > .window-frame > .window-footer {
+    display: none;
+  }
+  body.mobile-touch #options-menu .window-body {
+    padding: 0;
+    overflow: hidden;
+  }
+  .opt-mshell {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+  }
+  /* Sticky per-level header: back/close inherit the 44px window-close touch floor
+     (AAA block above); the title truncates. */
+  .opt-mshell-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: none;
+    min-height: var(--window-titlebar-h-touch);
+    padding: 0 var(--spacing-sm);
+    border-bottom: 1px solid var(--panel-edge);
+    background: var(--color-panel-l2-base);
+  }
+  .opt-mshell-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: 0.4px;
+    color: var(--window-title-color);
+  }
+  /* Content region: the single scroller between the sticky header and Done bar. */
+  .opt-mshell-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+  }
+  .opt-mshell-search {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+  }
+  /* Stacked category list: full-width 56px rows (icon + label/subhead + count +
+     conflict dot + chevron); the whole row is the tap target that pushes the page. */
+  .opt-mshell-cats {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--spacing-sm);
+  }
+  .opt-mshell-cat {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    min-height: 56px;
+    padding: var(--spacing-sm);
+    border: 0;
+    border-bottom: 1px solid var(--panel-edge);
+    background: transparent;
+    color: var(--color-text-light);
+    text-align: start;
+    cursor: var(--cursor-point);
+  }
+  .opt-mshell-cat:hover {
+    background: color-mix(in srgb, var(--color-text-light) 6%, transparent);
+  }
+  .opt-mshell-cat-icon {
+    flex: none;
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    color: var(--color-accent);
+  }
+  .opt-mshell-cat-icon .ui-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .opt-mshell-cat-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .opt-mshell-cat-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-ui);
+    font-size: var(--text-md);
+    color: var(--color-text-light);
+  }
+  .opt-mshell-cat-sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  /* The conflict dot rides inline in the list row (not the absolute rail corner). */
+  .opt-mshell-cat .opt-tab-dot {
+    position: static;
+    flex: none;
+    inset: auto;
+  }
+  .opt-mshell-chevron {
+    flex: none;
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
+    color: var(--color-text-muted);
+  }
+  .opt-mshell-chevron .ui-icon {
+    width: 16px;
+    height: 16px;
+  }
+  /* Sticky bottom Done bar, with the gamepad legend above it when a pad connects. */
+  .opt-mshell-bar {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-top: 1px solid var(--panel-edge);
+    background: var(--color-panel-l2-base);
+  }
+  .opt-mshell-done {
+    width: 100%;
+    min-height: var(--control-h-touch);
+  }
+  .opt-mshell-cat:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: calc(var(--focus-ring-offset) * -1);
+  }
+  /* Touch floors for the reused .opt-* controls inside the shell (spec section 9:
+     48px rows, larger switch/segments, a 16px search input floor that does not
+     depend on the pointer:coarse media query, so it holds under emulated capture). */
+  body.mobile-touch #options-menu .opt-row {
+    min-height: 48px;
+  }
+  body.mobile-touch #options-menu .opt-switch {
+    width: 52px;
+    height: 30px;
+    border-radius: 15px;
+  }
+  body.mobile-touch #options-menu .opt-switch::before {
+    width: 26px;
+    height: 26px;
+  }
+  body.mobile-touch #options-menu .opt-switch[aria-checked="true"]::before {
+    transform: translateX(22px);
+  }
+  body.mobile-touch #options-menu .opt-seg-btn {
+    height: var(--control-h-touch);
+    padding: 0 var(--spacing-md);
+    font-size: var(--text-sm);
+  }
+  body.mobile-touch #options-menu .opt-slider {
+    max-width: none;
+  }
+  body.mobile-touch #options-menu .search-input {
+    font-size: 16px;
+  }
 }

@@ -85,6 +85,17 @@ import {
   type QuickActionId,
   settingRow,
 } from './options_ia';
+import { type MobileShellDeps, renderMobileShell } from './options_mobile_shell';
+import {
+  currentLevel,
+  initialNav,
+  levelSelection,
+  type MobileNavState,
+  openCategory,
+  openSubView,
+  popClosesMenu,
+  popLevel,
+} from './options_mobile_shell_view';
 import {
   type BoolToggleControl,
   boolToggleNextValue,
@@ -319,6 +330,9 @@ export class OptionsWindow {
   // Assertive live region for controller announcements (the X = clear keybind verb),
   // a body-level child so a detail-only repaint never destroys it.
   private announceEl: HTMLElement | null = null;
+  // The dedicated mobile back-stack navigation (spec section 9); only consulted
+  // under body.mobile-touch, always reset to the landing on open.
+  private mobileNav: MobileNavState = initialNav();
 
   constructor(private readonly deps: OptionsWindowDeps) {}
 
@@ -332,6 +346,133 @@ export class OptionsWindow {
 
   private env(): { touch: boolean; nativeShell: boolean } {
     return { touch: useTouchInterface(), nativeShell: isNativeAppShell() };
+  }
+
+  /** True when the dedicated mobile back-stack shell is active. Keyed on the
+   *  body.mobile-touch class (NOT useTouchInterface()): the brief pins the shell
+   *  to that class, and it is the reliable, capture-testable signal (dims-only
+   *  viewport changes flip the class without flipping the coarse-pointer probe). */
+  private mobileActive(): boolean {
+    return typeof document !== 'undefined' && document.body.classList.contains('mobile-touch');
+  }
+
+  /** The environment the render paths gate rows/categories on. On the mobile
+   *  shell this forces touch:true so the desktop-only Keybinds category + mouse
+   *  rows hide and the touch category shows, independent of the coarse-pointer
+   *  probe (see mobileActive). Off the shell it is the live env(). */
+  private renderEnv(): { touch: boolean; nativeShell: boolean } {
+    return this.mobileActive() ? { touch: true, nativeShell: isNativeAppShell() } : this.env();
+  }
+
+  /** Mirror the top of the mobile back-stack onto activeCategory/subView so the
+   *  shared desktop body renderers (renderCategoryDetail / renderSystem /
+   *  renderBugReport) paint the current level without a mobile-only fork. */
+  private syncFromNav(): void {
+    const sel = levelSelection(currentLevel(this.mobileNav));
+    this.activeCategory = sel.category;
+    this.subView = sel.subView === 'bugreport' ? 'bugreport' : 'none';
+  }
+
+  // -------------------------------------------------------------------------
+  // Mobile back-stack shell (spec section 9). The desktop two-pane never
+  // renders on touch; this owns the shell chrome (options_mobile_shell.ts) and
+  // reuses the desktop body renderers (renderCategoryDetail / renderSystem /
+  // renderBugReport) + the shared Overview pieces, so every row dispatch stays
+  // byte-identical. The navigation reducer + env gating live in the pure
+  // options_mobile_shell_view core.
+  // -------------------------------------------------------------------------
+
+  private renderMobile(body: HTMLElement, footer: HTMLElement | null): void {
+    body.replaceChildren();
+    // The frame footer is hidden on touch (CSS); the shell carries its own Done
+    // bar. Clear any prior desktop footer content so a platform flip never leaves
+    // a stale row behind.
+    if (footer) footer.replaceChildren();
+    // Assertive live region (announcements), a body-level child so a shell rebuild
+    // keeps it; the shell is appended after it.
+    const announce = el('div', 'visually-hidden');
+    announce.setAttribute('role', 'status');
+    announce.setAttribute('aria-live', 'assertive');
+    body.appendChild(announce);
+    this.announceEl = announce;
+    this.syncFromNav();
+    renderMobileShell(body, this.mobileNav, this.mobileShellDeps());
+  }
+
+  private mobileShellDeps(): MobileShellDeps {
+    return {
+      env: () => this.renderEnv(),
+      onClose: () => this.close(),
+      onBack: () => this.backOrClose(),
+      onSelectCategory: (id) => this.setActiveCategory(id),
+      changedCount: (id) => {
+        const hooks = this.deps.options();
+        return hooks ? categoryChangedCount(id, (key) => this.isChanged(hooks, key)) : 0;
+      },
+      hasConflict: (id) => {
+        const conflicts = this.computeConflicts();
+        return (
+          (id === 'keybinds' && conflicts.keyboardWarning) ||
+          (id === 'controller' && conflicts.controllerWarning)
+        );
+      },
+      categoryIconHtml: (slug) => svgIcon(railIcon(slug)),
+      headerTitle: () => this.mobileHeaderTitle(),
+      searchActive: () => this.searchQuery.trim().length > 0,
+      buildSearchField: (onInput) => this.buildMobileSearchField(onInput),
+      appendQuickActions: (parent) => this.appendOverviewQuickActions(parent),
+      appendLandingAlerts: (parent) => this.appendReloadAlert(parent),
+      appendPins: (parent) => this.appendOverviewPins(parent),
+      appendStatus: (parent) => this.appendOverviewStatus(parent),
+      appendSearchResults: (parent) => this.renderSearchResults(parent, this.searchQuery.trim()),
+      appendContentBody: (parent) => this.appendMobileContentBody(parent),
+      buildLegend: () => this.buildLegend(),
+    };
+  }
+
+  /** Render the current level's body (a pushed category / sub-view page) by
+   *  dispatching to the same renderers the desktop detail pane uses. */
+  private appendMobileContentBody(parent: HTMLElement): void {
+    this.syncFromNav();
+    if (this.subView === 'bugreport') {
+      this.renderBugReport(parent);
+      return;
+    }
+    if (this.activeCategory === 'system') {
+      this.renderSystem(parent);
+      return;
+    }
+    this.renderCategoryDetail(parent);
+  }
+
+  /** The pushed-page header title: the category name (level 1) or the bug-report
+   *  title (level 2); the landing header uses the window's own title. */
+  private mobileHeaderTitle(): string {
+    const level = currentLevel(this.mobileNav);
+    if (level.kind === 'subview') return t('hudChrome.bugReport.menuButton');
+    if (level.kind === 'category') {
+      const cat = CATEGORIES.find((c) => c.id === level.id);
+      return cat ? t(cat.nameKey) : '';
+    }
+    return t('hud.options.gameMenu');
+  }
+
+  /** The landing's persistent global search field: typing re-fills only the lower
+   *  region (via onInput), so the field keeps focus + caret while typing. */
+  private buildMobileSearchField(onInput: () => void): HTMLElement {
+    const field = el('div', 'search-field opt-mshell-search');
+    const input = document.createElement('input');
+    input.type = 'search';
+    input.className = 'search-input';
+    input.value = this.searchQuery;
+    input.setAttribute('placeholder', t('hudChrome.options.searchPlaceholder'));
+    input.setAttribute('aria-label', t('hudChrome.options.searchPlaceholder'));
+    input.addEventListener('input', () => {
+      this.searchQuery = input.value;
+      onInput();
+    });
+    field.appendChild(input);
+    return field;
   }
 
   toggle(): void {
@@ -351,6 +492,8 @@ export class OptionsWindow {
     this.searchScope = 'all';
     this.capturingKey = null;
     this.keybindNote = '';
+    // The mobile shell always opens on the level-0 landing (never a pushed page).
+    this.mobileNav = initialNav();
     this.deps.options()?.perfOverlay.setPlacement(false);
     this.render();
     this.deps.root().style.display = 'flex';
@@ -421,6 +564,13 @@ export class OptionsWindow {
 
   private render(): void {
     const { body, footer } = this.ensureFrame();
+    // Under body.mobile-touch the window becomes the dedicated back-stack shell
+    // (spec section 9); the desktop two-pane never renders on touch, and the
+    // desktop path below stays byte-identical.
+    if (this.mobileActive()) {
+      this.renderMobile(body, footer);
+      return;
+    }
     body.replaceChildren();
     body.appendChild(this.buildSearchStrip());
     // Assertive live region for controller announcements (body-level so a detail
@@ -579,6 +729,21 @@ export class OptionsWindow {
   }
 
   private setActiveCategory(id: CategoryId, opts: { preserveRailFocus?: boolean } = {}): void {
+    // On the mobile back-stack shell, selecting a category pushes its level-1
+    // page (a single page, never stacked); the rail/roving machinery below is
+    // desktop-only. Search go-to + the Overview alert converge here too, so they
+    // navigate on touch without a mobile-only fork.
+    if (this.mobileActive()) {
+      audio.click();
+      this.mobileNav = openCategory(this.mobileNav, id);
+      this.searchQuery = '';
+      this.capturingKey = null;
+      this.keybindNote = '';
+      this.deps.options()?.perfOverlay.setPlacement(id === 'system');
+      this.syncFromNav();
+      this.render();
+      return;
+    }
     // Arrow-roving the rail (and Ctrl+Tab) plays no click and, per spec section 5,
     // re-renders the DETAIL pane only: the rail node (and thus the focused tab) must
     // survive. A pointer click keeps the full-render path (audio + rebuild).
@@ -882,8 +1047,20 @@ export class OptionsWindow {
     this.focusedControl()?.click();
   }
 
-  /** B: pop a pushed sub-view, else close the menu. */
+  /** B / back chevron: pop a pushed level (mobile) or sub-view (desktop), else
+   *  close the menu. On the mobile shell this walks the back-stack: level-0 pop
+   *  closes, any deeper pop steps back one page. */
   private backOrClose(): void {
+    if (this.mobileActive()) {
+      if (popClosesMenu(this.mobileNav)) {
+        this.close();
+        return;
+      }
+      this.mobileNav = popLevel(this.mobileNav);
+      this.syncFromNav();
+      this.render();
+      return;
+    }
     if (this.subView !== 'none') {
       this.subView = 'none';
       this.renderRail();
@@ -1009,7 +1186,7 @@ export class OptionsWindow {
 
   private renderCategoryDetail(detail: HTMLElement): void {
     const hooks = this.deps.options();
-    const model = renderCategory(this.activeCategory, this.env());
+    const model = renderCategory(this.activeCategory, this.renderEnv());
     this.categoryHead(detail, model.id, model.nameKey);
     const sub = el('div', 'opt-cat-sub');
     sub.textContent = t(model.subheadKey);
@@ -1478,43 +1655,14 @@ export class OptionsWindow {
     sub.textContent = t('hudChrome.options.ia.catOverviewSub');
     detail.append(head, sub);
 
-    // Quick actions (mirror the footer).
-    const quick = el('div', 'opt-quick');
-    for (const action of OVERVIEW_QUICK_ACTIONS) {
-      if (!this.quickActionAvailable(action.id)) continue;
-      const cls =
-        action.id === 'resume'
-          ? 'btn is-primary'
-          : action.id === 'logout' || action.id === 'resetAll'
-            ? 'btn is-danger'
-            : 'btn';
-      const btn = el('button', cls);
-      btn.type = 'button';
-      btn.textContent = t(action.labelKey);
-      btn.addEventListener('click', () => this.runQuickAction(action.id));
-      quick.appendChild(btn);
-    }
-    detail.appendChild(quick);
-
-    // Reload-pending alert (a graphics change that needs a reload was made).
-    if (this.reloadPending) {
-      const alert = el('div', 'opt-alert');
-      const text = document.createElement('span');
-      text.textContent = t('hud.options.graphicsReloadNote');
-      const reload = el('button', 'btn');
-      reload.type = 'button';
-      reload.textContent = t('hud.options.reloadNow');
-      reload.addEventListener('click', () => {
-        audio.click();
-        location.reload();
-      });
-      alert.append(text, reload);
-      detail.appendChild(alert);
-    }
+    // Quick actions (mirror the footer) + the reload-pending alert.
+    this.appendOverviewQuickActions(detail);
+    this.appendReloadAlert(detail);
 
     // Keybind-conflict alert (spec section 3): a persistent .error-banner linking to
     // Keybinds when any keyboard binding conflicts or is fully unbound, shown only
-    // where the Keybinds category is reachable (it hides on touch).
+    // where the Keybinds category is reachable (it hides on touch). Kept inline (not
+    // shared with the mobile landing, where Keybinds is env-hidden).
     if (this.computeConflicts().keyboardWarning && !this.env().touch) {
       const alert = el('div', 'error-banner');
       const text = document.createElement('span');
@@ -1530,7 +1678,53 @@ export class OptionsWindow {
       detail.appendChild(alert);
     }
 
-    // Pinned essentials: mirror rows writing their HOME key (no second home).
+    // Pinned essentials + the status block (both shared with the mobile landing).
+    this.appendOverviewPins(detail);
+    this.appendOverviewStatus(detail);
+  }
+
+  /** The Overview quick-action button row (spec section 3), shared by the desktop
+   *  Overview pane and the mobile landing. Each mirrors the footer action. */
+  private appendOverviewQuickActions(parent: HTMLElement): void {
+    const quick = el('div', 'opt-quick');
+    for (const action of OVERVIEW_QUICK_ACTIONS) {
+      if (!this.quickActionAvailable(action.id)) continue;
+      const cls =
+        action.id === 'resume'
+          ? 'btn is-primary'
+          : action.id === 'logout' || action.id === 'resetAll'
+            ? 'btn is-danger'
+            : 'btn';
+      const btn = el('button', cls);
+      btn.type = 'button';
+      btn.textContent = t(action.labelKey);
+      btn.addEventListener('click', () => this.runQuickAction(action.id));
+      quick.appendChild(btn);
+    }
+    parent.appendChild(quick);
+  }
+
+  /** The reload-pending alert (a graphics change that needs a reload was made),
+   *  shared by the desktop Overview pane and the mobile landing. No-op when clean. */
+  private appendReloadAlert(parent: HTMLElement): void {
+    if (!this.reloadPending) return;
+    const alert = el('div', 'opt-alert');
+    const text = document.createElement('span');
+    text.textContent = t('hud.options.graphicsReloadNote');
+    const reload = el('button', 'btn');
+    reload.type = 'button';
+    reload.textContent = t('hud.options.reloadNow');
+    reload.addEventListener('click', () => {
+      audio.click();
+      location.reload();
+    });
+    alert.append(text, reload);
+    parent.appendChild(alert);
+  }
+
+  /** The pinned-essentials mirror rows (each writes its HOME key, jumps nowhere),
+   *  shared by the desktop Overview pane and the mobile landing. */
+  private appendOverviewPins(parent: HTMLElement): void {
     const hooks = this.deps.options();
     const source = hooks ? this.settingsSource(hooks) : null;
     const pinsSection = el('div', 'opt-section');
@@ -1555,9 +1749,13 @@ export class OptionsWindow {
       if (home) crumb.textContent = t(home.nameKey);
       pinsSection.appendChild(crumb);
     }
-    detail.appendChild(pinsSection);
+    parent.appendChild(pinsSection);
+  }
 
-    // Status block: version, online/offline, total changed-from-defaults.
+  /** The status block (version, online/offline, total changed-from-defaults),
+   *  shared by the desktop Overview pane and the mobile landing. */
+  private appendOverviewStatus(parent: HTMLElement): void {
+    const hooks = this.deps.options();
     const status = el('div', 'opt-status');
     const { version, build } = appVersionInfo();
     const ver = document.createElement('span');
@@ -1572,7 +1770,7 @@ export class OptionsWindow {
       count: formatNumber(n, { maximumFractionDigits: 0 }),
     });
     status.append(ver, mode, changed);
-    detail.appendChild(status);
+    parent.appendChild(status);
   }
 
   private quickActionAvailable(id: QuickActionId): boolean {
@@ -1587,14 +1785,42 @@ export class OptionsWindow {
     if (id === 'resume') {
       this.close();
     } else if (id === 'reportBug') {
-      this.activeCategory = 'system';
-      this.subView = 'bugreport';
-      this.render();
+      this.openBugReport();
     } else if (id === 'logout') {
       this.deps.options()?.logout();
     } else {
       this.confirmResetAll();
     }
+  }
+
+  /** Open the bug-report sub-view. On the mobile shell it pushes a level-2 page
+   *  over System (back pops to System); on desktop it swaps the detail pane to the
+   *  bug-report sub-view under System, as before. */
+  private openBugReport(): void {
+    if (this.mobileActive()) {
+      this.mobileNav = openSubView(this.mobileNav, 'bugreport', 'system');
+      this.syncFromNav();
+      this.render();
+      return;
+    }
+    this.activeCategory = 'system';
+    this.subView = 'bugreport';
+    this.render();
+  }
+
+  /** Leave the bug-report sub-view (its Back button + a successful submit). On
+   *  the mobile shell this pops the back-stack to System; on desktop it returns
+   *  the detail pane to the System category. */
+  private exitBugReport(): void {
+    if (this.mobileActive()) {
+      this.mobileNav = popLevel(this.mobileNav);
+      this.syncFromNav();
+      this.render();
+      return;
+    }
+    this.subView = 'none';
+    this.renderRail();
+    this.renderDetail();
   }
 
   // -------------------------------------------------------------------------
@@ -1631,9 +1857,7 @@ export class OptionsWindow {
       btn.textContent = t('hudChrome.bugReport.menuButton');
       btn.addEventListener('click', () => {
         audio.click();
-        this.subView = 'bugreport';
-        this.renderRail();
-        this.renderDetail();
+        this.openBugReport();
       });
       control.appendChild(btn);
       support.appendChild(row);
@@ -1783,7 +2007,7 @@ export class OptionsWindow {
     detail.appendChild(head);
     if (!hooks) return;
     const source = this.settingsSource(hooks);
-    const env = this.env();
+    const env = this.renderEnv();
     const matches = buildSearchIndex().filter((r) =>
       rowMatchesQuery(t(r.labelKey), r.settingKey, query),
     );
@@ -1858,7 +2082,7 @@ export class OptionsWindow {
   /** True when a category is revealed under the current host environment (touch-only
    *  hides on desktop; desktop-only hides on touch). Mirrors options_view gating. */
   private categoryVisible(cat: { env?: { touchOnly?: boolean; desktopOnly?: boolean } }): boolean {
-    const e = this.env();
+    const e = this.renderEnv();
     if (cat.env?.touchOnly && !e.touch) return false;
     if (cat.env?.desktopOnly && e.touch) return false;
     return true;
@@ -2198,9 +2422,7 @@ export class OptionsWindow {
     back.textContent = t('hud.options.back');
     back.addEventListener('click', () => {
       audio.click();
-      this.subView = 'none';
-      this.renderRail();
-      this.renderDetail();
+      this.exitBugReport();
     });
     detail.appendChild(back);
 
@@ -2291,9 +2513,7 @@ export class OptionsWindow {
               droppedShot ? 'hudChrome.bugReport.submittedNoShot' : 'hudChrome.bugReport.submitted',
             ),
           );
-          this.subView = 'none';
-          this.renderRail();
-          this.renderDetail();
+          this.exitBugReport();
         })
         .catch((err: unknown) => {
           submit.disabled = false;

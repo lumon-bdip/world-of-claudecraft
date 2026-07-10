@@ -6806,22 +6806,10 @@
       white-space: nowrap;
     }
   }
-  /* Interim mobile (P2): the two-pane collapses to a single column and the whole
-     body scrolls; the dedicated back-stack shell replaces this in P5. */
-  body.mobile-touch #options-menu .window-body {
-    overflow-y: auto;
-  }
-  body.mobile-touch #options-menu .opt-body {
-    grid-template-columns: 1fr;
-  }
-  body.mobile-touch #options-menu .opt-rail,
-  body.mobile-touch #options-menu .opt-detail {
-    overflow: visible;
-  }
-  body.mobile-touch #options-menu .opt-rail {
-    border-inline-end: 0;
-    border-bottom: 1px solid var(--panel-edge);
-  }
+  /* Mobile (P5): under body.mobile-touch the two-pane grid is not rendered at all;
+     the dedicated full-screen back-stack shell (options_mobile_shell.ts) replaces
+     it, styled in the hud-mobile layer (.opt-mshell-*, which outranks components).
+     The reused .opt-* row/control grammar above is shared by both surfaces. */
   .opt-list {
     display: flex;
     flex-direction: column;
