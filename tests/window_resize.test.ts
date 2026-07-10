@@ -93,7 +93,7 @@ describe('resizedWindowSize', () => {
 describe('isResizableWindow', () => {
   const el = (id: string) => ({ id }) as HTMLElement;
 
-  it('excludes fixed-size boards, popups, modal prompts, and the Esc options menu', () => {
+  it('excludes fixed-size boards, popups, and modal prompts', () => {
     for (const id of [
       'map-window',
       'loot-window',
@@ -101,15 +101,22 @@ describe('isResizableWindow', () => {
       'mobile-extra-controls',
       'lockpick-panel',
       'emote-editor',
-      // The Warden's Codex is a full-attention XL modal (esc-menu-redesign spec 2).
-      'options-menu',
     ]) {
       expect(isResizableWindow(el(id))).toBe(false);
     }
   });
 
-  it('allows the content windows', () => {
-    for (const id of ['char-window', 'quest-log-window', 'market-window', 'bags', 'spellbook']) {
+  it('allows the content windows AND the Esc options menu (maintainer drag/resize direction)', () => {
+    // The Warden's Codex now resizes by the corner band like every grammar window,
+    // superseding the P2 fixed-window ruling (esc-menu-redesign spec section 2).
+    for (const id of [
+      'char-window',
+      'quest-log-window',
+      'market-window',
+      'bags',
+      'spellbook',
+      'options-menu',
+    ]) {
       expect(isResizableWindow(el(id))).toBe(true);
     }
   });

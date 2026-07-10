@@ -35,10 +35,15 @@ categories live permanently on the left, content is always in view.
 ## 2. Layout model
 
 - Root `#options-menu` adopts the landed `.window-frame` grammar, size class XL:
-  `width: min(1200px, 92% of #ui)`, `height: min(800px, 88% of #ui)`, centered,
-  **non-draggable and non-resizable** (a full-attention context; the world map is
-  the precedent, spec 3.6 of the AAA redesign; add `options-menu` to
-  `NON_RESIZABLE_WINDOW_IDS` and exclude its titlebar from the drag predicate).
+  `width: min(1200px, 92% of #ui)`, `height: min(800px, 88% of #ui)`, centered.
+  It **drags by its titlebar and resizes by the corner band** like every other
+  grammar window (maintainer direction: this supersedes the earlier fixed-window
+  ruling that added `options-menu` to `NON_RESIZABLE_WINDOW_IDS` and excluded its
+  titlebar from the drag predicate; those exclusions are removed). The XL width and
+  height are the DEFAULT sizing, overridden by an inline size once the player
+  resizes; the viewport clamp keeps a moved/resized window on-screen. Because the
+  window width is now dynamic, the rail's icon-collapse (below) reacts to the
+  WINDOW width via a container query, not just the viewport.
 - Zones top to bottom: `.window-titlebar` (40px desktop / 48px touch; title
   "Settings" in `--font-display` `--text-lg` gold; `.window-close` with 40px hit
   area) / **the SHELL SEARCH strip** (40px; a full-width `.search-field` that is
@@ -233,7 +238,9 @@ Controller (new; no menu navigation exists in the game today):
   affordance); D-pad Up/Down = row focus; D-pad Left/Right or left-stick X =
   adjust focused value (mirrors keyboard); A = activate; B = back (pops a
   pushed sub-view, else closes); **Y = reset the focused row to its default;
-  X = clear the focused keybind slot; RT/LT = page-scroll long panes**.
+  X = clear the focused keybind slot; RT = page down and LT = page up the long
+  panes** (coordinator direction: RT scrolls the detail toward the end, LT toward
+  the top, mirroring the trigger geometry).
 - The controller cursor is `.is-active-row` (see section 4), always visible.
 - A **persistent footer button-legend strip** renders while a gamepad is
   connected (console-settings convention): live glyphs for LB/RB, D-pad, A, B,
@@ -398,9 +405,10 @@ UI_PURE_CORES with tests):
 Reworked: `src/ui/options_view.ts` (IA swap onto options_ia, focus model,
 rail/category render models), `src/ui/options_window.ts` (repaint on the
 window-frame builder + `.opt-*` grammar; keep every dispatch and subsystem
-apply path byte-identical), `src/ui/focus_manager.ts` (add `hasActiveTrap()`),
-`window_drag_handle.ts` or its call site (exclude `#options-menu` titlebar),
-`window_resize.ts` (`NON_RESIZABLE_WINDOW_IDS` + `options-menu`).
+apply path byte-identical), `src/ui/focus_manager.ts` (add `hasActiveTrap()`).
+(Superseded by the maintainer drag/resize direction: `#options-menu` is NO LONGER
+in `window_resize.ts` `NON_RESIZABLE_WINDOW_IDS` nor excluded from the
+`window_drag_handle.ts` predicate; it drags/resizes like every grammar window.)
 
 CSS: `.opt-*` grammar + `--opt-rail-w` token inside the existing guarded
 sections of `components.css` / `hud.mobile.css` / `tokens.css`. No new files,
@@ -444,7 +452,7 @@ ui_scale extremes, long-string locale).
 ### Variant behavior (the menu accounts for every HUD type)
 | Variant | Behavior |
 |---|---|
-| Desktop full-screen | The two-pane Codex, XL centered, non-draggable |
+| Desktop full-screen | The two-pane Codex, XL centered by default, draggable + resizable (maintainer direction) |
 | Compact (ui_scale 0.8 to 1.15; narrow viewports) | Same layout; rail icon-collapses under 900px effective width; verify no clipping at both scale extremes |
 | Mobile portrait AND landscape (body.mobile-touch) | The dedicated back-stack shell (section 9); never the shrunk two-pane |
 | Combat | The menu opens identically; the world keeps running (MMO rule, no pause); it is a full-attention modal the player chose, same as today; zero combat-state coupling in the menu itself |

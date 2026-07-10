@@ -5852,12 +5852,13 @@
     touch-action: none;
   }
   /* ---------- options / game menu (Esc) ---------- */
-  /* The Warden's Codex desktop chrome (P2): #options-menu adopts the shared
-     .window-frame grammar at XL size, non-draggable + non-resizable (excluded in
-     window_drag_handle.ts + window_resize.ts, the world-map precedent). The frame
-     body hosts the shell search strip (fixed) then a recessed rail + detail
-     two-pane; the rail and detail are the two independent scrollers. Tokens only;
-     the .opt-* names are net-new, so they land inside this existing banner. */
+  /* The Warden's Codex desktop chrome: #options-menu adopts the shared
+     .window-frame grammar at XL size. It DRAGS by its titlebar and RESIZES by the
+     corner band like every grammar window (maintainer direction supersedes the P2
+     fixed-window ruling); the XL width/height below is the DEFAULT, overridden by
+     an inline size once resized. The frame body hosts the shell search strip
+     (fixed) then a recessed rail + detail two-pane; the rail and detail are the two
+     independent scrollers. Tokens only; the .opt-* names are net-new. */
   #options-menu {
     width: min(1200px, calc(var(--app-vw, 100vw) * 0.92));
     height: min(800px, calc(var(--app-vh, 100vh) * 0.88));
@@ -5878,6 +5879,11 @@
     min-height: 0;
     padding: 0;
     overflow: hidden;
+    /* Query container so the rail's icon-collapse reacts to the WINDOW width, not
+       the viewport: the Codex now drags/resizes, so a narrow window must collapse
+       the rail even on a wide desktop (maintainer drag/resize direction). */
+    container-type: inline-size;
+    container-name: opt-shell;
   }
   /* Shell search strip: first body tab stop, reuses the shared .search-field. */
   .opt-search {
@@ -6292,9 +6298,11 @@
       transition: none;
     }
   }
-  /* Under 900px effective width: collapse the rail to an icon strip (labels +
-     counts + group headers become the tab's title tooltip). */
-  @media (max-width: 900px) {
+  /* Under 900px effective WINDOW width: collapse the rail to an icon strip (labels
+     + counts + group headers become the tab's title tooltip). A container query on
+     the window body so it reacts to a resized/dragged window, not just the viewport
+     (the conflict dot stays visible: it is not in this hidden set). */
+  @container opt-shell (max-width: 900px) {
     #options-menu .opt-body {
       grid-template-columns: 56px 1fr;
     }

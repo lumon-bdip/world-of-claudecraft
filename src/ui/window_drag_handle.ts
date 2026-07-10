@@ -20,12 +20,6 @@ const DRAG_HANDLE_EXCLUDE =
 // and the AAA `.window-titlebar` (window_frame.ts).
 const DRAG_HANDLE_SELECTOR = '.panel-title, .window-titlebar';
 
-// Windows that never drag even though they carry a titlebar handle: a
-// full-attention XL modal is centered and fixed. #options-menu (the Warden's
-// Codex) joins the world-map precedent (#map-window, which is headerless below);
-// its `.window-titlebar` must not begin a move (esc-menu-redesign spec 2).
-const NON_DRAGGABLE_WINDOW_IDS = new Set(['options-menu']);
-
 /**
  * True when a pointerdown on `target` should begin dragging `win`.
  *
@@ -39,11 +33,12 @@ const NON_DRAGGABLE_WINDOW_IDS = new Set(['options-menu']);
  * Otherwise returns false for any excluded interactive control (so the close
  * button never drags), true when the target is within a `.panel-title` /
  * `.window-titlebar` that belongs to `win`, and true for the headerless
- * #map-window body.
+ * #map-window body. #options-menu (the Warden's Codex) now drags by its
+ * titlebar like every other grammar window (maintainer direction supersedes the
+ * esc-menu-redesign spec section 2 fixed-window ruling).
  */
 export function isWindowDragHandle(target: HTMLElement, win: HTMLElement): boolean {
   if (target.ownerDocument.body.classList.contains('mobile-touch')) return false;
-  if (NON_DRAGGABLE_WINDOW_IDS.has(win.id)) return false;
   if (target.closest(DRAG_HANDLE_EXCLUDE)) return false;
   const handle = target.closest(DRAG_HANDLE_SELECTOR);
   if (handle && win.contains(handle)) return true;

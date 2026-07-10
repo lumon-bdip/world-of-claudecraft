@@ -35,8 +35,9 @@ export interface WindowResizeDeps {
 
 // Windows whose body is not reflowable content: fixed-size boards/popups and
 // the modal prompts. Everything else gets the grip. The Esc options menu (the
-// Warden's Codex) is a full-attention XL modal at a fixed size, so it is
-// non-resizable too, matching the world-map precedent (esc-menu-redesign spec 2).
+// Warden's Codex) is NO LONGER excluded: per maintainer direction it drags by its
+// titlebar and resizes by the corner band like every other grammar window (this
+// supersedes the esc-menu-redesign spec section 2 fixed-window ruling).
 const NON_RESIZABLE_WINDOW_IDS = new Set([
   'map-window',
   'loot-window',
@@ -44,7 +45,6 @@ const NON_RESIZABLE_WINDOW_IDS = new Set([
   'mobile-extra-controls',
   'lockpick-panel',
   'emote-editor',
-  'options-menu',
 ]);
 
 export function isResizableWindow(el: HTMLElement): boolean {

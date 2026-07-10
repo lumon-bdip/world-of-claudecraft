@@ -311,7 +311,10 @@ describe('options_window: conflict surfacing (P4)', () => {
     expect(painter).toContain("el('span', 'opt-tab-dot')");
     expect(painter).toContain("t('hudChrome.options.conflictDot')");
     // The dot is NOT in the 900px icon-collapse hidden set, so it survives collapse.
-    const collapse = components.slice(components.indexOf('@media (max-width: 900px)'));
+    // The collapse is a CONTAINER query (reacts to the resized/dragged window width).
+    const collapse = components.slice(
+      components.indexOf('@container opt-shell (max-width: 900px)'),
+    );
     const block = collapse.slice(0, collapse.indexOf('\n  }\n  /*'));
     expect(block).not.toContain('opt-tab-dot');
     // A forced-colours fill keeps the dot visible when the palette drops color.

@@ -31,18 +31,19 @@ function scenario(
   return { target: opts.headerless ? (win as unknown as HTMLElement) : target, win };
 }
 
-describe('isWindowDragHandle: options-menu exclusion (P2)', () => {
-  it('a titlebar drag on a normal framed window still begins a move', () => {
+describe('isWindowDragHandle: grammar-window titlebar drag', () => {
+  it('a titlebar drag on a normal framed window begins a move', () => {
     const { target, win } = scenario('vendor-window');
     expect(isWindowDragHandle(target, win)).toBe(true);
   });
 
-  it('the Esc options menu never drags, even from its titlebar', () => {
+  it('the Esc options menu NOW drags from its titlebar (maintainer drag/resize direction)', () => {
+    // Supersedes the P2 fixed-window ruling: the Codex drags like every grammar window.
     const { target, win } = scenario('options-menu');
-    expect(isWindowDragHandle(target, win)).toBe(false);
+    expect(isWindowDragHandle(target, win)).toBe(true);
   });
 
-  it('still bails on the mobile touch HUD (unchanged)', () => {
+  it('still bails the options menu on the mobile touch HUD (full-screen layout)', () => {
     const { target, win } = scenario('options-menu', { mobile: true });
     expect(isWindowDragHandle(target, win)).toBe(false);
   });
