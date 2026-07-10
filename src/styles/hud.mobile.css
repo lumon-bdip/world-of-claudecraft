@@ -4636,7 +4636,9 @@
      Each tile is the tap target that pushes its category page. */
   .opt-mshell-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    /* Fixed 4 columns so the eight category tiles read as a balanced 4 + 4
+       (auto-fill packed them 5 + 3 on a 900px landscape phone). */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--spacing-sm);
     margin-top: var(--spacing-sm);
   }
