@@ -53,6 +53,7 @@ import {
 } from './game/mobile_controls';
 import { applyMobileHudLayout } from './game/mobile_hud_layout_applier';
 import { mouselookReleaseFacing } from './game/mouselook_release';
+import { diagonalMovementVisualFacing } from './game/movement_visual';
 import { music } from './game/music';
 import { createPerfMonitor } from './game/perf';
 import { startPerfReporter } from './game/perf_reporter';
@@ -2412,6 +2413,10 @@ async function startGame(
       ? (renderFacing ?? controllerFacing ?? pendingReleaseFacing)
       : null;
 
+    const visualFacingFor = (
+      mi: ReturnType<typeof input.readMoveInput>,
+      baseFacing: number,
+    ): number | null => (!movementFrozen() ? diagonalMovementVisualFacing(mi, baseFacing) : null);
     if (offlineSim) {
       acc += frameDt;
       // Supply the UTC day for the delve daily reset (the sim never reads the wall
@@ -2458,8 +2463,11 @@ async function startGame(
       renderer.camDist = input.camDist;
       syncGroundAimReticle();
       perf.setNetwork(null);
+      const offlineRenderFacing =
+        visualFacingFor(input.readMoveInput(), movementFacing ?? offlineSim.player.facing) ??
+        movementFacing;
       perf.time('renderer', () =>
-        perf.trace('renderer.sync', () => renderer.sync(acc / DT, frameDt, movementFacing), {
+        perf.trace('renderer.sync', () => renderer.sync(acc / DT, frameDt, offlineRenderFacing), {
           mode: 'offline',
           views: renderer.views.size,
           alpha: acc / DT,
@@ -2515,6 +2523,8 @@ async function startGame(
     // close a feedback loop through the server that at high RTT never
     // converges (the observed self-spinning resonance under netem).
     const netFacing = foreignFacing ?? kbTurn.wireFacing;
+    const onlineRenderFacing =
+      visualFacingFor(resolved.mi, netFacing ?? kbFacing ?? interpServerFacing) ?? netFacing;
     Object.assign(net.moveInput, resolved.mi);
     if (kbTurn.suppressTurnFlags) {
       net.moveInput.turnLeft = false;
@@ -2604,7 +2614,7 @@ async function startGame(
             // is applied server-side the moment it arrives, so the model may
             // show it immediately; without it the click-move yaw would lag
             // the predicted position by a round trip and corners would slide.
-            net.spectating === null ? netFacing : null,
+            net.spectating === null ? onlineRenderFacing : null,
             adaptiveSelfAlphaLead(onlineInputEchoMs, onlineJitterMs, net.snapInterval),
             selfMotion,
           ),
