@@ -83,9 +83,13 @@ describe('options_window: always opens on Overview (never last-visited)', () => 
     const toggle = painter.slice(painter.indexOf('toggle(): void {'));
     const body = toggle.slice(0, toggle.indexOf('\n  }\n'));
     // Desktop / wide rail: the active Overview tab. Narrow back-stack shell (F3):
-    // no rail tab exists (and the frame X is display:none), so the landing's
-    // search field, falling back to the first category row, seeds focus instead.
-    expect(body).toContain("? '.opt-mshell-search .search-input, .opt-mshell-cat'");
+    // no rail tab exists (and the frame X is display:none), so the FIRST CATEGORY
+    // TILE seeds focus. The search input must NOT appear in the seed selector at
+    // all: auto-focusing it popped the soft keyboard on every touch open, and a
+    // comma list cannot rank it second (querySelectorAll resolves selector lists
+    // in DOM order and the input sits above the grid).
+    expect(body).toContain("? '.opt-mshell-cat' : '.opt-tab.is-active'");
+    expect(body).not.toContain('.opt-mshell-search .search-input, .opt-mshell-cat');
     expect(body).toContain(": '.opt-tab.is-active'");
     expect(body).toContain('this.deps.focusFirstInteractive(this.deps.root(), preferred)');
   });

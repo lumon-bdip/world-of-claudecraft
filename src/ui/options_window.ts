@@ -597,13 +597,15 @@ export class OptionsWindow {
     this.observeInterfaceModeFlips();
     // Spec section 5: the menu opens with focus ON the Overview rail tab. The
     // narrow back-stack shell mounts no rail tab (and its frame X is display:none),
-    // so it seeds the landing's search field, falling back to the first category
-    // row (F3). This also seeds the controller path: hud routes pad menu verbs to
-    // this window only while focus is inside it, so without this a fresh open
-    // would strand a pad user.
-    const preferred = this.backStackActive()
-      ? '.opt-mshell-search .search-input, .opt-mshell-cat'
-      : '.opt-tab.is-active';
+    // so it seeds the first category tile (F3). The tile, DELIBERATELY not the
+    // search input: seeding the input popped the soft keyboard on every touch
+    // open (live feedback), and a comma list could not express "tile first"
+    // anyway (querySelectorAll resolves selector lists in DOM order and the
+    // input sits above the grid). The landing always renders tiles (the
+    // Reset/Logout action tiles at minimum), and focusFirst's generic
+    // first-focusable fallback still seeds the trap + pad routing if not (hud
+    // routes pad menu verbs to this window only while focus is inside it).
+    const preferred = this.backStackActive() ? '.opt-mshell-cat' : '.opt-tab.is-active';
     this.deps.focusFirstInteractive(this.deps.root(), preferred);
     music.pauseForMenu();
     audio.click();
