@@ -90,7 +90,7 @@ import {
   walletForAccount,
 } from './db';
 import { getDeedBroadcasts } from './deeds_db';
-import { isMarqueeDeed, recordDeedUnlock } from './deeds_records';
+import { isHiddenDeedId, isMarqueeDeed, recordDeedUnlock } from './deeds_records';
 import { enqueueActivity } from './discord_activity';
 import { discordFlairForAccount, grantRewardPoints } from './discord_db';
 import { enqueueRelay } from './discord_relay';
@@ -4992,6 +4992,11 @@ export class GameServer {
   private maybeBroadcastDeedUnlock(session: ClientSession, deedId: string): void {
     const def = DEEDS[deedId];
     if (!def || !isMarqueeDeed(def)) return;
+    // Hidden deeds are invisible until earned, EXISTENCE included (the
+    // deeds_records contract every third-party surface honors): a reward can
+    // make one marquee, but the fan-out would hand its id and name to viewers
+    // who have not earned their own copy.
+    if (isHiddenDeedId(deedId)) return;
     void getDeedBroadcasts(session.accountId)
       .then((enabled) => {
         if (!enabled) return;

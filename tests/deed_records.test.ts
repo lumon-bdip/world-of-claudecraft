@@ -408,6 +408,33 @@ describe('deedUnlocked through GameServer.detectActivity', () => {
     expect(broadcastSpy).not.toHaveBeenCalled();
   });
 
+  it('a hidden deed never broadcasts, even when a reward makes it marquee', async () => {
+    const fc = fakeWs();
+    const session = server.join(fc.ws as never, 7, 42, 'Hilda', 'warrior', null);
+    if ('error' in session) throw new Error(session.error);
+    const broadcastSpy = vi
+      .spyOn(server.social, 'broadcastDeedUnlock')
+      .mockResolvedValue(undefined);
+    tickAndDetect();
+    await settle();
+    insertMock.mockClear();
+
+    // Preconditions that make this test decisive: the deed clears the marquee
+    // bar (title reward) AND is hidden, so only the hidden gate can stop it.
+    expect(isMarqueeDeed(DEEDS.hid_saul_footnote)).toBe(true);
+    expect(DEEDS.hid_saul_footnote.hidden).toBe(true);
+
+    (server as unknown as { detectActivity(events: unknown[]): void }).detectActivity([
+      { type: 'deedUnlocked', pid: session.pid, deedId: 'hid_saul_footnote' },
+    ]);
+    await settle();
+    // The record still lands (the earner's own index is not a third-party
+    // surface); the broadcast path never runs, opt-out read included.
+    expect(insertMock.mock.calls.map((c) => c[0].deedId)).toEqual(['hid_saul_footnote']);
+    expect(broadcastsFlagMock).not.toHaveBeenCalled();
+    expect(broadcastSpy).not.toHaveBeenCalled();
+  });
+
   it('a non-marquee live unlock records without ever reading the opt-out flag', async () => {
     const fc = fakeWs();
     const session = server.join(fc.ws as never, 7, 42, 'Hilda', 'warrior', null);
