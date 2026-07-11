@@ -48,34 +48,34 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.professions.archetypeSwitchTitle': 'At skifte mening',
   'guide.professions.archetypeTitle': 'De ti arketyper',
   'guide.professions.craftComboBody':
-    'Ud over et enkelt håndværks egen opskriftsliste understøtter hjulet også kombinationsopskrifter, der trækker på to nabohåndværk på én gang, og belønner en karakter (eller et par handelspartnere), som har investeret i tilstødende fag på ringen frem for ét i isolation.',
+    'Ud over et enkelt håndværks egen opskriftsliste understøtter hjulet også kombinationsopskrifter, der trækker på to nabohåndværk på én gang, og belønner en karakter, som har investeret i tilstødende fag på ringen frem for ét i isolation. Håndværkeren skal selv besidde begge fag; en partners færdighed kan ikke træde i stedet for nogen af halvdelene.',
   'guide.professions.craftComboTitle': 'Kombinationsopskrifter',
   'guide.professions.craftIntro':
     'Ti håndværksfag forvandler indsamlede materialer til færdigt udstyr og varer: Rustningssmedning, Våbensmedning og Juvelering former råstof til udstyr, man kan bære; Alkymi og Ingeniørkunst drives af forsøg og fejl; Madlavning, Skriverkunst og Fortryllelse rører hver ved andre håndværks frembringelser; Skrædderi og Garveri arbejder ud fra nøjagtige mønstre. Sammen danner de et hjul, hvor hvert håndværk sidder ved siden af to naboer og over for ét andet.',
   'guide.professions.craftMasteryBody':
-    'Vellykket håndværk opbygger færdighed i faget, og rigere opskrifter er låst bag højere færdighed: de grundlæggende opskrifter er åbne for alle, mens stadig mere avancerede kræver stadig mere mesterskab at forsøge sig med. At øge din færdighed i et håndværk er vejen fra simple begyndervarer til fagets mere ambitiøse opskrifter.',
+    'Vellykket håndværk opbygger færdighed i faget, og færdighed låser aldrig et håndværks opskrifter væk: kender du en opskrift og har dens materialer, kan du forsøge dig. Hvad færdighed i stedet giver dig, er kvalitet, en øvet hånd frembringer finere arbejde. Den ene undtagelse er kombinationsopskrifter, der beder dig bevise dig selv i begge deres håndværk, før de åbner sig.',
   'guide.professions.craftMasteryTitle': 'Færdighed og mesterskab',
   'guide.professions.craftRecipesBody':
-    'Hvert håndværk har sine egne opskrifter, som hver kræver bestemte reagenser, du samler eller køber. De mest grundlæggende opskrifter i hvert håndværk kræver ikke andet end almindelige materialer og kan laves fra første færd, så du kan begynde at arbejde med et fag i samme øjeblik, du tager det op, i stedet for at vente på at låse det op.',
+    'Hver opskrift kræver bestemte reagenser, du samler eller køber. De simpleste opskrifter beder ikke om andet end almindelige materialer og kan laves fra allerførste færd, så du kan begynde at arbejde med et fag i samme øjeblik, du tager det op. Opskriftslisterne er stadig ved at fylde sig ud: nogle få fag venter på deres første opskrifter, og flere kommer til, efterhånden som håndværkene vokser.',
   'guide.professions.craftRecipesTitle': 'Opskrifter og reagenser',
   'guide.professions.craftRingBody':
     'De ti håndværk er ordnet i en fast ring, og hvor et håndværk sidder på ringen, betyder noget: håndværk ved siden af hinanden på hjulet har mere til fælles end håndværk på modsatte sider. At binde sig til ét håndværk skal føles som at træde ind i en familie af beslægtede fag, ikke som at vælge en isoleret færdighed.',
   'guide.professions.craftRingTitle': 'Et hjul af specialer',
   'guide.professions.craftTitle': 'De ti håndværk',
   'guide.professions.gatherIntro':
-    'Tre samlerfag lader dig hente råmaterialer direkte ud af verden: Minedrift slår malm og sten løs fra årer, Skovhugst fælder tømmer i trægrupper, og Urtekundskab samler urter og planter, der vokser vildt. Hvert fag spores for sig, så arbejde i det ene aldrig sinker dine fremskridt i et andet.',
+    'Tre samlerfag lader dig hente råmaterialer direkte ud af verden: Minedrift slår malm og sten løs fra årer, Skovhugst fælder tømmer i trægrupper, og Urtekundskab samler urter og planter, der vokser vildt. Hvert fag spores for sig, så arbejde i det ene aldrig sinker dine fremskridt i et andet. Ny i det hele? Formand Odell i Eastbrook har et kort ærinde, Et Fag for Hver Hånd, der fører dig gennem din første høst.',
   'guide.professions.gatherProficiencyBody':
-    'Hver vellykket høst opbygger din kyndighed i det samlerfag. Højere kyndighed forskyder, hvad du får ud af en forekomst, mod sjældnere materialegrader, fra almindelig og opefter, selvom de sjældneste grader forbliver sjældne selv ved høj kyndighed. Mere øvelse skader aldrig dine odds, den forbedrer dem kun.',
-  'guide.professions.gatherProficiencyTitle': 'Kyndighed og materialekvalitet',
+    'Hver vellykket høst opbygger din kyndighed i det samlerfag, og dit karakterark sporer hvert fag for sig. Mere øvelse skader aldrig dine fremskridt, den lægger kun til dem.',
+  'guide.professions.gatherProficiencyTitle': 'Kyndighed',
   'guide.professions.gatherTitle': 'Samlerfag: Minedrift, Skovhugst og Urtekundskab',
   'guide.professions.gatherToolsBody':
-    'Handlende sælger grundlæggende værktøj til hvert samlerfag, og bedre kan fremstilles, så arbejdet ved en ressourceforekomst gerne skulle føles stærkere og stærkere, efterhånden som du udstyrer dig til det, frem for at stå i stampe. Værktøj af højere grad er den tiltænkte vej til at få adgang til rigere forekomster og arbejde dem mere effektivt over en lang session.',
+    'Handlende sælger grundlæggende værktøj til hvert samlerfag, og bedre kan fremstilles. Intet værktøj kræves for at arbejde en forekomst i dag: værktøj er grundlaget for rigere forekomster, der kommer, hvor spidshakker, økser og segl af højere grad bliver vejen ind.',
   'guide.professions.gatherToolsTitle': 'Fagets værktøj',
   'guide.professions.gatherWhatBody':
-    'Malmårer, trægrupper og urtebede står ude i zonerne som synlige forekomster, som ingen ejer. Gå hen til en og interager med den for at høste, hvad den rummer. Når du har høstet en forekomst, skal den bruge tid på at komme sig, før du personligt kan høste den igen, men den blokerer aldrig for andre: en anden spiller kan høste den selvsamme forekomst i mellemtiden.',
+    'Malmårer, trægrupper og urtebede står ude i Dalen og sumpen som synlige forekomster, som ingen ejer. Gå hen til en og interager med den for at høste, hvad den rummer. Når du har høstet en forekomst, skal den bruge tid på at komme sig, før du personligt kan høste den igen, men den blokerer aldrig for andre: en anden spiller kan høste den selvsamme forekomst i mellemtiden.',
   'guide.professions.gatherWhatTitle': 'Ressourceforekomster',
   'guide.professions.intro':
-    'Ud over kamp og opdrag belønner verden dig for at arbejde med jorden og essen: at samle råmaterialer, forvandle dem til udstyr ved ti forskellige fags håndværksstationer og finde sig til rette i en identitet som en af de ti arketyper, fagene står for.',
+    'Ud over kamp og opdrag belønner verden dig for at arbejde med jorden og essen: at samle råmaterialer, forvandle dem til udstyr og varer på tværs af ti håndværksfag og finde sig til rette i en identitet som en af de ti arketyper, fagene står for.',
   'guide.valeCupPage.heading': 'Dalpokalen',
   'guide.valeCupPage.howHeading': 'Sådan spiller du',
   'guide.valeCupPage.howMatch':
@@ -109,10 +109,10 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Hvert hold spiller under et banner. Anføreren vælger nationen, og fører begge sider det samme, spiller udeholdet i den omvendte palet.',
   'guide.valeCupPage.nationsHeading': 'De otte bannernationer',
   'guide.valeCupPage.rewardsBody':
-    'Fredens regler betyder ingen erfaring og intet bytte: en afgjort kamp tæller med i din statistik og på vindertavlen, og der følger daglige belønningspoint med. Deserterer du en kamp, sættes din plads på bænken, og Banemesteren husker det.',
+    'Fredens regler betyder ingen erfaring og intet bytte: en afgjort kamp tæller med i din statistik og på vindertavlen, og en sejr tæller også med i dagens belønningsopgaver. Deserterer du en kamp, sættes din plads på bænken, og Banemesteren husker det.',
   'guide.valeCupPage.rewardsHeading': 'Fredens regler',
   'guide.valeCupPage.rolesBody':
-    'Din rolle afgør det sæt, du bærer med ind på banen. Alle sparker; resten er temperament.',
+    'Din rolle afgør det sæt, du bærer med ind på banen. Alle sparker; resten er temperament. I kategorierne en-mod-en og to-mod-to spiller alle allround-sættet, så rollevalg kommer først til deres ret fra tre-mod-tre og opefter.',
   'guide.valeCupPage.rolesHeading': 'Sportsroller',
   'guide.valeCupPage.spectateBody':
     'Én kamp spilles ad gangen på stadion, og enhver kan gå hen og se med fra tribunerne.',
@@ -3365,13 +3365,13 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.augmentsNote':
     'Forstærkninger og power-ups varer kun under kampen. De handler om legende, spontane builds, ikke om varig styrke, så ingen køber sig til en sejr.',
   'guide.arenaPage.coliseumBody':
-    'Coliseum er rigets arena, hvor du møder andre spillere i rangerede kampe, en mod en eller to mod to. Hver kategori har sin egen placering, så en sejr løfter dig op ad den rangliste for hele riget at se.',
+    'Coliseum er rigets arena, hvor du møder andre spillere i rangerede kampe, en mod en eller to mod to. Hver kategori har sin egen placering, så en sejr løfter dig op ad den rangliste for hele riget at se. Åbn Arena-vinduet for at melde dig til en kategori, alene eller med din makker.',
   'guide.arenaPage.coliseumHeading': 'Det Askegrå Colosseum',
   'guide.arenaPage.duelsBody':
     'Udfordr enhver spiller du møder til en venskabelig duel. Intet andet end stolthed står på spil, så det er den nemmeste måde at lære en kamp at kende eller bilægge en venskabelig uenighed.',
   'guide.arenaPage.duelsHeading': 'Dueller',
   'guide.arenaPage.fiestaBody':
-    'Fiesta er en hurtig to-mod-to-tilstand spillet i korte runder. Mellem runderne vælger du forstærkninger, hurtige boosts der omformer dit udstyr undervejs, så ingen kampe spilles helt ens.',
+    'Fiesta er en hurtig to-mod-to-kamp, spillet som én sammenhængende dyst, hvor hver kæmper stilles lige. Efterhånden som kampen skrider frem, vælger du forstærkninger, hurtige boosts der omformer dit udstyr undervejs, så ingen kampe spilles helt ens.',
   'guide.arenaPage.fiestaHeading': 'To mod to Fiesta',
   'guide.arenaPage.heading': 'Arena og PvP',
   'guide.arenaPage.intro':
@@ -3392,7 +3392,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Den indledende bølge: rene boosts på én egenskab der skærper grundlaget for din klasse.',
   'guide.arenaPage.waveSilverTitle': 'Sølv',
   'guide.arenaPage.wavesBody':
-    'Hver runde i en Fiesta giver dig et nyt valg, og valgene bliver dristigere efterhånden som kampen skrider frem. Du bygger fra én bølge til den næste, vælger en af nogle få muligheder hver gang og beholder den resten af dysten.',
+    'En Fiesta-dyst rækker dig friske valg undervejs, og valgene bliver dristigere, jo længere kampen kører. Du bygger fra én bølge til den næste, vælger en af nogle få muligheder hver gang og beholder den resten af dysten.',
   'guide.arenaPage.wavesTitle': 'Forstærkninger ankommer i bølger',
   'guide.bestiary.flavor.gravecaller_cultist':
     'Kappeklædte tjenere af dødskulten hvis virke besudler gravene fra Dalen til toppene. Hvor de samles, hviler de døde ikke.',
@@ -3406,7 +3406,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Et stormelementar med skuldre, der vandrer på de fjerne klipper over Stormcrag med en hjerteskår det er værd at trodse lynet for.',
   'guide.bestiary.heading': 'Bestiarium',
   'guide.bestiary.intro':
-    'Verdenens skabninger, grupperet efter familie. Dette er de fjender du møder ude i det fri. De dødeligste ting venter, unævnte, bag fangekælderdøre.',
+    'Verdenens skabninger, grupperet efter familie. Dette er de dagligdags fjender, du møder ude i det fri. Elitefjender og deres krigsherrer holder sig væk fra disse sider, og de dødeligste ting af alle venter bag fangekælderdøre.',
   'guide.bestiary.levels': 'Niveau {min} til {max}',
   'guide.bestiary.levelsSame': 'Niveau {min}',
   'guide.bestiary.notedLabel': 'Værd at bemærke',
@@ -3453,7 +3453,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.classPage.back': 'Alle klasser',
   'guide.classPage.fullKitHeading': 'Hele udstyret',
   'guide.classPage.fullKitNote':
-    'Enhver evne denne klasse kan lære, i den rækkefølge den bliver tilgængelig. Talenter afgør hvilke der bærer din build.',
+    'Det udstyr denne klasse lærer, efterhånden som den stiger i niveau, i den rækkefølge det bliver tilgængeligt. Talenter giver nogle få flere evner og afgør, hvilke der bærer din build.',
   'guide.classPage.masteryLabel': 'Mesterskab',
   'guide.classPage.petsHeading': 'Dæmoner',
   'guide.classPage.petsNote':
@@ -3462,15 +3462,15 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.classPage.roleLabel': 'Spiller som',
   'guide.classPage.specsHeading': 'Specialiseringer',
   'guide.combat.ccBody':
-    'Massekontrol er en særlig slags svækkelse, der begrænser, hvad et mål kan gøre: lammelser, rødder og sløvninger, forstummelser der stopper besværgelser, afvæbninger, frygt og forvandlinger, der gør en fjende harmløs et øjeblik. Mod andre spillere slides kontrollen tynd ved gentagelse: den samme slags påført igen for hurtigt svækkes og svigter så helt, og en lammelse, der åbner fra snigen, tælles for sig, adskilt fra de lammelser der følger efter, så ingen kan lænkes hjælpeløs for evigt. Verdenens skabninger nærer intet sådant nag; kontrol lander på dem ved fuld styrke hver gang.',
+    'Massekontrol er en særlig slags svækkelse, der begrænser, hvad et mål kan gøre: lammelser, rødder og sløvninger, forstummelser der stopper besværgelser, afvæbninger, frygt og forvandlinger, der gør en fjende harmløs et øjeblik. Mod andre spillere slides kontrollen tynd ved gentagelse: den samme slags påført igen for hurtigt svækkes og svigter så helt, og en lammelse, der åbner fra snigen, tælles for sig, adskilt fra de lammelser der følger efter, så ingen kan lænkes hjælpeløs for evigt. Verdenens skabninger nærer intet sådant nag: kontrol svækkes aldrig ved gentagelse mod dem, selvom mange af de mægtigste fjender, navngivne eliter og de stærkeste bosser blandt dem, slet ikke kan kontrolleres.',
   'guide.combat.deathBody':
-    'Hvis dit helbred når nul, bliver du slået ned, hvor du står, og dit lig bliver liggende der. Frigiv din ånd, og du rejser dig som et genfærd ved den nærmeste kirkegård: lettere til bens end de levende, uden for dine fjenders rækkevidde, men ude af stand til at kæmpe, samle bytte op eller tale med nogen anden end Den Blege Vogter, der svæver over stenene. Derfra vælger du selv. Løb dit genfærd tilbage til dit lig, og du genopstår på stedet med en del af dit helbred og din mana genoprettet og slet ingen straf. Eller tag imod Den Blege Vogters øjeblikkelige genopstandelse, hvor du står, mod prisen af Vogterens Told: en midlertidig svækkelse af alt, hvad du er, som varer længere, jo mere garvet du er, og som skåner splinternye karakterer helt. Falder du inde i et fangehul, venter din ånd ved kirkegården udenfor; gå dit genfærd tilbage gennem døren, og du genopstår ved indgangen. Uanset vejen mister du hverken erfaring, udstyr eller mønter. Mellem kampe, sæt dig ned for at spise og drikke, så du starter den næste ved fuld styrke.',
+    'Hvis dit helbred når nul, bliver du slået ned, hvor du står, og dit lig bliver liggende der. Frigiv din ånd, og du rejser dig som et genfærd ved den nærmeste kirkegård: lettere til bens end de levende, uden for dine fjenders rækkevidde, men ude af stand til at kæmpe, samle bytte op eller tale med nogen anden end Den Blege Vogter, der svæver over stenene. Derfra vælger du selv. Løb dit genfærd tilbage til dit lig, og du genopstår på stedet med en del af dit helbred og din mana genoprettet og slet ingen straf. Eller tag imod Den Blege Vogters øjeblikkelige genopstandelse, hvor du står, mod prisen af Vogterens Told: en midlertidig svækkelse af alt, hvad du er, som varer længere, jo mere garvet du er, og som skåner splinternye karakterer helt. Falder du inde i et fangehul, venter din ånd ved kirkegården udenfor; gå dit genfærd tilbage gennem døren, og du genopstår ved indgangen. Delves er undtagelsen: falder du der, bliver du blot sat på benene igen ved delvens indgang, men et andet fald afslutter turen. Uanset vejen mister du hverken erfaring, udstyr eller mønter. Mellem kampe, sæt dig ned for at spise og drikke, så du starter den næste ved fuld styrke.',
   'guide.combat.deathTitle': 'Når du falder',
   'guide.combat.effectsBody':
-    'Mange evner påfører en effekt der hænger ved. De gavnlige (forstærkninger) hæver dine egenskaber, skjolder dig eller helbreder dig lidt ad gangen; de skadelige (svækkelser) dræner dit helbred med skade over tid eller svækker dig. Hold øje med de små ikoner nær din handlingsbjælke for at se hvad der er på dig og hvor længe det varer.',
+    'Mange evner påfører en effekt der hænger ved. De gavnlige (forstærkninger) hæver dine egenskaber, skjolder dig eller helbreder dig lidt ad gangen; de skadelige (svækkelser) dræner dit helbred med skade over tid eller svækker dig. Hold øje med de små ikoner i skærmens øverste hjørne, ved siden af minikortet, for at se hvad der er på dig og hvor længe det varer.',
   'guide.combat.effectsTitle': 'Forstærkninger, svækkelser og massekontrol',
   'guide.combat.growBody':
-    'Hvert niveau gør dig sejere og låser nye evner op, helt op til loftet på niveau {cap}. Quests er den hurtigste vej op; fangekældre og udforskning runder det af.',
+    'Hvert niveau gør dig sejere og låser nye evner op, helt op til loftet på niveau {cap}. Quests er den hurtigste vej op; jagt, fangekældre og delves runder det af.',
   'guide.combat.growTitle': 'Du bliver stærkere for hvert niveau',
   'guide.combat.hitBody':
     'Angreb kan ramme ved siden af eller blive undveget, og det kan fjendens også, mens besværgelser kan blive modstået helt. At kæmpe nær dit eget niveau er det, der får dine slag til at ramme; jo større niveauforskellen er, jo mere slår du ud i den tomme luft.',
@@ -3488,7 +3488,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.controls.actionHeader': 'Handling',
   'guide.controls.arena': 'Arena',
   'guide.controls.controllerBody':
-    'Gamepads virker også, og controllerstyring er slået til som standard. Venstre pind bevæger dig, højre pind sigter kameraet, og knapperne foran og på skuldrene dækker dine evner, hop og interaktion. Åbn et hvilket som helst vindue for at få en markør frem på skærmen til menuer. Du kan ombinde knapperne og justere pindens dødzone, kamerahastighed, vibration og omvendt kig fra controllerafsnittet i spillets indstillinger.',
+    "Gamepads virker også, og controllerstyring er slået til som standard. Venstre pind bevæger dig, højre pind sigter kameraet, og knapperne foran og på skuldrene dækker dine evner, hop og interaktion. Åbn et vindue som dine tasker for at få en markør frem på skærmen, og spillets menu navigeres direkte med D-pad'en og knapperne foran. Du kan ombinde knapperne og justere pindens dødzone, kamerahastighed, vibration og omvendt kig fra controllerafsnittet i spillets indstillinger.",
   'guide.controls.controllerHeading': 'På en controller',
   'guide.controls.cycleFriendly': 'Skift venligt mål',
   'guide.controls.gameMenu': 'Åbn spilmenu og indstillinger',
@@ -3497,11 +3497,11 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.controls.groupInterface': 'Brugerflade',
   'guide.controls.groupMovement': 'Bevægelse',
   'guide.controls.intro':
-    'Standardtaster til computer. Hver tildeling kan ændres i spillets indstillinger.',
+    'Standardtaster til computer. Hver tildeling kan ændres i spillets indstillinger, undtagen Esc, der altid åbner spillets menu, og en tildeling kan være en modifikatorkombination som Shift+Z.',
   'guide.controls.keyHeader': 'Tast',
   'guide.controls.leaderboard': 'Resultattavle',
   'guide.controls.mobileBody':
-    'Berøringsstyring vises automatisk på telefoner og tablets: en bevægelsesstik til venstre, træk hvor som helst til højre for at kigge, og knapper på skærmen til dine evner og menuer.',
+    'Berøringsstyring vises automatisk på telefoner og tablets: en bevægelsesstik til venstre, træk hvor som helst ellers for at kigge, knib med to fingre for at zoome kameraet, og knapper på skærmen til dine evner og menuer. En lille pil i øverste venstre hjørne viser eller skjuler menuknapperne, og Mere-knappen der rummer resten af dine vinduer.',
   'guide.controls.mobileHeading': 'På mobil',
   'guide.controls.talents': 'Talenter',
   'guide.controls.targetFriendly': 'Vælg nærmeste venlige',
@@ -3575,7 +3575,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.dungeonsPage.templeLoreTitle': 'Det Druknede Tempel, en smule dybere',
   'guide.dungeonsPage.templeName': 'Det Druknede Tempel',
   'guide.economy.buyingBody':
-    'Stil dig nær en købmand for at åbne deres vindue. Du kan købe alt, de har på lager, hvis du har råd, og sælge det meste af det, der er i dine tasker, for mønter. Hvis du sælger noget ved en fejl, holder en handlende på dine seneste salg, så du kan købe dem tilbage.',
+    'Tal med en købmand og vælg at gennemse deres varer, så åbner butikken med tre faneblade: Gennemse, Sælg og Tilbagekøb. Gennemse rummer alt, de har på lager, dit hvis du har råd. Sælg viser, hvad i dine tasker de vil betale for, og at sælge et stykke, der bærer sin egen rullede kvalitet, beder dig bekræfte først, så en værdsat kopi aldrig glider væk ved en fejl. Skiller du dig af med noget, du fortryder, holder Tilbagekøb-fanebladet på dine seneste salg, så du kan købe dem tilbage for de mønter, du fik.',
   'guide.economy.buyingTitle': 'Køb og salg',
   'guide.economy.coinBody':
     'Penge kommer i tre mønter. Hundrede kobber bliver til en sølv, og hundrede sølv bliver til en guld, så din pung fyldes op fra den mindste mønt først. Du tjener dem fra opgavebelønninger, fra at plyndre faldne fjender og fra at sælge, hvad du ikke længere har brug for.',
@@ -3583,10 +3583,10 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.economy.intro':
     'Mønter smører hele verden: de køber dit udstyr, dine forsyninger og dit rejsegrej og skifter hænder mellem spillere. Du opsamler det hele bare ved at spille, så tænk på denne side som et kort over, hvor dine penge kommer fra og går hen.',
   'guide.economy.junkBody':
-    'Drops, du ikke har brug for, kan stadig sælges til enhver handlende, så tøm dine tasker, hver gang du kommer gennem byen, frem for at lade dem fyldes op. Helt værdiløst skrammel kan også kasseres direkte for at gøre plads.',
+    'Drops, du ikke har brug for, kan stadig sælges til enhver handlende, så tøm dine tasker, hver gang du kommer gennem byen, frem for at lade dem fyldes op. Handlendes Sælg-faneblad har endda en etkliksknap, der sælger hver ting af Ringe kvalitet på én gang. Helt værdiløst skrammel kan også kasseres direkte for at gøre plads.',
   'guide.economy.junkTitle': 'Rydde ud i skrammel',
   'guide.economy.marketBody':
-    'Købmanden driver Verdensmarkedet, en spillerdrevet børs, hvor du kan købe og sælge med folk, du måske aldrig møder. Tal med Købmanden for at åbne det. Købmanden har også et fast lager af sine egne varer opslået der, så der er altid noget at købe, selv når ingen andre spillere har lagt noget op.',
+    'Købmanden driver Verdensmarkedet, en spillerdrevet børs, hvor du kan købe og sælge med folk, du måske aldrig møder. Tal med Købmanden i Eastbrook, eller med Auktionarius Voss oppe i Highwatch, for at åbne det: begge vogtere betjener det ene fælles marked. Købmanden har også et fast lager af sine egne varer opslået der, så der er altid noget at købe, selv når ingen andre spillere har lagt noget op.',
   'guide.economy.marketBrowse':
     'Gennemse: rul gennem opslagene eller søg efter navn for at finde, hvad der er til salg. Hvert opslag viser varerne, sælgeren og den ønskede pris for hele stakken.',
   'guide.economy.marketCollect':
@@ -3637,15 +3637,15 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.a1':
     'Ja. Hele spillet er gratis at spille til niveaugrænsen, og kildekoden er åben på GitHub.',
   'guide.faqPage.a10':
-    'Grænsen er niveau {cap}. Derfra løber du fangehullerne for fem spillere og raidet for ti, tager dem igen i heroisk tilstand for opgraderet bytte, møder verdensbossen når han rejser sig, og afprøver dig selv i arenaen.',
+    'Grænsen er niveau {cap}. Derfra løber du fangehullerne for fem spillere og raidet for ti, tager dem igen i heroisk tilstand for opgraderet bytte, møder verdensbossen når han rejser sig, afprøver dig selv i arenaen, dykker ned i delves med en ledsager ved din side og jager bedrifter i Bedrifternes Bog for at klatre op ad rigets rangliste.',
   'guide.faqPage.a11':
     'Inviter enhver, du møder, til et følge, spørg i chatten, eller slå jer sammen ved et fangehul. Det meste af verden kan klares alene, så at danne grupper er et valg, ikke et krav.',
   'guide.faqPage.a2':
-    'Nej. Spillet kan spilles fuldt ud uden. Det valgfrie fællesskabstoken låser kun kosmetisk pynt op og påvirker aldrig styrke eller fremgang.',
+    'Nej. Spillet kan spilles fuldt ud uden. Det valgfrie fællesskabstoken tilføjer kun kosmetisk pynt og en andel af præmiepuljen for daglige belønninger, og det påvirker aldrig styrke eller fremgang.',
   'guide.faqPage.a3':
     'Ja. Spillet kører i en mobilbrowser med berøringsstyring, og der er også en computer-launcher.',
   'guide.faqPage.a4':
-    'Ja. Der er en øjeblikkelig offline-tilstand for en enkelt spiller, og onlineverdenen kan klares helt alene bortset fra fangehuller og raidet.',
+    'Ja. Der er en øjeblikkelig offline-tilstand for en enkelt spiller, og onlineverdenen kan klares helt alene bortset fra fangehuller, raidet og verdensbossen.',
   'guide.faqPage.a5':
     'Ni, der dækker de klassiske roller tank, healer og skadevolder, hver med et ressourcesystem (raseri, mana eller energi) og sine egne signaturevner.',
   'guide.faqPage.a6':
@@ -3696,7 +3696,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Der er to kosmetiske linjer at samle. De fleste klasser har flere alternative udseender, et nyt blik på klassens stil som kun er dit at bære. Ved siden af dem sidder chromaer: navngivne totonede farveskemaer der maler et udseende helt om, fra sobre metaller til klare kejserlige farver.',
   'guide.gear.cosmeticsTitle': 'Udseende og kosmetik',
   'guide.gear.fishingBody':
-    'Fiskeri er en rolig afveksling. Udstyr en fiskestang, kast ud i åbent vand, og rul ind hvad der bider. Du fanger mest fisk, der er mad, du kan spise, et og andet stykke skrammel at sælge for et par mønter, og nu og da en eftertragtet sjælden fangst. Hvad du finder, afhænger af det vand, du fisker i.',
+    'Fiskeri er en rolig afveksling. Bær en fiskestang, brug den ved åbent vand, og rul ind hvad der bider. Du fanger mest fisk, der er mad, du kan spise, et og andet stykke skrammel at sælge for et par mønter, og nu og da en eftertragtet sjælden fangst. Hvad du finder, afhænger af det vand, du fisker i.',
   'guide.gear.fishingFood':
     'De fisk, du ruller ind, er mad: spis en, mens du sætter dig for at hvile, og den genopretter helbred, med de mere mættende fisk fra de koldere, dybere vande mod nord. En line i søen er en stille måde at holde din taske fyldt mellem kampe.',
   'guide.gear.fishingRare':
@@ -3705,7 +3705,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.gear.intro':
     'Udstyr er det udstyr, din figur bærer, og de genstande, du bærer på. Bedre udstyr er den mest stabile måde at blive stærkere på, og du samler det meste af det op bare ved at spille.',
   'guide.gear.itemLevelBody':
-    'Hvis du vil have en hurtig måde at sammenligne to genstande på, så slå Vis genstandsniveau til i indstillingerne. Hvert våben og rustningsstykke viser så et genstandsniveau, et enkelt tal for nogenlunde hvor stærkt det er ud fra, hvor det kom fra, så du med et blik kan se, hvilken opgradering der vejer tungest, selv på tværs af forskellige pladser.',
+    'Hvis du vil have en hurtig måde at sammenligne to genstande på, så slå Vis genstandsniveau til i indstillingerne. Udstyr vundet ude i verden, fra fjender og opdrag, viser så et genstandsniveau, et enkelt tal for nogenlunde hvor stærkt det er ud fra, hvor det kom fra, så du med et blik kan se, hvilken opgradering der vejer tungest, selv på tværs af forskellige pladser. Stykker uden en sådan kilde, som simple butiksvarer og startudstyr, viser intet genstandsniveau, så et manglende tal er normalt, ikke en fejl.',
   'guide.gear.qualityBody':
     'Hver genstand har en kvalitet, og dens navn er farvet til at matche, så du kan aflæse dens værd med et blik. Fra mest almindelig til mest eftertragtet:',
   'guide.gear.qualityCommon': 'Almindelig',
@@ -3816,7 +3816,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.home.faq.a1':
     'Ja. Hele spillet er gratis til maksniveauet, og det er open source på GitHub.',
   'guide.home.faq.a2':
-    'Nej. Spillet er fuldt spilbart uden en. Den valgfrie community-token låser kun op for kosmetisk pynt og påvirker aldrig styrke.',
+    'Nej. Spillet er fuldt spilbart uden en. Det valgfrie fællesskabstoken tilføjer kun kosmetisk pynt og en andel af præmiepuljen for daglige belønninger, og det påvirker aldrig styrke.',
   'guide.home.faq.a3':
     'Ja. Der er en øjeblikkelig enkeltspillertilstand i din browser, plus den delte online-verden.',
   'guide.home.faq.a4':
@@ -3887,7 +3887,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Vælg en klasse og et udseende, giv din helt et navn, og træd ind i verden. Du kan lave flere karakterer senere.',
   'guide.howToPlay.step1Title': 'Lav en karakter',
   'guide.howToPlay.step2Body':
-    'Marskal Redbrook venter i startbyen. Tal med ham og tag imod Ulve ved Døren.',
+    'Marskal Redbrook venter i startbyen med Ulve ved Døren, og Formand Odell i nærheden har også arbejde. Tal med en af dem for at tage dit første opdrag.',
   'guide.howToPlay.step2Title': 'Find din første quest',
   'guide.howToPlay.step3Body':
     'Bevæg dig med W, A, S, D. Hold højre museknap nede og træk for at se dig omkring. Det er stort set det hele.',
@@ -3985,15 +3985,15 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.progression.noRush':
     'Der er ingen hast. Verden er der til at nyde i dit eget tempo, så vandr omkring, tag de opdrag der fanger dit blik, og lad din helt vokse undervejs.',
   'guide.progression.prestigeBody':
-    'Erfaring tæller stadig, selv efter loftet. Den fodrer et kosmetisk virtuelt niveau, så din erfaringsbjælke bliver ved med at stige, og en langsigtet prestigerang du kan optjene for anerkendelsen. At passere store milepæle for samlet livstidserfaring låser også op for kosmetiske titler og navneskiltskanter, der vises på dit karakterark. Det hele er rent valgfrit og giver aldrig magt, blot et mærke for den vej du har vandret.',
+    'Erfaring tæller stadig, selv efter loftet. Den fodrer et kosmetisk virtuelt niveau, så din erfaringsbjælke bliver ved med at stige, og en langsigtet prestigerang, du kan optjene fra dit karakterark, når du først er der. At passere store milepæle for samlet livstidserfaring optjener også bedrifter i din Bedrifternes Bog, med kosmetiske titler og navneskiltskanter, der vises på dit karakterark. Det hele er rent valgfrit og giver aldrig magt, blot et mærke for den vej, du har vandret.',
   'guide.progression.restedBody':
-    'Hvil et sikkert sted som en kro, uden for kamp, og din karakter opbygger udhvilet erfaring, mens du sidder der. Næste gang du går ud og kæmper, giver den pulje dine drab et ekstra skub, indtil den løber tør. En pause på kroen er aldrig spildt tid; den fremskynder dit næste stykke opleveling.',
+    'Træd ind på en kro og hold dig uden for kamp, så opbygger din karakter udhvilet erfaring, mens du venter. Hver by har en. Næste gang du går ud og kæmper, giver den pulje dine drab et ekstra skub, indtil den løber tør. En pause på kroen er aldrig spildt tid; den fremskynder dit næste stykke opleveling.',
   'guide.progression.restedTitle': 'Udhvilet erfaring',
   'guide.progression.xpBody':
-    'Du tjener erfaring ved at fuldføre opdrag og ved at besejre fjender. Opdrag giver langt mest, så at følge opdragsstien er den hurtigste vej op. At slå ting ihjel undervejs fylder resten ud.',
+    'Du tjener erfaring ved at fuldføre opdrag, ved at besejre fjender og ved at rydde delves. Opdrag giver langt mest, så at følge opdragsstien er den hurtigste vej op. Drab og delve-ture undervejs fylder resten ud.',
   'guide.progression.xpTitle': 'Sådan får du erfaring',
   'guide.questsPage.acceptBody':
-    'Folk med et mærke over hovedet har arbejde til dig. Tal med dem for at acceptere et opdrag. Dit allerførste er Ulve ved Døren, fra Marskal Redbrook i Eastbrook.',
+    'Folk med et mærke over hovedet har arbejde til dig. Tal med dem for at acceptere et opdrag. I Eastbrook venter Marskal Redbrook med Ulve ved Døren, et af de første opdrag, du kan tage.',
   'guide.questsPage.acceptTitle': 'At finde og acceptere',
   'guide.questsPage.heading': 'Opdrag',
   'guide.questsPage.intro':
@@ -4002,7 +4002,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Slå bestemte fjender ihjel, indsaml genstande, eller interager med noget i verden. Den skærmnære sporing tæller dit fremskridt, mens du går. Hvis du skifter mening, kan du droppe et opdrag fra din opdragslog og samle det op igen hos dets giver senere.',
   'guide.questsPage.objectivesTitle': 'Mål',
   'guide.questsPage.partyBody':
-    'Følgesvende i nærheden deler drabs- og målkredit, så at løse opdrag sammen er hurtigere, aldrig langsommere. Du kan også dele et opdrag med din gruppe: slå det op i chatten som et klikbart link med kommandoen /share, og ethvert medlem i nærheden, der opfylder kravene, kan samle det samme opdrag op med ét klik.',
+    'Følgesvende i nærheden deler drabs- og målkredit, så at løse opdrag sammen er hurtigere, aldrig langsommere. Du kan også dele et opdrag med din gruppe: slå det op i chatten som et klikbart link med kommandoen /share, og ethvert medlem, der opfylder kravene, kan samle det samme opdrag op med ét klik.',
   'guide.questsPage.partyTitle': 'At løse opdrag i en gruppe',
   'guide.questsPage.sagaBody':
     'Hovedhistorien er én lang jagt. En dødskult er på spil ved rigets grave, og hvert kapitel du lukker, peger en zone længere op ad vejen. Du bekæmper aldrig hele sammensværgelsen på én gang; du trækker i én tråd, og den fører til den næste hånd der holder den.',
@@ -4047,7 +4047,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Nogle opdrag får dig til at samle en by før et fremstød mod nord: tynd truslen ved portene og saml det, forsvarerne har brug for. Det er drabs- og indsamlingsmål i tjeneste for de folk, hvis historie du er en del af, og de holder dig i bevægelse med dem.',
   'guide.questsPage.typeMusterTitle': 'Mønstr forsvaret',
   'guide.questsPage.typeSlayBody':
-    'Tynd ud i en flok bæster eller bryd en kults greb ved at besejre et fastsat antal af en mærket fjende. Det første opdrag i spillet, at rydde ulve fra Eastbrook-vejen, er et af disse.',
+    'Tynd ud i en flok bæster eller bryd en kults greb ved at besejre et fastsat antal af en mærket fjende. Et af dine første opdrag, at rydde ulve fra Eastbrook-vejen, er et af disse.',
   'guide.questsPage.typeSlayTitle': 'Slå ihjel',
   'guide.questsPage.typesBody':
     'De fleste opdrag er en af nogle få velkendte former. Den skærmnære sporing staver præcist ud, hvad hvert enkelt vil have, så du aldrig efterlades i tvivl.',
@@ -4078,7 +4078,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'En altid-tændt rigsdækkende kanal, der når alle online, god til at stille et spørgsmål eller småsnakke. I modsætning til World og Looking for Group behøver du aldrig at melde dig til.',
   'guide.social.chanGuild': 'Laug og Officer.',
   'guide.social.chanGuildBody':
-    'Kanaler for dit laug. Laugschat når hvert medlem; officerkanalen er kun for officerer.',
+    'Kanaler for dit laug. Laugschat når hvert medlem; officerkanalen er for officerer og lauglederen.',
   'guide.social.chanLfg': 'Søger Gruppe.',
   'guide.social.chanLfgBody':
     'En tilvalgs rige-dækkende kanal til at finde folk til at løbe en fangekælder. Åbn dens fane for at deltage.',
@@ -4100,7 +4100,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Chat er delt op i kanaler, hver vist på sin egen fane. Skriv en besked for at sende den på den aktive kanal, eller brug en skråstregskommando for at sende en enkelt linje andetsteds hen. Dette er de kanaler du kan tale på:',
   'guide.social.chatHeading': 'Chatkanaler',
   'guide.social.etiquetteBody':
-    'At danne gruppe er et valg, ikke en pligt. Sig hej når du tilslutter dig, kast Behov kun på udstyr du faktisk vil bruge, og lad gruppen vide besked før du tager afsted. En smule høflighed rækker langt, og de fleste spillere er glade for selskabet.',
+    'At danne gruppe er et valg, ikke en pligt. Sig hej når du tilslutter dig, kast Behov kun på udstyr du faktisk vil bruge, og lad gruppen vide besked før du tager afsted. En smule høflighed rækker langt, og de fleste spillere er glade for selskabet. Moderatorer holder freden, og en spiller, der ikke vil lade andre nyde spillet, kan flyttes til en fængselscelle, indtil en moderator lukker vedkommende ud.',
   'guide.social.etiquetteHeading': 'Gruppeetikette',
   'guide.social.friendsBody':
     'Tilføj spillere til din venneliste for at se, hvornår de er online og hvor de er, så du kan danne gruppe i samme øjeblik de logger ind.',
@@ -4120,7 +4120,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Penge fra et drab kan gå til den der tager byttet, eller deles ligeligt på tværs af gruppen.',
   'guide.social.lootCoinTitle': 'Mønter.',
   'guide.social.lootCommonBody':
-    'Almindelige fund kan gå til byttetageren, mens bedre fund sættes op til et kast, så alle får en fair chance.',
+    'Almindelige fund kan gå på skift rundt i gruppen eller til den, der samler op, mens bedre fund sættes op til et kast, så alle får en fair chance.',
   'guide.social.lootCommonTitle': 'Genstande.',
   'guide.social.lootHeading': 'Gruppebytte',
   'guide.social.lootMasterBody':
@@ -4140,7 +4140,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Smidighed skærper dig på flere måder: den hæver din chance for at lande et kritisk slag og din chance for at undvige, og den tilføjer en smule rustning. For slyngler og jægere fodrer den også angrebsstyrke, og den driver en jægers fjernkampsskud.',
   'guide.stats.agiTitle': 'Smidighed',
   'guide.stats.apBody':
-    'Angrebsstyrke måler hvor hårdt dit våben slår. Dine primære attributter fodrer den, og stærkere våben og udstyr hæver den yderligere, hvilket er grunden til at en opgradering kan være et reelt spring i skade.',
+    'Angrebsstyrke måler hvor hårdt dit våben slår. Dine primære attributter fodrer den, og udstyr, der bærer de attributter, hæver den yderligere, mens et stærkere våben hæver din skade direkte, hvilket er grunden til, at en opgradering kan være et reelt spring i skade.',
   'guide.stats.apTitle': 'Angrebsstyrke',
   'guide.stats.armorBody':
     'Rustning reducerer den fysiske skade du tager. Den kommer mest fra hvad du bærer, og de tungere rustningsklasser bærer langt mere af den. Mere rustning mod en fjende nær dit niveau betyder, at hvert af dens slag lander blødere.',
@@ -4172,7 +4172,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Besværgelsesstyrke er en besværgers modstykke til angrebsstyrke: den hæver den skade, dine besværgelser volder. Intellekt fodrer den, og besværgerudstyr og forstærkninger lægger mere oven i, så en besværger holder øje med besværgelsesstyrke, sådan som en nærkampskæmper holder øje med angrebsstyrke.',
   'guide.stats.spTitle': 'Besværgelsesstyrke',
   'guide.stats.spiBody':
-    'Ånd styrer hvor hurtigt en besværgers mana vender tilbage uden for kamp. Ligesom Intellekt tjener den manaklasserne og betyder kun lidt for de andre.',
+    'Ånd styrer, hvor hurtigt en besværgers mana vender tilbage, når som helst de holder pause i deres besværgelser, hvilket er det meste af tiden mellem kampe. Ligesom Intellekt tjener den manaklasserne og betyder kun lidt for de andre.',
   'guide.stats.spiTitle': 'Ånd',
   'guide.stats.staBody':
     'Udholdenhed er din ihærdighed. Mere Udholdenhed betyder en større sundhedspulje, og den fremskynder den sundhed du genvinder, mens du hviler uden for kamp. Hver klasse vil have noget.',
@@ -4193,17 +4193,17 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.tagline': 'En klassisk MMO, du spiller gratis i din browser.',
   'guide.talentsPage.heading': 'Talenter og specialiseringer',
   'guide.talentsPage.howBody':
-    'Talenter låses op på niveau 10, og du bliver ved med at tjene point, mens du klatrer mod grænsen. Du bruger dem i din klasses talentpanel, og du kan gemme mere end ét opsæt for at skifte mellem builds.',
+    'Talenter låses op på niveau 10, og du bliver ved med at tjene point, mens du klatrer mod grænsen. Du bruger dem i din klasses talentpanel, hvor dybere rækker åbner sig, efterhånden som du investerer og stiger i niveau, og du kan gemme mere end ét opsæt for at skifte mellem builds.',
   'guide.talentsPage.howHeading': 'Sådan virker de',
   'guide.talentsPage.intro':
     'Talenter er måden, du gør en klasse til din egen. De er valgfrie, tilgivende og nemme at ændre, så du kan eksperimentere uden frygt.',
   'guide.talentsPage.resetNote':
-    'Du kan nulstille dine talenter når som helst, du er uden for kamp, så et tidligt valg er aldrig en fælde. Prøv tingene, se hvad du kan lide, og skift mening frit.',
+    'Du kan nulstille dine talenter når som helst, du er uden for kamp og ikke i en arenakamp, så et tidligt valg er aldrig en fælde. Prøv tingene, se hvad du kan lide, og skift mening frit.',
   'guide.talentsPage.resetTitle': 'Intet er permanent',
   'guide.talentsPage.shareNote':
     'En færdig build kan kopieres til en kort delbar kode og gives til en ven, der indsætter den direkte i sit eget talentpanel for at indlæse den.',
   'guide.talentsPage.specsBody':
-    'Hver klasse har en håndfuld specialiseringer, hver med sin egen rolle og sit særkende. Her er formen på dem alle. Åbn en klasse for dens fulde udstyr.',
+    'Hver klasse har en håndfuld specialiseringer, hver med sin egen rolle og sit særkende. At vælge en i talentpanelet giver en signaturevne og et blivende mesterskab af sin egen slags. Her er formen på dem alle. Åbn en klasse for dens fulde udstyr.',
   'guide.talentsPage.specsHeading': 'Specialiseringer efter klasse',
   'guide.talentsPage.whatBody':
     'Efterhånden som du stiger i niveau, tjener du talentpoint at bruge på små, permanente forbedringer af dine evner og egenskaber. De former, hvordan en klasse føles, og hælder den mod mere skade, sejere forsvar eller stærkere helbredelse.',
@@ -4267,7 +4267,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.peaksGreeting':
     'I to hundrede år har denne mur holdt. Den brister ikke på min vagt, men den knager.',
   'guide.worldPage.peaksPlaceNotes':
-    "Highwatch holder muren. Stalker Ridge og Deeprock Burrows tilhører ryg-katte og gravere; Ogre Foothills og Drogmar's War-Camp tilhører lejede bøller; Stormcrag knitrer med elementaler, og Glimmermere gløder nedenfor; Wyrmcult Tents og Revenant Fields omkranser kultens høje grund, med Gravormens Helligdom på dens top.",
+    "Highwatch holder muren. Stalker Ridge og Deeprock Burrows tilhører ryg-katte og gravere; Ogre Foothills og Drogmar's War-Camp tilhører lejede bøller; Stormcrag knitrer med elementaler, og nedenfor gløder Glimmersøen, tjernet hvis bred holder porten af blegt lys ned til Det Druknede Tempel; Wyrmcult Tents og Revenant Fields omkranser kultens høje grund, med Gravormens Helligdom på dens top.",
   'guide.worldPage.places': 'Bemærkelsesværdige steder',
   'guide.worldPage.residents': 'Hvem du vil møde',
   'guide.worldPage.valeBlurb':
@@ -4275,7 +4275,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.valeGreeter': 'Marskal Redbrook, Eastbrook',
   'guide.worldPage.valeGreeting': 'Hold dit blad nært. Dalen er ikke, hvad den var.',
   'guide.worldPage.valePlaceNotes':
-    'Eastbrook er din første hjemmebase. Wolf Run og Boar Meadow er milde jagtmarker; Spejlsøen er stille vand at fiske i; Sableweb og Copper Dig skjuler edderkopper og malmgriske gravere; en Bandit Camp og Fallen Chapel rummer barskere arbejde; Reliquary Hill falder ned i Collapsed Reliquary, rigets første delve; Brightwood Glade er en rolig, solbeskinnet lund i nord; og Somarken er Eastbrooks indhegnede vildsvineboldbane, hvor Dalpokalen spilles under en høstfred.',
+    'Eastbrook er din første hjemmebase. Wolf Run og Boar Meadow er milde jagtmarker; Spejlsøen er fint vand at fiske i, selvom mudderfinner myldrer i dens lavvande; Sableweb og Copper Dig skjuler edderkopper og malmgriske gravere; en Bandit Camp og Fallen Chapel rummer barskere arbejde; Reliquary Hill falder ned i Collapsed Reliquary, rigets første delve; Brightwood Glade er en rolig, solbeskinnet lund i nord; og Somarken er Eastbrooks indhegnede vildsvineboldbane, hvor Dalpokalen spilles under en høstfred.',
   'highscores.desc': 'Følg verdenens største mestre og sammenlign din fremgang.',
   'highscores.title': 'Highscore-Ranglisten',
   'hud.arena.close': 'Luk arena',
@@ -6390,7 +6390,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.settingsPage.visualsWhy':
     'Ultra gengiver med den højeste opløsning, din skærm tilbyder med den rigeste belysning. Det slukker også for sikkerhedsnettet, og det er kun til desktop: telefoner og appen topper ud ved High.',
   'guide.settingsPage.wherePath':
-    'Alt på denne side lever i spillet: Tryk på Esc og kig i Grafik, Interface og Performance Overlay.',
+    'Alt på denne side lever i spillet: tryk på Esc for at åbne indstillingerne. Menuen åbner på en Oversigt over fastgjorte essentielle valg, med kategorierne på en skinne ved siden: indstillingerne nedenfor bor under Grafik, Interface og Tilgængelighed i Skærm-gruppen, og Performance Overlay under System. Endnu hurtigere, skriv et navn i søgefeltet øverst og spring direkte hen til det.',
   'guide.settingsPage.whyLabel': 'Hvorfor virker det:',
   'hudChrome.crafting.close': 'Tæt håndværk',
   'hudChrome.crafting.craft': 'Håndværk',
@@ -6576,8 +6576,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.deedsPage.cat.exploration': 'Udforskning',
   'guide.deedsPage.cat.feat': 'Bragder',
   'guide.deedsPage.cat.progression': 'Fremgang',
-  'guide.deedsPage.cat.pvp': 'Spiller mod spiller',
-  'guide.deedsPage.cat.social': 'Socialt og økonomi',
+  'guide.deedsPage.cat.pvp': 'PvP og Sport',
+  'guide.deedsPage.cat.social': 'Socialt',
   'guide.deedsPage.catHeading': '{label} ({count})',
   'guide.deedsPage.catalogBody':
     'Her står hver eneste bedrift, Bogen kan rumme, ordnet efter kategori. De hemmelige er udeladt med vilje; de venter på, at du finder dem. Åbn Bedrifternes Bog inde i spillet for at se præcis, hvad hver enkelt kræver.',
@@ -6605,7 +6605,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Belønningerne er ren pynt, og det er hele pointen. Nogle bedrifter skænker en titel, du kan bære, eller en ramme om dit navn, men aldrig noget, der gør din helt stærkere. Vælg den titel, du ønsker, i Bedrifternes Bog, så følger den med på dit navneskilt, i chatten og på ranglisterne, hvor alle kan se den.',
   'guide.deedsPage.rewardsHeading': 'Titler og rammer',
   'guide.deedsPage.standingsNote':
-    'Rigerne fører et løbende regnskab over hæder på tværs af alle konti. Vil du se, hvem der står hvor, så åbn Bedrifternes Bog inde i spillet og slå op på Hæder-ranglisten; den bor der, ikke på wikien.',
+    'Rigerne fører et løbende regnskab over Hæder på tværs af alle konti. Vil du se, hvem der står hvor, så åbn ranglisten inde i spillet og slå op på dens Hæder-faneblad; placeringerne bor der, ikke på wikien.',
   'guide.nav.deeds': 'Bedrifternes Bog',
   'hudChrome.deeds.broadcastLine': '{name} har fuldbragt en bedrift: {deed}',
   'hudChrome.deeds.broadcastsLabel': 'Del nye bedrifter med laug og venner',
@@ -6809,4 +6809,146 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Tip: Udfordr en anden spiller til en venskabelig duel, eller stil dig i kø til arenaen i Det Askegrå Colosseum for at afprøve din opbygning.',
   'loading.tips.talents':
     'Tip: Du kan nulstille dine talenter, når du er ude af kamp, så et tidligt valg er aldrig en fælde.',
+  'guide.bestiary.flavor.sethrael_palecoil':
+    'En knoglebleg slange, der glider hen over Glimmersøens dybe afsats, den tavse vogter af det vand, den har gjort krav på. Svømmere, der deler søen med den, kommer sjældent op til overfladen igen.',
+  'guide.combat.metersBody':
+    'Nysgerrig efter, hvordan en kamp gik? Tryk på Z for at åbne gruppens målere, der opgør skade, helbredelse og trussel for din gruppe, kamp for kamp.',
+  'guide.combat.queueBody':
+    'Du behøver ikke ramme dine tryk præcist på slaget. Tryk på din næste evne i de sidste øjeblikke af den igangværende besværgelse, så sættes den i kø og udløses i samme nu, besværgelsen er færdig, så øvet spil flyder uden huller. Et tryk for tidligt bliver simpelthen afvist, så intet går til spilde. Nogle nærkampsslag virker på samme måde og rider med på dit næste våbensving.',
+  'guide.combat.queueTitle': 'Dit næste træk er allerede ladt',
+  'guide.controls.arrowKeys': 'Piletaster',
+  'guide.controls.attackMoveNote':
+    'En mere, slået fra som standard: aktivér Angrebsbevægelse i indstillingerne for at reservere en tast (A, mens indstillingen er slået til), der fører dig mod din markør og åbner ild mod fjenden under den, eller den første, du møder undervejs.',
+  'guide.controls.bothMouse': 'Begge museknapper',
+  'guide.controls.calendar': 'Begivenhedskalender',
+  'guide.controls.crafting': 'Håndværk',
+  'guide.controls.discord': 'Discord',
+  'guide.controls.groupPet': 'Kæledyrskommandoer',
+  'guide.controls.petBar':
+    'Kæledyrsbjælke: Angrib, Stop, Ægge, Defensiv, Aggressiv (når et jæger- eller heksemesterkæledyr er fremme)',
+  'guide.controls.runForward': 'Løb fremad',
+  'guide.controls.valeCup': 'Dalpokalen',
+  'guide.dungeonsPage.heroicBody':
+    'Hver fangekælder for fem spillere, og selve raidet, har en heroisk udgave, der venter hinsides niveauloftet. De samme haller, gjort om til en veludstyret slutspilsgruppe: alt slår hårdere, intet kan løbes fra til fods, og bosserne ryster lammelser og fastholdelser fuldstændig af sig. Voks fra de normale udgaver først; heroisk går ud fra, at du allerede har.',
+  'guide.dungeonsPage.heroicHowBody':
+    'Vælg sværhedsgraden, før din gruppe gør krav på instansen: skriv /dungeon heroic, eller slå Fangekældersværhedsgrad til på gruppemenuen. Valget deles af hele gruppen og låses fast ved døren, så en tur forbliver det, den blev gjort krav på som.',
+  'guide.dungeonsPage.heroicLockoutBody':
+    'Normale fangekældre kan løbes hele dagen. Heroisk kræver tålmodighed: drabet på den sidste boss spærrer alle i turen til én heroisk gennemførelse af den fangekælder om dagen, og raidet holder en daglig spærring for hver sværhedsgrad. En gennemført tur for fem spillere står stadig åben for dens egen gruppe til ligløb og bytte, så ingen bliver låst ude fra det, de har optjent der. Raidet er strengere: når først dets drab spærrer dig, forbliver døren lukket indtil den daglige nulstilling, så saml dit bytte, før du forlader arenaen.',
+  'guide.dungeonsPage.heroicRewardsBody':
+    'Heroiske bosser taber det bytte, du kender, opgraderet og mærket Heroisk i værktøjstippet, og den sidste boss i hver tur føjer episke genstande til, som ikke findes nogen andre steder. Det sidste drab efterlader også Heroiske Mærker til hver deltager: en valuta, du bruger hos Kvartermester Vex i Highwatch, hvis lager af ringe og halskæder er de eneste smykker i riget.',
+  'guide.dungeonsPage.heroicRewardsTitle': 'Heroiske Mærker og opgraderet bytte',
+  'guide.dungeonsPage.heroicTitle': 'Heroisk tilstand',
+  'guide.economy.dailyBody':
+    'En skattekisteknap på din skærm åbner vinduet for daglige belønninger. Hver dag fremlægger en håndfuld opgaver: fuldfør opdrag, kæmp i Askekolosseet, vind en kamp i Dalpokalen, og tilbyder et gratis spin på præmiehjulet, alt sammen point til dagens placeringer, og dagens topscorere deler en præmiepulje for indehavere af det valgfrie fællesskabstoken. Intet af det giver magt i spillet. Selve vinduet forklarer dagens regler, og hvem der er kvalificeret, viser ranglisten og gemmer din historik.',
+  'guide.economy.dailyTitle': 'Daglige belønninger',
+  'guide.economy.mailBody':
+    'Hver hjemmebase har en udskåret ravnesøjle: en postkasse for Ravneposten, rigets brevtjeneste. Stil dig ved en for at skrive til enhver karakter ved navn, en ven online eller længe offline, og vedhæft mønter eller varer til brevet mod en lille portoafgift. Ravnen er et stykke tid om at flyve; når den lander, fortæller en kuvertmarkør modtageren, at noget venter.',
+  'guide.economy.mailHow':
+    'At hente virker på samme måde omvendt: stil dig ved enhver søjle for at læse dine breve og tage det, de bærer, ind i din pung og dine tasker. Et almindeligt brev falmer bort efter et stykke tid, men et, der stadig bærer mønter eller varer, venter på dig, uanset hvor lang tid du tager. Nogle ting nægter posten helt: sjælebundne genstande, opdragsvarer og unikke kosmetiske tokens rejser med dig eller slet ikke. Og hold øje med søjlen efter en god aflevering; nogle opdragsgivere skriver.',
+  'guide.economy.mailTitle': 'Ravneposten',
+  'guide.footer.linksLabel': 'Spil- og fællesskabslinks',
+  'guide.gear.bagsBody':
+    'Alt, hvad du samler op, ligger i én fælles taske, og du udvider den ved at udstyre tasker. Dit taskevindue har fire tasketilslutninger: klik på en taske i din pakke for at sætte den i en ledig plads, og hver taske, du bærer, føjer sin egen plads til. Simple tasker er billige handelsvarer, mere rummelige falder fra bæster, og de fineste kommer fra fangekælderbosser, så din bæreplads vokser side om side med dit udstyr.',
+  'guide.gear.bagsTitle': 'Tasker og bæreplads',
+  'guide.gear.slotFinger': 'Finger',
+  'guide.gear.slotNeck': 'Hals',
+  'guide.gear.soulboundBody':
+    'Nogle få særlige belønninger er sjælebundne, bundet til din karakter fra det øjeblik, du optjener dem. En sjælebunden genstand kan ikke byttes, sendes med posten, sælges til en handlende eller lægges op på markedet; den er din og din alene. I dag beskytter det præmietokens som Heroiske Mærker, mens det udstyr, du vinder, er dit at bytte, sælge eller dele frit.',
+  'guide.gear.soulboundTitle': 'Sjælebundet: din og din alene',
+  'guide.glossary.deedDef':
+    'En bedrift, der nedskrives i Bedrifternes Bog. At opnå en giver Hæder, og nogle giver en kosmetisk titel eller navneskiltskant.',
+  'guide.glossary.deedTerm': 'Bedrift',
+  'guide.glossary.heroicDef':
+    'Den sværere udgave af en fangekælder eller raidet, tilpasset veludstyrede slutspilsgrupper. Heroiske bosser taber opgraderet bytte, og den sidste boss betaler Heroiske Mærker.',
+  'guide.glossary.heroicTerm': 'Heroisk',
+  'guide.glossary.loadoutDef':
+    'Et gemt talentopsæt. Behold flere, og skift mellem builds uden at bruge dine point om ét ad gangen.',
+  'guide.glossary.loadoutTerm': 'Opsæt',
+  'guide.glossary.lockoutDef':
+    'Et dagligt loft over de største gentagelige belønninger. Hver heroisk fangekælder udbetaler én gennemførelse om dagen, raidet sporer normal og heroisk hver for sig, og at samle bytte fra en verdensboss starter din. En gennemført tur for fem spillere står stadig åben for dens egen gruppe; den spærrede raiddør åbner ikke igen før nulstillingen.',
+  'guide.glossary.lockoutTerm': 'Spærring',
+  'guide.glossary.metersDef':
+    'Gruppens pointtavle for den aktuelle kamp: skade givet, helbredelse ydet, og hvem der bærer mest trussel, ført pr. kamp. Åbn det med dets tastebinding (Z som standard).',
+  'guide.glossary.metersTerm': 'Skadesmålere',
+  'guide.glossary.petBarDef':
+    'Den kommandorække, som et jæger- eller heksemesterkæledyr føjer til: Angrib, Stop, Ægge, Defensiv og Aggressiv, bundet til Ctrl plus 1 til 5 som standard.',
+  'guide.glossary.petBarTerm': 'Kæledyrsbjælke',
+  'guide.glossary.readyCheckDef':
+    'En gruppeleder skriver /ready for at spørge gruppen eller raidet: alle bekræfter Klar eller Ikke klar, og gruppen ser optællingen.',
+  'guide.glossary.readyCheckTerm': 'Klarmelding',
+  'guide.glossary.renownDef':
+    'Den livstidsscore, dine bedrifter lægger op til. Den stiger kun nogensinde, og riget fører placeringer over den på ranglisten.',
+  'guide.glossary.renownTerm': 'Hæder',
+  'guide.glossary.restedDef':
+    'Bonuserfaring, som din karakter opsparer, mens den hviler på en kro, uden for kamp. Dine næste drab tjener ekstra erfaring, indtil puljen løber tør.',
+  'guide.glossary.restedTerm': 'Udhvilet',
+  'guide.glossary.soulboundDef':
+    'En genstand, der er bundet til din karakter fra det øjeblik, du erhverver den. Den kan ikke byttes, sendes med posten, sælges til en handlende eller lægges op på markedet.',
+  'guide.glossary.soulboundTerm': 'Sjælebundet',
+  'guide.glossary.spiritHealerDef':
+    'Rigets åndehelbreder, der svæver over hver kirkegård: den kan genrejse dit genfærd på stedet mod prisen af en forbigående svækkelse.',
+  'guide.glossary.spiritHealerTerm': 'Den Blege Vogter',
+  'guide.glossary.targetMarkerDef':
+    'Et symbol, som ethvert gruppe- eller raidmedlem kan fæstne over et mål, så alle fokuserer på, eller undgår, det samme. Otte symboler, ét mål pr. symbol.',
+  'guide.glossary.targetMarkerTerm': 'Målmarkør',
+  'guide.glossary.worldBossDef':
+    'En boss af raidstyrke, der rejser sig i den åbne verden i en fast rytme, bekæmpet af hvem end der samles for at svare frem for en fast gruppe.',
+  'guide.glossary.worldBossTerm': 'Verdensboss',
+  'guide.models.formBear': 'Bruin-form',
+  'guide.models.formCat': 'Ulveform',
+  'guide.models.formTravel': 'Fleet-form',
+  'guide.models.groupForms': 'Druideformer',
+  'guide.nav.sidebarLabel': 'Guideemner',
+  'guide.professions.craftHowBody':
+    'Åbn Håndværksvinduet (standardtast T) for at se hver opskrift, du kender, hvad hver enkelt kræver, og hvad du har ved hånden; når materialerne er der, klarer ét klik arbejdet. Almindelige opskrifter kan laves hvor som helst i verden. En håndfuld avancerede værktøjsopskrifter beder dig i stedet om at stå ved håndværksknudepunktet i Highwatch.',
+  'guide.professions.craftHowTitle': 'Håndværksvinduet',
+  'guide.professions.focusBody':
+    'Hver hjemmebase har et Byfokus-panel for besøgende høstere: stå i byen, åbn det ved siden af minikortet, og ret et lille budget af fokuspoint mod de komponenttyper, du bryder dig om. Jo mere fokus du giver en komponent, jo finere og rigere kommer den af hvert senere lig; din fordeling følger din karakter, hvor end den færdes, og du kan omarbejde den, gratis, ved ethvert senere besøg i byen.',
+  'guide.professions.focusTitle': 'Byfokus',
+  'guide.professions.harvestBody':
+    'Indsamling stopper ikke ved forekomster. Nogle dræbte bæster kan høstes for komponenter, skind, hugtænder, silke og mærkeligere ting, direkte fra liget ved siden af dets almindelige bytte. Én høster pr. drab: den, der høster først, får det hele. Valget er også dit hver gang: strip alt, hvad liget tilbyder, eller koncentrer dig om en enkelt komponent og tag en finere grad af den. Enhver karakter kan høste, uden fag eller oplæring, og en særligt fin komponent bærer endda navnet på den, der høstede den.',
+  'guide.professions.harvestTitle': 'At høste selve jagten',
+  'guide.search.typeAbility': 'Evne',
+  'guide.search.typeDeed': 'Bedrift',
+  'guide.settingsPage.audioBody':
+    'Indstillingsvinduet er ikke kun pixels. En Lyd-kategori rummer særskilte lydstyrkeknapper for effekter, musik og stemme, og Interface-kategorien bærer en sprogvælger, der omlokaliserer hele grænsefladen på stedet, uden genindlæsning, plus en temavælger til vinduets udseende. Sprog er også fæstnet først på Oversigten, så det altid er ét skridt fra at åbne menuen.',
+  'guide.settingsPage.audioTitle': 'Lyd og sprog',
+  'guide.settingsPage.autolootBody':
+    'Foretrækker du ikke at klikke på hvert lig? En grænsefladeindstilling, slået fra som standard, samler byttet fra dine egne drab op, mens du går forbi dem.',
+  'guide.settingsPage.factSearchBody':
+    'Er du ikke sikker på, hvor en indstilling bor? Skriv i søgefeltet øverst i menuen. Den forstår også almindelige formuleringer, så fps finder FPS-visningen, og at vælge et resultat springer dig hen til indstillingen og lader den stå fremhævet.',
+  'guide.settingsPage.factSearchTitle': 'Søgningen finder det først',
+  'guide.settingsPage.touchBody':
+    'På en berøringsskærm vokser indstillingerne også deres egen komfortsamling frem: joystickstørrelse og følsomhed, størrelse og gennemsigtighed på skærmknapper, et venstrehåndet spejlvendt layout, en valgfri kamerastik og omvendt berøringskig, så skærmen passer til dine hænder frem for omvendt.',
+  'guide.social.calendarBody':
+    'Tryk på I for at åbne begivenhedskalenderen. Den markerer de dage i riget, der er værd at planlægge efter, fra det ugentlige raidkald til fiesta-aften, og det er her, laug holder deres kalender: lauglederen og officererne kan booke begivenheder på den, og hvert medlem ser dem på samme side.',
+  'guide.social.calendarHeading': 'Begivenhedskalenderen',
+  'guide.social.communityBody':
+    'Start en chatlinje med et udråbstegn for at lave et fællesskabskald: !lfg for at søge en gruppe, !wts og !wtb for at handle, !recruit til dit laug, !event for at annoncere et raid eller møde, og !help for at bede om en hånd. En menu over kaldene dukker op i samme øjeblik, du skriver tegnet. Hvert kald udsendes i verden og gentages på fællesskabets Discord, så det når spillere, der ikke engang er logget ind. Fællesskabskald er en del af onlinespil.',
+  'guide.social.communityHeading': 'At kalde hele fællesskabet',
+  'guide.social.emotesBody':
+    'Din karakter kan også tale uden ord: skriv en emote som /wave, /dance, /cheer eller /bow, mål en ven først for at rette den mod dem, eller hold X nede for at åbne emotehjulet til et hurtigt udtryk over hovedet.',
+  'guide.social.markersBody':
+    'I en gruppe, mål en fjendtlig skabning og højreklik dens portræt på målrammen (langt tryk på berøring) for at krone den med et af otte raidsymboler. Ethvert medlem kan markere, hvert symbol lever på ét mål ad gangen, og at sætte et symbol på sit eget mål igen fjerner det. Draborden, opgaver til massekontrol eller et enkelt »denne først« rejser alle hurtigere som et symbol end som en sætning.',
+  'guide.social.markersHeading': 'Målmarkører',
+  'guide.social.readyBody':
+    'Før et stort pull kan gruppelederen skrive /ready for at spørge rummet: alle andre får en Klar- eller Ikke klar-forespørgsel, og når alle har svaret, eller 30 sekunder er gået, ser hele gruppen en enkelt opsummering af optællingen. Ingen bliver hængt ud; pointen er tallet, ikke synderen.',
+  'guide.social.readyHeading': 'Klarmeldinger',
+  'guide.social.slashBody':
+    'Nogle få dagligdags kommandoer er værd at huske: /w Navn sender en hvisken, og /r svarer på den seneste, du modtog, /invite beder nogen ind i din gruppe, /follow falder i trit bag en ven, /roll kaster terninger, som gruppen kan se, /who viser, hvem der er online, og /afk markerer dig som væk. Skriv /help i spillet for hele listen.',
+  'guide.social.slashHeading': 'Nyttige skråstregskommandoer',
+  'guide.stats.hasteBody':
+    'Hast er en egenskab, der fremskynder alt, hvad du gør: nærkampssving, afstandsskud og besværgelser sætter alle farten op sammen. Den kommer fra udstyr, især bonusser fra rustningssæt, mens nogle få evner giver et kort udbrud af hurtigere sving. Dit karakterark viser den som Hast-rating.',
+  'guide.stats.hasteTitle': 'Hast',
+  'guide.talentsPage.choiceNote':
+    'Nogle få point på hvert træ er en korsvej frem for et køb: knuden tilbyder to eller tre muligheder, og du binder dig til en af dem. Din næste nulstilling åbner valget igen, ligesom alt andet på træet.',
+  'guide.valeCupPage.bettingBody':
+    'Tilskuere ved Somarken kan bakke en side op, mens en kamp danner sig: indsatserne samles i en pulje, og ved slutfløjtet deler vinderne tabernes pulje i forhold til, hvad de satsede. En uafgjort kamp, eller en overraskelse, som ingen bakkede op, refunderer hver mønt. Spillere, der er sat ind i kampen, kan ikke vædde på den, og rækværket fører din livstidsstatistik over sejre, nederlag og nettomønter.',
+  'guide.valeCupPage.bettingHeading': 'Et lille væddemål ved rækværket',
+  'guide.valeCupPage.practiceBody':
+    'Dalpokal-vinduet tilbyder også træning: en privat kopi af banen, hvor bots fylder begge sider ud, og intet tæller med i din statistik. Mangler du en spiller eller to til det virkelige? Efter en kort ventetid runder bots holdene af, og enhver kamp med bots på banen er en venskabskamp, aldrig rangeret. Og når Somarken står tom, giver botsene en opvisning, du kan se, og vædde på, fra tribunerne; i det øjeblik rigtige spillere melder sig klar, overlader opvisningen banen, og hver indsats gives tilbage.',
+  'guide.valeCupPage.practiceHeading': 'Træningskampe og den tomme bane',
+  'guide.worldPage.worldBossBody':
+    'Højt oppe på Tornetop samler stormen over Stormcrag sig undertiden til en skikkelse. Thunzharr, den Vågnende Tind rejser sig der i en fast rytme, en elementar af raidstyrke, der bekæmpes i den åbne verden af hvem end der svarer på kaldet, og han vokser sig mægtigere, jo flere udfordrere der stiller op mod ham. Alle, der slutter sig til kampen, tjener deres eget kast om hans bytte, hædret på raidspærrings-vilkår, og hans fald varer længe nok til, at de faldne kan løbe tilbage og gøre krav på deres del. Saml flere sværd, end du tror, du har brug for.',
+  'guide.worldPage.worldBossTitle': 'Når tinden vågner: verdensbossen',
 };
