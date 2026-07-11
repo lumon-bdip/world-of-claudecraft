@@ -116,6 +116,12 @@ describe('options_ia: Overview pins + quick actions', () => {
     expect(categorySettingKeys('overview')).toEqual([]);
   });
 
+  it('leads with the language pin (readable-language-first)', () => {
+    // A player who cannot read the current language must reach the language
+    // control before anything else on the Overview landing.
+    expect(OVERVIEW_PINS[0]?.nonSettingsHome).toBe('language');
+  });
+
   it('mirrors the spec pin set, each pointing at its real home', () => {
     const settingPins = OVERVIEW_PINS.filter((p) => p.key).map((p) => p.key);
     expect([...settingPins].sort()).toEqual(

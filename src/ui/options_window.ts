@@ -1852,7 +1852,11 @@ export class OptionsWindow {
     parent.append(row, status);
   }
 
-  private themeRow(parent: HTMLElement): void {
+  /** The theme preset row, plus (by default) the Custom Colors block. The
+   *  Overview pin passes withCustomColors: false so it stays a true MIRROR of
+   *  the preset control (options_ia OverviewPin: a pin is not a second home);
+   *  the Interface category page and search results keep the full block. */
+  private themeRow(parent: HTMLElement, opts: { withCustomColors?: boolean } = {}): void {
     const hooks = this.deps.options();
     if (!hooks) return;
     const theme = hooks.theme;
@@ -1874,6 +1878,7 @@ export class OptionsWindow {
     }
     control.appendChild(seg);
     parent.appendChild(row);
+    if (opts.withCustomColors === false) return;
 
     // Custom palette: one colour input per knob, seeded with the effective value.
     const effective = resolveTheme(theme.get());
@@ -2083,10 +2088,19 @@ export class OptionsWindow {
     pinsHead.appendChild(pinsTitle);
     pinsSection.appendChild(pinsHead);
     for (const pin of OVERVIEW_PINS) {
+      // Each pin's row(s) + home crumb render into ONE .opt-pin wrapper cell:
+      // the mobile shell's 2-column section grid treats every non-.opt-row
+      // child as a full-width break, so loose row + crumb siblings stranded
+      // every pin in the left column (the crumb after each row forced a new
+      // grid row and column 2 was never filled). Desktop block flow is
+      // unaffected by the extra div.
+      const pinCell = el('div', 'opt-pin');
       if (pin.nonSettingsHome === 'language') {
-        this.languageRow(pinsSection);
+        this.languageRow(pinCell);
       } else if (pin.nonSettingsHome === 'themePreset') {
-        this.themeRow(pinsSection);
+        // Mirror-only (the IA contract: a pin is NOT a second home): the
+        // Custom Colors block stays on the Interface category page.
+        this.themeRow(pinCell, { withCustomColors: false });
       } else if (pin.key && hooks && source) {
         const homeRow = settingRow(pin.key);
         if (!homeRow) continue;
@@ -2096,12 +2110,13 @@ export class OptionsWindow {
         // carries the same capped option set as its home.
         const control = buildEnvGatedControl(source, homeRow, this.renderEnv());
         if (!control) continue;
-        this.applyControls(pinsSection, [control], hooks, () => this.render());
+        this.applyControls(pinCell, [control], hooks, () => this.render());
       }
       const crumb = el('div', 'opt-pin-home');
       const home = CATEGORIES.find((c) => c.id === pin.homeCategory);
       if (home) crumb.textContent = t(home.nameKey);
-      pinsSection.appendChild(crumb);
+      pinCell.appendChild(crumb);
+      pinsSection.appendChild(pinCell);
     }
     parent.appendChild(pinsSection);
   }

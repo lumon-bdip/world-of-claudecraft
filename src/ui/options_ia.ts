@@ -643,6 +643,14 @@ export interface OverviewPin {
 }
 
 export const OVERVIEW_PINS: readonly OverviewPin[] = [
+  // Language leads the Overview (maintainer direction): a player who cannot
+  // read the current language must reach it before anything else.
+  {
+    nonSettingsHome: 'language',
+    labelKey: 'hud.options.language',
+    homeCategory: 'interface',
+    sprintTier: 'required',
+  },
   {
     key: 'graphicsPreset',
     labelKey: 'hud.options.graphicsQuality',
@@ -658,12 +666,6 @@ export const OVERVIEW_PINS: readonly OverviewPin[] = [
   {
     nonSettingsHome: 'themePreset',
     labelKey: 'hudChrome.theme.preset',
-    homeCategory: 'interface',
-    sprintTier: 'required',
-  },
-  {
-    nonSettingsHome: 'language',
-    labelKey: 'hud.options.language',
     homeCategory: 'interface',
     sprintTier: 'required',
   },

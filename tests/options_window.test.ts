@@ -192,6 +192,38 @@ describe('options_window: theme custom-color grid preserved under Interface', ()
     expect(body).toContain('theme.setCustom(knob, input.value)');
     expect(body).toContain('theme.resetCustom()');
   });
+
+  it('keeps the full custom-color block on the category + search paths (default opts)', () => {
+    // Mirror-only rendering is the PIN path's mode; the Interface page and the
+    // search results must keep the whole block via the no-opts calls.
+    expect(painter).toContain('this.themeRow(secEl);');
+    expect(painter).toContain('this.themeRow(group)');
+  });
+});
+
+describe('options_window: Overview pins are one wrapper cell each', () => {
+  // The mobile shell's 2-column section grid treats every non-.opt-row child as
+  // a full-width break, so a pin appended as loose row + crumb siblings strands
+  // the whole Overview in the left column (the crumb after each row forces a
+  // new grid row and column 2 never fills). Each pin must render into ONE
+  // .opt-pin cell carrying its row(s) + home crumb, and the theme pin must be a
+  // MIRROR of the preset control only (the Custom Colors block is the Interface
+  // page's, per the options_ia OverviewPin contract).
+  it('wraps each pin (row + home crumb) in an .opt-pin cell, theme pin mirror-only', () => {
+    const pins = painter.slice(
+      painter.indexOf('private appendOverviewPins'),
+      painter.indexOf('private appendOverviewStatus'),
+    );
+    expect(pins).toContain("el('div', 'opt-pin')");
+    expect(pins).toContain('this.themeRow(pinCell, { withCustomColors: false })');
+    expect(pins).toContain('pinCell.appendChild(crumb)');
+    expect(pins).toContain('pinsSection.appendChild(pinCell)');
+  });
+
+  it('the mobile 2-col escape rule exempts .opt-pin so pins fill both columns', () => {
+    const mobile = readFileSync(new URL('../src/styles/hud.mobile.css', import.meta.url), 'utf8');
+    expect(mobile).toContain('> :not(.opt-row, .opt-pin)');
+  });
 });
 
 describe('options_window: bug-report dispatch + async states (preserved)', () => {

@@ -4763,12 +4763,16 @@
     column-gap: var(--spacing-lg);
     row-gap: var(--spacing-xs);
   }
-  /* Only .opt-row children are half-width cells; EVERYTHING else spans the full
-     width (section heads, notes, pin home crumbs, the theme swatch grid, bespoke
-     buttons). An allowlist of specific classes here kept missing pieces: the
-     Overview pins' home crumbs and theme sub-blocks landed as stray right-column
-     cells (live feedback: the right side "not rendering properly"). */
-  body.mobile-touch #options-menu .opt-mshell-content .opt-section > :not(.opt-row) {
+  /* Only .opt-row children and .opt-pin wrapper cells are half-width; EVERYTHING
+     else spans the full width (section heads, notes, the theme swatch grid,
+     bespoke buttons). An allowlist of specific classes here kept missing pieces:
+     the Overview pins' home crumbs and theme sub-blocks landed as stray
+     right-column cells (live feedback: the right side "not rendering properly").
+     The .opt-pin exemption is what lets the Overview pins fill BOTH columns: a
+     pin's row + home crumb travel together inside one wrapper cell, where the
+     loose row-then-full-width-crumb siblings used to break the grid after every
+     pin and strand the whole landing in the left column. */
+  body.mobile-touch #options-menu .opt-mshell-content .opt-section > :not(.opt-row, .opt-pin) {
     grid-column: 1 / -1;
   }
   body.mobile-touch #options-menu .opt-mshell-content .opt-row {
