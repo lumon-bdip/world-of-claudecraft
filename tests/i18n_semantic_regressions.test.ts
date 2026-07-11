@@ -56,6 +56,7 @@ describe('reviewed localization semantics', () => {
   }
 
   const marketTerms: Record<string, string> = {
+    id_ID: 'dunia',
     tr_TR: 'dünya',
     vi_VN: 'thế giới',
   };
@@ -83,11 +84,16 @@ describe('reviewed localization semantics', () => {
   }
 
   const professionEndings: Record<string, string> = {
+    da_DK: 'Der er et hæderligt levebrød i det alt sammen, hvis du ønsker det.',
     es: 'En esos oficios te espera una vida honrada, si la quieres.',
     fr_FR: 'Tout cela peut vous offrir un gagne-pain honorable, si le cœur vous en dit.',
     id_ID: 'Semua itu bisa menjadi mata pencaharian yang layak, jika kamu menginginkannya.',
     it_IT: 'C’è un mestiere onesto in tutto questo, se ti interessa.',
+    ko_KR: '원한다면 이 모든 일로 떳떳하게 생계를 꾸릴 수 있다네.',
     pt_BR: 'Dá para ganhar a vida honestamente com tudo isso, se você quiser.',
+    sv_SE: 'Det går att försörja sig hederligt på alltihop, om du vill.',
+    zh_CN: '只要你愿意，靠这些都能正经谋生。',
+    zh_TW: '只要你願意，靠這些都能正經謀生。',
   };
 
   for (const [locale, expectedEnding] of Object.entries(professionEndings)) {
