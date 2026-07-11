@@ -12,7 +12,14 @@ directory lives in git history before 2026-07-11.
 
 - Live set: 192 deeds, 2365 Renown, 19 titles, 3 distinct borders, 72 Steam
   marquee entries.
-- The one red on the branch: `tests/i18n_completeness.test.ts` (M16) lists
+- A second red arrived with the v0.25.0 merge and is inherited, not
+  branch-caused: the new `sfx check` gate step (`npm run sfx:check`, added to
+  `scripts/gate.mjs` by the SFX conform pipeline) exits 1 with 111 legacy
+  audio files out of spec. The audio tree and the conform tooling on this
+  branch are byte-identical to the release/v0.25.0 tip, so the pristine base
+  is equally red; conforming the assets (`sfx:conform`) belongs upstream, not
+  in this branch's diff.
+- The one branch-owned red: `tests/i18n_completeness.test.ts` (M16) lists
   exactly 36 English-only `guide.*` keys; a dedicated translation pass fills
   them (registry pending is 1650 pairs across 97 keys, every one branch-owned
   `guide.*` prose; deeds-owned pending is zero in every locale). That pass
