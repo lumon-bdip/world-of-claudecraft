@@ -78,3 +78,18 @@ describe('.window-frame .bar neutralizes the legacy same-layer .bar skin', () =>
     expect(has(bar, /margin-top:\s*0;/)).toBe(true);
   });
 });
+
+describe('sell-junk gap survives the .window-frame .btn margin reset', () => {
+  // The Sell tab stacks the sell-junk button directly above .list-rows, and the
+  // gap rule sits EARLIER in the same layer than the (0,2,0) '.window-frame .btn
+  // { margin: 0 }' reset above. Only the compound (0,3,0) selector keeps the
+  // margin-bottom alive; a well-meaning "simplification" back to
+  // '.window-frame .vendor-sell' would silently lose the cascade tie again and
+  // weld the button to the first item row.
+  it('declares the gap on the higher-specificity .btn.vendor-sell compound', () => {
+    const gap = ruleBlocks('.window-frame .btn.vendor-sell');
+    expect(gap.length).toBeGreaterThan(0);
+    expect(has(gap, /margin-bottom:\s*var\(--spacing-md\);/)).toBe(true);
+    expect(ruleBlocks('.window-frame .vendor-sell')).toHaveLength(0);
+  });
+});

@@ -3218,11 +3218,14 @@
   }
   /* The bulk sell-junk action moved from the (now removed) sticky footer into the
      Sell tab body; keep it full-width with the label/proceeds split like a footer
-     action, with room below before the sellable rows. */
-  .window-frame .vendor-sell {
+     action, with room below before the sellable rows. The compound .btn.vendor-sell
+     (0,3,0) is load-bearing: the later same-layer '.window-frame .btn' reset
+     (0,2,0) declares 'margin: 0', which used to win the cascade tie by source
+     order and flatten this gap to zero. */
+  .window-frame .btn.vendor-sell {
     width: 100%;
     justify-content: space-between;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
   }
   /* The Heroic Quartermaster's frame nests one level under .heroic-shop, so the
      old direct-child frame grip could never reach it and needed a bespoke restate.
