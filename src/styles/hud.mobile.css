@@ -1205,11 +1205,17 @@
       calc(var(--app-vh) - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom))
     );
   }
+  /* The open transform restates the base centering EXPLICITLY: it used to read
+     an undefined --mobile-more-open-transform custom property, which computes to
+     'unset' (transform: none) under CSS invalid-at-computed-value-time rules, so
+     whenever the drawer relied on the stylesheet its top-left corner sat at the
+     screen center (the first-open-off-screen bug: the Hud observer's show-time
+     inline clear exposed it exactly once per session). */
   body.mobile-touch.mobile-more-open #mobile-extra-controls {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: var(--mobile-more-open-transform);
+    transform: translate(-50%, -50%);
     transition:
       opacity 150ms ease,
       transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),

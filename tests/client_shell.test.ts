@@ -1535,7 +1535,7 @@ describe('client HTML shell', () => {
     );
     expect(drawerRule).toContain('max-height: min(\n      calc(var(--app-vh) * 0.8),');
     expect(hudMobileCss).toContain(
-      'body.mobile-touch.mobile-more-open #mobile-extra-controls {\n    opacity: 1;\n    visibility: visible;\n    pointer-events: auto;\n    transform: var(--mobile-more-open-transform);',
+      'body.mobile-touch.mobile-more-open #mobile-extra-controls {\n    opacity: 1;\n    visibility: visible;\n    pointer-events: auto;\n    transform: translate(-50%, -50%);',
     );
     expect(hudMobileCss).toContain(
       'transition:\n      opacity 150ms ease,\n      transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),',
@@ -1588,10 +1588,11 @@ describe('client HTML shell', () => {
     );
     expect(mobileControlsTs).toContain("this.root?.classList.toggle('expanded', open);");
     expect(mobileControlsTs).toContain("document.body.classList.toggle('mobile-more-open', open);");
-    expect(mobileControlsTs).toContain("modal.style.left = '50%';");
-    expect(mobileControlsTs).toContain("modal.style.top = '50%';");
-    expect(mobileControlsTs).toContain("modal.style.transform = 'translate(-50%, -50%)';");
-    expect(mobileControlsTs).toContain('delete modal.dataset.windowMoved;');
+    // The opener writes NO inline geometry: centering belongs to the stylesheet
+    // alone (the old inline left/top/transform write raced the Hud observer's
+    // show-time mobile clear and broke the FIRST open of every session).
+    expect(mobileControlsTs).not.toContain("modal.style.left = '50%';");
+    expect(mobileControlsTs).not.toContain("modal.style.transform = 'translate(-50%, -50%)';");
     expect(mobileControlsTs).toContain('private closeMoreModal(): void {');
     expect(mobileControlsTs).toContain(
       "document.getElementById('mobile-controls')?.classList.remove('expanded');",

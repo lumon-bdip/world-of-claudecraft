@@ -1137,7 +1137,12 @@ describe('MobileControls pointer lifecycle', () => {
     expect(document.body.classList.contains('mobile-more-open')).toBe(false);
   });
 
-  it('keeps the More drawer centered when opened', () => {
+  it('opens the More drawer via the body class alone, never inline geometry', () => {
+    // Centering is the stylesheet's (hud.mobile.css): the old inline
+    // left/top/transform write here raced the Hud window observer, whose
+    // show-time mobile clear wiped it on the FIRST open of a session and
+    // dropped the drawer onto a broken open-state transform (an undefined
+    // custom property), landing it half off-screen exactly once.
     const { moreButton, moreModal } = installMobileControlDom();
     const input = {
       setTouchMove: () => {},
@@ -1149,11 +1154,10 @@ describe('MobileControls pointer lifecycle', () => {
 
     moreButton.dispatchEvent(new Event('click', { bubbles: true, cancelable: true }));
 
-    expect(moreModal.style.left).toBe('50%');
-    expect(moreModal.style.top).toBe('50%');
-    expect(moreModal.style.right).toBe('auto');
-    expect(moreModal.style.bottom).toBe('auto');
-    expect(moreModal.style.transform).toBe('translate(-50%, -50%)');
+    expect(document.body.classList.contains('mobile-more-open')).toBe(true);
+    expect(moreModal.style.left).toBe('');
+    expect(moreModal.style.top).toBe('');
+    expect(moreModal.style.transform).toBe('');
   });
 
   it('fires the Jump callback immediately on pointerdown without double-firing the generated click', () => {

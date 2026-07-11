@@ -519,17 +519,11 @@ export class MobileControls {
       const open = !document.body.classList.contains('mobile-more-open');
       this.root?.classList.toggle('expanded', open);
       document.body.classList.toggle('mobile-more-open', open);
-      if (open) {
-        const modal = document.getElementById('mobile-extra-controls');
-        if (modal) {
-          modal.style.left = '50%';
-          modal.style.top = '50%';
-          modal.style.right = 'auto';
-          modal.style.bottom = 'auto';
-          modal.style.transform = 'translate(-50%, -50%)';
-          delete modal.dataset.windowMoved;
-        }
-      }
+      // No inline positioning here: the drawer is centered by the stylesheet
+      // (hud.mobile.css). The old inline left/top/transform write raced the Hud
+      // window observer, whose show-time mobile clear wiped it on the FIRST
+      // open of a session and dropped the drawer onto the (then broken)
+      // stylesheet transform, so the first open landed half off-screen.
     });
   }
 
