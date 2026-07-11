@@ -42,8 +42,7 @@ interface LoopSlot {
 class Sfx {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
-  private buffers = new Map<string, AudioBuffer>();
-  private variants = new Map<string, AudioBuffer[]>();
+  private variants = new Map<string, AudioBuffer[]>(); // single source of truth: key -> pool
   private lastVariant = new Map<string, number>(); // last played index per key (no-repeat random)
   private vol = 0.8;
   private active = 0;
@@ -107,21 +106,18 @@ class Sfx {
             /* missing/corrupt variant: skip it */
           }
         }
-        if (bufs.length > 0) {
-          this.buffers.set(key, bufs[0]);
-          this.variants.set(key, bufs);
-        }
+        if (bufs.length > 0) this.variants.set(key, bufs);
       }),
     );
     // Procedurally synthesized beds/one-shots (no clip files; the Vale Cup
     // crowd is generated, not recorded, keeping the shipped audio set as-is).
     try {
-      this.buffers.set('amb_crowd', this.makeCrowdBuffer(ctx, 6, false));
-      this.buffers.set('vcup_crowd_roar', this.makeCrowdBuffer(ctx, 2.6, true));
+      this.variants.set('amb_crowd', [this.makeCrowdBuffer(ctx, 6, false)]);
+      this.variants.set('vcup_crowd_roar', [this.makeCrowdBuffer(ctx, 2.6, true)]);
     } catch {
       /* stub AudioContext in tests: the keys just stay silent */
     }
-    this.ready = this.buffers.size > 0;
+    this.ready = this.variants.size > 0;
   }
 
   /** Procedural crowd noise. Bed mode is a seamless 6s murmur loop (filtered
@@ -212,14 +208,20 @@ class Sfx {
 
   /** No-repeat random variant selection. Picks a random variant each play,
    *  never repeating the immediately previous one so the same sample never
-   *  double-hits back-to-back. */
+   *  double-hits back-to-back. First play is uniform over the full pool. */
   private nextBuffer(key: string): AudioBuffer | undefined {
     const pool = this.variants.get(key);
     if (!pool || pool.length === 0) return undefined;
     if (pool.length === 1) return pool[0];
     const last = this.lastVariant.get(key) ?? -1;
-    let idx = Math.floor(Math.random() * (pool.length - 1));
-    if (idx >= last) idx++;
+    let idx: number;
+    if (last < 0) {
+      // First play: uniform over the full pool (no variant to exclude yet).
+      idx = Math.floor(Math.random() * pool.length);
+    } else {
+      idx = Math.floor(Math.random() * (pool.length - 1));
+      if (idx >= last) idx++;
+    }
     this.lastVariant.set(key, idx);
     return pool[idx];
   }
@@ -338,7 +340,9 @@ class Sfx {
       slot = undefined;
     }
     if (!slot) {
-      const buf = this.buffers.get(key);
+      // Loop slots always use variant[0] -- seamless looping beds are single-buffer
+      // by design; picking a different variant on each loop cycle would cause a click.
+      const buf = this.variants.get(key)?.[0];
       if (!buf) return;
       const src = ctx.createBufferSource();
       src.buffer = buf;
