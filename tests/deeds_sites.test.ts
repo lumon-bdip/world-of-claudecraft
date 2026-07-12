@@ -393,6 +393,26 @@ describe('encounter mechanical arms (onMobKillCreditForDeeds)', () => {
     for (const m of s.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
   });
 
+  it('dgn_morthen_trio: a fourth member present only through their PET on the hate table counts', () => {
+    // The sweep fold owner-resolves the threat table: a pet entry credits the
+    // owning player, so a healer whose only hate-table presence is their pet
+    // still lands in the roster and the trio restriction holds.
+    const sim = makeSim();
+    const s = encounterInstance(sim, 'morthen', 'hollow_crypt', 'normal', ['A', 'B', 'C']);
+    for (const m of s.recipients) {
+      onDamageDealtForDeeds(sim.ctx, entityOf(sim, m), s.boss, 10, false, 'hit');
+    }
+    const healer = addMeta(sim, 'D');
+    const pet = spawnMob(sim, 'webwood_spider', { x: 6, y: 0, z: -6 });
+    pet.ownerId = healer.entityId;
+    s.boss.threat.set(pet.id, 50); // only the PET ever touched the hate table
+    sim.tickCount = 20; // cross a 1 Hz sweep boundary
+    updateDeeds(sim.ctx);
+    s.boss.threat.delete(pet.id);
+    onMobKillCreditForDeeds(sim.ctx, s.boss, null, s.recipients[0], s.recipients);
+    for (const m of s.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
+  });
+
   it('dgn_vael_thralls: every summoned add dead grants; a live add blocks', () => {
     const clean = makeSim();
     const boss = spawnMob(clean, 'vael_the_mistcaller', { x: 5, y: 0, z: -5 });

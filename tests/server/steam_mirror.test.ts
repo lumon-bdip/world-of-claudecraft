@@ -549,6 +549,9 @@ describe('reconcile-on-login: the durable heal for a dropped push', () => {
   });
 
   it('throttles repeated logins: two calls inside the TTL do exactly one earned read', async () => {
+    // Pin the magnitude too: the clock stepping below uses the constant, so
+    // without this literal the test would accept any TTL value.
+    expect(LOGIN_RECONCILE_TTL_MS).toBe(6 * 60 * 60 * 1000);
     enableSteam();
     earnedMock.mockResolvedValue([MAPPED_DEED]);
     reconcileOnLogin(ACCOUNT_ID);

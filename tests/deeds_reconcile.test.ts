@@ -43,10 +43,11 @@ import { insertCharacterDeeds } from '../server/deeds_db';
 import { deedRecordsIdle, reconcileCharacterDeeds } from '../server/deeds_records';
 import { GameServer } from '../server/game';
 import { REALM } from '../server/realm';
-import { onDeedRecorded } from '../server/steam/mirror';
+import { onDeedRecorded, reconcileOnLogin } from '../server/steam/mirror';
 
 const insertDeedsMock = vi.mocked(insertCharacterDeeds);
 const onDeedRecordedMock = vi.mocked(onDeedRecorded);
+const reconcileOnLoginMock = vi.mocked(reconcileOnLogin);
 
 // Let the fire-and-forget FIFO tail settle deterministically before asserting.
 async function settle(): Promise<void> {
@@ -176,8 +177,12 @@ describe('reconcile through GameServer.join', () => {
     expect(who).toEqual({ realm: REALM, characterId: 42, accountId: 7 });
     // The reconcile replays the WHOLE loaded set, faithfully.
     expect([...ids].sort()).toEqual(earnedIds);
-    // The reconcile is a DB write only; the Steam mirror is never told.
+    // The reconcile is a DB write only; the Steam mirror is never told
+    // per-row. The join DOES fire the account-level Steam login reconcile
+    // (the durable heal for a dropped push), exactly once, beside this one.
     expect(onDeedRecordedMock).not.toHaveBeenCalled();
+    expect(reconcileOnLoginMock).toHaveBeenCalledTimes(1);
+    expect(reconcileOnLoginMock).toHaveBeenCalledWith(7);
   });
 
   it('a fresh character with no earned deeds issues no reconcile batch', async () => {
