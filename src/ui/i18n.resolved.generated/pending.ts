@@ -10,6 +10,7 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -18,6 +19,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "es_ES": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -26,6 +28,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "fr_FR": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -34,6 +37,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "fr_CA": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -43,6 +47,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -51,6 +56,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "de_DE": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -63,6 +69,7 @@ export const pending: Record<string, readonly string[]> = {
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -72,6 +79,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "ru_RU": [],
   "cs_CZ": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -80,6 +88,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "nl_NL": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -88,6 +97,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "pl_PL": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -96,6 +106,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "id_ID": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -104,6 +115,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "tr_TR": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -112,6 +124,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "sv_SE": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -120,6 +133,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "vi_VN": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
@@ -128,6 +142,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.tutorial.slayTargetHintTouch"
   ],
   "da_DK": [
+    "hudChrome.discord.link.joinServer",
     "hudChrome.tutorial.nextTipMap",
     "hudChrome.tutorial.nextTipQuestLog",
     "hudChrome.tutorial.nextTipSocial",
