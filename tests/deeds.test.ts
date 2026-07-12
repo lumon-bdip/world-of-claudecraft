@@ -41,6 +41,50 @@ function deedEvents(evs: SimEvent[]): Extract<SimEvent, { type: 'deedUnlocked' }
   });
 }
 
+// Seat a live 2v2 Fiesta bout (four solo-queuers, countdown run out) so the
+// fiesta-takedown arm of dealDamage can be driven directly. Mirrors the
+// startFiesta harness in tests/fiesta.test.ts.
+function startFiestaBout(): { sim: Sim; match: ArenaMatch } {
+  const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+  const pids = [
+    sim.addPlayer('warrior', 'P0'),
+    sim.addPlayer('mage', 'P1'),
+    sim.addPlayer('rogue', 'P2'),
+    sim.addPlayer('priest', 'P3'),
+  ];
+  for (const p of pids) sim.arenaQueueJoin(p, 'fiesta');
+  sim.tick(); // matchmake
+  for (let i = 0; i < 20 * 8; i++) {
+    const m = sim.arenaMatchFor(pids[0]);
+    if (m && m.state === 'active') break;
+    sim.tick();
+  }
+  return { sim, match: sim.arenaMatchFor(pids[0])! };
+}
+
+// Seat a live 3v3 Protect Yumi bout (six solo-queuers, countdown run out) so
+// the yumi player-down arm of dealDamage can be driven directly. Mirrors the
+// startYumi3 harness in tests/yumi_match.test.ts.
+function startYumiBout(): { sim: Sim; match: ArenaMatch } {
+  const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+  const pids = [
+    sim.addPlayer('warrior', 'P0'),
+    sim.addPlayer('mage', 'P1'),
+    sim.addPlayer('rogue', 'P2'),
+    sim.addPlayer('priest', 'P3'),
+    sim.addPlayer('hunter', 'P4'),
+    sim.addPlayer('druid', 'P5'),
+  ];
+  for (const p of pids) sim.arenaQueueJoin(p, 'yumi3');
+  sim.tick(); // matchmake
+  for (let i = 0; i < 20 * 8; i++) {
+    const m = sim.arenaMatchFor(pids[0]);
+    if (m && m.state === 'active') break;
+    sim.tick();
+  }
+  return { sim, match: sim.arenaMatchFor(pids[0])! };
+}
+
 describe('trigger kinds grant once, with negatives', () => {
   it('level: threshold minus one does not grant; the grant fires exactly once', () => {
     const sim = makeSim();
@@ -1223,6 +1267,74 @@ describe('site wiring (real modules, not direct bumps)', () => {
     expect(metaB.deedStats.counters.deaths).toBe(1); // victim accounting unchanged
     expect(metaA.deedStats.counters.damageDealt).toBe(clamped);
     expect(metaA.deedStats.counters.crits).toBe(1);
+  });
+
+  it('a Protect Yumi player-down through dealDamage counts the clamped terminal hit and its crit', () => {
+    const { sim, match } = startYumiBout();
+    const killerPid = match.teamA[0];
+    const victimPid = match.teamB[0];
+    const attacker = sim.entities.get(killerPid)!;
+    const victim = sim.entities.get(victimPid)!;
+    const killerMeta = sim.players.get(killerPid)!;
+    const dmgBefore = killerMeta.deedStats.counters.damageDealt;
+    const critsBefore = killerMeta.deedStats.counters.crits;
+    const sessionDmgBefore = killerMeta.counters.damageDealt;
+
+    // The terminal down clamps overkill to the victim's remaining hp, benches
+    // them on the yumi respawn timer (never the permanent ranked death), and
+    // the clamped hit plus its crit still land on the attacker's deed counters.
+    const clamped = victim.hp;
+    dealDamage(sim.ctx, attacker, victim, victim.hp + 500, true, 'physical', null, 'hit');
+    expect(match.yumi!.respawn.has(victimPid)).toBe(true);
+    expect(victim.hp).toBe(0);
+    expect(victim.dead).toBe(true);
+    expect(killerMeta.deedStats.counters.damageDealt).toBe(dmgBefore + clamped);
+    expect(killerMeta.deedStats.counters.crits).toBe(critsBefore + 1);
+    // The deliberate divergence: the release-owned session RewardCounters do
+    // NOT count a terminal PvP hit. The arm returns before the session damage
+    // site, so only the deed ledger above records the clamped blow.
+    expect(killerMeta.counters.damageDealt).toBe(sessionDmgBefore);
+  });
+
+  it('a Fiesta takedown through dealDamage counts the clamped terminal hit and its crit', () => {
+    const { sim, match } = startFiestaBout();
+    const killerPid = match.teamA[0]; // team A: the takedown scores on scoreA
+    const victimPid = match.teamB[0];
+    const attacker = sim.entities.get(killerPid)!;
+    const victim = sim.entities.get(victimPid)!;
+    const killerMeta = sim.players.get(killerPid)!;
+    const scoreBefore = match.fiesta!.scoreA;
+    const dmgBefore = killerMeta.deedStats.counters.damageDealt;
+    const critsBefore = killerMeta.deedStats.counters.crits;
+
+    // The takedown scores the point and benches the victim on the fiesta
+    // respawn timer (never a real death); the clamped hit plus its crit still
+    // land on the attacker's deed counters.
+    const clamped = victim.hp;
+    dealDamage(sim.ctx, attacker, victim, victim.hp + 500, true, 'physical', null, 'hit');
+    expect(match.fiesta!.scoreA).toBe(scoreBefore + 1);
+    expect(match.fiesta!.respawn.has(victimPid)).toBe(true);
+    expect(victim.hp).toBe(0);
+    expect(killerMeta.deedStats.counters.damageDealt).toBe(dmgBefore + clamped);
+    expect(killerMeta.deedStats.counters.crits).toBe(critsBefore + 1);
+  });
+
+  it('a hit on the Protect Yumi cat routes to the cat arm and stays out of the deed ledger', () => {
+    const { sim, match } = startYumiBout();
+    const attacker = sim.entities.get(match.teamA[0])!;
+    const cat = sim.entities.get(match.yumi!.yumiB)!; // team B's objective cat (a mob)
+    const killerMeta = sim.players.get(match.teamA[0])!;
+    const dmgBefore = killerMeta.deedStats.counters.damageDealt;
+    const critsBefore = killerMeta.deedStats.counters.crits;
+    const catHpBefore = cat.hp;
+
+    // The cat's damage routes through yumiCatDamaged (the objective-hp arm),
+    // which returns before the shared deed site: the hit lands on the cat but
+    // is deliberately outside the deed ledger, so it bumps neither counter.
+    dealDamage(sim.ctx, attacker, cat, 100, true, 'physical', null, 'hit');
+    expect(cat.hp).toBeLessThan(catHpBefore);
+    expect(killerMeta.deedStats.counters.damageDealt).toBe(dmgBefore);
+    expect(killerMeta.deedStats.counters.crits).toBe(critsBefore);
   });
 
   it('forming a party bumps partiesJoined for inviter and accepter through partyAccept', () => {

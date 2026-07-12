@@ -39,6 +39,7 @@ import {
 import { createMob } from '../src/sim/entity';
 import { craftItem } from '../src/sim/professions/crafting';
 import { type ArenaMatch, type InstanceSlot, type PlayerMeta, Sim } from '../src/sim/sim';
+import { endArenaMatch } from '../src/sim/social/arena';
 import { applyResurrectionSickness } from '../src/sim/spirit';
 import type { DungeonDifficulty, Entity, Vec3 } from '../src/sim/types';
 
@@ -757,6 +758,37 @@ describe('Fiesta sites', () => {
     );
     expect(w2.deedsEarned.has('pvp_fiesta_first_win')).toBe(true);
     expect(w2.deedsEarned.has('pvp_fiesta_full_build')).toBe(false);
+  });
+
+  it('endArenaMatch drives the forfeit-vs-completed-bout distinction end to end', () => {
+    // The helper cases above pin onArenaMatchEndForDeeds directly; this drives the
+    // REAL endArenaMatch so the reason -> completedBout wiring (arena.ts: the fourth
+    // argument is reason !== 'forfeit') is exercised end to end. A forfeit reaches the
+    // helper with completedBout false: nobody fought a full bout, but the winner still
+    // banks the win family.
+    const forfeit = makeSim();
+    const winner = addMeta(forfeit, 'Champ');
+    const loser = addMeta(forfeit, 'Quitter');
+    endArenaMatch(
+      forfeit.ctx,
+      fiestaMatch(forfeit, [winner.entityId], [loser.entityId]),
+      'A',
+      'forfeit',
+    );
+    expect(winner.deedsEarned.has('pvp_fiesta_first_bout')).toBe(false);
+    expect(loser.deedsEarned.has('pvp_fiesta_first_bout')).toBe(false);
+    expect(winner.deedsEarned.has('pvp_fiesta_first_win')).toBe(true);
+
+    // A timeout is a completed bout (it ran its full clock): both fighters bank the
+    // full-bout deed. Hardcoding the fourth argument to a constant true would grant it
+    // on the forfeit arm above; a constant false would drop it here.
+    const timeout = makeSim();
+    const w2 = addMeta(timeout, 'Champ');
+    const l2 = addMeta(timeout, 'Runner');
+    endArenaMatch(timeout.ctx, fiestaMatch(timeout, [w2.entityId], [l2.entityId]), 'A', 'timeout');
+    expect(w2.deedsEarned.has('pvp_fiesta_first_bout')).toBe(true);
+    expect(l2.deedsEarned.has('pvp_fiesta_first_bout')).toBe(true);
+    expect(w2.deedsEarned.has('pvp_fiesta_first_win')).toBe(true);
   });
 
   it('a ranked forfeit still grants the first-match deed', () => {
