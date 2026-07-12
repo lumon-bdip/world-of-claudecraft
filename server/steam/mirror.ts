@@ -160,10 +160,24 @@ async function attemptPush(item: PushItem): Promise<void> {
   // (deliberately not the TTL cache, which a peer realm process cannot see
   // invalidated) must still name this exact Steam id, or the item was queued
   // by a read that lost a race with an unlink and is dropped. Comparing ids
-  // rather than row existence keeps queued pushes flowing after a relink; a
-  // failed read drops too (no proof of a live link means no push, and
-  // reconcile-on-link heals the gap).
-  const row = await deps.linkForAccount(item.accountId).catch(() => null);
+  // rather than row existence keeps queued pushes flowing after a relink. A
+  // REJECTED read proves nothing about the link, so it is retried once (one
+  // transient DB blip must not eat a push), and a second rejection drops WITH
+  // a warn line so operators can see the loss instead of a silent gap;
+  // reconcile-on-link heals it either way.
+  let row: { steamId: string } | null;
+  try {
+    row = await deps.linkForAccount(item.accountId);
+  } catch {
+    try {
+      row = await deps.linkForAccount(item.accountId);
+    } catch {
+      console.warn(
+        `steam mirror: dropping unlock ${item.achName}, link revalidation read failed twice`,
+      );
+      return;
+    }
+  }
   if (row?.steamId !== item.steamId) return;
   for (let attempt = 1; attempt <= MAX_PUSH_ATTEMPTS; attempt++) {
     const ok = await deps.pushUnlock({ key, appId, steamId: item.steamId, achName: item.achName });

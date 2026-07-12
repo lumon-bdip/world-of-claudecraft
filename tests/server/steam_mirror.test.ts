@@ -393,3 +393,38 @@ describe('unlink is a revocation barrier', () => {
     expect(pushedIds).toEqual([OLD_STEAM_ID]);
   });
 });
+
+describe('push-time revalidation read resilience', () => {
+  it('retries a rejected revalidation read once and still delivers the push', async () => {
+    enableSteam();
+    linkMock
+      .mockResolvedValueOnce({ steamId: STEAM_ID }) // the lookup-path (cache) read
+      .mockRejectedValueOnce(new Error('transient blip')) // revalidation, first try
+      .mockResolvedValueOnce({ steamId: STEAM_ID }); // revalidation retry
+    onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
+    await settle();
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(pushMock).toHaveBeenCalledWith(expect.objectContaining({ achName: MAPPED_ACH }));
+    expect(linkMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('drops with one warn line, never silently, when the revalidation read fails twice', async () => {
+    enableSteam();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    linkMock
+      .mockResolvedValueOnce({ steamId: STEAM_ID })
+      .mockRejectedValueOnce(new Error('down'))
+      .mockRejectedValueOnce(new Error('still down'));
+    onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
+    await settle();
+    expect(pushMock).not.toHaveBeenCalled();
+    const dropLines = warn.mock.calls
+      .map((call) => String(call[0]))
+      .filter((line) => line.includes('link revalidation read failed twice'));
+    expect(dropLines).toHaveLength(1);
+    // One fixed line, no URL, no body, no key (the module's log contract).
+    expect(dropLines[0]).toBe(
+      `steam mirror: dropping unlock ${MAPPED_ACH}, link revalidation read failed twice`,
+    );
+  });
+});
