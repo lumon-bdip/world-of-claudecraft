@@ -494,10 +494,14 @@ async function refreshDeedsBoard(): Promise<DeedsBoardCache> {
   return deedsBoardCache;
 }
 
-// Single-flight on the inline refresh: the board read is the one full-table
-// roll-up here, so N requests racing a cold or just-expired cache must share
-// ONE refresh, not run N concurrent full-table reads (a login-page storm on a
-// fresh process would otherwise multiply the most expensive query it has).
+// Single-flight on the board refresh, covering BOTH read paths: the inline
+// read (ensureDeedsBoard) and the demand-warm loop. The board read is the one
+// full-table roll-up here, so callers racing a cold or just-expired cache (a
+// login-page storm on a fresh process, or a warm tick landing on an inline
+// request, since the warm interval equals the cache TTL) must share ONE
+// refresh: concurrent flights would multiply the most expensive query the
+// process has, and the slower flight would overwrite a newer snapshot with a
+// fresher timestamp.
 const refreshDeedsBoardShared = singleFlight(refreshDeedsBoard);
 
 // Freshness gate shared by the two board reads below: serve the cache inside
@@ -2537,7 +2541,9 @@ export async function startServer(): Promise<http.Server> {
     // this loop keeps it fresh until demand lapses again.
     warmDeedsBoardIfDemanded(
       () => {
-        void refreshDeedsBoard().catch((err) => console.error('deeds board refresh failed:', err));
+        void refreshDeedsBoardShared().catch((err) =>
+          console.error('deeds board refresh failed:', err),
+        );
       },
       deedsBoardLastRequestAt,
       Date.now(),

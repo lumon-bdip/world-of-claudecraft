@@ -4,6 +4,7 @@
 // logic and the wiring gate, with a spy standing in for the full-table read so a
 // regression that drops the gate (warming an idle board) fails decisively.
 
+import { readFileSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
 import {
   DEEDS_BOARD_DEMAND_TTL_MS,
@@ -129,5 +130,31 @@ describe('singleFlight', () => {
     await expect(second).rejects.toThrow('db down');
     await expect(shared()).resolves.toBe('recovered');
     expect(run).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('server/main.ts wiring: both board read paths share one flight', () => {
+  // Source scan (like the architecture guards): the warm loop fires every
+  // LEADERBOARD_TTL_MS, the same interval as the cache TTL, so under demand a
+  // warm tick and an inline read race the same cold window. A raw (unwrapped)
+  // refresh on either path runs a second concurrent full-table roll-up, and the
+  // slower flight can overwrite a newer snapshot with a fresher timestamp.
+  const src = readFileSync(new URL('../../server/main.ts', import.meta.url), 'utf8');
+
+  it('the demand-warm callback invokes the single-flight wrapper', () => {
+    const callSite = src.indexOf('warmDeedsBoardIfDemanded(');
+    expect(callSite).toBeGreaterThan(-1);
+    // The callback is the first argument, so the shared call must sit in the
+    // opening lines of the call site.
+    expect(src.slice(callSite, callSite + 400)).toContain('refreshDeedsBoardShared()');
+  });
+
+  it('no caller bypasses the wrapper with a bare refreshDeedsBoard call', () => {
+    expect(src).not.toContain('void refreshDeedsBoard().catch');
+    // Exactly two bare references may exist: the function definition and its
+    // wrap into the shared flight. Anything else is a bypass.
+    expect(src.match(/\brefreshDeedsBoard\b/g)).toHaveLength(2);
+    expect(src).toContain('async function refreshDeedsBoard(');
+    expect(src).toContain('singleFlight(refreshDeedsBoard)');
   });
 });
