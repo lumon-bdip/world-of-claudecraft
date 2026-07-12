@@ -188,4 +188,14 @@ describe('characterSheet: deeds.recent hidden/unknown filter', () => {
       'gone_deed',
     ]);
   });
+
+  it('public visibility coarsens earnedAt to the UTC day; owner keeps the exact stamp', () => {
+    const stamped = [{ deedId: 'prog_veteran', earnedAt: '2026-06-01T13:45:22.318Z' }];
+    const pub = characterSheet(input({ visibility: 'public', deedsRecent: stamped }));
+    expect(pub.deeds.recent).toEqual([{ deedId: 'prog_veteran', earnedAt: '2026-06-01' }]);
+    const own = characterSheet(input({ visibility: 'owner', deedsRecent: stamped }));
+    expect(own.deeds.recent).toEqual([
+      { deedId: 'prog_veteran', earnedAt: '2026-06-01T13:45:22.318Z' },
+    ]);
+  });
 });

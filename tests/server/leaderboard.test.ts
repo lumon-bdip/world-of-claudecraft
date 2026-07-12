@@ -483,7 +483,10 @@ describe('readPublicSheet (FakeCharactersDb, resolved by name)', () => {
       renown: 15,
       earnedCount: 2,
       activeTitle: 'prog_veteran',
-      recent: seeded.slice(0, SHEET_RECENT_DEEDS),
+      // The public arm coarsens earnedAt to the UTC day (activity-timing privacy).
+      recent: seeded
+        .slice(0, SHEET_RECENT_DEEDS)
+        .map(({ deedId, earnedAt }) => ({ deedId, earnedAt: earnedAt.slice(0, 10) })),
     });
   });
 
@@ -507,7 +510,7 @@ describe('readPublicSheet (FakeCharactersDb, resolved by name)', () => {
     const out = await readPublicSheet(db, 'Secretive', sheetDeps);
     const body = out.body as Record<string, unknown>;
     expect((body.deeds as { recent: unknown }).recent).toEqual([
-      { deedId: 'prog_veteran', earnedAt: '2026-07-07T00:00:00.000Z' },
+      { deedId: 'prog_veteran', earnedAt: '2026-07-07' },
     ]);
   });
 });

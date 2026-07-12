@@ -315,12 +315,16 @@ describe('characterSheet deeds summary', () => {
     });
   });
 
-  it('passes the pre-fetched recent strip through verbatim on BOTH visibilities', () => {
+  it('passes the strip verbatim to the owner; the public arm coarsens earnedAt to the UTC day', () => {
     const recent = [
       { deedId: 'prog_veteran', earnedAt: '2026-07-08T10:00:00.000Z' },
       { deedId: 'prog_first_steps', earnedAt: '2026-07-01T09:00:00.000Z' },
     ];
-    expect(buildSheet({ level: 12 }, { deedsRecent: recent }).deeds.recent).toEqual(recent);
+    // Public: same rows, day-granularity stamps (activity-timing privacy).
+    expect(buildSheet({ level: 12 }, { deedsRecent: recent }).deeds.recent).toEqual([
+      { deedId: 'prog_veteran', earnedAt: '2026-07-08' },
+      { deedId: 'prog_first_steps', earnedAt: '2026-07-01' },
+    ]);
     expect(
       buildSheet({ level: 12 }, { deedsRecent: recent, visibility: 'owner' }).deeds.recent,
     ).toEqual(recent);
@@ -333,7 +337,9 @@ describe('characterSheet deeds summary', () => {
       { deedId: 'hid_saul_footnote', earnedAt: '2026-07-08T10:00:00.000Z' },
       { deedId: 'prog_veteran', earnedAt: '2026-07-07T09:00:00.000Z' },
     ];
-    expect(buildSheet({ level: 12 }, { deedsRecent: recent }).deeds.recent).toEqual([recent[1]]);
+    expect(buildSheet({ level: 12 }, { deedsRecent: recent }).deeds.recent).toEqual([
+      { deedId: 'prog_veteran', earnedAt: '2026-07-07' },
+    ]);
     expect(
       buildSheet({ level: 12 }, { deedsRecent: recent, visibility: 'owner' }).deeds.recent,
     ).toEqual(recent);

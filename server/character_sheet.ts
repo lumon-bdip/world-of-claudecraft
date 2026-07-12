@@ -77,7 +77,12 @@ export interface SheetArenaBracket {
 }
 export interface SheetDeedRecent {
   deedId: string;
-  earnedAt: string; // ISO 8601, the character_deeds server-clock stamp
+  // ISO 8601. The owner arm carries the exact character_deeds server-clock
+  // stamp; the public arm coarsens it to the UTC day ('YYYY-MM-DD') so an
+  // unauthenticated reader cannot infer login/activity timing from it (the
+  // owner's own Book shows day granularity too, so public never reveals more
+  // than the owner surface does).
+  earnedAt: string;
 }
 /** How many recent deeds the sheet's deeds summary lists. Lives here so every
  *  serving arm (both dispatch paths, both visibilities) shares one bound. */
@@ -235,12 +240,16 @@ export function characterSheet(input: CharacterSheetInput): CharacterSheet {
       // deeds-db graph into its import graph (a known partial-mock breakage
       // class), and the rule of three is not yet met. The strip can shorten
       // the fetched window below its limit; hidden earns are rare by design.
+      // The public arm also coarsens earnedAt to the UTC day: exact stamps on
+      // an unauthenticated surface leak activity timing (see SheetDeedRecent).
       recent:
         visibility === 'public'
-          ? (input.deedsRecent ?? []).filter((r) => {
-              const def = DEEDS[r.deedId];
-              return def !== undefined && def.hidden !== true;
-            })
+          ? (input.deedsRecent ?? [])
+              .filter((r) => {
+                const def = DEEDS[r.deedId];
+                return def !== undefined && def.hidden !== true;
+              })
+              .map((r) => ({ deedId: r.deedId, earnedAt: r.earnedAt.slice(0, 10) }))
           : (input.deedsRecent ?? []),
     },
     rank: rank ?? null,
