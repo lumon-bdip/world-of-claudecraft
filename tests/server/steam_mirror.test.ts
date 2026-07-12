@@ -9,9 +9,13 @@ import { readFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ACHIEVEMENT_MAP } from '../../server/steam/achievement_map';
 import {
+  LINK_CACHE_MAX,
   LINK_CACHE_TTL_MS,
   LOGIN_RECONCILE_TTL_MS,
+  linkCacheHasForTests,
+  linkCacheSizeForTests,
   MAX_PUSH_ATTEMPTS,
+  OUTAGE_TRIP_BATCHES,
   onDeedRecorded,
   onLinkChanged,
   PUSH_BACKOFF_BASE_MS,
@@ -19,9 +23,12 @@ import {
   reconcileLink,
   reconcileOnLogin,
   reconcileStampCountForTests,
+  reconcileSweepCountForTests,
+  reconcileSweepThresholdForTests,
   resetSteamMirrorForTests,
   setSteamMirrorDepsForTests,
   steamMirrorIdle,
+  stopSteamMirror,
 } from '../../server/steam/mirror';
 
 const ACCOUNT_ID = 7;
@@ -33,6 +40,8 @@ const OLD_STEAM_ID = '76561198000000002';
 const mappedEntries = Object.entries(ACHIEVEMENT_MAP);
 const [MAPPED_DEED, MAPPED_ACH] = mappedEntries[0];
 const [MAPPED_DEED_2, MAPPED_ACH_2] = mappedEntries[1];
+const [MAPPED_DEED_3, MAPPED_ACH_3] = mappedEntries[2];
+const [MAPPED_DEED_4, MAPPED_ACH_4] = mappedEntries[3];
 const UNMAPPED_DEED = 'not_a_real_deed_id';
 
 const savedEnv: Record<string, string | undefined> = {};
@@ -70,7 +79,7 @@ beforeEach(() => {
   earnedMock = vi.fn(async () => [] as string[]);
   delayMock = vi.fn(async () => {});
   setSteamMirrorDepsForTests({
-    pushUnlock: pushMock as never,
+    pushUnlocks: pushMock as never,
     linkForAccount: linkMock as never,
     earnedDeedIds: earnedMock as never,
     delay: delayMock as never,
@@ -131,7 +140,7 @@ describe('observer no-op guards', () => {
     await settle();
     expect(pushMock).toHaveBeenCalledTimes(1);
     expect(pushMock).toHaveBeenCalledWith(
-      expect.objectContaining({ steamId: STEAM_ID, achName: MAPPED_ACH_2 }),
+      expect.objectContaining({ steamId: STEAM_ID, achNames: [MAPPED_ACH_2] }),
     );
   });
 
@@ -187,7 +196,7 @@ describe('delivery, dedupe, and the retry ladder', () => {
       key: 'raw-test-publisher-value',
       appId: 480,
       steamId: STEAM_ID,
-      achName: MAPPED_ACH,
+      achNames: [MAPPED_ACH],
     });
   });
 
@@ -223,7 +232,8 @@ describe('delivery, dedupe, and the retry ladder', () => {
     ]);
     expect(warn).toHaveBeenCalledTimes(1);
     const line = String(warn.mock.calls[0][0]);
-    expect(line).toContain(MAPPED_ACH);
+    // The batched drop line reports the count and the attempt cap, not secrets.
+    expect(line).toBe(`steam mirror: dropping 1 unlock(s) after ${MAX_PUSH_ATTEMPTS} attempts`);
     // The drop line never leaks the key or an upstream URL/body.
     expect(line).not.toContain('raw-test-publisher-value');
     expect(line).not.toContain('http');
@@ -253,15 +263,19 @@ describe('delivery, dedupe, and the retry ladder', () => {
 });
 
 describe('the link cache', () => {
-  it('a burst for one account does exactly one lookup read inside the TTL', async () => {
+  it('a same-tick burst for one account does one lookup read and one batched push', async () => {
     enableSteam();
     onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
     onDeedRecorded(ACCOUNT_ID, MAPPED_DEED_2);
     await settle();
-    // One cached lookup read for the whole burst; each delivered push then
-    // adds its own revalidation read, so three reads for two pushes.
-    expect(linkMock).toHaveBeenCalledTimes(3);
-    expect(pushMock).toHaveBeenCalledTimes(2);
+    // One cached lookup read for the whole burst, plus one batch revalidation
+    // read for the single delivered batch: two reads, not three.
+    expect(linkMock).toHaveBeenCalledTimes(2);
+    // Both unlocks coalesce into ONE SetUserStatsForGame call carrying both names.
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(pushMock).toHaveBeenCalledWith(
+      expect.objectContaining({ steamId: STEAM_ID, achNames: [MAPPED_ACH, MAPPED_ACH_2] }),
+    );
   });
 
   it('re-reads after the TTL expires', async () => {
@@ -275,6 +289,26 @@ describe('the link cache', () => {
     // revalidation read per delivered push.
     expect(linkMock).toHaveBeenCalledTimes(4);
   });
+
+  it('is bounded: caching past the max evicts the oldest by insertion order, keeping the newest', async () => {
+    enableSteam();
+    // onLinkChanged writes the cache directly, so drive it well past the cap.
+    const overflow = 200;
+    for (let acct = 1; acct <= LINK_CACHE_MAX + overflow; acct++) {
+      onLinkChanged(acct, `steam-${acct}`);
+    }
+    // The map never grows past the hard cap: the oldest entries were evicted as
+    // new ones landed.
+    expect(linkCacheSizeForTests()).toBe(LINK_CACHE_MAX);
+    // The most recently linked account is still cached; the oldest (account 1)
+    // and everything up to the overflow were evicted in insertion order.
+    const newest = LINK_CACHE_MAX + overflow;
+    expect(linkCacheHasForTests(newest)).toBe(true);
+    expect(linkCacheHasForTests(1)).toBe(false);
+    expect(linkCacheHasForTests(overflow)).toBe(false);
+    // The first surviving account is exactly overflow + 1 (the oldest not evicted).
+    expect(linkCacheHasForTests(overflow + 1)).toBe(true);
+  });
 });
 
 describe('reconcile-on-link', () => {
@@ -284,12 +318,12 @@ describe('reconcile-on-link', () => {
     reconcileLink(ACCOUNT_ID, STEAM_ID);
     await settle();
     expect(earnedMock).toHaveBeenCalledWith(ACCOUNT_ID);
-    expect(pushMock).toHaveBeenCalledTimes(2);
-    const pushed = pushMock.mock.calls.map((c) => c[0]);
-    expect(pushed).toEqual([
-      expect.objectContaining({ steamId: STEAM_ID, achName: MAPPED_ACH }),
-      expect.objectContaining({ steamId: STEAM_ID, achName: MAPPED_ACH_2 }),
-    ]);
+    // The whole earned-and-mapped set ships as ONE batched call (the unmapped
+    // deed is filtered out), preserving earned order in the names array.
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(pushMock).toHaveBeenCalledWith(
+      expect.objectContaining({ steamId: STEAM_ID, achNames: [MAPPED_ACH, MAPPED_ACH_2] }),
+    );
   });
 
   it('is inert while the flag is off (a stray call cannot leak)', async () => {
@@ -405,7 +439,7 @@ describe('unlink is a revocation barrier', () => {
     await settle();
     expect(pushMock).toHaveBeenCalledTimes(2);
     expect(pushMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ steamId: STEAM_ID, achName: MAPPED_ACH }),
+      expect.objectContaining({ steamId: STEAM_ID, achNames: [MAPPED_ACH] }),
     );
   });
 
@@ -438,29 +472,34 @@ describe('push-time revalidation read resilience', () => {
     onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
     await settle();
     expect(pushMock).toHaveBeenCalledTimes(1);
-    expect(pushMock).toHaveBeenCalledWith(expect.objectContaining({ achName: MAPPED_ACH }));
+    expect(pushMock).toHaveBeenCalledWith(expect.objectContaining({ achNames: [MAPPED_ACH] }));
     expect(linkMock).toHaveBeenCalledTimes(3);
   });
 
-  it('a push attempt that THROWS drops that item with one warn and never wedges the drain', async () => {
-    // pushUnlock's contract is resolve-boolean, but the drain must survive a
+  it('a push attempt that THROWS drops that batch with one warn and never wedges the drain', async () => {
+    // pushUnlocks' contract is resolve-boolean, but the drain must survive a
     // contract breach: without the backstop the rejection becomes an unhandled
-    // rejection (process-fatal under Node defaults) and every queued item
-    // behind it stalls until some future enqueue restarts the worker.
+    // rejection (process-fatal under Node defaults) and every queued batch
+    // behind it stalls until some future enqueue restarts the worker. Enqueue
+    // the two unlocks in SEPARATE ticks so they form two batches, not one: the
+    // first batch's push throws and drops, the second still delivers.
     enableSteam();
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     pushMock.mockRejectedValueOnce(new Error('contract breach'));
     onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
+    await settle();
     onDeedRecorded(ACCOUNT_ID, MAPPED_DEED_2);
     await settle();
-    // The first item dropped with the backstop line; the second still delivered.
+    // The first batch dropped with the backstop line; the second still delivered.
     expect(pushMock).toHaveBeenCalledTimes(2);
-    expect(pushMock).toHaveBeenLastCalledWith(expect.objectContaining({ achName: MAPPED_ACH_2 }));
+    expect(pushMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ achNames: [MAPPED_ACH_2] }),
+    );
     const backstopLines = warn.mock.calls
       .map((call) => String(call[0]))
       .filter((line) => line.includes('push attempt threw unexpectedly'));
     expect(backstopLines).toEqual([
-      `steam mirror: dropping unlock ${MAPPED_ACH}, push attempt threw unexpectedly`,
+      'steam mirror: dropping 1 unlock(s), push attempt threw unexpectedly',
     ]);
   });
 
@@ -480,7 +519,7 @@ describe('push-time revalidation read resilience', () => {
     expect(dropLines).toHaveLength(1);
     // One fixed line, no URL, no body, no key (the module's log contract).
     expect(dropLines[0]).toBe(
-      `steam mirror: dropping unlock ${MAPPED_ACH}, link revalidation read failed twice`,
+      'steam mirror: dropping 1 unlock(s), link revalidation read failed twice',
     );
   });
 });
@@ -544,7 +583,7 @@ describe('reconcile-on-login: the durable heal for a dropped push', () => {
     expect(earnedMock).toHaveBeenCalledWith(ACCOUNT_ID);
     expect(pushMock).toHaveBeenCalledTimes(1);
     expect(pushMock).toHaveBeenCalledWith(
-      expect.objectContaining({ steamId: STEAM_ID, achName: MAPPED_ACH }),
+      expect.objectContaining({ steamId: STEAM_ID, achNames: [MAPPED_ACH] }),
     );
   });
 
@@ -583,43 +622,263 @@ describe('reconcile-on-login: the durable heal for a dropped push', () => {
     expect(pushMock).not.toHaveBeenCalled();
   });
 
-  it('sweeps expired throttle stamps once the map outgrows the bound', async () => {
+  it('a transient earned-read failure clears the stamp so the next login retries (not throttled 6h)', async () => {
+    enableSteam();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    // The link resolves, but the earned read rejects once: the stamp taken
+    // before the read must be cleared so a retry at the same instant re-reads.
+    earnedMock.mockRejectedValueOnce(new Error('transient blip'));
+    reconcileOnLogin(ACCOUNT_ID);
+    await settle();
+    expect(earnedMock).toHaveBeenCalledTimes(1);
+    // A second login at the SAME fake now: the failure did not burn the throttle.
+    earnedMock.mockResolvedValue([MAPPED_DEED]);
+    reconcileOnLogin(ACCOUNT_ID);
+    await settle();
+    expect(earnedMock).toHaveBeenCalledTimes(2);
+    expect(pushMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('a transient link-read failure clears the stamp so the next login retries', async () => {
+    enableSteam();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    // The link read itself rejects: reconcile reads the link DIRECTLY (not via
+    // the error-swallowing cache), so the rejection reaches the catch and clears
+    // the stamp rather than looking like a genuine unlink that keeps it.
+    linkMock.mockRejectedValueOnce(new Error('db down'));
+    reconcileOnLogin(ACCOUNT_ID);
+    await settle();
+    expect(earnedMock).not.toHaveBeenCalled();
+    // Retry at the same fake now re-reads and, now healthy, enqueues.
+    linkMock.mockResolvedValue({ steamId: STEAM_ID });
+    earnedMock.mockResolvedValue([MAPPED_DEED]);
+    reconcileOnLogin(ACCOUNT_ID);
+    await settle();
+    expect(earnedMock).toHaveBeenCalledTimes(1);
+    expect(pushMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('a RESOLVED unlinked account keeps its stamp: a second login inside the TTL does not re-read', async () => {
+    enableSteam();
+    // steamId resolves null (a genuine unlink, not a read failure): the stamp is
+    // deliberately kept so a relink-then-reconnect burst cannot hammer the reads.
+    linkMock.mockResolvedValue(null);
+    reconcileOnLogin(ACCOUNT_ID);
+    await settle();
+    expect(linkMock).toHaveBeenCalledTimes(1);
+    reconcileOnLogin(ACCOUNT_ID);
+    await settle();
+    expect(linkMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not re-run the full sweep per insert while nothing has expired', async () => {
     enableSteam();
     linkMock.mockResolvedValue(null);
-    // Unlinked accounts still take a stamp (by design), which makes filling
-    // the map cheap here.
+    // Unlinked accounts still take a stamp (by design), which fills the map
+    // cheaply. Filling to the base bound crosses no sweep yet (the trigger is
+    // the NEXT insert once size >= threshold).
     for (let acct = 1; acct <= RECONCILE_STAMP_SWEEP_SIZE; acct++) reconcileOnLogin(acct);
     await settle();
     expect(reconcileStampCountForTests()).toBe(RECONCILE_STAMP_SWEEP_SIZE);
-    // Inside the TTL nothing has expired: the bound triggers a sweep that
-    // removes nothing and the map grows past it (a sweep trigger, not a cap).
+    expect(reconcileSweepCountForTests()).toBe(0);
+    // The first insert at the bound sweeps once (frees nothing, all live) and
+    // then backs the threshold off to twice the live size.
     reconcileOnLogin(RECONCILE_STAMP_SWEEP_SIZE + 1);
     await settle();
-    expect(reconcileStampCountForTests()).toBe(RECONCILE_STAMP_SWEEP_SIZE + 1);
-    // Past the TTL every old stamp is dead weight: the next stamp sweeps them
-    // all, leaving only itself.
-    clock += LOGIN_RECONCILE_TTL_MS + 1;
+    expect(reconcileSweepCountForTests()).toBe(1);
+    expect(reconcileSweepThresholdForTests()).toBe(RECONCILE_STAMP_SWEEP_SIZE * 2);
+    // Subsequent inserts stay below the raised threshold: no more O(n) sweeps.
     reconcileOnLogin(RECONCILE_STAMP_SWEEP_SIZE + 2);
+    reconcileOnLogin(RECONCILE_STAMP_SWEEP_SIZE + 3);
     await settle();
+    expect(reconcileSweepCountForTests()).toBe(1);
+  });
+
+  it('past the TTL a sweep reclaims the expired stamps and resets the threshold to the base bound', async () => {
+    enableSteam();
+    linkMock.mockResolvedValue(null);
+    for (let acct = 1; acct <= RECONCILE_STAMP_SWEEP_SIZE; acct++) reconcileOnLogin(acct);
+    await settle();
+    expect(reconcileStampCountForTests()).toBe(RECONCILE_STAMP_SWEEP_SIZE);
+    // Advance past the TTL so every stamp is now dead weight, then the next
+    // insert crosses the base threshold and sweeps them all in one pass.
+    clock += LOGIN_RECONCILE_TTL_MS + 1;
+    reconcileOnLogin(RECONCILE_STAMP_SWEEP_SIZE + 1);
+    await settle();
+    // Only the new stamp survives, and the drop below the base bound restores
+    // the base sweep cadence.
     expect(reconcileStampCountForTests()).toBe(1);
+    expect(reconcileSweepCountForTests()).toBe(1);
+    expect(reconcileSweepThresholdForTests()).toBe(RECONCILE_STAMP_SWEEP_SIZE);
+  });
+});
+
+describe('batching, the outage trip-wire, and bounded shutdown', () => {
+  it("batches an account's whole reconcile set into ONE push carrying every mapped name", async () => {
+    enableSteam();
+    linkMock.mockResolvedValue({ steamId: STEAM_ID });
+    earnedMock.mockResolvedValue([MAPPED_DEED, MAPPED_DEED_2, MAPPED_DEED_3]);
+    reconcileOnLogin(ACCOUNT_ID);
+    await settle();
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(pushMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        steamId: STEAM_ID,
+        achNames: [MAPPED_ACH, MAPPED_ACH_2, MAPPED_ACH_3],
+      }),
+    );
+  });
+
+  it('groups by account: interleaved reconciles for two accounts yield one batch each, never merged', async () => {
+    enableSteam();
+    const ACCOUNT_B = ACCOUNT_ID + 1;
+    linkMock.mockImplementation(async (acct: number) =>
+      acct === ACCOUNT_B ? { steamId: OLD_STEAM_ID } : { steamId: STEAM_ID },
+    );
+    earnedMock.mockImplementation(async (acct: number) =>
+      acct === ACCOUNT_B ? [MAPPED_DEED_2] : [MAPPED_DEED, MAPPED_DEED_3],
+    );
+    reconcileOnLogin(ACCOUNT_ID);
+    reconcileOnLogin(ACCOUNT_B);
+    await settle();
+    expect(pushMock).toHaveBeenCalledTimes(2);
+    const calls = pushMock.mock.calls.map((c) => c[0]);
+    expect(calls).toContainEqual(
+      expect.objectContaining({ steamId: STEAM_ID, achNames: [MAPPED_ACH, MAPPED_ACH_3] }),
+    );
+    expect(calls).toContainEqual(
+      expect.objectContaining({ steamId: OLD_STEAM_ID, achNames: [MAPPED_ACH_2] }),
+    );
+  });
+
+  it('head-of-line bound: one exhausted ladder per account, then the trip-wire fast-drops the rest', async () => {
+    enableSteam();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // Pin the ladder cap and the trip threshold as literals (the counts below
+    // are derived from them, so a drifted constant must not read as green).
+    expect(MAX_PUSH_ATTEMPTS).toBe(4);
+    expect(OUTAGE_TRIP_BATCHES).toBe(2);
+    pushMock.mockResolvedValue(false); // Steam is down: every push fails.
+    const A = ACCOUNT_ID;
+    const B = ACCOUNT_ID + 1;
+    const C = ACCOUNT_ID + 2;
+    linkMock.mockResolvedValue({ steamId: STEAM_ID });
+    earnedMock.mockImplementation(async (acct: number) =>
+      acct === A ? [MAPPED_DEED, MAPPED_DEED_2] : acct === B ? [MAPPED_DEED_3] : [MAPPED_DEED_4],
+    );
+    reconcileOnLogin(A);
+    reconcileOnLogin(B);
+    reconcileOnLogin(C);
+    await settle();
+    const names = pushMock.mock.calls.map((c) => c[0].achNames);
+    // Account A is ONE exhausted ladder (its batch pushed MAX_PUSH_ATTEMPTS
+    // times), then account B is the second exhausted ladder.
+    expect(names.slice(0, MAX_PUSH_ATTEMPTS)).toEqual(
+      Array(MAX_PUSH_ATTEMPTS).fill([MAPPED_ACH, MAPPED_ACH_2]),
+    );
+    expect(names.slice(MAX_PUSH_ATTEMPTS, MAX_PUSH_ATTEMPTS * 2)).toEqual(
+      Array(MAX_PUSH_ATTEMPTS).fill([MAPPED_ACH_3]),
+    );
+    expect(pushMock).toHaveBeenCalledTimes(MAX_PUSH_ATTEMPTS * 2);
+    // The trip-wire fast-dropped account C entirely: it was never pushed.
+    expect(names.flat()).not.toContain(MAPPED_ACH_4);
+    const tripLines = warn.mock.calls
+      .map((c) => String(c[0]))
+      .filter((l) => l.includes('Steam unreachable'));
+    expect(tripLines).toHaveLength(1);
+  });
+
+  it('drops a whole batch (zero pushes) when the revalidated steam id differs from the queued id', async () => {
+    enableSteam();
+    // The link now names a DIFFERENT id than the reconcile queued for (a relink
+    // landed): the per-attempt revalidation drops the ENTIRE batch, unpushed.
+    linkMock.mockResolvedValue({ steamId: OLD_STEAM_ID });
+    earnedMock.mockResolvedValue([MAPPED_DEED, MAPPED_DEED_2]);
+    reconcileLink(ACCOUNT_ID, STEAM_ID);
+    await settle();
+    expect(pushMock).not.toHaveBeenCalled();
+  });
+
+  it('shutdown races the drain against the deadline and reports the residual when the deadline wins', async () => {
+    enableSteam();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // A push that never resolves: the drain parks forever on the in-flight batch.
+    pushMock.mockImplementation(() => new Promise<boolean>(() => {}));
+    // A controllable deadline delay so the test decides when it elapses.
+    let fireDeadline: () => void = () => {};
+    delayMock.mockImplementation(
+      () =>
+        new Promise<void>((resolve) => {
+          fireDeadline = resolve;
+        }),
+    );
+    linkMock.mockResolvedValue({ steamId: STEAM_ID });
+    // Two accounts: one batch parks in flight, one stays queued -> residual > 0.
+    onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
+    onDeedRecorded(ACCOUNT_ID + 1, MAPPED_DEED_2);
+    for (let i = 0; i < 10; i++) await Promise.resolve();
+    const stop = stopSteamMirror(5000);
+    let resolved = false;
+    void stop.then(() => {
+      resolved = true;
+    });
+    await Promise.resolve();
+    // Neither the drain (parked) nor the deadline (not fired) has settled.
+    expect(resolved).toBe(false);
+    fireDeadline();
+    await stop;
+    const residualLines = warn.mock.calls
+      .map((c) => String(c[0]))
+      .filter((l) => l.includes('shutdown deadline reached'));
+    expect(residualLines).toHaveLength(1);
+    expect(residualLines[0]).toMatch(/[1-9]\d* unlock\(s\) undelivered/);
+  });
+
+  it('under shutdown a failing push skips the retry ladder and the backoff sleeps', async () => {
+    enableSteam();
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // Park the first push so shutdown begins while it is in flight.
+    let releasePush: (ok: boolean) => void = () => {};
+    pushMock.mockImplementationOnce(
+      () =>
+        new Promise<boolean>((resolve) => {
+          releasePush = resolve;
+        }),
+    );
+    pushMock.mockResolvedValue(false);
+    linkMock.mockResolvedValue({ steamId: STEAM_ID });
+    onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
+    for (let i = 0; i < 10; i++) await Promise.resolve();
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    // Enter shutdown (instant deadline), then fail the in-flight push.
+    await stopSteamMirror(0);
+    releasePush(false);
+    await settle();
+    // shuttingDown short-circuited the ladder: no attempt 2, and no backoff sleep
+    // (the only delay call is the shutdown deadline itself, never a backoff).
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(delayMock.mock.calls.map((c) => c[0])).not.toContain(PUSH_BACKOFF_BASE_MS);
   });
 });
 
 describe('server/main.ts shutdown drains the mirror queue', () => {
   // Source scan (main.ts builds a pg pool at load, so it is never imported):
   // an unlock still queued in the mirror's in-memory FIFO at shutdown would be
-  // lost on pool.end(), so the drain must await steamMirrorIdle() alongside the
+  // lost on pool.end(), so the drain must call stopSteamMirror (which flips the
+  // shutdown flag and races the drain tail against a deadline) alongside the
   // other FIFO drains, right after the deeds-records drain and before the lease
   // sweep that lets a replacement process reload the same characters.
   const src = readFileSync(new URL('../../server/main.ts', import.meta.url), 'utf8');
 
-  it('awaits steamMirrorIdle after deedRecordsIdle and before the lease sweep', () => {
-    expect(src).toContain('await steamMirrorIdle();');
+  it('awaits stopSteamMirror(5000) after deedRecordsIdle and before the lease sweep', () => {
+    // The bounded-deadline shutdown, pinned to the 5s literal: a stuck upstream
+    // must never hang the process shutdown.
+    expect(src).toContain('await stopSteamMirror(5000);');
     const deedIdle = src.indexOf('await deedRecordsIdle();');
-    const steamIdle = src.indexOf('await steamMirrorIdle();');
+    const stopMirror = src.indexOf('await stopSteamMirror(5000);');
     const leaseSweep = src.indexOf('releaseAllCharacterLeases(');
     expect(deedIdle).toBeGreaterThan(-1);
-    expect(steamIdle).toBeGreaterThan(deedIdle);
-    expect(leaseSweep).toBeGreaterThan(steamIdle);
+    expect(stopMirror).toBeGreaterThan(deedIdle);
+    expect(leaseSweep).toBeGreaterThan(stopMirror);
   });
 });

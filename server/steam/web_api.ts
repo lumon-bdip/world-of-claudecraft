@@ -43,17 +43,20 @@ export async function verifyLinkTicket(
   return verdict;
 }
 
-/** POST one achievement unlock to Steam. True on a 2xx, false otherwise; the
- *  mirror worker owns retries and gives up quietly (reconcile heals later). */
-export async function pushAchievementUnlock(
-  opts: { key: string; appId: number; steamId: string; achName: string },
+/** POST a batch of achievement unlocks for one account+steamId in ONE
+ *  SetUserStatsForGame call (name[i]/value[i] pairs). True on a 2xx, false
+ *  otherwise; the mirror worker owns retries and gives up quietly (reconcile
+ *  heals later). Batching lets the mirror flush a whole account's reconcile
+ *  set in a single request instead of one per unlock. */
+export async function pushAchievementUnlocks(
+  opts: { key: string; appId: number; steamId: string; achNames: readonly string[] },
   fetchImpl: typeof fetch = fetch,
 ): Promise<boolean> {
   const { url, body } = buildSetAchievementRequest({
     key: opts.key,
     appId: opts.appId,
     steamId: opts.steamId,
-    achNames: [opts.achName],
+    achNames: opts.achNames,
   });
   try {
     const res = await fetchImpl(url, {
@@ -66,4 +69,16 @@ export async function pushAchievementUnlock(
   } catch {
     return false;
   }
+}
+
+/** POST one achievement unlock to Steam. Thin single-name wrapper over
+ *  pushAchievementUnlocks; kept for callers that unlock exactly one deed. */
+export async function pushAchievementUnlock(
+  opts: { key: string; appId: number; steamId: string; achName: string },
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  return pushAchievementUnlocks(
+    { key: opts.key, appId: opts.appId, steamId: opts.steamId, achNames: [opts.achName] },
+    fetchImpl,
+  );
 }

@@ -138,8 +138,22 @@ export async function displaceSteamLink(
       // A concurrent request beat this transaction to the INSERT. Classify which
       // uniqueness lost the race the same way insertSteamLink does; nothing was
       // written, so no link was displaced either.
-      const mine = await steamLinkForAccount(newAccountId);
-      return { result: mine ? 'account_linked' : 'steam_taken', displacedAccountId: null };
+      //
+      // Classify on the ALREADY-HELD client, never a fresh pool.query: this arm
+      // is only reached on a clean server-side 23505 followed by a successful
+      // ROLLBACK, so the connection is healthy and idle. Riding the pool here
+      // (steamLinkForAccount is pool.query) would check out a SECOND connection
+      // while this one is still held until the finally; two concurrent identical
+      // reclaims drive the second into this catch, and ~10 concurrent conflicters
+      // would then hold one connection each while waiting for another, exhausting
+      // the shared max-10 pool (no connection timeout) and wedging the realm.
+      const mine = await client.query('SELECT 1 FROM steam_links WHERE account_id = $1', [
+        newAccountId,
+      ]);
+      return {
+        result: mine.rows.length > 0 ? 'account_linked' : 'steam_taken',
+        displacedAccountId: null,
+      };
     }
     throw err;
   } finally {

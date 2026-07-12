@@ -88,16 +88,19 @@ describe('displaceSteamLink', () => {
   it("never deletes the caller's own row: a self-owned id skips the DELETE and re-classifies the 23505 as account_linked", async () => {
     const client = clientStub();
     dbMock.connect.mockResolvedValue(client as never);
+    // The catch-arm classification runs on the ALREADY-HELD client (a direct
+    // SELECT 1), never a second pool checkout: pool.query must stay untouched
+    // for the whole displace, or a burst of concurrent conflicters could wedge
+    // the shared pool. Make any pool.query during the call an assertion failure.
+    dbMock.query.mockImplementation(() => {
+      throw new Error('pool.query must not be called during displaceSteamLink');
+    });
     client.query
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // BEGIN
-      .mockResolvedValueOnce({ rows: [{ account_id: 7 }], rowCount: 1 } as never) // SELECT: own row
-      .mockRejectedValueOnce(uniqueViolation()); // INSERT trips the PK
-    // The catch-arm classification read (steamLinkForAccount) rides the pool:
-    // the caller still holds a link, so the race reads as account_linked.
-    dbMock.query.mockResolvedValueOnce({
-      rows: [{ account_id: 7, steam_id: STEAM_ID, created_at: '2026-07-12T00:00:00Z' }],
-      rowCount: 1,
-    } as never);
+      .mockResolvedValueOnce({ rows: [{ account_id: 7 }], rowCount: 1 } as never) // SELECT FOR UPDATE: own row
+      .mockRejectedValueOnce(uniqueViolation()) // INSERT trips the PK
+      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // ROLLBACK
+      .mockResolvedValueOnce({ rows: [{ '?column?': 1 }], rowCount: 1 } as never); // classification SELECT 1: caller still linked
 
     await expect(displaceSteamLink(7, STEAM_ID)).resolves.toEqual({
       result: 'account_linked',
@@ -105,25 +108,79 @@ describe('displaceSteamLink', () => {
     });
     const texts = client.query.mock.calls.map((c) => String(c[0]));
     expect(texts.some((t) => /DELETE/.test(t))).toBe(false);
-    expect(texts).toContain('ROLLBACK');
+    // Classification rode the held client, after the ROLLBACK, never the pool.
+    expect(dbMock.query).not.toHaveBeenCalled();
+    const rollbackIdx = texts.indexOf('ROLLBACK');
+    const classifyIdx = texts.findIndex((t) =>
+      /SELECT 1 FROM steam_links WHERE account_id = \$1/.test(t),
+    );
+    expect(rollbackIdx).toBeGreaterThan(-1);
+    expect(classifyIdx).toBeGreaterThan(rollbackIdx);
+    expect(client.query.mock.calls[classifyIdx][1]).toEqual([7]);
     expect(client.release).toHaveBeenCalledTimes(1);
   });
 
   it('re-classifies a lost concurrent race as steam_taken when the caller ends up unlinked', async () => {
     const client = clientStub();
     dbMock.connect.mockResolvedValue(client as never);
+    dbMock.query.mockImplementation(() => {
+      throw new Error('pool.query must not be called during displaceSteamLink');
+    });
     client.query
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // BEGIN
-      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // SELECT: unclaimed
-      .mockRejectedValueOnce(uniqueViolation()); // a racer's INSERT landed first
-    dbMock.query.mockResolvedValueOnce({ rows: [], rowCount: 0 } as never); // caller unlinked
+      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // SELECT FOR UPDATE: unclaimed
+      .mockRejectedValueOnce(uniqueViolation()) // a racer's INSERT landed first
+      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // ROLLBACK
+      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never); // classification SELECT 1: caller unlinked
 
     await expect(displaceSteamLink(7, STEAM_ID)).resolves.toEqual({
       result: 'steam_taken',
       displacedAccountId: null,
     });
     const texts = client.query.mock.calls.map((c) => String(c[0]));
-    expect(texts).toContain('ROLLBACK');
+    expect(dbMock.query).not.toHaveBeenCalled();
+    const rollbackIdx = texts.indexOf('ROLLBACK');
+    const classifyIdx = texts.findIndex((t) =>
+      /SELECT 1 FROM steam_links WHERE account_id = \$1/.test(t),
+    );
+    expect(rollbackIdx).toBeGreaterThan(-1);
+    expect(classifyIdx).toBeGreaterThan(rollbackIdx);
+    expect(client.release).toHaveBeenCalledTimes(1);
+  });
+
+  it('classification never rides the pool: pool.query stays idle while a client checkout is outstanding', async () => {
+    // The BLOCKER this pins: the old classification called steamLinkForAccount
+    // (pool.query) inside the catch while STILL holding the transaction client,
+    // so ~10 concurrent conflicters would each hold one connection while waiting
+    // for a second, exhausting the shared pool. Count outstanding checkouts and
+    // fail if pool.query ever runs while one is live.
+    let outstanding = 0;
+    const client = clientStub();
+    client.release.mockImplementation(() => {
+      outstanding--;
+    });
+    dbMock.connect.mockImplementation(async () => {
+      outstanding++;
+      return client as never;
+    });
+    dbMock.query.mockImplementation(() => {
+      if (outstanding > 0) {
+        throw new Error('pool.query rode the pool while a client was checked out');
+      }
+      return { rows: [], rowCount: 0 } as never;
+    });
+    client.query
+      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // BEGIN
+      .mockResolvedValueOnce({ rows: [{ account_id: 7 }], rowCount: 1 } as never) // SELECT FOR UPDATE: own row
+      .mockRejectedValueOnce(uniqueViolation()) // INSERT trips the PK
+      .mockResolvedValueOnce({ rows: [], rowCount: 0 } as never) // ROLLBACK
+      .mockResolvedValueOnce({ rows: [{ '?column?': 1 }], rowCount: 1 } as never); // classification SELECT 1
+
+    await expect(displaceSteamLink(7, STEAM_ID)).resolves.toEqual({
+      result: 'account_linked',
+      displacedAccountId: null,
+    });
+    expect(dbMock.query).not.toHaveBeenCalled();
     expect(client.release).toHaveBeenCalledTimes(1);
   });
 
