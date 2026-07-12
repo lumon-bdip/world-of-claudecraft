@@ -63,12 +63,83 @@ See also the deferred section in `docs/design/deeds.md`.
 - Deed titles deliberately do not render yet on party/raid frames, mail
   sender lines, chat bubbles, or the localized OG card page.
 
+## Rollback
+
+Rolling the server binary back past this feature is the one direction the
+deeds persistence cannot heal itself from (the `server/deeds_records.ts`
+header comment calls this out): the base serializer reconstructs only the
+fields it knows, so the FIRST save a pre-deeds binary makes strips `deeds`,
+`deedStats`, `activeTitle`, and `renown` from that character's
+`characters.state` blob. Before rolling back, snapshot the characters table:
+
+```sh
+pg_dump "$DATABASE_URL" --table=characters --format=custom \
+  --file=characters-pre-deeds-rollback.dump
+```
+
+What survives a base-binary save:
+
+- The legacy `unlockedMilestones` dual-write: new grants keep writing the
+  legacy ids for exactly this insurance (the one-release retirement window
+  in the follow-up chores below), so every milestone-unified deed re-derives
+  from it on re-upgrade.
+- The `character_deeds` rows (deed_id plus earned_at per character): a base
+  binary rewrites only the state blob, never the table. These rows are the
+  seed for a manual blob restore: they enumerate exactly which ids each
+  character had earned, and when.
+- Everything a state predicate can prove: on re-upgrade the join path
+  re-derives it (unionLegacyMilestones, recomputeRenown, seedItemDiscovery,
+  retroFallbackGrants, then the full evaluateDeedsFor retro pass, all wired
+  in `src/sim/sim.ts`).
+
+Genuinely unrecoverable once a base binary saves a character:
+
+- The deedStats lifetime counters.
+- The per-deed earn-day stamps (the utcDay values in the persisted `deeds`
+  map; a retro re-grant stamps the current day, not the original).
+- The persisted activeTitle pick.
+- Event-witnessed deeds no state predicate can re-prove: the retro pass can
+  only grant what the surviving blob demonstrates.
+
+Safe re-upgrade path: restore blobs from the snapshot where you have one,
+then let the join path re-derive the rest; renown recomputes from the
+earned map on every load, so it never needs hand-repair. For characters
+that saved under the base binary with no snapshot, `character_deeds` is the
+recovery seed: their earned ids are still known even though the blob no
+longer carries them, so a restore script can rebuild the `deeds` map from
+the table (earn days, deedStats, and activeTitle stay lost).
+
+### Rollout population
+
+`character_deeds` fills lazily, and that is the accepted launch semantic.
+Rows arrive from three sources only (live unlocks, the login reconcile, and
+the login retro pass); nothing walks dormant characters. The rarity
+denominator (`deedRarityCounts` in `server/deeds_db.ts`) counts every
+eligible character (level 5 or above, state present, eligible account), so
+immediately post-rollout every rarity percentage reads near zero, and
+dormant veterans dilute the numbers until they log in. The Renown board
+likewise shows only characters that have rows. This self-heals as the
+active population logs in, and the public wording already matches it: a
+dormant-forever character was never GRANTED its deeds, so the aggregates'
+earned framing stays literally true.
+
+If launch-accurate rarity is wanted on day one, a deterministic one-shot
+backfill is feasible and is the named follow-up: iterate the eligible
+characters, run each state blob through the same Sim join retro evaluation,
+and batch the results through insertCharacterDeeds (already idempotent);
+never write blobs back. Follow the `server/market_backfill.ts` marker
+pattern (a completion marker row so re-runs no-op). Its risks, and why it
+is a follow-up rather than in this branch: every backfilled row gets a
+run-time earned_at stamp, which compresses the Renown board's
+completionTime tie-break (score-then-earliest collapses to the backfill
+timestamp for everyone it touches); the public rarity numbers jump visibly
+when it runs; and boot-time placement would be far too heavy, so it runs
+script-driven, off-peak only.
+
 ## Follow-up chores (none blocking)
 
 - Retire the unlockedMilestones dual-write after one release (rollback
   insurance only).
-- A character_deeds login-time reconcile would close the dropped-insert
-  drift edge.
 - Wiki-bundle severance: the shared icons chunk bakes deed descriptions,
   hidden names, and boss names, and entity-English also rides the per-locale
   resolved chunks; consuming the catalog at build time closes both and
