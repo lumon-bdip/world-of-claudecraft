@@ -139,6 +139,15 @@ function enqueue(item: PushItem): void {
         if (!next) break;
         try {
           await attemptPush(next);
+        } catch {
+          // attemptPush handles its known failure modes itself; this backstop
+          // exists so one unexpectedly-throwing item can never turn the drain
+          // promise into an unhandled rejection (process-fatal under Node
+          // defaults) and wedge every queued push behind it. Same contract as
+          // any other drop: one fixed line, reconcile-on-link heals the gap.
+          console.warn(
+            `steam mirror: dropping unlock ${next.achName}, push attempt threw unexpectedly`,
+          );
         } finally {
           pending.delete(pushKey(next));
         }

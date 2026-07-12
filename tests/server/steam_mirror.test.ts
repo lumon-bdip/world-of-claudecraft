@@ -408,6 +408,28 @@ describe('push-time revalidation read resilience', () => {
     expect(linkMock).toHaveBeenCalledTimes(3);
   });
 
+  it('a push attempt that THROWS drops that item with one warn and never wedges the drain', async () => {
+    // pushUnlock's contract is resolve-boolean, but the drain must survive a
+    // contract breach: without the backstop the rejection becomes an unhandled
+    // rejection (process-fatal under Node defaults) and every queued item
+    // behind it stalls until some future enqueue restarts the worker.
+    enableSteam();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    pushMock.mockRejectedValueOnce(new Error('contract breach'));
+    onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
+    onDeedRecorded(ACCOUNT_ID, MAPPED_DEED_2);
+    await settle();
+    // The first item dropped with the backstop line; the second still delivered.
+    expect(pushMock).toHaveBeenCalledTimes(2);
+    expect(pushMock).toHaveBeenLastCalledWith(expect.objectContaining({ achName: MAPPED_ACH_2 }));
+    const backstopLines = warn.mock.calls
+      .map((call) => String(call[0]))
+      .filter((line) => line.includes('push attempt threw unexpectedly'));
+    expect(backstopLines).toEqual([
+      `steam mirror: dropping unlock ${MAPPED_ACH}, push attempt threw unexpectedly`,
+    ]);
+  });
+
   it('drops with one warn line, never silently, when the revalidation read fails twice', async () => {
     enableSteam();
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
