@@ -2,8 +2,9 @@
 // the meta fixpoint, Fiesta standardization safety, retro-on-join credit,
 // milestone unification, persistence round-trips, and determinism.
 import { describe, expect, it } from 'vitest';
+import { DEED_ORDER, DEEDS } from '../src/sim/content/deeds';
 import { emptyAllocation } from '../src/sim/content/talents';
-import { DEED_ORDER, DEEDS, ITEMS } from '../src/sim/data';
+import { ITEMS } from '../src/sim/data';
 import {
   bumpDeedStat,
   checkDeedTrigger,
@@ -11,12 +12,13 @@ import {
   grantDeed,
   markItemDiscovered,
   markVisited,
+  onDungeonFinalBossKilledForDeeds,
   onFishCaughtForDeeds,
   restoreDeedStats,
 } from '../src/sim/deeds';
 import { type CharacterState, Sim } from '../src/sim/sim';
 import * as duelMod from '../src/sim/social/duel';
-import { MAX_LEVEL, MILESTONES, type SimEvent } from '../src/sim/types';
+import { type Entity, MAX_LEVEL, MILESTONES, type SimEvent } from '../src/sim/types';
 
 function makeSim(seed = 42): Sim {
   return new Sim({ seed, playerClass: 'warrior', autoEquip: false });
@@ -518,6 +520,25 @@ describe('retro on join', () => {
     expect(pmeta.deedsEarned.has('dgn_nythraxis_crypt')).toBe(false);
   });
 
+  it('an equipped instance with a rolled quality seeds the quality-first marks on join', () => {
+    // A veteran whose only rare is worn (the crafted instance moved from the
+    // bags into equipmentInstance) must keep the rare-first credit at join.
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'RolledVet', {
+      state: {
+        ...veteranState(),
+        inventory: [],
+        equipment: { mainhand: 'redbrook_blade' },
+        equipmentInstance: { mainhand: { rolled: { quality: 'rare' } } },
+      },
+    });
+    const meta = sim.players.get(pid)!;
+    expect(meta.deedStats.itemsDiscovered.has('redbrook_blade')).toBe(true);
+    expect(meta.deedStats.visited.has('quality:rare')).toBe(true);
+    expect(meta.deedsEarned.has('col_first_rare')).toBe(true);
+    expect(meta.deedsEarned.has('col_first_epic')).toBe(false);
+  });
+
   it('the retro pass is a pure function of the loaded state and the catalog', () => {
     const a = new Sim({ seed: 7, playerClass: 'mage' });
     const b = new Sim({ seed: 7, playerClass: 'mage' });
@@ -694,6 +715,38 @@ describe('persistence', () => {
     const m2 = sim2.players.get(pid)!;
     expect(m2.deedStats.itemsDiscovered.has('heroic_boundstone_helm')).toBe(true);
     expect(m2.deedStats.itemsDiscovered.has('boundstone_helm')).toBe(true);
+  });
+
+  it('the join seed covers the vendor buyback list, and a repurchase credits discovery', () => {
+    const sim = makeSim();
+    const state: CharacterState = {
+      level: 20,
+      xp: 0,
+      copper: 1000,
+      hp: 30,
+      resource: 0,
+      pos: { x: 2, z: -2 },
+      facing: 0,
+      equipment: {},
+      inventory: [],
+      questLog: [],
+      questsDone: [],
+      vendorBuyback: [{ itemId: 'wolf_fang', count: 1 }],
+    };
+    const pid = sim.addPlayer('warrior', 'BuybackVet', { state });
+    const meta = sim.players.get(pid)!;
+    // A pre-ledger save whose only copy sits in the buyback list was once
+    // possessed: the join seed credits it.
+    expect(meta.deedStats.itemsDiscovered.has('wolf_fang')).toBe(true);
+
+    // The repurchase path credits on its own, so a future seed refactor
+    // cannot silently reopen the gap: clear the mark and buy the item back.
+    meta.deedStats.itemsDiscovered.delete('wolf_fang');
+    const wilkes = [...sim.entities.values()].find((e) => e.templateId === 'trader_wilkes')!;
+    sim.entities.get(pid)!.pos = { x: wilkes.pos.x + 2, y: wilkes.pos.y, z: wilkes.pos.z };
+    sim.buyBackItem('wolf_fang', pid);
+    expect(sim.countItem('wolf_fang', pid)).toBe(1);
+    expect(meta.deedStats.itemsDiscovered.has('wolf_fang')).toBe(true);
   });
 
   it('the discovery ledger rejects ids that are not real items', () => {
@@ -1097,6 +1150,30 @@ describe('site wiring (real modules, not direct bumps)', () => {
     expect(sim.players.get(b)!.deedStats.counters.partiesJoined).toBe(1);
     sim.tick();
     expect(sim.players.get(b)!.deedsEarned.has('soc_first_party')).toBe(true);
+  });
+
+  it('fullPartyDungeonClears needs all five roster members in the kill-credit snapshot', () => {
+    const sim = makeSim();
+    const a = sim.playerId;
+    const others = ['Ana', 'Bern', 'Cato', 'Dita'].map((n) => sim.addPlayer('warrior', n));
+    for (const pid of others) {
+      sim.ctx.partyInvite(pid, a);
+      sim.partyAccept(pid);
+    }
+    const metas = [a, ...others].map((pid) => sim.players.get(pid)!);
+    const boss = { templateId: 'morthen' } as Entity;
+
+    // Four members parked out of XP range: the roster is five but the
+    // participating snapshot is one, so the full-party stat must not bump.
+    onDungeonFinalBossKilledForDeeds(sim.ctx, boss, undefined, [metas[0]]);
+    expect(metas[0].deedStats.counters.fullPartyDungeonClears).toBe(0);
+    expect(metas[0].deedStats.dungeonClears.hollow_crypt).toBe(1); // the clear itself counts
+
+    // All five in the snapshot: every member records the full-party clear.
+    onDungeonFinalBossKilledForDeeds(sim.ctx, boss, undefined, metas);
+    for (const m of metas) expect(m.deedStats.counters.fullPartyDungeonClears).toBe(1);
+    sim.tick();
+    for (const m of metas) expect(m.deedsEarned.has('soc_full_house')).toBe(true);
   });
 });
 

@@ -41,8 +41,10 @@ import {
   type DeedTrigger,
   dist2d,
   type Entity,
+  type EquipSlot,
   type ItemDef,
   MAX_LEVEL,
+  NYTHRAXIS_ROOM_RADIUS,
   type PlayerClass,
 } from './types';
 
@@ -111,14 +113,24 @@ const BELL_TASKS: Record<string, string> = {
   sister_nhalia_drowned_canticle: 'dlv_nhalia_bells',
 };
 
-// Roster-restriction task: at most 3 unique players appear in the boss's
-// participant set (threat/damager credit, pet damage credits the owner).
+// Roster-restriction task: at most 3 unique players field the attempt, counted
+// as the union of the boss's damager set (pet damage credits the owner) and
+// the recipient envelope at the kill, so a present healer or taunt-only tank
+// counts against the cap too.
 const TRIO_TASKS: Record<string, string> = {
   morthen: 'dgn_morthen_trio',
 };
 
 // Templates whose encounters need per-attempt tracking at the damage site.
 const PARTICIPANT_TRACKED = new Set(Object.keys(TRIO_TASKS));
+
+// Bosses whose encounter tasks span a room wider than the generic 120x250
+// instance band: the death taint and the task recipients use the boss's own
+// room radius around its spawn (the same contract the encounter uses for
+// targeting, wipes, and kill credit), never the band.
+const ENCOUNTER_ROOM_RADIUS: Record<string, number> = {
+  nythraxis_scourge_of_thornpeak: NYTHRAXIS_ROOM_RADIUS,
+};
 
 const THUNZHARR_ID = 'thunzharr_waking_peak';
 const WOLF_PACK_TEMPLATE = 'forest_wolf';
@@ -923,7 +935,8 @@ export function recomputeRenown(meta: PlayerMeta): void {
 }
 
 /** Seed the discovery ledger from what the character already holds (bags,
- *  bank, equipment), so veterans keep credit for what they still own. Runs on
+ *  bank, equipment, and the vendor buyback list, whose entries were all once
+ *  possessed), so veterans keep credit for what they still own. Runs on
  *  every join; the set only grows, so re-seeding is idempotent. */
 export function seedItemDiscovery(ctx: SimContext, meta: PlayerMeta): void {
   for (const slot of meta.inventory) {
@@ -932,11 +945,18 @@ export function seedItemDiscovery(ctx: SimContext, meta: PlayerMeta): void {
   for (const slot of meta.bank.inventory) {
     markItemDiscovered(ctx, meta, slot.itemId, slot.instance?.rolled?.quality);
   }
-  for (const itemId of Object.values(meta.equipment)) {
-    if (itemId) markItemDiscovered(ctx, meta, itemId);
+  for (const [slot, itemId] of Object.entries(meta.equipment) as [
+    EquipSlot,
+    string | undefined,
+  ][]) {
+    if (itemId)
+      markItemDiscovered(ctx, meta, itemId, meta.equipmentInstance[slot]?.rolled?.quality);
   }
   for (const bagId of meta.bags) {
     if (bagId) markItemDiscovered(ctx, meta, bagId);
+  }
+  for (const slot of meta.vendorBuyback) {
+    markItemDiscovered(ctx, meta, slot.itemId);
   }
 }
 
@@ -1001,15 +1021,27 @@ export function onPlayerDeathForDeeds(ctx: SimContext, e: Entity): void {
   }
   // Perfection windows: a player death inside a tracked boss's instance while
   // that boss is engaged taints the attempt (the window re-arms on evade or
-  // respawn via resetDeedEncounter).
+  // respawn via resetDeedEncounter). The position test is per boss: a boss
+  // with a room radius uses it (the Nythraxis arena interior is wider than
+  // the generic band); every other boss keeps the band.
   for (const inst of ctx.instances) {
     if (inst.partyKey === null) continue;
     const origin = ctx.instanceOriginOf(inst);
-    if (Math.abs(e.pos.x - origin.x) >= 120 || Math.abs(e.pos.z - origin.z) >= 250) continue;
+    const inBand = Math.abs(e.pos.x - origin.x) < 120 && Math.abs(e.pos.z - origin.z) < 250;
     for (const mobId of inst.mobIds) {
       const boss = ctx.entities.get(mobId);
       if (!boss || boss.dead || !FLAWLESS_TASKS[boss.templateId]) continue;
       if (boss.threat.size === 0) continue; // not engaged: no window open
+      const radius = ENCOUNTER_ROOM_RADIUS[boss.templateId];
+      // The room circle is clipped to the slot's own z band: arena slots sit
+      // 500 apart in z with the spawn skewed high, so the raw circle would
+      // reach into the next slot; x needs no clip (the 260 yd reach stays far
+      // inside the 600 yd dungeon spacing).
+      const inRoom =
+        radius !== undefined
+          ? dist2d(e.pos, boss.spawnPos) <= radius && Math.abs(e.pos.z - origin.z) < 250
+          : inBand;
+      if (!inRoom) continue;
       ensureEncounter(ctx, boss.id).deathTainted = true;
     }
   }
@@ -1066,6 +1098,29 @@ function playersInInstance(ctx: SimContext, inst: InstanceSlot): PlayerMeta[] {
   return out;
 }
 
+// Players inside a tracked boss's room radius around its spawn, dead players
+// included (the raid-room MEMBERSHIP standard nythraxisRoomMetas uses for
+// kill credit and the lockout; iteration stays this module's insertion-order
+// convention, and grants are idempotent, so ordering carries no weight).
+// The circle is clipped to the boss slot's own z band so a raider in the
+// adjacent arena slot (500 apart in z, spawn skewed high) never qualifies.
+function playersInRoom(
+  ctx: SimContext,
+  boss: Entity,
+  radius: number,
+  origin: { x: number; z: number },
+): PlayerMeta[] {
+  const out: PlayerMeta[] = [];
+  for (const meta of ctx.players.values()) {
+    const e = ctx.entities.get(meta.entityId);
+    if (!e) continue;
+    if (dist2d(e.pos, boss.spawnPos) <= radius && Math.abs(e.pos.z - origin.z) < 250) {
+      out.push(meta);
+    }
+  }
+  return out;
+}
+
 function instanceForMob(ctx: SimContext, mob: Entity): InstanceSlot | undefined {
   return ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(mob.id));
 }
@@ -1091,7 +1146,12 @@ export function onDungeonFinalBossKilledForDeeds(
     markDeedDirtyKey(ctx, meta.entityId, 'dungeonClears');
     bumpDeedStat(ctx, meta, 'dungeonFinalBossKills', 1);
     const party = ctx.partyOf(meta.entityId);
-    if (party && !party.raid && party.members.length === 5) {
+    if (
+      party &&
+      !party.raid &&
+      party.members.length === 5 &&
+      party.members.every((pid) => recipients.some((r) => r.entityId === pid))
+    ) {
       bumpDeedStat(ctx, meta, 'fullPartyDungeonClears', 1);
     }
   }
@@ -1174,17 +1234,30 @@ export function onMobKillCreditForDeeds(
   }
 
   // Encounter skill tasks resolve at the tracked boss's death; recipients are
-  // every player inside the instance (the encounter-window standard), falling
-  // back to the eligible snapshot outside instances.
+  // every player inside the instance (the encounter-window standard, widened
+  // to the boss's room radius where one is declared), falling back to the
+  // eligible snapshot outside instances.
   const st = ctx.deedRuntime.encounters.get(mob.id);
-  const taskRecipients = inst ? playersInInstance(ctx, inst) : eligible;
+  const roomRadius = ENCOUNTER_ROOM_RADIUS[mob.templateId];
+  const taskRecipients = inst
+    ? roomRadius !== undefined
+      ? playersInRoom(ctx, mob, roomRadius, ctx.instanceOriginOf(inst))
+      : playersInInstance(ctx, inst)
+    : eligible;
   const flawlessDeed = FLAWLESS_TASKS[mob.templateId];
   if (flawlessDeed && inst?.difficulty === 'heroic' && !st?.deathTainted) {
     for (const meta of taskRecipients) grantDeed(ctx, meta, flawlessDeed);
   }
   const trioDeed = TRIO_TASKS[mob.templateId];
-  if (trioDeed && (st?.participants.size ?? 0) <= 3) {
-    for (const meta of taskRecipients) grantDeed(ctx, meta, trioDeed);
+  if (trioDeed) {
+    // The attempt roster is the union of the damager set and the recipient
+    // envelope: an attacker who died and released out of the envelope still
+    // counts, and so does a present non-attacker.
+    const attempt = new Set(st?.participants ?? []);
+    for (const meta of taskRecipients) attempt.add(meta.entityId);
+    if (attempt.size <= 3) {
+      for (const meta of taskRecipients) grantDeed(ctx, meta, trioDeed);
+    }
   }
   const addDeed = ADD_TASKS[mob.templateId];
   if (addDeed) {

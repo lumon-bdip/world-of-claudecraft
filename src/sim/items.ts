@@ -478,6 +478,9 @@ export function buyBackItem(ctx: SimContext, itemId: string, pid?: number): void
   slot.count -= 1;
   if (slot.count <= 0) meta.vendorBuyback = meta.vendorBuyback.filter((s) => s !== slot);
   addItemSilent(itemId, 1, meta);
+  // The silent add bypasses the inventory hub, so credit the discovery
+  // ledger here (an acquisition like any other; the mark is idempotent).
+  ctx.markItemDiscovered(meta, itemId);
   ctx.onInventoryChangedForQuests(meta);
   ctx.emit({ type: 'vendor', action: 'buyback', itemId, pid: meta.entityId });
   ctx.emit({

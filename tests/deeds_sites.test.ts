@@ -222,6 +222,75 @@ describe('encounter mechanical arms (onMobKillCreditForDeeds)', () => {
     expect(t.recipients[0].deedsEarned.has('dgn_nythraxis_deathless')).toBe(false);
   });
 
+  it('dgn_nythraxis_deathless: the 260 yd room radius, not the instance band, bounds taint and credit', () => {
+    // A raider parked in a side wing (arena walls reach local |x| 229) is a
+    // full room member: their death must taint even though the generic 120 yd
+    // band misses them.
+    const taint = makeSim();
+    const t = encounterInstance(
+      taint,
+      'nythraxis_scourge_of_thornpeak',
+      'nythraxis_boss_arena',
+      'heroic',
+      ['Tank', 'Wing'],
+    );
+    const wing = entityOf(taint, t.recipients[1]);
+    wing.pos = { x: wing.pos.x + 150, y: 0, z: wing.pos.z };
+    t.boss.threat.set(t.recipients[1].entityId, 100); // engaged: window open
+    onPlayerDeathForDeeds(taint.ctx, wing);
+    onMobKillCreditForDeeds(taint.ctx, t.boss, null, t.recipients[0], t.recipients);
+    expect(t.recipients[0].deedsEarned.has('dgn_nythraxis_deathless')).toBe(false);
+
+    // On a clean kill the wing raider receives credit with everyone else,
+    // while a player beyond the room radius neither taints nor receives.
+    const clean = makeSim();
+    const c = encounterInstance(
+      clean,
+      'nythraxis_scourge_of_thornpeak',
+      'nythraxis_boss_arena',
+      'heroic',
+      ['Tank', 'Wing', 'Far'],
+    );
+    const cWing = entityOf(clean, c.recipients[1]);
+    cWing.pos = { x: cWing.pos.x + 150, y: 0, z: cWing.pos.z };
+    const far = entityOf(clean, c.recipients[2]);
+    far.pos = { x: far.pos.x + 300, y: 0, z: far.pos.z };
+    c.boss.threat.set(c.recipients[0].entityId, 100);
+    onPlayerDeathForDeeds(clean.ctx, far); // outside the room: no taint
+    onMobKillCreditForDeeds(clean.ctx, c.boss, null, c.recipients[0], c.recipients);
+    expect(c.recipients[0].deedsEarned.has('dgn_nythraxis_deathless')).toBe(true);
+    expect(c.recipients[1].deedsEarned.has('dgn_nythraxis_deathless')).toBe(true);
+    expect(c.recipients[2].deedsEarned.has('dgn_nythraxis_deathless')).toBe(false);
+  });
+
+  it('dgn_nythraxis_deathless: the room circle never crosses into the adjacent arena slot', () => {
+    // Arena slots sit 500 apart in z, so the raw 260 yd circle around this
+    // slot's boss overlaps the next slot's territory. A raider who belongs to
+    // the ADJACENT slot and stands at their own back wall is inside that raw
+    // circle; they must neither taint this slot's attempt nor receive its
+    // deeds.
+    const sim = makeSim();
+    const a = encounterInstance(
+      sim,
+      'nythraxis_scourge_of_thornpeak',
+      'nythraxis_boss_arena',
+      'heroic',
+      ['Tank', 'Healer'],
+    );
+    const originB = instanceOrigin(DUNGEONS.nythraxis_boss_arena.index, 1);
+    const neighbor = addMeta(sim, 'Neighbor');
+    // Inside slot B's own band (245 < 250 from its origin) and inside slot
+    // A's raw circle (500 - 245 = 255 <= 260 from A's boss spawn).
+    entityOf(sim, neighbor).pos = { x: originB.x, y: 0, z: originB.z - 245 };
+
+    a.boss.threat.set(a.recipients[0].entityId, 100); // engaged: window open
+    onPlayerDeathForDeeds(sim.ctx, entityOf(sim, neighbor)); // must not taint slot A
+    onMobKillCreditForDeeds(sim.ctx, a.boss, null, a.recipients[0], a.recipients);
+    expect(a.recipients[0].deedsEarned.has('dgn_nythraxis_deathless')).toBe(true);
+    expect(a.recipients[1].deedsEarned.has('dgn_nythraxis_deathless')).toBe(true);
+    expect(neighbor.deedsEarned.has('dgn_nythraxis_deathless')).toBe(false);
+  });
+
   it('dgn_morthen_trio: at most three participants grants; a fourth blocks', () => {
     const ok = makeSim();
     const boss = spawnMob(ok, 'morthen', { x: 5, y: 0, z: -5 });
@@ -237,6 +306,48 @@ describe('encounter mechanical arms (onMobKillCreditForDeeds)', () => {
       onDamageDealtForDeeds(over.ctx, entityOf(over, m), boss2, 10, false, 'hit');
     onMobKillCreditForDeeds(over.ctx, boss2, null, four[0], four);
     for (const m of four) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
+  });
+
+  it('dgn_morthen_trio: the attempt roster is the union of damagers and the recipient envelope', () => {
+    // Five players inside the instance with only three damaging still field a
+    // five-player attempt: nobody earns the trio deed.
+    const five = makeSim();
+    const f = encounterInstance(five, 'morthen', 'hollow_crypt', 'normal', [
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+    ]);
+    for (const m of f.recipients.slice(0, 3)) {
+      onDamageDealtForDeeds(five.ctx, entityOf(five, m), f.boss, 10, false, 'hit');
+    }
+    onMobKillCreditForDeeds(five.ctx, f.boss, null, f.recipients[0], f.recipients);
+    for (const m of f.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
+
+    // A genuine trio with a present non-attacker (a dedicated healer) still
+    // earns it for all three.
+    const trio = makeSim();
+    const t = encounterInstance(trio, 'morthen', 'hollow_crypt', 'normal', ['A', 'B', 'C']);
+    for (const m of t.recipients.slice(0, 2)) {
+      onDamageDealtForDeeds(trio.ctx, entityOf(trio, m), t.boss, 10, false, 'hit');
+    }
+    onMobKillCreditForDeeds(trio.ctx, t.boss, null, t.recipients[0], t.recipients);
+    for (const m of t.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(true);
+
+    // A fourth damager who leaves the recipient envelope before the kill
+    // still counts against the cap: an envelope-only count would see three.
+    const left = makeSim();
+    const l = encounterInstance(left, 'morthen', 'hollow_crypt', 'normal', ['A', 'B', 'C']);
+    const fourth = addMeta(left, 'D');
+    const fourthEnt = entityOf(left, fourth);
+    fourthEnt.pos = { ...entityOf(left, l.recipients[0]).pos };
+    for (const m of [...l.recipients, fourth]) {
+      onDamageDealtForDeeds(left.ctx, entityOf(left, m), l.boss, 10, false, 'hit');
+    }
+    fourthEnt.pos = { x: fourthEnt.pos.x + 500, y: 0, z: fourthEnt.pos.z };
+    onMobKillCreditForDeeds(left.ctx, l.boss, null, l.recipients[0], l.recipients);
+    for (const m of l.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
   });
 
   it('dgn_vael_thralls: every summoned add dead grants; a live add blocks', () => {

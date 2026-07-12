@@ -45,6 +45,7 @@ import {
   INTERACT_RANGE,
   NYTHRAXIS_ADD_ID,
   NYTHRAXIS_BOSS_ID,
+  NYTHRAXIS_ROOM_RADIUS,
   normAngle,
   OBJECT_RESPAWN,
   type SimEvent,
@@ -58,8 +59,9 @@ const NYTHRAXIS_RELIC_SUMMONS: Record<string, string> = {
   royal_seal: 'deathstalker_voss',
 };
 const _NYTHRAXIS_CRYPT_QUESTS = new Set(['q_nythraxis_sealed_crypt', 'q_nythraxis_bound_guardian']);
-// NYTHRAXIS_BOSS_ID / NYTHRAXIS_ADD_ID live in types.ts (shared with mob/locomotion.ts;
-// the dungeon raid-door seal in instances/dungeons.ts also reads NYTHRAXIS_BOSS_ID).
+// NYTHRAXIS_BOSS_ID / NYTHRAXIS_ADD_ID / NYTHRAXIS_ROOM_RADIUS live in types.ts
+// (shared with mob/locomotion.ts and deeds.ts; the dungeon raid-door seal in
+// instances/dungeons.ts also reads NYTHRAXIS_BOSS_ID).
 const NYTHRAXIS_ALDRIC_ID = 'brother_aldric_raid';
 const _NYTHRAXIS_FINAL_QUEST_ID = 'q_nythraxis_scourges_end';
 const NYTHRAXIS_WARDSTONE_ITEM_ID = 'bastion_ward_stone';
@@ -110,7 +112,6 @@ const NYTHRAXIS_PHASE_TWO_SETTLE_DELAY = 5;
 const NYTHRAXIS_TRANSITION_DURATION = 21;
 const NYTHRAXIS_TRANSITION_STUN = 21.5;
 const NYTHRAXIS_FINAL_STAND_HP = 0.05;
-const NYTHRAXIS_ROOM_RADIUS = 260;
 // Brother Aldric enters on the door side of the arena (the raid's side, lower z
 // than the boss spawn) and walks toward the boss. Distances are yards in front
 // of the boss spawn: appears 50yd out, walks up to 30yd out (between door + boss).
