@@ -118,7 +118,15 @@ async function startSteamLink(api: Api): Promise<void> {
     try {
       await api.steamLink(ticket);
     } catch (err) {
+      // Refresh BEFORE flashing. The unlinked branch of refreshSteamLinkStatus
+      // toggles #steam-status hidden, and the flash's restore guard only
+      // protects a textContent overwrite, not the hidden toggle; a refresh
+      // fired after the flash would hide the error within a frame. Refreshing
+      // first keeps the panel truthful (e.g. an already_linked race) and lets
+      // the flash own the last write, so the error survives its full 4s.
+      await refreshSteamLinkStatus(api).catch(() => {});
       flashSteamStatus(userFacingApiError(err));
+      return;
     }
     void refreshSteamLinkStatus(api);
   } finally {
@@ -134,7 +142,12 @@ export function wireSteamLink(api: Api): void {
     void api
       .unlinkSteam()
       .then(() => refreshSteamLinkStatus(api))
-      .catch((err) => console.error('[steam] unlink failed', err));
+      .catch((err) => {
+        // Dev-channel log stays English; the player gets the localized reason.
+        // An unlink failure was previously silent (console-only, no feedback).
+        console.error('[steam] unlink failed', err);
+        flashSteamStatus(userFacingApiError(err));
+      });
   });
   void refreshSteamLinkStatus(api);
 }
