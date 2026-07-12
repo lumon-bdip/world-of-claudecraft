@@ -268,7 +268,10 @@ export function restoreDeedStats(saved: SavedDeedStats | undefined): DeedStats {
 // ---------------------------------------------------------------------------
 
 export interface DeedEncounterState {
-  // Player pids (pet damage resolves to the owner) that damaged this boss.
+  // Character keys (deedCharKey; pet damage resolves to the owner) of every
+  // player who fielded this attempt: damagers, plus engaged non-damagers folded
+  // in by the death scan and the 1 Hz sweep. Keyed on the stable character id so
+  // a mid-fight relog counts once (not two pids) and a departed member persists.
   participants: Set<number>;
   // A player died inside the boss's instance while it was engaged.
   deathTainted: boolean;
@@ -280,9 +283,10 @@ export interface DeedEncounterState {
   bellTainted: boolean;
   // Live entity ids of every add this boss summoned this attempt.
   addIds: number[];
-  // World boss only: contributors who died between joining the roster and
-  // the kill (cmb_thunzharr_unbroken is personal, not raid-wide).
-  diedPids: Set<number>;
+  // World boss only: character keys (deedCharKey) of contributors who died
+  // between joining the roster and the kill (cmb_thunzharr_unbroken is personal,
+  // not raid-wide). Keyed by character so a relog cannot launder the death.
+  diedKeys: Set<number>;
 }
 
 export interface DeedRuntime {
@@ -314,6 +318,25 @@ export function createDeedRuntime(): DeedRuntime {
   };
 }
 
+/** A rename-proof, relog-proof owner key for a character: the stable database
+ *  character id on the server, falling back to the transient entity pid offline
+ *  and in tests (which mint no characterId). Encounter restriction bookkeeping
+ *  keys on this so a relog (which mints a NEW pid for the same character) can
+ *  neither launder a death nor slip past the roster cap. */
+function deedCharKey(meta: PlayerMeta): number {
+  return meta.characterId ?? meta.entityId;
+}
+
+/** Resolve a hate-table / damage entity id (a player or its controlled pet) to
+ *  its owning character key, or null when it maps to no live player meta. */
+function deedCharKeyForEntityId(ctx: SimContext, entityId: number): number | null {
+  const ent = ctx.entities.get(entityId);
+  const pid = ent ? (ent.kind === 'player' ? ent.id : ent.ownerId) : entityId;
+  if (pid === null) return null;
+  const meta = ctx.players.get(pid);
+  return meta ? deedCharKey(meta) : null;
+}
+
 function ensureEncounter(ctx: SimContext, bossId: number): DeedEncounterState {
   let st = ctx.deedRuntime.encounters.get(bossId);
   if (!st) {
@@ -324,7 +347,7 @@ function ensureEncounter(ctx: SimContext, bossId: number): DeedEncounterState {
       rageResolved: false,
       bellTainted: false,
       addIds: [],
-      diedPids: new Set(),
+      diedKeys: new Set(),
     };
     ctx.deedRuntime.encounters.set(bossId, st);
   }
@@ -890,8 +913,10 @@ export function updateDeeds(ctx: SimContext): void {
 }
 
 // The 1 Hz sweep behind the poisVisited marks (within 20 yd of a named
-// ZoneDef poi) and the Thunzharr witness mark. Deterministic: fixed cadence
-// on the sim clock, insertion-order player iteration, zero rng.
+// ZoneDef poi), the Thunzharr witness mark, and the roster-restriction fold
+// (every live hate-table member of a participant-tracked boss, so a non-damager
+// who leaves before the kill still counts against the trio cap). Deterministic:
+// fixed cadence on the sim clock, insertion-order iteration, zero rng.
 function sweepProximityMarks(ctx: SimContext): void {
   // Resolve the live boss through the scheduler's tracked ids (a seam view)
   // instead of scanning the whole entity map every second: liveness is
@@ -919,6 +944,21 @@ function sweepProximityMarks(ctx: SimContext): void {
     }
     if (thunzharr && dist2d(e.pos, thunzharr.pos) <= THUNZHARR_WITNESS_RADIUS) {
       markVisited(ctx, meta, `witness:${THUNZHARR_ID}`);
+    }
+  }
+  // Roster restriction: fold each participant-tracked boss's live hate table
+  // (owner-resolved to character keys, so healing threat and pet damage both
+  // count) into its durable attempt set. This closes the departed-non-damager
+  // hole the kill-time envelope misses: a member captured here persists in the
+  // roster even after they leave before the kill. The encounters map is scoped
+  // to active attempts, so the scan stays small; it writes only deed runtime
+  // state (never an entity or the rng), so its placement cannot fork the draw.
+  for (const [bossId, st] of ctx.deedRuntime.encounters) {
+    const boss = ctx.entities.get(bossId);
+    if (!boss || boss.dead || !PARTICIPANT_TRACKED.has(boss.templateId)) continue;
+    for (const attackerId of boss.threat.keys()) {
+      const key = deedCharKeyForEntityId(ctx, attackerId);
+      if (key !== null) st.participants.add(key);
     }
   }
 }
@@ -1022,7 +1062,8 @@ export function onDamageDealtForDeeds(
   }
   if (target.kind === 'mob' && PARTICIPANT_TRACKED.has(target.templateId) && amount > 0) {
     const pid = source.kind === 'player' ? source.id : source.ownerId;
-    if (pid !== null) ensureEncounter(ctx, target.id).participants.add(pid);
+    const damagerMeta = pid !== null ? ctx.players.get(pid) : undefined;
+    if (damagerMeta) ensureEncounter(ctx, target.id).participants.add(deedCharKey(damagerMeta));
   }
 }
 
@@ -1037,19 +1078,25 @@ export function onPlayerDeathForDeeds(ctx: SimContext, e: Entity): void {
       grantDeed(ctx, meta, 'hid_keepers_toll_twice');
     }
   }
-  // Perfection windows: a player death inside a tracked boss's instance while
-  // that boss is engaged taints the attempt (the window re-arms on evade or
-  // respawn via resetDeedEncounter). The position test is per boss: a boss
-  // with a room radius uses it (the Nythraxis arena interior is wider than
-  // the generic band); every other boss keeps the band.
+  // A player death inside a tracked boss's engaged room feeds two per-attempt
+  // records: it taints the perfection window (the window re-arms on evade or
+  // respawn via resetDeedEncounter), and it folds the dying member into the
+  // roster-restriction set so a healer/tank who died and released out of the
+  // instance still counts against the trio cap (deedCharKey survives the relog
+  // a release+rejoin mints). The position test is per boss: a boss with a room
+  // radius uses it (the Nythraxis arena interior is wider than the generic
+  // band); every other boss keeps the band.
   for (const inst of ctx.instances) {
     if (inst.partyKey === null) continue;
     const origin = ctx.instanceOriginOf(inst);
     const inBand = Math.abs(e.pos.x - origin.x) < 120 && Math.abs(e.pos.z - origin.z) < 250;
     for (const mobId of inst.mobIds) {
       const boss = ctx.entities.get(mobId);
-      if (!boss || boss.dead || !FLAWLESS_TASKS[boss.templateId]) continue;
-      if (boss.threat.size === 0) continue; // not engaged: no window open
+      if (!boss || boss.dead) continue;
+      const flawless = FLAWLESS_TASKS[boss.templateId] !== undefined;
+      const tracked = PARTICIPANT_TRACKED.has(boss.templateId);
+      if (!flawless && !tracked) continue;
+      if (boss.threat.size === 0) continue; // not engaged: no live attempt
       const radius = ENCOUNTER_ROOM_RADIUS[boss.templateId];
       // The room circle is clipped to the slot's own z band: arena slots sit
       // 500 apart in z with the spawn skewed high, so the raw circle would
@@ -1060,7 +1107,8 @@ export function onPlayerDeathForDeeds(ctx: SimContext, e: Entity): void {
           ? dist2d(e.pos, boss.spawnPos) <= radius && Math.abs(e.pos.z - origin.z) < 250
           : inBand;
       if (!inRoom) continue;
-      ensureEncounter(ctx, boss.id).deathTainted = true;
+      if (flawless) ensureEncounter(ctx, boss.id).deathTainted = true;
+      if (tracked && meta) ensureEncounter(ctx, boss.id).participants.add(deedCharKey(meta));
     }
   }
   // World boss: a contributor dying mid-fight loses only their own unbroken
@@ -1072,7 +1120,8 @@ export function onPlayerDeathForDeeds(ctx: SimContext, e: Entity): void {
   // hot path.
   for (const ent of ctx.entities.values()) {
     if (ent.kind !== 'mob' || ent.dead || ent.templateId !== THUNZHARR_ID) continue;
-    if (ent.bossDamagers.has(e.id)) ensureEncounter(ctx, ent.id).diedPids.add(e.id);
+    if (meta && ent.bossDamagers.has(e.id))
+      ensureEncounter(ctx, ent.id).diedKeys.add(deedCharKey(meta));
   }
 }
 
@@ -1268,11 +1317,12 @@ export function onMobKillCreditForDeeds(
   }
   const trioDeed = TRIO_TASKS[mob.templateId];
   if (trioDeed) {
-    // The attempt roster is the union of the damager set and the recipient
-    // envelope: an attacker who died and released out of the envelope still
-    // counts, and so does a present non-attacker.
+    // The attempt roster is the union of the recorded participant keys (damagers
+    // plus the death-scan and sweep folds) and the present recipients, all as
+    // stable character keys: an attacker or healer who died or left the envelope
+    // still counts, and a relog cannot split one character across two pids.
     const attempt = new Set(st?.participants ?? []);
-    for (const meta of taskRecipients) attempt.add(meta.entityId);
+    for (const meta of taskRecipients) attempt.add(deedCharKey(meta));
     if (attempt.size <= 3) {
       for (const meta of taskRecipients) grantDeed(ctx, meta, trioDeed);
     }
@@ -1320,7 +1370,7 @@ export function onWorldBossKilledForDeeds(
   for (const meta of contributors) {
     grantDeed(ctx, meta, 'cmb_thunzharr');
     bumpDeedStat(ctx, meta, 'thunzharrKills', 1);
-    if (!st?.diedPids.has(meta.entityId)) grantDeed(ctx, meta, 'cmb_thunzharr_unbroken');
+    if (!st?.diedKeys.has(deedCharKey(meta))) grantDeed(ctx, meta, 'cmb_thunzharr_unbroken');
   }
   ctx.deedRuntime.encounters.delete(mob.id);
 }

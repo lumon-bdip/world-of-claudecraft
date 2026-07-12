@@ -35,6 +35,7 @@ import {
   onPlayerDeathForDeeds,
   onRiteFinaleForDeeds,
   onWorldBossKilledForDeeds,
+  updateDeeds,
 } from '../src/sim/deeds';
 import { createMob } from '../src/sim/entity';
 import { craftItem } from '../src/sim/professions/crafting';
@@ -351,6 +352,47 @@ describe('encounter mechanical arms (onMobKillCreditForDeeds)', () => {
     for (const m of l.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
   });
 
+  it('dgn_morthen_trio: a heal-only member who dies inside the envelope and releases still counts', () => {
+    // A four-player attempt whose heal-only member never damages the boss:
+    // recording damagers alone would size the roster at three and wrongly grant
+    // the trio deed. The death-scan arm folds the dying non-damager, inside the
+    // engaged room, into the durable roster before the released spirit exits.
+    const sim = makeSim();
+    const s = encounterInstance(sim, 'morthen', 'hollow_crypt', 'normal', ['A', 'B', 'C']);
+    for (const m of s.recipients) {
+      onDamageDealtForDeeds(sim.ctx, entityOf(sim, m), s.boss, 10, false, 'hit');
+    }
+    // A heal-only fourth member, standing in the room while the boss is engaged.
+    const healer = addMeta(sim, 'D');
+    const healerEnt = entityOf(sim, healer);
+    healerEnt.pos = { ...entityOf(sim, s.recipients[0]).pos };
+    s.boss.threat.set(s.recipients[0].entityId, 100); // the attempt is live
+    // The healer dies inside the envelope, then releases out of the instance.
+    onPlayerDeathForDeeds(sim.ctx, healerEnt);
+    healerEnt.pos = { x: healerEnt.pos.x + 500, y: 0, z: healerEnt.pos.z };
+    onMobKillCreditForDeeds(sim.ctx, s.boss, null, s.recipients[0], s.recipients);
+    for (const m of s.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
+  });
+
+  it('dgn_morthen_trio: a heal-only member captured by the 1 Hz sweep counts even after leaving', () => {
+    // The departed-non-damager hole: a healer generates threat, is folded into
+    // the roster by the 1 Hz sweep, then walks out and drops off the hate table
+    // before the kill. An envelope-only count would see three at the kill.
+    const sim = makeSim();
+    const s = encounterInstance(sim, 'morthen', 'hollow_crypt', 'normal', ['A', 'B', 'C']);
+    for (const m of s.recipients) {
+      onDamageDealtForDeeds(sim.ctx, entityOf(sim, m), s.boss, 10, false, 'hit');
+    }
+    const healer = addMeta(sim, 'D');
+    s.boss.threat.set(healer.entityId, 50); // healing put the healer on the hate table
+    sim.tickCount = 20; // cross a 1 Hz sweep boundary
+    updateDeeds(sim.ctx);
+    // The healer leaves and drops off the hate table before the boss falls.
+    s.boss.threat.delete(healer.entityId);
+    onMobKillCreditForDeeds(sim.ctx, s.boss, null, s.recipients[0], s.recipients);
+    for (const m of s.recipients) expect(m.deedsEarned.has('dgn_morthen_trio')).toBe(false);
+  });
+
   it('dgn_vael_thralls: every summoned add dead grants; a live add blocks', () => {
     const clean = makeSim();
     const boss = spawnMob(clean, 'vael_the_mistcaller', { x: 5, y: 0, z: -5 });
@@ -501,6 +543,33 @@ describe('encounter mechanical arms (onMobKillCreditForDeeds)', () => {
     expect(diver.deedsEarned.has('cmb_thunzharr')).toBe(true);
     expect(survivor.deedsEarned.has('cmb_thunzharr')).toBe(true);
     expect(diver.deedsEarned.has('cmb_thunzharr_unbroken')).toBe(false);
+    expect(survivor.deedsEarned.has('cmb_thunzharr_unbroken')).toBe(true);
+  });
+
+  it('cmb_thunzharr_unbroken: a relog after dying does not launder the death', () => {
+    // The record keys on the stable character id, not the transient pid a relog
+    // mints, so dying, relogging (new pid, same character), and re-hitting the
+    // boss cannot earn the unbroken record.
+    const sim = makeSim();
+    const boss = spawnMob(sim, 'thunzharr_waking_peak', { x: 5, y: 0, z: -5 }, 30);
+    const diverChar = 8801;
+    const diverPid = sim.addPlayer('warrior', 'Diver', { characterId: diverChar });
+    const diver = sim.players.get(diverPid)!;
+    const survivor = sim.players.get(sim.addPlayer('warrior', 'Survivor', { characterId: 8802 }))!;
+    boss.bossDamagers.add(diver.entityId);
+    boss.bossDamagers.add(survivor.entityId);
+    // The diver falls mid-fight while on the boss's damager roster.
+    onPlayerDeathForDeeds(sim.ctx, entityOf(sim, diver));
+    // Relog: the old entity leaves the world, the same character rejoins with a
+    // fresh pid and re-hits the boss (rejoining the damager roster).
+    sim.removePlayer(diverPid);
+    const diver2 = sim.players.get(sim.addPlayer('warrior', 'Diver', { characterId: diverChar }))!;
+    boss.bossDamagers.add(diver2.entityId);
+    onWorldBossKilledForDeeds(sim.ctx, boss, [diver2, survivor]);
+    expect(diver2.deedsEarned.has('cmb_thunzharr')).toBe(true);
+    // The relog did not launder the death: the record stays unearned.
+    expect(diver2.deedsEarned.has('cmb_thunzharr_unbroken')).toBe(false);
+    // A distinct character who never died still earns it on the same kill.
     expect(survivor.deedsEarned.has('cmb_thunzharr_unbroken')).toBe(true);
   });
 });
