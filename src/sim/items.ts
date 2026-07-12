@@ -251,13 +251,16 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
     // uncommon potion, exactly as before this issue.
     const [drunkInstance] = ctx.removeItem(itemId, 1, meta.entityId);
     if (drunkInstance) {
-      battlefieldExperienceTrickle(meta.craftSkills, {
+      const granted = battlefieldExperienceTrickle(meta.craftSkills, {
         itemId,
         instance: drunkInstance,
         observerName: meta.name,
         observerActiveArchetype: meta.archetype.activeArchetype,
         observerPairedMajor: meta.archetype.pairedMajor,
       });
+      // A nonzero trickle changed a craft skill (returns 0 on every
+      // short-circuit), so the craft-skill deeds re-check this player.
+      if (granted > 0) ctx.markDeedsDirty(meta.entityId);
     }
     p.potionCooldownUntil = ctx.time + POTION_COOLDOWN;
     p.potionCdRemaining = POTION_COOLDOWN; // materialized remaining for the action-bar swipe

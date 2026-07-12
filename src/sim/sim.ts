@@ -3403,7 +3403,13 @@ export class Sim {
     pidOrAlloc?: number | TalentAllocation,
     allocMaybe?: TalentAllocation,
   ): number {
-    return saveTalentLoadout(this.ctx, name, bar, pidOrAlloc, allocMaybe);
+    const idx = saveTalentLoadout(this.ctx, name, bar, pidOrAlloc, allocMaybe);
+    // A successful save applies the staged allocation (the UI's Save flow always
+    // passes it), so mark the talent deeds like the sibling wrappers; -1 is a
+    // rejected save. saveTalentLoadout derives its pid the same way.
+    const pid = typeof pidOrAlloc === 'number' ? pidOrAlloc : undefined;
+    this.markTalentDeeds(idx >= 0, pid);
+    return idx;
   }
 
   // Apply a saved loadout's talents (out of combat). The action bar is restored
@@ -3413,7 +3419,9 @@ export class Sim {
   }
 
   deleteLoadout(index: number, pid?: number): boolean {
-    return deleteTalentLoadout(this.ctx, index, pid);
+    // Deleting the active loadout auto-applies the next one (talents.ts), which
+    // can newly satisfy a talent deed, so mark on success like switchLoadout.
+    return this.markTalentDeeds(deleteTalentLoadout(this.ctx, index, pid), pid);
   }
 
   // Threat modifier including the tank-role talent bonus (e.g. Protection's

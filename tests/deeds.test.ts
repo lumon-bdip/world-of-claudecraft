@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { dealDamage } from '../src/sim/combat/damage';
 import { DEED_ORDER, DEEDS } from '../src/sim/content/deeds';
-import { emptyAllocation } from '../src/sim/content/talents';
+import { emptyAllocation, type TalentAllocation } from '../src/sim/content/talents';
 import { ITEMS, MOBS, QUESTS } from '../src/sim/data';
 import {
   bumpDeedStat,
@@ -19,6 +19,7 @@ import {
   onFishCaughtForDeeds,
   restoreDeedStats,
 } from '../src/sim/deeds';
+import { BATTLEFIELD_XP_TRICKLE } from '../src/sim/professions/battlefield_xp';
 import { queueGatheringGrant } from '../src/sim/professions/gathering';
 import { turnInQuestCore } from '../src/sim/quests/quest_commands';
 import { type ArenaMatch, type CharacterState, Sim } from '../src/sim/sim';
@@ -1563,5 +1564,96 @@ describe('live sites grant in the same run (retro cannot mask a broken site)', (
     sim.tick();
     expect(meta.deedStats.counters.damageDealt).toBe(500_000);
     expect(meta.deedsEarned.has('cmb_heavy_hitter')).toBe(true);
+  });
+
+  // A valid eleven-point warrior build: a spec, a pointsGate-8 capstone
+  // (war_berserker_rage, requires war_imp_heroic_strike and eight points spent
+  // above it), and eleven points spent in total, so it satisfies the spec, the
+  // capstone, the first-point, and the full-build deeds at once.
+  const warriorSpecCapstoneBuild = (): TalentAllocation => ({
+    ...emptyAllocation(),
+    spec: 'arms',
+    ranks: {
+      war_toughness: 3,
+      war_cruelty: 3,
+      war_imp_heroic_strike: 2,
+      war_berserker_rage: 1,
+      arms_imp_overpower: 2,
+    },
+  });
+
+  it('saveLoadout: applying a staged spec+capstone build makes the talent deeds land in-tick', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(MAX_LEVEL); // the full eleven-point budget
+    const { meta } = primary(sim);
+    // Drain the setPlayerLevel dirty mark on its own tick so the final tick's
+    // only mark can come from saveLoadout itself.
+    sim.tick();
+    expect(meta.deedsEarned.has('prog_talented')).toBe(false);
+    expect(meta.deedsEarned.has('prog_specialized')).toBe(false);
+    expect(meta.deedsEarned.has('prog_deep_roots')).toBe(false);
+    expect(meta.deedsEarned.has('prog_full_build')).toBe(false);
+    // The UI Save flow always passes the staged allocation, so this applies the
+    // build as its only effect.
+    expect(sim.saveLoadout('Build', [], warriorSpecCapstoneBuild())).toBeGreaterThanOrEqual(0);
+    expect(meta.talents.spec).toBe('arms'); // the staged build was applied
+    sim.tick();
+    expect(meta.deedsEarned.has('prog_talented')).toBe(true);
+    expect(meta.deedsEarned.has('prog_specialized')).toBe(true);
+    expect(meta.deedsEarned.has('prog_deep_roots')).toBe(true);
+    expect(meta.deedsEarned.has('prog_full_build')).toBe(true);
+  });
+
+  it('deleteLoadout: auto-applying the next loadout on delete makes its talent deeds land in-tick', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(MAX_LEVEL);
+    const { meta } = primary(sim);
+    const plainBuild: TalentAllocation = {
+      ...emptyAllocation(),
+      spec: null,
+      ranks: { war_toughness: 1 },
+    };
+    // Save the spec+capstone build first (slot 0), then a spec-less build (slot
+    // 1) which becomes active and live. No tick runs between the two saves, so
+    // the live state settles on the spec-less build.
+    expect(sim.saveLoadout('Spec', [], warriorSpecCapstoneBuild())).toBe(0);
+    expect(sim.saveLoadout('Plain', [], plainBuild)).toBe(1);
+    // Drain the save marks; the live build is spec-less, so the spec deeds stay
+    // unearned. This isolates the delete auto-apply as the only remaining site.
+    sim.tick();
+    expect(meta.talents.spec).toBeNull();
+    expect(meta.deedsEarned.has('prog_specialized')).toBe(false);
+    expect(meta.deedsEarned.has('prog_deep_roots')).toBe(false);
+    // Deleting the active spec-less loadout auto-applies slot 0 (the
+    // spec+capstone build), which must re-check the talent deeds.
+    expect(sim.deleteLoadout(1)).toBe(true);
+    expect(meta.talents.spec).toBe('arms'); // slot 0 auto-applied
+    sim.tick();
+    expect(meta.deedsEarned.has('prog_specialized')).toBe(true);
+    expect(meta.deedsEarned.has('prog_deep_roots')).toBe(true);
+  });
+
+  it('potion drink: a Battlefield Experience trickle crossing 75 skill makes the craft deed land in-tick', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(MAX_LEVEL); // MAX_LEVEL so updateRested never re-marks the player
+    const { meta, e } = primary(sim);
+    meta.archetype.activeArchetype = 'alchemy'; // the craft minor_healing_potion belongs to
+    meta.craftSkills.alchemy = 75 - BATTLEFIELD_XP_TRICKLE; // one trickle shy of the threshold
+    // A self-signed rare instance: the only shape the trickle credits (signer,
+    // rare-or-better quality, active-specialty match).
+    sim.addItemInstance(
+      'minor_healing_potion',
+      { signer: meta.name, rolled: { quality: 'rare' } },
+      meta.entityId,
+    );
+    // Drain the setPlayerLevel + item-discovery marks so the final tick's only
+    // mark can come from the drink itself; the skill is still below 75 here.
+    sim.tick();
+    expect(meta.deedsEarned.has('prog_craft_specialist')).toBe(false);
+    e.hp = 1; // so the potion has something to restore and useItem does not deny
+    sim.useItem('minor_healing_potion', meta.entityId);
+    expect(meta.craftSkills.alchemy).toBe(75); // the trickle crossed the threshold
+    sim.tick();
+    expect(meta.deedsEarned.has('prog_craft_specialist')).toBe(true);
   });
 });
