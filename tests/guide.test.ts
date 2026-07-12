@@ -34,6 +34,7 @@ import { DEEDS } from '../src/sim/content/deeds';
 import { CAMPS, MOBS } from '../src/sim/data';
 import { DEED_IMAGE_IDS } from '../src/ui/deed_image_ids';
 import { setLanguage, t } from '../src/ui/i18n';
+import { guideStrings } from '../src/ui/i18n.catalog/guide';
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 const publicPath = (url: string): string => resolve(repoRoot, 'public', url.replace(/^\//, ''));
@@ -633,6 +634,17 @@ describe('Guide deeds spoiler safety', () => {
     expect(t('guide.deedsPage.standingsNote' as never)).toContain('Leaderboard');
     expect(t('guide.deedsPage.standingsNote' as never)).not.toContain('Book of Deeds');
     expect(t('guide.glossary.renownDef' as never)).toContain('Leaderboard');
+    // The Book, Renown, and titles are character-scoped; only the realm leaderboard
+    // aggregates Renown across an account (each deed counted once). The old copy wrongly
+    // said deeds are "shown across your whole account" and feed the "same collection", so
+    // the corrected phrasing is pinned against the CATALOG source (the resolved English
+    // table is regenerated centrally) so the account-wide misstatement cannot return.
+    expect(guideStrings.deedsPage.howBody).not.toContain('across your whole account');
+    expect(guideStrings.deedsPage.howBody).not.toContain('same collection');
+    expect(guideStrings.deedsPage.howBody).toContain('builds a Book of their own');
+    expect(guideStrings.deedsPage.howBody).toContain(
+      'only the realm leaderboard gathers your Renown',
+    );
     // The per-category heading is a translator-controlled format, not a hardcoded join.
     expect(t('guide.deedsPage.catHeading' as never, { label: 'Combat', count: '7' })).toBe(
       'Combat (7)',
