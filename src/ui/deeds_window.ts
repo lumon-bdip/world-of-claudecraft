@@ -209,6 +209,21 @@ export class DeedsWindow {
       searchEl !== null && active === searchEl
         ? { start: searchEl.selectionStart, end: searchEl.selectionEnd }
         : null;
+    // An Enter activation rebuilds the DOM under the focused control, so carry
+    // its stable identity attribute across and refocus the role-equivalent
+    // fresh control (the social/market/mailbox refocus family). A match that
+    // vanished or renders disabled (a watch button at DEED_WATCH_CAP) must not
+    // take focus; those fall through to the Close fallback below.
+    let refocusSel: string | null = null;
+    if (hadFocus && searchFocus === null && active !== null) {
+      for (const attr of ['data-cat', 'data-filter', 'data-watch', 'data-title']) {
+        const value = active.getAttribute(attr);
+        if (value !== null) {
+          refocusSel = `[${attr}="${esc(value)}"]:not([disabled])`;
+          break;
+        }
+      }
+    }
     this.deps.hideTooltip();
     markDialogRoot(el, { label: t('hudChrome.deeds.title') });
     const prevScrollTop = el.querySelector('.deeds-scroll')?.scrollTop ?? 0;
@@ -232,7 +247,8 @@ export class DeedsWindow {
         fresh.setSelectionRange(searchFocus.start, searchFocus.end);
       }
     } else if (hadFocus) {
-      (el.querySelector('[data-close]') as HTMLElement | null)?.focus();
+      const fresh = refocusSel === null ? null : el.querySelector<HTMLElement>(refocusSel);
+      (fresh ?? (el.querySelector('[data-close]') as HTMLElement | null))?.focus();
     }
   }
 
