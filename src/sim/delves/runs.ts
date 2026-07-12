@@ -452,6 +452,7 @@ export function claimDelveRun(
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
+  run.deedMaxParty = 0;
   run.objectState = {};
   run.raiseDeadChannel = null;
   run.restlessPending = [];
@@ -568,6 +569,7 @@ export function freeDelveRun(ctx: SimContext, run: DelveRun): void {
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
+  run.deedMaxParty = 0;
   run.objectState = {};
   run.raiseDeadChannel = null;
   run.restlessPending = [];
