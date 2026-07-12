@@ -7,6 +7,10 @@ import { REALM } from './realm';
 // reads share the predicate so the page, the total, and the self rank always
 // agree on one population. These reads run per request (no board cache), so
 // the SQL exclusion alone delists immediately; there is nothing to bust.
+// The payout path embeds it too: finalizeDay selects winners from the same
+// population the board displays, and pendingPayouts rechecks eligibility at
+// pay time so a ban or suspension landing after finalization still blocks
+// the transfer.
 
 export interface DailyRewardTaskRow {
   taskId: string;
@@ -538,6 +542,7 @@ export class PgDailyRewardDb implements DailyRewardDb {
            JOIN accounts a ON a.id = s.account_id
            LEFT JOIN wallet_links wl ON wl.account_id = s.account_id
           WHERE s.day = $1 AND s.realm = $2 AND s.points > 0
+            AND ${ELIGIBLE_ACCOUNT_SQL}
             AND NOT EXISTS (SELECT 1 FROM daily_reward_excluded_accounts b WHERE b.account_id = s.account_id)
           ORDER BY s.points DESC, s.updated_at ASC, s.account_id ASC
           LIMIT 10`,
@@ -581,6 +586,8 @@ export class PgDailyRewardDb implements DailyRewardDb {
          FROM daily_reward_payouts p
          LEFT JOIN wallet_links wl ON wl.account_id = p.account_id
         WHERE p.status IN ('pending', 'failed')
+          AND EXISTS (SELECT 1 FROM accounts a
+                       WHERE a.id = p.account_id AND ${ELIGIBLE_ACCOUNT_SQL})
           AND NOT EXISTS (SELECT 1 FROM daily_reward_excluded_accounts b WHERE b.account_id = p.account_id)
         ORDER BY p.day ASC, p.rank ASC
         LIMIT $1`,

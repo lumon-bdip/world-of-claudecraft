@@ -11,6 +11,7 @@ vi.mock('../server/db', async (importOriginal) => {
 vi.mock('../server/realm', () => ({ REALM: 'test-realm' }));
 
 import { PgDailyRewardDb } from '../server/daily_rewards_db';
+import { ELIGIBLE_ACCOUNT_SQL } from '../server/db';
 
 describe('Daily Rewards ban query enforcement', () => {
   beforeEach(() => {
@@ -37,6 +38,10 @@ describe('Daily Rewards ban query enforcement', () => {
     expect(mocks.query.mock.calls[0][0]).toContain('daily_reward_excluded_accounts');
     expect(mocks.query.mock.calls[1][0]).toContain('NOT EXISTS');
     expect(mocks.query.mock.calls[1][0]).toContain('daily_reward_excluded_accounts');
+    // Pay-time recheck: a ban or suspension landing after finalization still
+    // blocks the payout row.
+    expect(mocks.query.mock.calls[1][0]).toContain(ELIGIBLE_ACCOUNT_SQL);
+    expect(mocks.query.mock.calls[1][0]).toContain('a.id = p.account_id');
   });
 
   it('filters banned accounts while selecting end-of-day winners', async () => {
@@ -55,6 +60,10 @@ describe('Daily Rewards ban query enforcement', () => {
     );
     expect(winnerQuery?.[0]).toContain('NOT EXISTS');
     expect(winnerQuery?.[0]).toContain('daily_reward_excluded_accounts');
+    // Winner selection uses the same account-eligibility predicate as the
+    // displayed board, so the payout ranks match what players see.
+    expect(winnerQuery?.[0]).toContain(ELIGIBLE_ACCOUNT_SQL);
+    expect(winnerQuery?.[0]).toContain('a.id = s.account_id');
     expect(release).toHaveBeenCalledOnce();
   });
 
