@@ -104,6 +104,7 @@ export const IWORLD_MEMBERS = [
   { name: 'gatheringProficiency', kind: 'data' },
   { name: 'known', kind: 'data' },
   { name: 'activeFrostRings', kind: 'data' },
+  { name: 'activeTemporalHourglasses', kind: 'data' },
   { name: 'questLog', kind: 'data' },
   { name: 'questsDone', kind: 'data' },
   // --- commands + read-returning methods ---
@@ -1016,6 +1017,7 @@ type _ExhaustEntityRoster = AssertNever<
 const FACET_COMBAT = [
   'known',
   'activeFrostRings',
+  'activeTemporalHourglasses',
   'castAbility',
   'castAbilityAt',
   'castAbilityBySlot',

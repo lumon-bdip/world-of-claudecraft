@@ -10699,6 +10699,7 @@ export class Hud {
           const tgt = sim.entities.get(ev.targetId);
           const auraName = auraDisplayNameFromSource(ev.name);
           if (ev.name === 'Polymorph' && ev.gained) audio.sheep();
+          if (ev.name === ABILITIES.temporal_hourglass.name && ev.gained) audio.temporalClock();
           if (ev.targetId === sim.playerId) {
             if (ev.gained) this.noteProcAuraGain(ev.name);
             else this.noteProcAuraConsume(ev.auraKind);
@@ -15913,7 +15914,15 @@ function abilityDisplayDescription(
       buff: buff === null ? '' : formatAbilityNumber(buff),
       duration: duration === null ? '' : formatAbilityNumber(duration),
       healing: hourglass === null ? '' : formatAbilityNumber(hourglass.healing),
-      cooldownRecovery: hourglass === null ? '' : formatAbilityNumber(hourglass.cooldownRecovery),
+      selfCooldownRecovery:
+        hourglass === null ? '' : formatAbilityNumber(hourglass.selfCooldownRecovery),
+      allyCooldownRecovery:
+        hourglass === null ? '' : formatAbilityNumber(hourglass.allyCooldownRecovery),
+      hostilePveDuration:
+        hourglass === null ? '' : formatAbilityNumber(hourglass.hostilePveDuration),
+      hostilePvpDuration:
+        hourglass === null ? '' : formatAbilityNumber(hourglass.hostilePvpDuration),
+      groundDuration: hourglass === null ? '' : formatAbilityNumber(hourglass.groundDuration),
       rage: rageText,
     },
   });

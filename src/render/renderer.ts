@@ -144,6 +144,7 @@ import { shouldRenderStealthGhost } from './stealth';
 import { buildFlaredConeFan, buildRingXZ, drapeConeWorld } from './target_cone_debug';
 import {
   syncTemporalHourglassVisual,
+  TemporalHourglassGroundVisuals,
   type TemporalHourglassMode,
   type TemporalHourglassVisual,
 } from './temporal_hourglass_visual';
@@ -1005,6 +1006,7 @@ export class Renderer {
   private frozenOrbFx!: FrozenOrbFx;
   private mageGroundFx!: MageGroundFx;
   private ringOfFrostVisuals!: RingOfFrostVisuals;
+  private temporalHourglassGroundVisuals!: TemporalHourglassGroundVisuals;
   private readonly mageBarrierStateScratch: MageBarrierState = { theme: 'frost', value: 0 };
   private glacialFrontVisual!: GlacialFrontVisual;
   private weather: Weather;
@@ -1581,6 +1583,9 @@ export class Renderer {
       },
     );
     this.ringOfFrostVisuals = new RingOfFrostVisuals(this.scene, (x, z) =>
+      groundHeight(x, z, this.sim.cfg.seed),
+    );
+    this.temporalHourglassGroundVisuals = new TemporalHourglassGroundVisuals(this.scene, (x, z) =>
       groundHeight(x, z, this.sim.cfg.seed),
     );
     this.vfx = new Vfx(this.scene, (id, frac) => {
@@ -2255,6 +2260,8 @@ export class Renderer {
     this.mageGroundFx.update(dt);
     this.ringOfFrostVisuals.sync(this.sim.activeFrostRings);
     this.ringOfFrostVisuals.update(dt);
+    this.temporalHourglassGroundVisuals.sync(this.sim.activeTemporalHourglasses);
+    this.temporalHourglassGroundVisuals.update(dt);
     this.glacialFrontVisual.updateCharge(p, dt, groundHeight(p.pos.x, p.pos.z, this.sim.cfg.seed));
     this.glacialFrontVisual.update(dt);
     this.lightPulses.update(dt);
@@ -3110,6 +3117,8 @@ export class Renderer {
           // per-hit heal-glow pulse the conversion heals emit.
           this.vfx.wardBloom(ev.targetId, 'arcane');
           this.pulseAt(ev.targetId, 'arcane', 5, 0.45);
+        } else if (ev.fx === 'temporalClock') {
+          // Audio-only cue. The authoritative Rewind nova is emitted separately.
         } else if (ev.fx === 'lightning') this.vfx.lightningProjectile(ev.sourceId, ev.targetId);
         else if (ev.fx === 'tick') this.vfx.tick(ev.targetId, ev.school);
         else this.vfx.nova(ev.targetId, ev.school);
@@ -4772,6 +4781,7 @@ export class Renderer {
         v.group,
         temporalHourglassMode,
         dt,
+        v.height,
       );
       v.frostNovaRootVisual = syncFrostNovaRootVisual(
         v.frostNovaRootVisual,
@@ -5278,6 +5288,8 @@ export class Renderer {
     this.mageGroundFx.update(dt);
     this.ringOfFrostVisuals.sync(this.sim.activeFrostRings);
     this.ringOfFrostVisuals.update(dt);
+    this.temporalHourglassGroundVisuals.sync(this.sim.activeTemporalHourglasses);
+    this.temporalHourglassGroundVisuals.update(dt);
     this.glacialFrontVisual.updateCharge(p, dt, groundHeight(p.pos.x, p.pos.z, this.sim.cfg.seed));
     this.glacialFrontVisual.update(dt);
     this.lightPulses.update(dt);
