@@ -105,7 +105,6 @@ import {
   DESKTOP_APP,
   isAuthError,
   NATIVE_APP,
-  type ReleaseEntry,
 } from './net/online';
 import { realmPopulation } from './net/realm_population';
 import { openStripeCheckout } from './net/stripe_checkout';
@@ -207,6 +206,7 @@ import { iconDataUrl } from './ui/icons';
 import { createLoadingTipRotation, type LoadingTipRotation } from './ui/loading_tips';
 import { applyNativeDeviceLanguage } from './ui/native_language';
 import { scheduleNativeUpdateCheck } from './ui/native_update_prompt';
+import { loadNewsInto } from './ui/news_feed';
 import { createMetricsSampler } from './ui/perf_metrics_sampler';
 import { PerfOverlay } from './ui/perf_overlay';
 import { type PerfOverlayConfig, PerfOverlayConfigStore } from './ui/perf_overlay_config';
@@ -239,6 +239,11 @@ import {
   setWocBalance,
   shouldDisconnectUnverifiedWallet,
 } from './ui/wallet_balance';
+import {
+  mountWelcomeScreen,
+  takeArmoryOpenIntent,
+  type WelcomeScreenController,
+} from './ui/welcome_screen_window';
 import { formatXp } from './ui/xp_bar';
 import type { IWorld, LeaderboardEntry } from './world_api';
 
@@ -813,6 +818,11 @@ function nextPaint(): Promise<void> {
 // focus, so Enter/Space could re-fire it mid-entry. One entry per page load;
 // every failure path recovers via fatalOverlay's reload.
 let hasBegunWorldEntry = false;
+
+// The one live Welcome Screen instance, if the DOM has it (absent on /play).
+// module-scoped so enterWorld/startOffline and the intro-finish hook below can
+// share the single mounted controller.
+let welcomeScreen: WelcomeScreenController | null = null;
 
 function beginWorldEntry(): boolean {
   if (hasBegunWorldEntry) return false;
@@ -3026,6 +3036,10 @@ async function startGame(
     } catch {
       // storage unavailable: worst case the intro replays next session
     }
+    // The Armory card's one-shot open intent (if the player clicked it on the
+    // Welcome Screen) fires here, never during the pan and never while #ui is
+    // hidden: the pan just finished and setIntroUiHidden(false) ran above.
+    if (takeArmoryOpenIntent()) hud.openWocStore();
   };
   const introTaps: number[] = [];
   const skipIntro = (e: Event): void => {
@@ -3077,6 +3091,10 @@ async function startGame(
     setIntroUiHidden(true);
     window.addEventListener('keydown', skipIntro, true);
     window.addEventListener('pointerdown', skipIntro, true);
+  } else if (takeArmoryOpenIntent()) {
+    // No intro pan this login (returning character, or reduced motion): the
+    // loading fade already happened by this point, so open right away.
+    hud.openWocStore();
   }
   input.setSuspendMovement(true);
   await nextPaint();
@@ -3163,6 +3181,37 @@ async function startOffline(
   seedOverride?: number,
 ): Promise<void> {
   if (!(await prepareWorldEntry())) return;
+  // Offline path: same Welcome Screen before startGame, but Continue enables
+  // immediately (no connection to wait on) and every store/chest/discord tile
+  // stays hidden per the gating matrix; the news fetch still hits the site
+  // origin and fails soft if offline.
+  const welcomeRoot = $('#welcome-screen');
+  if (welcomeRoot) {
+    await new Promise<void>((resolve) => {
+      welcomeScreen = mountWelcomeScreen(welcomeRoot, {
+        platform: { nativeApp: false, desktopApp: false, mobileTouch: false, offline: true },
+        fetchReleases: () => api.releases(20),
+        fetchArmoryPromoEnabled: () => Promise.resolve(false),
+        fetchDiscord: () =>
+          Promise.resolve({ enabled: null, linked: null, guildMember: null, fetchFailed: false }),
+        fetchChest: () => Promise.resolve({ ready: false, unknown: true }),
+        header: () => ({
+          characterName: name,
+          level: 1,
+          className: classDisplayName(playerClass),
+          realmName: '',
+          lastPlayed: null,
+        }),
+        onContinue: () => {
+          welcomeScreen?.hide();
+          welcomeScreen?.destroy();
+          welcomeScreen = null;
+          resolve();
+        },
+      });
+      void welcomeScreen.show();
+    });
+  }
   enterLoadingState(t('loading.world'));
   // Editor play-test: route terrain + props at the custom world too (the renderer
   // reaches it by module global), in addition to the Sim reading cfg.world.
@@ -4602,7 +4651,6 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
     audio.init();
     music.init();
     sfx.init();
-    enterLoadingState(t('loading.connectingRealm'));
   } finally {
     if (!hasBegunWorldEntry && button) {
       button.disabled = false;
@@ -4627,16 +4675,81 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
     setReferralProvider(null);
     setStandingProvider(null);
   };
+
+  // Post-login Welcome Screen: news + patch notes + Join our Discord strip, plus
+  // (desktop web only) the Season 1 Armory promo. Shown instead of the bare
+  // loading screen while the realm connection establishes behind it; Continue
+  // is the only way forward, gated on the same readiness condition the old
+  // auto-poll used to gate startGame on. Falls back to the old bare loading
+  // screen if the welcome-screen DOM is absent (the /play entry lacks it).
+  const welcomeRoot = $('#welcome-screen');
+  let started = false;
+  const proceedToGame = () => {
+    if (started) return;
+    started = true;
+    clearInterval(poll);
+    welcomeScreen?.hide();
+    welcomeScreen?.destroy();
+    welcomeScreen = null;
+    void startGame(world, null, world, `char:${c.id}`, true);
+  };
+  if (welcomeRoot) {
+    welcomeScreen = mountWelcomeScreen(welcomeRoot, {
+      platform: {
+        nativeApp: NATIVE_APP,
+        desktopApp: DESKTOP_APP,
+        mobileTouch: document.body.classList.contains('mobile-touch'),
+        offline: false,
+      },
+      fetchReleases: () => api.releases(20),
+      fetchArmoryPromoEnabled: () => api.welcomeFlags().then((f) => f.armoryPromoEnabled),
+      fetchDiscord: () =>
+        api.discordStatus().then((d) => ({
+          enabled: typeof d.enabled === 'boolean' ? d.enabled : null,
+          linked: typeof d.linked === 'boolean' ? d.linked : null,
+          guildMember: typeof d.guildMember === 'boolean' ? d.guildMember : null,
+          fetchFailed: false,
+        })),
+      fetchChest: () =>
+        api.dailyRewards().then((s) => ({
+          ready: s.eligibility.eligible === true && s.spin.claimed === false,
+          unknown: false,
+        })),
+      header: () => ({
+        characterName: c.name,
+        level: c.level,
+        className: classDisplayName(c.class),
+        realmName: (() => {
+          try {
+            return new URL(api.base).host;
+          } catch {
+            return '';
+          }
+        })(),
+        lastPlayed: c.lastPlayed ?? null,
+      }),
+      onContinue: proceedToGame,
+    });
+    void welcomeScreen.show();
+  } else {
+    enterLoadingState(t('loading.connectingRealm'));
+  }
+
   // wait for hello + first snapshot so the world starts populated
   const waitStart = Date.now();
   const poll = setInterval(() => {
     if (world.connected && world.entities.has(world.playerId)) {
-      clearInterval(poll);
-      void startGame(world, null, world, `char:${c.id}`, true);
+      if (welcomeRoot) {
+        welcomeScreen?.setConnectionReady(true);
+      } else {
+        proceedToGame();
+      }
     } else if (Date.now() - waitStart > 10000) {
       clearInterval(poll);
       world.close();
       clearCardProviders();
+      welcomeScreen?.destroy();
+      welcomeScreen = null;
       hideReconnectOverlay();
       fatalOverlay(t('loading.enterTimeout'));
     }
@@ -4646,6 +4759,8 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   world.onDisconnect = (reason) => {
     clearInterval(poll);
     clearCardProviders();
+    welcomeScreen?.destroy();
+    welcomeScreen = null;
     hideReconnectOverlay();
     fatalOverlay(userFacingApiError(reason));
   };
@@ -5251,97 +5366,12 @@ async function loadHighscores(): Promise<void> {
   host.innerHTML = head + body;
 }
 
-// Minimal, safe Markdown → HTML for GitHub release notes. The input is escaped
-// FIRST, so every regex below operates on inert text; the only markup we emit is
-// our own whitelisted tags. Deliberately tiny (no tables/images/blockquotes),
-// enough to make patch notes readable without pulling in a markdown dependency.
-function renderReleaseBody(md: string): string {
-  const esc = (s: string): string =>
-    s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
-  const inline = (s: string): string =>
-    esc(s)
-      // [text](url), only http(s) links survive; anything else renders as text.
-      .replace(
-        /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-        (_m, text, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`,
-      )
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-      .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
-  const out: string[] = [];
-  let inList = false;
-  const closeList = () => {
-    if (inList) {
-      out.push('</ul>');
-      inList = false;
-    }
-  };
-  for (const line of md.replace(/\r\n/g, '\n').split('\n')) {
-    const heading = /^(#{1,6})\s+(.*)$/.exec(line);
-    const bullet = /^\s*[-*]\s+(.*)$/.exec(line);
-    if (heading) {
-      closeList();
-      const level = Math.min(3, heading[1].length); // collapse h1-h6 → h1-h3
-      out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
-    } else if (bullet) {
-      if (!inList) {
-        out.push('<ul>');
-        inList = true;
-      }
-      out.push(`<li>${inline(bullet[1])}</li>`);
-    } else if (line.trim() === '') {
-      closeList();
-    } else {
-      closeList();
-      out.push(`<p>${inline(line)}</p>`);
-    }
-  }
-  closeList();
-  return out.join('');
-}
-
 // News & Updates: published GitHub releases, proxied + cached by the server.
 // Re-fetched each time the view is opened (the server caches, so it is cheap).
-let newsLoading = false;
+// The sanitizing renderer + fetch/paint loop live in ./ui/news_feed (extracted
+// out of this firewall file); this call site just supplies the host + fetcher.
 async function loadNews(): Promise<void> {
-  const host = $('#news-feed');
-  if (!host || newsLoading) return;
-  newsLoading = true;
-  host.innerHTML = `<div class="news-loading">${t('news.loading')}</div>`;
-  let releases: ReleaseEntry[] = [];
-  try {
-    releases = await api.releases(20);
-  } catch {
-    host.innerHTML = `<div class="news-error">${t('news.error')}</div>`;
-    newsLoading = false;
-    return;
-  }
-  newsLoading = false;
-  if (releases.length === 0) {
-    host.innerHTML = `<div class="news-empty">${t('news.empty')}</div>`;
-    return;
-  }
-  const esc = (s: string): string =>
-    s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
-  host.innerHTML = releases
-    .map((r) => {
-      const when = r.publishedAt
-        ? `<span class="news-date">${formatDateTime(new Date(r.publishedAt), { dateStyle: 'medium' })}</span>`
-        : '';
-      const tag = r.tag ? `<span class="news-tag">${esc(r.tag)}</span>` : '';
-      const badge = r.prerelease ? `<span class="news-badge">${t('news.prerelease')}</span>` : '';
-      const title = esc(r.name || r.tag || '');
-      const link = r.url
-        ? `<div class="news-item-foot"><a class="news-link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${t('news.viewOnGithub')}</a></div>`
-        : '';
-      return (
-        `<article class="news-item">` +
-        `<div class="news-item-head">` +
-        `<h3 class="news-item-title">${title}</h3><div class="news-item-meta">${tag}${badge}${when}</div></div>` +
-        `<div class="news-body">${renderReleaseBody(r.body)}</div>${link}</article>`
-      );
-    })
-    .join('');
+  await loadNewsInto($('#news-feed'), () => api.releases(20));
 }
 
 let caCopyResetTimer: number | null = null;

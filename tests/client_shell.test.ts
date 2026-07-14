@@ -87,6 +87,10 @@ const mainTs = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8').
   /\r\n/g,
   '\n',
 );
+const newsFeedTs = readFileSync(new URL('../src/ui/news_feed.ts', import.meta.url), 'utf8').replace(
+  /\r\n/g,
+  '\n',
+);
 const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8').replace(
   /\r\n/g,
   '\n',
@@ -1438,7 +1442,8 @@ describe('client HTML shell', () => {
   });
 
   it('places news release metadata below the heading on mobile', () => {
-    expect(mainTs).toContain(
+    // The renderer moved to src/ui/news_feed.ts (extracted out of main.ts).
+    expect(newsFeedTs).toContain(
       // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the source literally contains this template expression
       '<h3 class="news-item-title">${title}</h3><div class="news-item-meta">${tag}${badge}${when}</div></div>',
     );

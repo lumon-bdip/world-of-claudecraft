@@ -2112,6 +2112,9 @@ export const nl_NL: EnTranslations = {
       "already_linked": "Je account heeft al een gekoppeld Steam-account.",
       "account_taken": "Dat Steam-account is al aan een ander account gekoppeld.",
       "upstream": "Steam reageerde niet. Probeer het zo meteen opnieuw."
+    },
+    "welcome": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {
@@ -4806,6 +4809,24 @@ export const nl_NL: EnTranslations = {
     "heading": "De wereld is tijdelijk niet beschikbaar.",
     "body": "We herstarten de gameservice en verwachten dat Claudemoon binnenkort weer terug is. Deze pagina blijft automatisch controleren.",
     "status": "Snel terug"
+  },
+  "welcome": {
+    "back": "Welcome back, {name}",
+    "level": "Level {level}",
+    "lastPlayed": "Last played {when}",
+    "continue": "Enter World",
+    "continueHint": "Enter to continue, Esc to skip",
+    "discord": {
+      "title": "The community lives on Discord",
+      "sub": "Patch previews, events, dev chat, and 2 bonus bank slots for linking.",
+      "join": "Join our Discord"
+    },
+    "chest": {
+      "ready": "Daily chest ready"
+    },
+    "armory": {
+      "cta": "Enter and browse the Armory"
+    }
   },
   "hud": {
     "core": {
