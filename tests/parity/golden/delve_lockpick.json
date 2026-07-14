@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "20380ff5",
+      "state": "ee4a773d",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -70,8 +70,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -134,8 +133,16 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 422,
+<<<<<<< HEAD
       "state": "96ba5a50",
       "events": "0743001f",
+||||||| parent of c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
+      "state": "a862caa8",
+      "events": "494596a3",
+=======
+      "state": "0aa755e4",
+      "events": "494596a3",
+>>>>>>> c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
       "rng": {
         "draws": 7,
         "digest": "30365ad3"
@@ -145,7 +152,13 @@
       "tick": 20,
       "time": 1,
       "nextId": 422,
+<<<<<<< HEAD
       "state": "dec5d3ae",
+||||||| parent of c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
+      "state": "61ff76bd",
+=======
+      "state": "f8514605",
+>>>>>>> c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
       "events": "e8535d0d",
       "rng": {
         "draws": 7,
@@ -156,8 +169,16 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 422,
+<<<<<<< HEAD
       "state": "a241fc2d",
       "events": "adb5f051",
+||||||| parent of c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
+      "state": "3e5b909e",
+      "events": "dea37e16",
+=======
+      "state": "0cefa9d2",
+      "events": "dea37e16",
+>>>>>>> c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
       "rng": {
         "draws": 10,
         "digest": "06665a19"
@@ -167,8 +188,16 @@
       "tick": 38,
       "time": 1.9,
       "nextId": 424,
+<<<<<<< HEAD
       "state": "88ffbe56",
       "events": "4e2f9332",
+||||||| parent of c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
+      "state": "a86e6621",
+      "events": "0cb94d06",
+=======
+      "state": "3ed9a035",
+      "events": "0cb94d06",
+>>>>>>> c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
       "rng": {
         "draws": 13,
         "digest": "ded57bf5"
@@ -268,8 +297,7 @@
           "nodeHarvestReadyAt": {},
           "renown": 55,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {},
           "xp": 898
@@ -467,7 +495,13 @@
       "tick": 40,
       "time": 2,
       "nextId": 424,
+<<<<<<< HEAD
       "state": "d68a7282",
+||||||| parent of c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
+      "state": "a98489a8",
+=======
+      "state": "945d99d8",
+>>>>>>> c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
       "events": "741638a5",
       "rng": {
         "draws": 13,
@@ -478,7 +512,13 @@
       "tick": 40,
       "time": 2,
       "nextId": 424,
+<<<<<<< HEAD
       "state": "d68a7282",
+||||||| parent of c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
+      "state": "a98489a8",
+=======
+      "state": "945d99d8",
+>>>>>>> c82ae1bf0 (feat(talents): integrate v2 rows and redesigned warrior)
       "events": "741638a5",
       "rng": {
         "draws": 13,
@@ -579,8 +619,7 @@
           "nodeHarvestReadyAt": {},
           "renown": 55,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {},
           "xp": 898

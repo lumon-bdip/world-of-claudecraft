@@ -26,6 +26,7 @@ import {
 import { ARENA_NEW, BASE_NEW, ITEM_NEW, PET_NEW, QUEST_NEW, RAID_NEW } from './sim_i18n.newlocales';
 
 const baseEnTable = {
+  'log.deathwardSaves': 'A deathward saves you!',
   'error.lineOfSight': 'Line of sight.',
   'error.bagsFull': 'Your bags are full.',
   'error.bagSocketsFull': 'All your bag slots are full.',
@@ -369,6 +370,7 @@ export type SimMessageKey = keyof typeof enTable;
 // back to English here until the release localization pass fills them.
 const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, string>>> = {
   en: {
+    'log.deathwardSaves': 'A deathward saves you!',
     'error.lineOfSight': 'Line of sight.',
     'error.bagsFull': 'Your bags are full.',
     'error.bagSocketsFull': 'All your bag slots are full.',
@@ -578,6 +580,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': 'Tu grupo cambio y salio de la cola del Buscador de Mazmorras.',
     'dfinder.listingFull': 'Tu anuncio de grupo esta completo.',
     'error.wrongEquipSlot': 'Ese objeto no va en ese espacio.',
+    'log.deathwardSaves': '¡Una protección contra la muerte te salva!',
     'error.heroicMarksNeeded': 'Necesitas {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'El cajón está cerrado con clavos.',
     'groundPickup.gravecallerSigilDeny': 'El sigilo repele tu tacto.',
@@ -866,6 +869,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': 'Tu grupo cambio y salio de la cola del Buscador de Mazmorras.',
     'dfinder.listingFull': 'Tu anuncio de grupo esta completo.',
     'error.wrongEquipSlot': 'Ese objeto no va en ese espacio.',
+    'log.deathwardSaves': '¡Una protección contra la muerte te salva!',
     'error.heroicMarksNeeded': 'Necesitas {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'El cajón está cerrado con clavos.',
     'groundPickup.gravecallerSigilDeny': 'El sigilo repele tu contacto.',
@@ -1155,6 +1159,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': 'Votre groupe a changé et a quitté la file du Chercheur de donjons.',
     'dfinder.listingFull': 'Votre annonce de groupe est désormais complète.',
     'error.wrongEquipSlot': 'Cet objet ne va pas dans cet emplacement.',
+    'log.deathwardSaves': 'Une protection contre la mort vous sauve !',
     'error.heroicMarksNeeded': 'Il vous faut {marks} Marques héroïques pour acheter {name}.',
     'groundPickup.supplyCrateDeny': 'La caisse est solidement clouée.',
     'groundPickup.gravecallerSigilDeny': 'Le sceau repousse votre main.',
@@ -1446,6 +1451,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': 'Votre groupe a changé et a quitté la file du Chercheur de donjons.',
     'dfinder.listingFull': 'Votre annonce de groupe est désormais complète.',
     'error.wrongEquipSlot': 'Cet objet ne va pas dans cet emplacement.',
+    'log.deathwardSaves': 'Une protection contre la mort vous sauve !',
     'error.heroicMarksNeeded': 'Il vous faut {marks} Marques héroïques pour acheter {name}.',
     'groundPickup.supplyCrateDeny': 'La caisse est solidement clouée.',
     'groundPickup.gravecallerSigilDeny': 'Le sceau repousse votre main.',
@@ -1695,6 +1701,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': "Embrasement d'âme",
   },
   en_CA: {
+    'log.deathwardSaves': 'A deathward saves you!',
     'log.learnedAbility': 'You have learned a new ability: {name}.',
     'log.abilityRankUp': 'Your {name} has improved to Rank {rank}.',
     'log.stopFollowing': 'You stop following.',
@@ -1905,6 +1912,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
       'Il tuo gruppo e cambiato e ha lasciato la coda del Cercatore di Dungeon.',
     'dfinder.listingFull': 'Il tuo annuncio di gruppo e ora al completo.',
     'error.wrongEquipSlot': "Quell'oggetto non va in quello slot.",
+    'log.deathwardSaves': 'Una protezione dalla morte ti salva!',
     'error.heroicMarksNeeded': 'Ti servono {marks} Marchi Eroici per comprare {name}.',
     'groundPickup.supplyCrateDeny': 'La cassa è inchiodata.',
     'groundPickup.gravecallerSigilDeny': 'Il sigillo respinge il tuo tocco.',
@@ -2193,6 +2201,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
       'Deine Gruppe hat sich verandert und die Instanzfinder-Warteschlange verlassen.',
     'dfinder.listingFull': 'Dein Gruppenangebot ist nun voll.',
     'error.wrongEquipSlot': 'Das gehoert nicht in diesen Slot.',
+    'log.deathwardSaves': 'Ein Todesbann rettet dich!',
     'error.heroicMarksNeeded': 'Du brauchst {marks} Heroische Marken, um {name} zu kaufen.',
     'groundPickup.supplyCrateDeny': 'Die Kiste ist fest vernagelt.',
     'groundPickup.gravecallerSigilDeny': 'Das Siegel weist Eure Berührung ab.',
@@ -2479,6 +2488,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': '你的队伍发生变动，已退出副本搜索器队列。',
     'dfinder.listingFull': '你的组队招募名额已满。',
     'error.wrongEquipSlot': '该物品不能放入此装备栏位。',
+    'log.deathwardSaves': '死亡护符救了你！',
     'error.heroicMarksNeeded': '购买{name}需要{marks}个英雄徽记。',
     'aura.clearcasting': '清晰施法',
     'aura.gravemight': '墓冢之力',
@@ -2752,6 +2762,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': '你的隊伍組成有所變動，已離開地城配對系統的佇列。',
     'dfinder.listingFull': '你的招募公告已額滿。',
     'error.wrongEquipSlot': '此物品無法裝備於該欄位。',
+    'log.deathwardSaves': '死亡護符救了你！',
     'error.heroicMarksNeeded': '購買{name}需要{marks}個英雄徽記。',
     'aura.clearcasting': '清晰施法',
     'aura.gravemight': '墓塚之力',
@@ -3025,6 +3036,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': '그룹 구성이 변경되어 던전 탐색기 대기열에서 퇴장했습니다.',
     'dfinder.listingFull': '그룹 모집 공고의 정원이 찼습니다.',
     'error.wrongEquipSlot': '해당 슬롯에 맞지 않는 장비입니다.',
+    'log.deathwardSaves': '죽음의 수호가 당신을 구했습니다!',
     'error.heroicMarksNeeded': '{name}을(를) 구매하려면 영웅의 징표 {marks}개가 필요합니다.',
     'aura.clearcasting': '선명한 시전',
     'aura.gravemight': '무덤의 위력',
@@ -3309,6 +3321,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
       'グループ構成が変わったためダンジョンファインダーのキューから退出しました。',
     'dfinder.listingFull': 'グループリストが満員になりました。',
     'error.wrongEquipSlot': 'そのアイテムはそのスロットに装備できません。',
+    'log.deathwardSaves': '死の加護があなたを救った！',
     'error.heroicMarksNeeded': '{name}を購入するには英雄の証が{marks}個必要です。',
     'aura.clearcasting': 'クリアキャスティング',
     'aura.gravemight': 'グレイブマイト',
@@ -3597,6 +3610,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'dfinder.groupChanged': 'Seu grupo mudou e saiu da fila do Localizador de Masmorras.',
     'dfinder.listingFull': 'Sua listagem de grupo está cheia.',
     'error.wrongEquipSlot': 'Esse item não pode ser colocado nesse espaço.',
+    'log.deathwardSaves': 'Uma proteção contra a morte salva você!',
     'error.heroicMarksNeeded': 'Você precisa de {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'O caixote está fechado com pregos.',
     'groundPickup.gravecallerSigilDeny': 'O sigilo repele seu toque.',
@@ -3883,6 +3897,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
       'Состав вашей группы изменился, и она покинула очередь Поисковика подземелий.',
     'dfinder.listingFull': 'Ваше объявление о наборе группы заполнено.',
     'error.wrongEquipSlot': 'Этот предмет не подходит для данного слота.',
+    'log.deathwardSaves': 'Оберег от смерти спасает вас!',
     'error.heroicMarksNeeded': 'Вам нужно {marks} Героических знаков, чтобы купить {name}.',
     'aura.clearcasting': 'Ясность',
     'aura.gravemight': 'Могильная мощь',
@@ -5909,6 +5924,15 @@ const RULES: Rule[] = [
       }) + (m[5] ? locTalentTail(m[5]) : ''),
   },
   {
+    re: /^Talents: (.+) - (.+)\/(.+) rows selected\.(.*)$/,
+    build: (m) =>
+      t('hudChrome.talentRows.readoutSummary', {
+        head: m[1] === 'no specialization' ? t('game.talents.readout.noSpec') : m[1],
+        spent: m[2],
+        total: m[3],
+      }) + (m[4] ? locTalentTail(m[4]) : ''),
+  },
+  {
     re: /^The ritual circle is silent without the Crypt Keystone\.$/,
     build: () => tQuestExtra('ritualNeedsKey'),
   },
@@ -5955,6 +5979,10 @@ const RULES: Rule[] = [
   {
     re: /^You must be level (\d+) to equip that\.$/,
     build: (m) => tSim('error.equipLevel', { level: m[1] }),
+  },
+  {
+    re: /^You must have a shield equipped\.$/,
+    build: () => t('hudChrome.abilityError.shieldRequired'),
   },
   {
     re: /^You can save at most (\d+) loadouts\.$/,
