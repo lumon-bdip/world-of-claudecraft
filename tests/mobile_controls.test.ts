@@ -377,7 +377,27 @@ class FakeElement extends EventTarget {
   }
 
   releasePointerCapture(pointerId: number): void {
+    if (!this.captured.has(pointerId)) return;
     this.captured.delete(pointerId);
+    // Real browsers dispatch lostpointercapture for both an explicit
+    // releasePointerCapture() call and an implicit capture loss (spec
+    // behavior), and do so as a separate task rather than re-entrantly within
+    // the releasePointerCapture() call itself. The fake DOM previously stayed
+    // silent here, which is why the pinch-vs-swipe-look echo regression
+    // (releaseSwipeLook's own release tearing down a just-started pinch) went
+    // uncaught: queue it with queueMicrotask so callers observe the same
+    // non-reentrant timing as a real browser instead of synchronous recursion.
+    queueMicrotask(() => {
+      this.dispatchEvent(
+        Object.defineProperties(
+          new Event('lostpointercapture', { bubbles: true, cancelable: true }),
+          {
+            pointerId: { value: pointerId },
+            pointerType: { value: 'touch' },
+          },
+        ),
+      );
+    });
   }
 
   hasPointerCapture(pointerId: number): boolean {
@@ -1386,6 +1406,89 @@ describe('MobileControls pointer lifecycle', () => {
     expect(zooms).toHaveLength(2);
     expect(zooms[0]).toBeGreaterThan(0);
     expect(zooms[1]).toBeLessThan(0);
+  });
+
+  it('keeps a pinch alive when the takeover release echoes back as lostpointercapture', () => {
+    // Regression test: releaseSwipeLook() calls releasePointerCapture() on the
+    // swipe-look pointer when a second finger lands (onPinchDown at size 2).
+    // That explicit release also fires lostpointercapture per spec, exactly
+    // like an implicit iOS capture loss. Without the releasingCaptureForPointer
+    // guard, the canvas lostpointercapture handler (mobile_controls.ts:429)
+    // treats that echo as a real capture loss and runs onPinchEnd for the
+    // pointer that just became part of the pinch, deleting it from
+    // pinchPointers and nulling pinchPrevDist: the pinch that just started is
+    // dead on arrival and stays dead (only pointerdown re-adds a pointer).
+    const { canvas } = installMobileControlDom();
+    const zooms: number[] = [];
+    const lookActive: boolean[] = [];
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: (active: boolean) => {
+        lookActive.push(active);
+      },
+      setTouchLookVector: () => {},
+      applyTouchLookDelta: () => {},
+      zoomBy: (delta: number) => {
+        zooms.push(delta);
+      },
+    } as unknown as Input;
+
+    new MobileControls(input, mobileCallbacks()).start();
+
+    // First finger: starts swipe-look (moves past the deadzone so lookActive
+    // latches true and pointer capture is actually held, matching the fake
+    // DOM's captured-set guard on releasePointerCapture).
+    canvas.dispatchEvent(
+      pointerEvent('pointerdown', {
+        pointerId: 41,
+        pointerType: 'touch',
+        clientX: 100,
+        clientY: 100,
+      }),
+    );
+    canvas.dispatchEvent(
+      pointerEvent('pointermove', {
+        pointerId: 41,
+        pointerType: 'touch',
+        clientX: 130,
+        clientY: 100,
+      }),
+    );
+    expect(lookActive).toEqual([true]);
+
+    // Second finger lands: triggers the pinch takeover, which releases the
+    // first finger's swipe-look capture and echoes lostpointercapture for it.
+    canvas.dispatchEvent(
+      pointerEvent('pointerdown', {
+        pointerId: 42,
+        pointerType: 'touch',
+        clientX: 200,
+        clientY: 100,
+      }),
+    );
+    expect(lookActive).toEqual([true, false]);
+
+    // The pinch must survive the echo: a move on both fingers should still
+    // register as a guarded pinch zoom, not be silently dropped.
+    canvas.dispatchEvent(
+      pointerEvent('pointermove', {
+        pointerId: 41,
+        pointerType: 'touch',
+        clientX: 90,
+        clientY: 100,
+      }),
+    );
+    canvas.dispatchEvent(
+      pointerEvent('pointermove', {
+        pointerId: 42,
+        pointerType: 'touch',
+        clientX: 210,
+        clientY: 100,
+      }),
+    );
+
+    expect(zooms.length).toBeGreaterThan(0);
   });
 
   it('does not zoom for small two-finger jitter', () => {
