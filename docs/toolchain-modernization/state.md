@@ -2,7 +2,36 @@
 
 ## Current phase
 
-Phase 1 (Degit the i18n aggregate artifacts): NOT STARTED.
+Phase 1 (Degit the i18n aggregate artifacts): IMPLEMENTED 2026-07-14, draft PR #1931
+open against release/v0.26.0. Next: the Phase 1 QA session (phase-01-qa.md) marks the
+PR ready on PASS; the merge stays owner-scheduled at a release cut (OPEN item 3).
+
+## Phase 1 execution notes (2026-07-14, for later phases)
+
+- Commit cadence deviation: no separate test(i18n) commit exists. The pinned-test edits
+  rode chore(i18n) and ci(i18n) per the non-negotiable pinned-tests-same-commit
+  constraint, and every commit in the stack is individually green.
+- tests/ci_workflow.test.ts DID gain Phase 1 pins (review finding): the coverage step in
+  both jobs, the slimmed freshness diff line, and gate.mjs staying free of the summary
+  path. Phases 3 and 4 must update these pins when they restructure ci.yml.
+- Both de-committed files gained stays-untracked pins (i18n_resolved_equivalence,
+  i18n_status_registry) so a re-commit regression is caught.
+- scripts/gate.mjs deliberately did NOT gain the coverage-summary step: it is a CI-only
+  audit step (job summary sink, never gates). Revisit if step-list parity is tightened.
+- Two unmapped comment-only consumers were found and fixed beyond the mapped set:
+  src/ui/i18n.ts (SHA harness wording) and scripts/i18n_build.mjs (SHA-invariance note).
+- The sticky PR comment substitute was deferred; the job summary is the audit trail.
+- Merge experiment result: two branches each adding a key in a different catalog domain
+  merged with zero conflicts, AND the auto-merged slices were byte-identical to a fresh
+  regeneration of the merged union (textual merge = semantic merge for line-item slices).
+- Local environment gotchas (this dev machine, relevant to every later phase):
+  Node 25.2.1 (shell default) ships a built-in localStorage that breaks jsdom suites
+  (deeds_window_focus reds); run gates under nvm Node 24 (CI pins Node 22). ffmpeg and
+  ffprobe are NOT on PATH; the node_modules ffmpeg-static/ffprobe-static binaries work
+  when shimmed onto PATH (direct Phase 3 / D8 evidence). npm run test:browser needed a
+  one-time npx playwright install chromium-headless-shell, and then has ONE pre-existing
+  environmental failure (armory_mobile_layout pixel-height assertion) that reproduces
+  identically on the untouched release/v0.26.0 tip; CI is the arbiter for that suite.
 
 ## Locked design decisions (record once, reference forever)
 
