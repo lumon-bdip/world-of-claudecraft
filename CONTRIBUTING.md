@@ -64,6 +64,23 @@ npm run dev          # in another terminal; the client proxies to the server
 The [README](README.md) has the full host, develop, and play guide, and the
 `CLAUDE.md` files throughout the repo document the conventions for each area.
 
+### TypeScript toolchain
+
+Type checking runs on TypeScript 7, the native compiler: `npx tsc --noEmit` works
+exactly as before and a full repo check now takes a few seconds instead of tens of
+seconds. The install is the official dual alias: the `typescript` package resolves
+the TypeScript 6 JS API (via the `@typescript/typescript6` wrapper) because
+`svelte-check` still consumes that API, while `@typescript/native` provides the
+`tsc` binary. Two things to know:
+
+- **Editors.** VS Code needs the TypeScript 7 marketplace extension for language
+  service support until built-in support ships; editors that use a standalone
+  language server work natively.
+- **When to revisit.** Collapse the dual alias back to a single `typescript`
+  dependency once BOTH hold: the TypeScript 7.1 stable JS API has shipped, and
+  sveltejs/language-tools issue 3063 has closed with a released `svelte-check`
+  that adopts it.
+
 ## Making your change
 
 1. **Create a branch** from the current `release/vX.Y.Z` branch: `feature/<short-slug>`
