@@ -1259,7 +1259,7 @@ describe('chat moderation', () => {
 describe('autosaves', () => {
   beforeEach(() => {
     vi.mocked(saveCharacterState).mockReset();
-    vi.mocked(saveCharacterState).mockResolvedValue(undefined);
+    vi.mocked(saveCharacterState).mockResolvedValue(true);
   });
 
   it('skips overlapping saveAll runs while saving each current session once', async () => {
@@ -1272,7 +1272,7 @@ describe('autosaves', () => {
     const firstSave = new Promise<void>((resolve) => {
       resolveFirstSave = resolve;
     });
-    vi.mocked(saveCharacterState).mockImplementationOnce(() => firstSave);
+    vi.mocked(saveCharacterState).mockImplementationOnce(() => firstSave.then(() => true));
 
     const firstRun = server.saveAll('test');
     await vi.waitFor(() => {
@@ -1298,7 +1298,7 @@ describe('autosaves', () => {
     const firstSave = new Promise<void>((resolve) => {
       resolveFirstSave = resolve;
     });
-    vi.mocked(saveCharacterState).mockImplementationOnce(() => firstSave);
+    vi.mocked(saveCharacterState).mockImplementationOnce(() => firstSave.then(() => true));
 
     const autosave = server.saveAll('autosave');
     await vi.waitFor(() => {
