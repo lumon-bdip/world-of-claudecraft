@@ -335,6 +335,7 @@ import {
   instanceSlotAt as instanceSlotAtImpl,
   leaveCrypt as leaveCryptImpl,
   leaveDungeon as leaveDungeonImpl,
+  resetDungeonInstances as resetDungeonInstancesImpl,
   updateDoorTriggers as updateDoorTriggersImpl,
   updateInstances as updateInstancesImpl,
 } from './instances/dungeons';
@@ -790,6 +791,9 @@ export interface InstanceSlot {
   // Sim-time (seconds) this slot was claimed, cleared with the claim. Session
   // state (instances never persist); the Sanctum speed deed reads it.
   claimedAt?: number;
+  // A manual difficulty-transition reset cannot itself be chained into another
+  // reset until the normal empty-instance timeout has elapsed.
+  manualResetAvailableAt?: number;
   // Players whose heroic daily lockout FIRST landed with THIS claim's final-boss
   // kill (instances/dungeons lockToHeroicClaim). The heroic door's cleared-run
   // exception admits only these: a player locked by an earlier run can never
@@ -3360,6 +3364,7 @@ export class Sim {
       instanceClaimIdAt: sim.instanceClaimIdAt.bind(sim),
       enterDungeon: sim.enterDungeon.bind(sim),
       leaveDungeon: sim.leaveDungeon.bind(sim),
+      resetDungeonInstances: sim.resetDungeonInstances.bind(sim),
       dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
       setDungeonDifficulty: sim.setDungeonDifficulty.bind(sim),
       awardHeroicMarks: sim.awardHeroicMarks.bind(sim),
@@ -7535,6 +7540,10 @@ export class Sim {
 
   leaveDungeon(pid?: number): void {
     leaveDungeonImpl(this.ctx, pid);
+  }
+
+  resetDungeonInstances(pid?: number): void {
+    resetDungeonInstancesImpl(this.ctx, pid);
   }
 
   dungeonDifficulty(pid?: number): DungeonDifficulty {

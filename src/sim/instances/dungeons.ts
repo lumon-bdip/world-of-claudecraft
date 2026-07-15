@@ -461,7 +461,91 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
   inst.exitId = null;
   inst.emptyFor = 0;
   inst.claimedAt = undefined;
+  inst.manualResetAvailableAt = undefined;
   inst.clearedBy = new Set();
+}
+
+// Explicit classic-style reset for the caller's standard dungeon claims. Durable
+// character keys keep relogs attached to the same run; this is the deliberate,
+// server-authoritative way to abandon that run before selecting another difficulty.
+// Raid approach/arena claims are excluded because their lockout and corpse-return
+// rules are stricter and are reset only by their existing lifecycle.
+export function resetDungeonInstances(ctx: SimContext, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const party = ctx.partyOf(r.meta.entityId);
+  if (party && party.leader !== r.meta.entityId) {
+    ctx.error(r.meta.entityId, 'You are not the party leader.');
+    return;
+  }
+
+  const key = instanceKeyFor(ctx, r.meta.entityId);
+  const owned = ctx.instances.filter(
+    (inst) => inst.partyKey === key && !RAID_ALLOWED_DUNGEON_IDS.has(inst.dungeonId),
+  );
+  if (owned.length === 0) {
+    ctx.error(r.meta.entityId, 'You have no instances to reset.');
+    return;
+  }
+  // Reset is a difficulty-transition escape hatch, not a same-difficulty farming
+  // loop. The v0.26 durable key intentionally stopped relog from respawning Normal
+  // bosses; require the player to select the other difficulty before abandoning the
+  // old claims so Reset All cannot recreate that exploit with one extra click.
+  const selected = ctx.dungeonDifficulty(r.meta.entityId);
+  const resettable = owned.filter((inst) => inst.difficulty !== selected);
+  if (resettable.length === 0) {
+    ctx.error(r.meta.entityId, 'Change dungeon difficulty before resetting these instances.');
+    return;
+  }
+  if (resettable.some((inst) => (inst.manualResetAvailableAt ?? 0) > ctx.time)) {
+    ctx.error(r.meta.entityId, 'Instances can only be reset once every 5 minutes.');
+    return;
+  }
+  if (selected === 'heroic') {
+    const locked = resettable.find((inst) =>
+      isRaidLocked(ctx, r.meta, heroicLockoutId(inst.dungeonId)),
+    );
+    if (locked) {
+      ctx.error(r.meta.entityId, `You are locked to Heroic ${DUNGEONS[locked.dungeonId].name}.`);
+      return;
+    }
+  }
+
+  // Validate every claim before freeing any so Reset All is atomic. A living player,
+  // an unreleased corpse, or a released spirit still bound to a corpse in the claim
+  // keeps it alive for recovery and loot instead of being stranded by the reset.
+  for (const inst of resettable) {
+    const origin = instanceOriginOf(inst);
+    for (const meta of ctx.players.values()) {
+      const player = ctx.entities.get(meta.entityId);
+      if (!player) continue;
+      const bodyInside = instanceContains(origin, player.pos);
+      const corpseInside =
+        player.ghost &&
+        player.corpsePos !== null &&
+        player.corpseInstanceId === inst.exitId &&
+        instanceContains(origin, player.corpsePos);
+      if (bodyInside || corpseInside) {
+        ctx.error(r.meta.entityId, 'You cannot reset instances while someone is still inside.');
+        return;
+      }
+    }
+    if (inst.mobIds.some((id) => ctx.entities.get(id)?.lootable)) {
+      ctx.error(r.meta.entityId, 'You cannot reset instances while loot remains inside.');
+      return;
+    }
+  }
+
+  // Reclaim each slot immediately at the selected difficulty. This commits the
+  // transition atomically: toggling the preference back afterward still rejoins this
+  // live claim, so Reset All cannot be turned into a Normal -> Heroic -> Normal
+  // zero-downtime boss-respawn loop.
+  for (const inst of resettable) {
+    freeInstance(ctx, inst);
+    claimInstance(ctx, inst, key, claimDifficultyForDungeon(inst.dungeonId, selected));
+    inst.manualResetAvailableAt = ctx.time + INSTANCE_EMPTY_TIMEOUT;
+  }
+  ctx.error(r.meta.entityId, 'All instances have been reset.');
 }
 
 // Kill-time lockout recipients for a claimed instance: every CURRENT member of

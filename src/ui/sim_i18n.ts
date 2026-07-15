@@ -6421,6 +6421,30 @@ const RULES: Rule[] = [
     build: (m) => tSim('error.heroicMarksNeeded', { marks: m[1], name: locItem(m[2]) }),
   },
   {
+    re: /^All instances have been reset\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.resetDone'),
+  },
+  {
+    re: /^You have no instances to reset\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.resetNone'),
+  },
+  {
+    re: /^You cannot reset instances while someone is still inside\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.resetOccupied'),
+  },
+  {
+    re: /^Change dungeon difficulty before resetting these instances\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.resetSameDifficulty'),
+  },
+  {
+    re: /^You cannot reset instances while loot remains inside\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.resetLoot'),
+  },
+  {
+    re: /^Instances can only be reset once every 5 minutes\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.resetCooldown'),
+  },
+  {
     re: /^You pass through the tombstone into (.+)\.$/,
     build: (m) => t('sim.delve.tombstoneInto', { name: locDelveModule(m[1]) }),
   },

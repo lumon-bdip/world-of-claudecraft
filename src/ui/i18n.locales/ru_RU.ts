@@ -505,6 +505,21 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.menuItem': 'Настройки добычи',
   'hudChrome.dungeonDifficulty.setHeroic': 'Установить сложность подземелий: героическая',
   'hudChrome.dungeonDifficulty.setNormal': 'Установить сложность подземелий: обычная',
+  'hudChrome.dungeonDifficulty.resetAll': 'Сбросить все подземелья',
+  'hudChrome.dungeonDifficulty.resetDone': 'Все подземелья сброшены.',
+  'hudChrome.dungeonDifficulty.resetNone': 'Нет подземелий для сброса.',
+  'hudChrome.dungeonDifficulty.resetOccupied':
+    'Нельзя сбросить подземелья, пока внутри кто-то находится.',
+  'hudChrome.dungeonDifficulty.resetSameDifficulty':
+    'Смените сложность подземелья перед сбросом этих подземелий.',
+  'hudChrome.dungeonDifficulty.resetLoot':
+    'Нельзя сбросить подземелья, пока внутри остаётся добыча.',
+  'hudChrome.dungeonDifficulty.resetConfirmTitle': 'Сбросить все подземелья?',
+  'hudChrome.dungeonDifficulty.resetConfirmBody':
+    'Это отменит пустые подземелья прежней выбранной сложности. Неполученная добыча не позволит выполнить сброс.',
+  'hudChrome.dungeonDifficulty.resetConfirm': 'Сбросить подземелья',
+  'hudChrome.dungeonDifficulty.resetCooldown':
+    'Подземелья можно сбрасывать только один раз в 5 минут.',
   'hudChrome.lootSettings.method': 'Способ добычи',
   'hudChrome.lootSettings.rollThreshold': 'Порог броска',
   'hudChrome.lootSettings.groupLoot': 'Групповая добыча',

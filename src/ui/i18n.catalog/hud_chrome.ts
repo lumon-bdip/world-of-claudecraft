@@ -1372,6 +1372,17 @@ export const hudChromeStrings = {
   dungeonDifficulty: {
     setHeroic: 'Set Dungeon Difficulty: Heroic',
     setNormal: 'Set Dungeon Difficulty: Normal',
+    resetAll: 'Reset All Instances',
+    resetDone: 'All instances have been reset.',
+    resetNone: 'You have no instances to reset.',
+    resetOccupied: 'You cannot reset instances while someone is still inside.',
+    resetSameDifficulty: 'Change dungeon difficulty before resetting these instances.',
+    resetLoot: 'You cannot reset instances while loot remains inside.',
+    resetConfirmTitle: 'Reset All Instances?',
+    resetConfirmBody:
+      'This abandons empty instances from your previously selected difficulty. Unclaimed loot will prevent the reset.',
+    resetConfirm: 'Reset Instances',
+    resetCooldown: 'Instances can only be reset once every 5 minutes.',
   },
   // Modular bag filtering controls: the category chips, sort dropdown, and live
   // search above the bag grid, plus the "no items match" empty state.

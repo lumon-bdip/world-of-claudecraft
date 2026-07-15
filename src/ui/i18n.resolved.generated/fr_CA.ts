@@ -1283,7 +1283,17 @@ export const fr_CA: EnTranslations = {
     },
     "dungeonDifficulty": {
       "setHeroic": "Définir la difficulté du donjon : Héroïque",
-      "setNormal": "Définir la difficulté du donjon : Normal"
+      "setNormal": "Définir la difficulté du donjon : Normal",
+      "resetAll": "Reset All Instances",
+      "resetDone": "All instances have been reset.",
+      "resetNone": "You have no instances to reset.",
+      "resetOccupied": "You cannot reset instances while someone is still inside.",
+      "resetSameDifficulty": "Change dungeon difficulty before resetting these instances.",
+      "resetLoot": "You cannot reset instances while loot remains inside.",
+      "resetConfirmTitle": "Reset All Instances?",
+      "resetConfirmBody": "This abandons empty instances from your previously selected difficulty. Unclaimed loot will prevent the reset.",
+      "resetConfirm": "Reset Instances",
+      "resetCooldown": "Instances can only be reset once every 5 minutes."
     },
     "bags": {
       "cannotDestroy": "Cet objet ne peut pas être détruit.",

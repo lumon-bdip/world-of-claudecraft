@@ -149,6 +149,162 @@ describe('dungeons: door-trigger entry/exit', () => {
 });
 
 describe('dungeons: heroic difficulty', () => {
+  it('resets a cleared durable solo claim before starting the selected heroic difficulty', () => {
+    const sim = makeSim(456);
+    const firstPid = sim.addPlayer('warrior', 'Switcher', { characterId: 77 });
+
+    enterDungeon(sim.ctx, 'hollow_crypt', firstPid);
+    const normalInst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+    const normalBoss = mobInInstance(sim, normalInst, 'morthen');
+    const firstPlayer = sim.entities.get(firstPid) as AnyEntity;
+    teleport(sim, firstPlayer, normalBoss.pos.x, normalBoss.pos.z);
+    sim.dealDamage(firstPlayer, normalBoss, normalBoss.hp + 100000, false, 'physical', null, 'hit');
+    expect(normalBoss.dead).toBe(true);
+
+    // A relog keeps the anti-exploit durable claim and its defeated boss.
+    sim.removePlayer(firstPid);
+    const secondPid = sim.addPlayer('warrior', 'Switcher', { characterId: 77 });
+    enterDungeon(sim.ctx, 'hollow_crypt', secondPid);
+    expect(mobInInstance(sim, normalInst, 'morthen').dead).toBe(true);
+
+    // Loot the defeated boss, leave, select the other difficulty, and explicitly
+    // reset the empty old-difficulty claim before entering Heroic.
+    normalBoss.lootable = false;
+    normalBoss.loot = null;
+    leaveDungeon(sim.ctx, secondPid);
+    sim.setDungeonDifficulty('heroic', secondPid);
+    sim.resetDungeonInstances(secondPid);
+    expect(normalInst.partyKey).not.toBeNull();
+    expect(normalInst.difficulty).toBe('heroic');
+    enterDungeon(sim.ctx, 'hollow_crypt', secondPid);
+
+    const heroicInst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
+    expect(heroicInst).toBeTruthy();
+    expect(mobInInstance(sim, heroicInst, 'morthen').dead).toBe(false);
+  });
+
+  it('refuses a same-difficulty reset so normal bosses cannot be farmed with zero downtime', () => {
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'Farmer', { characterId: 89 });
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    const inst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+    leaveDungeon(sim.ctx, pid);
+
+    sim.drainEvents();
+    sim.resetDungeonInstances(pid);
+
+    expect(inst.partyKey).not.toBeNull();
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (event) =>
+          event.type === 'error' &&
+          event.pid === pid &&
+          event.text === 'Change dungeon difficulty before resetting these instances.',
+      ),
+    ).toBe(true);
+  });
+
+  it('binds a reset to the selected difficulty so toggle-reset-toggle cannot respawn Normal', () => {
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'ToggleFarmer', { characterId: 92 });
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    const normalInst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+    leaveDungeon(sim.ctx, pid);
+
+    sim.setDungeonDifficulty('heroic', pid);
+    sim.resetDungeonInstances(pid);
+    expect(normalInst.difficulty).toBe('heroic');
+
+    sim.setDungeonDifficulty('normal', pid);
+    sim.drainEvents();
+    sim.resetDungeonInstances(pid);
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (event) =>
+          event.type === 'error' &&
+          event.pid === pid &&
+          event.text === 'Instances can only be reset once every 5 minutes.',
+      ),
+    ).toBe(true);
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+
+    expect(claimedDungeon(sim, 'hollow_crypt', 'normal')).toBeUndefined();
+    expect(claimedDungeon(sim, 'hollow_crypt', 'heroic')).toBe(normalInst);
+  });
+
+  it('preserves an empty claim while unlooted boss loot remains inside', () => {
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'Looter', { characterId: 90 });
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    const inst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+    const boss = mobInInstance(sim, inst, 'morthen');
+    const player = sim.entities.get(pid) as AnyEntity;
+    teleport(sim, player, boss.pos.x, boss.pos.z);
+    sim.dealDamage(player, boss, boss.hp + 100000, false, 'physical', null, 'hit');
+    expect(boss.lootable).toBe(true);
+    leaveDungeon(sim.ctx, pid);
+    sim.setDungeonDifficulty('heroic', pid);
+
+    sim.drainEvents();
+    sim.resetDungeonInstances(pid);
+
+    expect(inst.partyKey).not.toBeNull();
+    expect(sim.entities.get(boss.id)).toBe(boss);
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (event) =>
+          event.type === 'error' &&
+          event.pid === pid &&
+          event.text === 'You cannot reset instances while loot remains inside.',
+      ),
+    ).toBe(true);
+  });
+
+  it('preserves a heroic daily lockout after resetting a cleared normal claim', () => {
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'Locked', { characterId: 91 });
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    const normalInst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+    leaveDungeon(sim.ctx, pid);
+    sim.setDungeonDifficulty('heroic', pid);
+    const meta = sim.players.get(pid);
+    expect(meta).toBeTruthy();
+    meta?.raidLockouts.set('hollow_crypt:heroic', Number.MAX_SAFE_INTEGER);
+
+    sim.resetDungeonInstances(pid);
+    expect(normalInst.partyKey).not.toBeNull();
+    sim.drainEvents();
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+
+    expect(claimedDungeon(sim, 'hollow_crypt', 'heroic')).toBeUndefined();
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (event) => event.type === 'log' && event.text === DUNGEONS.hollow_crypt.enterText,
+      ),
+    ).toBe(true);
+  });
+
+  it('refuses to reset an owned instance while a player is still inside', () => {
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'Inside', { characterId: 88 });
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    const inst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+    sim.setDungeonDifficulty('heroic', pid);
+
+    sim.drainEvents();
+    sim.resetDungeonInstances(pid);
+
+    expect(inst.partyKey).not.toBeNull();
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (event) =>
+          event.type === 'error' &&
+          event.pid === pid &&
+          event.text === 'You cannot reset instances while someone is still inside.',
+      ),
+    ).toBe(true);
+  });
+
   it('claims heroic Hollow Crypt as a fixed heroic instance with level-22 transformed mobs', () => {
     const heroic = makeSim(123);
     const heroicPid = heroic.addPlayer('warrior', 'Hero');

@@ -572,6 +572,10 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     );
     return null;
   }
+  if (/^\/(?:dungeons|dungeon|instances)\s+reset\s*$/i.test(raw)) {
+    ctx.resetDungeonInstances(r.meta.entityId);
+    return null;
+  }
   if (/^\/(?:dungeons|dungeon|instances)(?:\s|$)/i.test(raw)) {
     ctx.error(r.meta.entityId, readouts.dungeonsReadout());
     ctx.error(

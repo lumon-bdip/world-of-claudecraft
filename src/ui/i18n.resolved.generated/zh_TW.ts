@@ -1283,7 +1283,17 @@ export const zh_TW: EnTranslations = {
     },
     "dungeonDifficulty": {
       "setHeroic": "設定地城難度：英雄",
-      "setNormal": "設定地城難度：普通"
+      "setNormal": "設定地城難度：普通",
+      "resetAll": "重置所有地城副本",
+      "resetDone": "所有地城副本已重置。",
+      "resetNone": "你沒有可重置的地城副本。",
+      "resetOccupied": "仍有人在地城副本內時無法重置。",
+      "resetSameDifficulty": "切換地城難度後才能重置這些副本。",
+      "resetLoot": "地城副本內仍有戰利品時無法重置。",
+      "resetConfirmTitle": "重置所有地城副本？",
+      "resetConfirmBody": "此操作會放棄先前所選難度下的空置副本。若有未拾取的戰利品，則無法重置。",
+      "resetConfirm": "重置副本",
+      "resetCooldown": "每5分鐘只能重置一次副本。"
     },
     "bags": {
       "cannotDestroy": "此物品無法銷毀。",
