@@ -5,15 +5,16 @@
 // translate that key. The build (scripts/i18n_build.mjs) unflattens this map and
 // overlays it onto nested `en` to produce the dense resolved table; any key here
 // must be a real `en` leaf path: keys are typed `Partial<Record<TranslationKey,
-// string>>` so tsc rejects a structurally-wrong key, plus
-// tests/i18n_overlay_key_membership.test.ts catches a typo'd entity id the
-// template-literal key type cannot. Overlays are SPARSE: an
+// string>>` against the build-generated flat key union, so tsc rejects any key
+// that is not an exact `en` leaf path, typo'd entity ids included. Overlays are SPARSE: an
 // untranslated key is omitted and the build fills it from English, then the
 // registry (src/ui/i18n.status.json) marks it `pending`.
 
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.legend': '传奇',
+  'hudChrome.discord.roleTag.shill': '布道者',
   'hudChrome.wocStore.title': 'WOC 商店',
   'hudChrome.wocStore.close': '关闭 WOC 商店',
   'hudChrome.wocStore.tabsLabel': 'WOC 商店分区',
@@ -553,6 +554,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.theme.knob.energy': '能量',
   'hudChrome.options.interfaceMode': '界面模式',
   'hudChrome.options.groundReticle': '地面瞄准指示圈',
+  'hudChrome.options.showAttackButton': '显示攻击按钮',
   'hudChrome.options.interfaceModeAuto': '自动',
   'hudChrome.options.interfaceModeDesktop': '桌面',
   'hudChrome.options.interfaceModeTouch': '触控',
@@ -572,6 +574,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '法术强度',
   'hudChrome.statInfo.names.critRating': '暴击等级',
   'hudChrome.statInfo.names.hasteRating': '急速等级',
+  'hudChrome.statInfo.names.hitRating': '命中等级',
+  'hudChrome.statInfo.desc.hitRating':
+    '来自装备和套装奖励的命中等级，降低你的攻击被闪避和法术被抵抗的几率，对更高等级的敌人尤其有效。约每10点等级提供1%命中。',
   'hudChrome.statInfo.names.warfare': '战争',
   'hudChrome.statInfo.warfareValue': '造成伤害 +{increase}% / 承受伤害 -{reduction}%',
   'hudChrome.statInfo.desc.critRating':
@@ -885,6 +890,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'download.macCta': '下载 macOS 版',
   'download.linuxCta': '下载 Linux 版',
   'download.linuxHint': 'AppImage 格式：赋予可执行权限后直接运行，无需安装。',
+  'download.windowsCta': '下载 Windows 版',
   'download.windowsPending': 'Windows 版本即将推出。',
   'download.desc': '获取独立启动器，以获得更优化的性能和全屏游戏体验。',
   'comingSoon.placeholder': '敬请期待...',
@@ -1140,6 +1146,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'loading.connectionLost': '与服务器的连接已断开。',
   'loading.reconnecting': '连接已断开。正在重新连接...',
   'loading.connectionRejected': '服务器关闭了连接。',
+  'loading.realmFull': '当前服务器已满，请稍后几分钟再试。',
+  'loading.tooManyConnections':
+    '您的网络向该服务器发起的连接过多。请关闭多余的游戏窗口，或稍后几分钟再试。',
   'errors.nothingInteract': '附近没有可互动目标。',
   'errors.noEnemyNearby': '附近没有敌人。',
   'errors.characterNameRequired': '请输入角色名称。',
@@ -1186,9 +1195,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'realm.medium': '中',
   'realm.low': '低',
   'realm.popTipLow': '人数较少：当前在线玩家不足 15 人。空间充足，适合全新开始。',
-  'realm.popTipMedium': '人数适中：当前在线玩家 15 至 39 人。健康活跃的服务器。',
-  'realm.popTipHigh': '人数较多：当前在线玩家 40 至 79 人。繁忙，玩家众多。',
-  'realm.popTipFull': '人数已满：当前在线玩家 80 人或以上。非常繁忙；登录时可能需要排队。',
+  'realm.popTipMedium': '人数适中：当前在线玩家 15 至 79 人。健康活跃的服务器。',
+  'realm.popTipHigh': '人数较多：当前在线玩家 80 人以上。繁忙，玩家众多。',
+  'realm.popTipFull': '人数已满：当前服务器已达到玩家上限。在有玩家退出之前，新的登录会被拒绝。',
   'realm.popTipOffline': '离线：此服务器当前无法连接，无法加入。',
   'realm.characterCountOne': '{count} 个角色',
   'realm.characterCountOther': '{count} 个角色',
@@ -1748,6 +1757,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hud.arena.levelClass': '{level} 级 {className}',
   'abilityUi.actionBar.attackName': '攻击',
   'abilityUi.actionBar.attackTooltip': '对目标开启或关闭自动攻击。右键点击敌人也会发起攻击。',
+  'abilityUi.actionBar.attackRemoveHint': '右键点击可将其从动作栏移除并空出栏位。',
   'abilityUi.actionBar.emptySlot': '空栏位',
   'abilityUi.actionBar.slotAria': '动作栏位 {slot}：{ability}',
   'abilityUi.actionBar.emptySlotAria': '动作栏位 {slot}：空',
@@ -2391,6 +2401,15 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '为一个友方目标恢复 {damage} 点生命值，并在 21 秒内额外恢复一定生命值。',
   'entities.abilities.barkskin.name': '橡树皮',
   'entities.abilities.barkskin.description': '你的皮肤硬化如树皮，使护甲提高 150，持续 15 秒。',
+  'entities.abilities.ironhold.name': '铁壁',
+  'entities.abilities.ironhold.description':
+    '以坚固的防御自守，使受到的所有伤害降低 40%，持续 8 秒。',
+  'entities.abilities.sacred_bulwark.name': '神圣壁垒',
+  'entities.abilities.sacred_bulwark.description':
+    '在 {duration} 秒内，下一次会杀死你的敌人攻击将被抵消，转而将你恢复至 35% 生命值。',
+  'entities.abilities.primal_reflexes.name': '野性反射',
+  'entities.abilities.primal_reflexes.description':
+    '你的本能变得敏锐，使闪避几率提高 50%，持续 6 秒。',
   'entities.abilities.starfire.name': '天陨',
   'entities.abilities.starfire.description': '召下一道星辰之火，造成 {damage} 点奥术伤害。',
   'entities.abilities.travel_form.name': '迅捷形态',
@@ -5444,6 +5463,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.attackSpeedFast': '攻击速度提高 {pct}%',
   'hudChrome.auraEffect.haste': '攻击速度和施法速度提高 {pct}%',
   'hudChrome.auraEffect.tongues': '施法时间延长 {pct}%',
+  'hudChrome.auraEffect.damageReduction': '受到的所有伤害降低 {pct}%',
+  'hudChrome.auraEffect.guardianWard': '下一次敌人的致命攻击会改为将你的生命值恢复至 {pct}%',
   'hudChrome.auraEffect.increase.ap': '攻击强度提高 {value}',
   'hudChrome.auraEffect.increase.armor': '护甲提高 {value}',
   'hudChrome.auraEffect.increase.int': '智力提高 {value}',
@@ -6411,6 +6432,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '采矿',
   'hudChrome.gathering.logging': '伐木',
   'hudChrome.gathering.herbalism': '草药学',
+  'hudChrome.gathering.notReady': '这个资源节点尚未为你重新生成。',
   'hudChrome.archetypeTitle.label': '称号',
   'hudChrome.archetypeTitle.none': '无',
   'hudChrome.archetypeTitle.hobbyLabel': '爱好',

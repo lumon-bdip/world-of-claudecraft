@@ -5,15 +5,16 @@
 // translate that key. The build (scripts/i18n_build.mjs) unflattens this map and
 // overlays it onto nested `en` to produce the dense resolved table; any key here
 // must be a real `en` leaf path: keys are typed `Partial<Record<TranslationKey,
-// string>>` so tsc rejects a structurally-wrong key, plus
-// tests/i18n_overlay_key_membership.test.ts catches a typo'd entity id the
-// template-literal key type cannot. Overlays are SPARSE: an
+// string>>` against the build-generated flat key union, so tsc rejects any key
+// that is not an exact `en` leaf path, typo'd entity ids included. Overlays are SPARSE: an
 // untranslated key is omitted and the build fills it from English, then the
 // registry (src/ui/i18n.status.json) marks it `pending`.
 
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.legend': '傳奇',
+  'hudChrome.discord.roleTag.shill': '擁護者',
   'hudChrome.wocStore.title': 'WOC 商店',
   'hudChrome.wocStore.close': '關閉 WOC 商店',
   'hudChrome.wocStore.tabsLabel': 'WOC 商店分區',
@@ -553,6 +554,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.theme.knob.energy': '能量',
   'hudChrome.options.interfaceMode': '介面模式',
   'hudChrome.options.groundReticle': '地面瞄準指示圈',
+  'hudChrome.options.showAttackButton': '顯示攻擊按鈕',
   'hudChrome.options.interfaceModeAuto': '自動',
   'hudChrome.options.interfaceModeDesktop': '桌面',
   'hudChrome.options.interfaceModeTouch': '觸控',
@@ -572,6 +574,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '法術強度',
   'hudChrome.statInfo.names.critRating': '暴擊等級',
   'hudChrome.statInfo.names.hasteRating': '急速等級',
+  'hudChrome.statInfo.names.hitRating': '命中等級',
+  'hudChrome.statInfo.desc.hitRating':
+    '來自裝備和套裝獎勵的命中等級，降低你的攻擊被閃避和法術被抵抗的機率，對更高等級的敵人尤其有效。約每10點等級提供1%命中。',
   'hudChrome.statInfo.names.warfare': '戰爭',
   'hudChrome.statInfo.warfareValue': '造成傷害 +{increase}% / 承受傷害 -{reduction}%',
   'hudChrome.statInfo.desc.critRating':
@@ -886,6 +891,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'download.macCta': '下載 macOS 版',
   'download.linuxCta': '下載 Linux 版',
   'download.linuxHint': 'AppImage 格式：賦予可執行權限後直接執行，無需安裝。',
+  'download.windowsCta': '下載 Windows 版',
   'download.windowsPending': 'Windows 版本即將推出。',
   'download.desc': '獲取獨立啟動器，以獲得更優化的效能和全螢幕遊戲體驗。',
   'comingSoon.placeholder': '敬請期待...',
@@ -1141,6 +1147,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'loading.connectionLost': '與伺服器的連線已中斷。',
   'loading.reconnecting': '連線已中斷。正在重新連線...',
   'loading.connectionRejected': '伺服器已關閉連線。',
+  'loading.realmFull': '這個世界目前已滿，請於幾分鐘後再試。',
+  'loading.tooManyConnections':
+    '您的網路對這個世界建立的連線過多。請關閉多餘的遊戲視窗，或於幾分鐘後再試。',
   'errors.nothingInteract': '附近沒有可互動目標。',
   'errors.noEnemyNearby': '附近沒有敵人。',
   'errors.characterNameRequired': '請輸入角色名稱。',
@@ -1187,9 +1196,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'realm.medium': '中',
   'realm.low': '低',
   'realm.popTipLow': '人數較少：目前在線玩家不足 15 人。空間充足，適合全新開始。',
-  'realm.popTipMedium': '人數適中：目前在線玩家 15 至 39 人。健康活躍的世界。',
-  'realm.popTipHigh': '人數較多：目前在線玩家 40 至 79 人。繁忙，玩家眾多。',
-  'realm.popTipFull': '人數已滿：目前在線玩家 80 人或以上。非常繁忙；登入時可能需要排隊。',
+  'realm.popTipMedium': '人數適中：目前在線玩家 15 至 79 人。健康活躍的世界。',
+  'realm.popTipHigh': '人數較多：目前在線玩家 80 人以上。繁忙，玩家眾多。',
+  'realm.popTipFull': '人數已滿：這個世界目前已達到玩家上限。在有玩家登出之前，新的登入將被拒絕。',
   'realm.popTipOffline': '離線：此世界目前無法連接，無法加入。',
   'realm.characterCountOne': '{count} 個角色',
   'realm.characterCountOther': '{count} 個角色',
@@ -1750,6 +1759,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hud.arena.levelClass': '{level} 級 {className}',
   'abilityUi.actionBar.attackName': '攻擊',
   'abilityUi.actionBar.attackTooltip': '對目標開啟或關閉自動攻擊。右鍵點擊敵人也會發起攻擊。',
+  'abilityUi.actionBar.attackRemoveHint': '右鍵點擊可將其從動作列移除並空出欄位。',
   'abilityUi.actionBar.emptySlot': '空欄位',
   'abilityUi.actionBar.slotAria': '動作欄位 {slot}：{ability}',
   'abilityUi.actionBar.emptySlotAria': '動作欄位 {slot}：空',
@@ -2393,6 +2403,15 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '為一個友方目標恢復 {damage} 點生命值，並在 21 秒內額外恢復一定生命值。',
   'entities.abilities.barkskin.name': '橡樹皮術',
   'entities.abilities.barkskin.description': '你的皮膚硬化如樹皮，使護甲提高 150，持續 15 秒。',
+  'entities.abilities.ironhold.name': '鐵壁',
+  'entities.abilities.ironhold.description':
+    '以堅固的防禦自守，使受到的所有傷害降低 40%，持續 8 秒。',
+  'entities.abilities.sacred_bulwark.name': '神聖壁壘',
+  'entities.abilities.sacred_bulwark.description':
+    '在 {duration} 秒內，下一次會殺死你的敵人攻擊將被抵消，轉而將你恢復至 35% 生命值。',
+  'entities.abilities.primal_reflexes.name': '野性反射',
+  'entities.abilities.primal_reflexes.description':
+    '你的本能變得敏銳，使閃避機率提高 50%，持續 6 秒。',
   'entities.abilities.starfire.name': '隕天術',
   'entities.abilities.starfire.description': '召下一道星辰之火，造成 {damage} 點秘法傷害。',
   'entities.abilities.travel_form.name': '迅捷形態',
@@ -5445,6 +5464,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.attackSpeedFast': '攻擊速度提高 {pct}%',
   'hudChrome.auraEffect.haste': '攻擊與施法速度提高 {pct}%',
   'hudChrome.auraEffect.tongues': '施法時間增加 {pct}%',
+  'hudChrome.auraEffect.damageReduction': '受到的所有傷害降低 {pct}%',
+  'hudChrome.auraEffect.guardianWard': '下一次敵人的致命攻擊會改為將你的生命值恢復至 {pct}%',
   'hudChrome.auraEffect.increase.ap': '攻擊強度提高 {value}',
   'hudChrome.auraEffect.increase.armor': '護甲提高 {value}',
   'hudChrome.auraEffect.increase.int': '智力提高 {value}',
@@ -6412,6 +6433,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '採礦',
   'hudChrome.gathering.logging': '伐木',
   'hudChrome.gathering.herbalism': '藥草學',
+  'hudChrome.gathering.notReady': '這個資源節點尚未為你重新生成。',
   'hudChrome.archetypeTitle.label': '稱號',
   'hudChrome.archetypeTitle.none': '無',
   'hudChrome.archetypeTitle.hobbyLabel': '愛好',

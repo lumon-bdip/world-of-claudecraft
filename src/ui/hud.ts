@@ -294,18 +294,24 @@ import {
   holderTierForBalance,
 } from './holder_tier';
 import {
+  actionForAttackSlot,
   applyLoadoutBar as applyLoadoutBarActions,
+  assignAttackSlotAction,
+  attackSlotStorageKey,
   buildDefaultFormBar,
   classHasFormBars,
   clearHotbarSlot,
   encodeHotbarAction,
   HOTBAR_ACTION_MIME,
   type HotbarAction,
+  handleMobileAttackTap,
+  loadAttackSlotAction,
   parseHotbarAction,
   parseHotbarActions,
   placeAbilityOnSlot,
   placeItemOnSlot,
   resolveMobileHotbarDrop,
+  saveAttackSlotAction,
   shouldSeedFormBar,
   swapHotbarSlots,
   syncHotbarActions,
@@ -971,7 +977,7 @@ export class Hud {
   // no live hostile target: wired by main.ts to the same nearest-attackable
   // pick the touch layer uses (the HUD cannot resolve attackability itself,
   // that helper lives behind the game-layer seam). Null until wired; the
-  // attack handler then falls back to the plain castSlot(0) toggle.
+  // attack handler then falls back to the fixed attack control.
   onMobileAttackNearest: (() => void) | null = null;
   private hotbarActions: HotbarAction[] = []; // index = barSlot-1
   private loadedSlotMapFromStorage = false;
@@ -987,8 +993,11 @@ export class Hud {
   // the pure vale_cup_charge_view core; only the input timing state lives here.
   private shootChargeSlot: number | null = null;
   private shootChargeStartMs = 0;
-  private dragAction: { action: Exclude<HotbarAction, null>; sourceIndex: number | null } | null =
-    null;
+  private dragAction: {
+    action: Exclude<HotbarAction, null>;
+    sourceIndex: number | null;
+    sourceAttackSlot?: boolean;
+  } | null = null;
   // Set while dragging an equipped piece out of the paperdoll onto the bags window.
   private dragUnequipSlot: EquipSlot | null = null;
   // The mirror gesture: the bag stack currently being dragged OUT of the bags, read
@@ -1891,6 +1900,7 @@ export class Hud {
     mapCanvas.addEventListener('pointerup', endMapTap);
     mapCanvas.addEventListener('pointercancel', endMapTap);
     $('#mm-bag').addEventListener('click', () => this.toggleBags());
+    $('#mm-crafting').addEventListener('click', () => this.toggleCrafting());
     // Drop an equipped piece dragged out of the paperdoll onto the bags window.
     const bagsEl = $('#bags');
     bagsEl.addEventListener('dragover', (e) => {
@@ -4783,6 +4793,19 @@ export class Hud {
         }),
       )}</div>`;
     }
+    // Combat ratings (hit / crit / haste): shown as classic "+N Rating" affix lines,
+    // sharing the character-sheet HUD-chrome labels. Hit answers the higher-level
+    // miss/resist penalty; crit and haste add throughput.
+    for (const ratingStat of ['hitRating', 'critRating', 'hasteRating'] as const) {
+      const value = item[ratingStat] ?? 0;
+      if (value <= 0) continue;
+      html += `<div class="tt-green">${esc(
+        t('itemUi.tooltip.stat', {
+          value: itemNumber(value),
+          stat: t(statNameKey(ratingStat) as TranslationKey),
+        }),
+      )}</div>`;
+    }
     if (item.foodHp)
       html += `<div class="tt-desc">${esc(t('itemUi.tooltip.useFood', { amount: itemNumber(item.foodHp), seconds: itemNumber(CONSUME_DURATION) }))}</div>`;
     if (item.drinkMana)
@@ -4977,6 +5000,7 @@ export class Hud {
       dodgeChance: p.dodgeChance,
       critRating: p.critRating,
       hasteRating: p.hasteRating,
+      hitRating: p.hitRating,
       dps: weaponDps(wpn?.weapon, p.attackPower),
       gear,
       buffs,
@@ -5470,7 +5494,44 @@ export class Hud {
     this.mobileActionPage = clampMobilePage(this.mobileActionPage);
   }
 
+  // Slot 0 (the first key) mode. With the Interface option "Show Attack Button" ON
+  // (default) it is the classic fixed auto-attack toggle. OFF turns it into a normal
+  // assignable slot: right-click on the Attack button flips the option off (the
+  // "remove it from the bar" gesture), the freed slot accepts a drag like any other,
+  // and its key then casts the assigned action. The Options toggle restores Attack.
+  // The assignment is backed by its own persisted action (attackSlotAction), shared
+  // across forms, so it never disturbs the hotbarActions array layout.
+  private attackSlotAction: HotbarAction = null;
+  private attackSlotIsAttack(): boolean {
+    return this.optionsHooks?.settings.get('showAttackButton') ?? true;
+  }
+  private attackSlotKey(): string {
+    return attackSlotStorageKey(this.slotMapKey('normal'));
+  }
+  private loadAttackSlotAction(): void {
+    try {
+      this.attackSlotAction = loadAttackSlotAction(
+        localStorage,
+        this.attackSlotKey(),
+        (id) => this.sim.known.some((known) => known.def.id === id),
+        (id) => this.isHotbarItemId(id),
+      );
+    } catch {
+      this.attackSlotAction = null;
+    }
+  }
+  private saveAttackSlotAction(): void {
+    try {
+      saveAttackSlotAction(localStorage, this.attackSlotKey(), this.attackSlotAction);
+    } catch {
+      // Storage can be unavailable in private modes or restricted embeds.
+    }
+  }
+
   private actionForSlot(barSlot: number): HotbarAction {
+    // barSlot 0 is the attack slot: it resolves an action only when the Attack
+    // toggle was removed (showAttackButton off) and something was dropped in.
+    if (barSlot === 0) return actionForAttackSlot(this.attackSlotIsAttack(), this.attackSlotAction);
     // barSlot 1..22 (1..11 primary bar, 12..22 secondary bar)
     return this.hotbarActions[barSlot - 1] ?? null;
   }
@@ -5687,6 +5748,21 @@ export class Hud {
     return true;
   }
 
+  private activateFixedAttackSlot(): void {
+    // On the pitch, key 1 casts your first sport move (Kick) instead of the
+    // harvest-truce-inert auto-attack, which would be a dead key with no useful
+    // effect. Off the pitch it is the normal auto-attack toggle.
+    const sportFirst = this.firstSportAbilityId();
+    if (sportFirst) {
+      this.castSportTap(sportFirst, this.sim.known[0]?.def.range ?? MELEE_RANGE);
+      this.flashActionSlot(0);
+      return;
+    }
+    if (this.sim.player.autoAttack) this.sim.stopAutoAttack();
+    else this.sim.startAutoAttack();
+    this.flashActionSlot(0);
+  }
+
   // Shared entry point for hotbar clicks and the 1..0-= keybinds.
   castSlot(barSlot: number): void {
     if (this.isGroundAimActive()) {
@@ -5697,19 +5773,8 @@ export class Hud {
       }
       this.cancelGroundAim();
     }
-    if (barSlot === 0) {
-      // On the pitch, key 1 casts your first sport move (Kick) instead of the
-      // harvest-truce-inert auto-attack, which would be a dead key with no useful
-      // effect. Off the pitch it is the normal auto-attack toggle.
-      const sportFirst = this.firstSportAbilityId();
-      if (sportFirst) {
-        this.castSportTap(sportFirst, this.sim.known[0]?.def.range ?? MELEE_RANGE);
-        this.flashActionSlot(barSlot);
-        return;
-      }
-      if (this.sim.player.autoAttack) this.sim.stopAutoAttack();
-      else this.sim.startAutoAttack();
-      this.flashActionSlot(barSlot);
+    if (barSlot === 0 && this.attackSlotIsAttack()) {
+      this.activateFixedAttackSlot();
       return;
     }
     const action = this.actionForSlot(barSlot);
@@ -5833,6 +5898,8 @@ export class Hud {
     // the secondary bar. One button list (this.abilityButtons), indexed by slot.
     // An entry whose template omits #actionbar2 leaves those buttons detached
     // rather than crashing on appendChild (keybind dispatch by slot still works).
+    // Restore any action assigned to the freed attack slot (showAttackButton off).
+    this.loadAttackSlotAction();
     const totalButtons = 1 + Hud.BAR_ABILITY_SLOTS;
     for (let i = 0; i < totalButtons; i++) {
       const container = i <= Hud.PRIMARY_BAR_ABILITY_SLOTS ? bar : bar2;
@@ -5877,8 +5944,8 @@ export class Hud {
         e.stopPropagation();
       });
       this.attachTooltip(btn, () => {
-        if (slot === 0) {
-          return `<div class="tt-title">${esc(t('abilityUi.actionBar.attackName'))}</div><div class="tt-sub">${esc(t('abilityUi.actionBar.attackTooltip'))}</div>`;
+        if (slot === 0 && this.attackSlotIsAttack()) {
+          return `<div class="tt-title">${esc(t('abilityUi.actionBar.attackName'))}</div><div class="tt-sub">${esc(t('abilityUi.actionBar.attackTooltip'))}</div><div class="tt-sub">${esc(t('abilityUi.actionBar.attackRemoveHint'))}</div>`;
         }
         const known = this.abilityForSlot(slot);
         const clearHint = `<div class="tt-sub">${esc(t('abilityUi.actionBar.clearHint'))}</div>`;
@@ -5940,7 +6007,11 @@ export class Hud {
           e.preventDefault(); // required to permit the drop
           if (e.dataTransfer)
             e.dataTransfer.dropEffect =
-              this.dragAction?.sourceIndex === null && dragged.type === 'item' ? 'copy' : 'move';
+              this.dragAction?.sourceIndex === null &&
+              !this.dragAction?.sourceAttackSlot &&
+              dragged.type === 'item'
+                ? 'copy'
+                : 'move';
           btn.classList.add('drop-target');
         });
         btn.addEventListener('dragleave', () => btn.classList.remove('drop-target'));
@@ -5950,6 +6021,7 @@ export class Hud {
           const dragged = this.dragAction ?? {
             action: this.readDraggedAction(e.dataTransfer),
             sourceIndex: null,
+            sourceAttackSlot: false,
           };
           this.dragAction = null;
           const action = dragged.action;
@@ -5963,6 +6035,10 @@ export class Hud {
             this.hotbarActions = placeAbilityOnSlot(this.hotbarActions, action.id, slot - 1);
           } else if (action.type === 'item' && this.isHotbarItemId(action.id)) {
             this.hotbarActions = placeItemOnSlot(this.hotbarActions, action.id, slot - 1);
+          }
+          if (dragged.sourceAttackSlot) {
+            this.attackSlotAction = null;
+            this.saveAttackSlotAction();
           }
           this.saveSlotMap();
           // The drop rearranged this slot's contents, but a drop that ends with the
@@ -5983,6 +6059,69 @@ export class Hud {
           this.hotbarActions = clearHotbarSlot(this.hotbarActions, slot - 1);
           this.saveSlotMap();
           this.hideTooltip();
+        });
+      } else {
+        // Slot 0 (Attack). Right-click removes the Attack toggle from the bar
+        // (Interface option showAttackButton -> off), freeing the slot and its key
+        // for a normal action; right-click again clears whatever was dropped in.
+        // The Options toggle restores Attack at any time.
+        btn.draggable = true;
+        btn.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          if (this.attackSlotIsAttack()) {
+            this.optionsHooks?.settings.set('showAttackButton', false);
+          } else if (this.attackSlotAction !== null) {
+            this.attackSlotAction = null;
+            this.saveAttackSlotAction();
+          }
+          this.hideTooltip();
+        });
+        btn.addEventListener('dragstart', (e) => {
+          const action = this.actionForSlot(0);
+          if (!action) {
+            e.preventDefault();
+            return;
+          }
+          this.dragAction = { action, sourceIndex: null, sourceAttackSlot: true };
+          this.writeDraggedAction(e.dataTransfer, action);
+          if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+          this.hideTooltip();
+        });
+        // With Attack removed, the freed slot accepts a drag like any other slot.
+        btn.addEventListener('dragover', (e) => {
+          if (this.attackSlotIsAttack()) return;
+          if (this.dragAction?.sourceAttackSlot) return;
+          const dragged = this.dragAction?.action ?? this.readDraggedAction(e.dataTransfer);
+          if (!dragged) return;
+          e.preventDefault();
+          btn.classList.add('drop-target');
+        });
+        btn.addEventListener('dragleave', () => btn.classList.remove('drop-target'));
+        btn.addEventListener('drop', (e) => {
+          e.preventDefault();
+          btn.classList.remove('drop-target');
+          if (this.attackSlotIsAttack()) return;
+          const dragged = this.dragAction ?? {
+            action: this.readDraggedAction(e.dataTransfer),
+            sourceIndex: null,
+            sourceAttackSlot: false,
+          };
+          if (!dragged.action) return;
+          const assigned = assignAttackSlotAction(dragged.action, dragged.sourceIndex);
+          this.attackSlotAction = assigned.action;
+          this.saveAttackSlotAction();
+          // A drag from another bar slot MOVES the action there (the attack slot
+          // holds nothing to swap back); spellbook/bag drags simply assign.
+          if (assigned.clearSourceIndex !== null) {
+            this.hotbarActions = clearHotbarSlot(this.hotbarActions, assigned.clearSourceIndex);
+            this.saveSlotMap();
+          }
+          this.dragAction = null;
+          this.hideTooltip();
+        });
+        btn.addEventListener('dragend', () => {
+          this.dragAction = null;
+          this.clearActionDropTargets();
         });
       }
       container?.appendChild(btn);
@@ -6008,7 +6147,9 @@ export class Hud {
           const slotKey = `slot${i}`;
           return {
             slotIndex: i,
-            isAttack: i === 0,
+            // Live accessor: slot 0 stops being the Attack toggle when the player
+            // removes it (Interface option showAttackButton off / right-click).
+            isAttack: () => i === 0 && this.attackSlotIsAttack(),
             // Raw binding presence (any assigned slot, even one whose ability is
             // unlearned or item id is unknown): the many-spells count source, kept
             // byte-identical to the former hotbarActions.filter(a => a !== null).
@@ -6081,7 +6222,7 @@ export class Hud {
       return { btn, label, countEl, keybindEl, cdOverlay, cdText };
     });
 
-    // Wire clicks: attack -> the classic toggle via castSlot(0) while the
+    // Wire clicks: attack -> the classic fixed control while the
     // player is auto-attacking or holds a live hostile target, and the
     // acquire-nearest fallback (the old Closest behavior, injected by main.ts
     // as onMobileAttackNearest) otherwise, so a bare tap with nothing targeted
@@ -6103,11 +6244,13 @@ export class Hud {
       const p = this.sim.player;
       const target = p.targetId !== null ? this.sim.entities.get(p.targetId) : null;
       const hasLiveHostileTarget = !!target && !target.dead && target.hostile;
-      if (p.autoAttack || hasLiveHostileTarget || !this.onMobileAttackNearest) {
-        this.castSlot(0);
-      } else {
-        this.onMobileAttackNearest();
-      }
+      handleMobileAttackTap(
+        { autoAttack: p.autoAttack, hasLiveHostileTarget },
+        {
+          activateAttack: () => this.activateFixedAttackSlot(),
+          attackNearest: this.onMobileAttackNearest,
+        },
+      );
       attackBtn.blur();
     });
     slotBtns.forEach((btn, i) => {
@@ -6149,7 +6292,7 @@ export class Hud {
         slots: [
           {
             slotIndex: 0,
-            isAttack: true,
+            isAttack: () => true,
             hasAction: () => false,
             ability: () => null,
             item: () => null,
@@ -6157,7 +6300,7 @@ export class Hud {
           },
           ...Array.from({ length: 5 }, (_, i) => ({
             slotIndex: i + 1,
-            isAttack: false,
+            isAttack: () => false,
             hasAction: () =>
               this.actionForSlot(sourceSlotForMobileButton(this.mobileActionPage, i)) !== null,
             ability: () => this.abilityForSlot(sourceSlotForMobileButton(this.mobileActionPage, i)),
@@ -6280,7 +6423,7 @@ export class Hud {
       {
         slots: Array.from({ length: CONSUMABLE_BAR_SLOTS }, (_, i) => ({
           slotIndex: i,
-          isAttack: false,
+          isAttack: () => false,
           hasAction: () => this.consumableBarIds[i] !== undefined,
           ability: () => null,
           item: () => {
@@ -6563,6 +6706,7 @@ export class Hud {
       ['#mm-deeds', 'deeds', 'hudChrome.deeds.title'],
       ['#mm-map', 'map', 'hud.core.mobileMap'],
       ['#mm-bag', 'bags', 'itemUi.bags.title'],
+      ['#mm-crafting', 'crafting', 'hudChrome.crafting.title'],
       ['#mm-arena', 'arena', 'hud.core.mobileArena'],
       ['#mm-dfinder', 'dungeonFinder', 'hudChrome.finder.title'],
       ['#mm-valecup', 'valecup', 'hudChrome.keybinds.valecup'],
@@ -7347,6 +7491,7 @@ export class Hud {
         }),
         this.mobileActionPage,
         mobilePageCount(),
+        this.attackSlotIsAttack(),
       );
     }
 
