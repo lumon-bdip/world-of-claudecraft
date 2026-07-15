@@ -6541,6 +6541,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required': 'Start opsætning af to-faktor først.',
   'apiError.validation.failed': 'Nogle felter er ugyldige. Tjek formularen og prøv igen.',
   'download.linuxCta': 'Download til Linux',
+  'download.windowsCta': 'Download til Windows',
   'download.linuxHint':
     'AppImage: gør det eksekverbart, og kør det derefter. Ingen installation nødvendig.',
   'loading.reconnecting': 'Forbindelse mistet. Genopretter forbindelse...',

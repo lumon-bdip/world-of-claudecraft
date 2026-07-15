@@ -6684,6 +6684,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'apiError.validation.failed':
     'Algunos campos no son válidos. Revisa el formulario e inténtalo de nuevo.',
   'download.linuxCta': 'Descargar para Linux',
+  'download.windowsCta': 'Descargar para Windows',
   'download.linuxHint': 'AppImage: hazlo ejecutable y luego ejecútalo. No se necesita instalación.',
   'loading.reconnecting': 'Conexión perdida. Reconectando...',
   'guide.nav.settings': 'Configuración y rendimiento',

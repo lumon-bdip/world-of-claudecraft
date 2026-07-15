@@ -7088,6 +7088,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'apiError.validation.failed':
     'Certains champs sont invalides. Vérifiez le formulaire puis réessayez.',
   'download.linuxCta': 'Télécharger pour Linux',
+  'download.windowsCta': 'Télécharger pour Windows',
   'download.linuxHint':
     'AppImage$1 rendez-le exécutable, puis exécutez-le. Aucune installation nécessaire.',
   'loading.reconnecting': 'Connexion perdue. Reconnexion...',

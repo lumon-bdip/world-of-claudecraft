@@ -6671,6 +6671,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     "Avvia prima la configurazione dell'autenticazione a due fattori.",
   'apiError.validation.failed': 'Alcuni campi non sono validi. Controlla il modulo e riprova.',
   'download.linuxCta': 'Scarica per Linux',
+  'download.windowsCta': 'Scarica per Windows',
   'download.linuxHint':
     'AppImage: rendilo eseguibile, quindi eseguilo. Nessuna installazione necessaria.',
   'loading.reconnecting': 'Connessione persa. Riconnessione...',

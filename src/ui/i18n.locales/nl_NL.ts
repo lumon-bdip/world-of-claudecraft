@@ -6647,6 +6647,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'apiError.validation.failed':
     'Sommige velden zijn ongeldig. Controleer het formulier en probeer het opnieuw.',
   'download.linuxCta': 'Downloaden voor Linux',
+  'download.windowsCta': 'Downloaden voor Windows',
   'download.linuxHint':
     'AppImage: maak het uitvoerbaar en voer het vervolgens uit. Geen installatie nodig.',
   'loading.reconnecting': 'Verbinding verbroken. Opnieuw verbinding maken...',

@@ -6561,6 +6561,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required': 'Starta konfigurationen av tvåfaktorsautentisering först.',
   'apiError.validation.failed': 'Vissa fält är ogiltiga. Kontrollera formuläret och försök igen.',
   'download.linuxCta': 'Ladda ner för Linux',
+  'download.windowsCta': 'Ladda ner för Windows',
   'download.linuxHint': 'AppImage: gör den körbar och kör den sedan. Ingen installation behövs.',
   'loading.reconnecting': 'Anslutning förlorad. Återansluter...',
   'guide.nav.settings': 'Inställningar och prestanda',
