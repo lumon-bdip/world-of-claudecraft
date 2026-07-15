@@ -10,7 +10,7 @@
 | Phase 2 QA | complete: PASS (0 BLOCKING; 2 SHOULD-FIX found and resolved: the committed teeth successor test + the recorded cadence deviation; 7 doc corrections) | 2026-07-14 | 2026-07-14 |
 | Phase 3: CI parallel checks + FFmpeg | implemented; PR #1945 ready for review (post-merge CI green), merge owner-scheduled | 2026-07-14 | 2026-07-14 |
 | Phase 3 QA | complete: PASS (0 BLOCKING; 8 SHOULD-FIX found and resolved; release base merged in as e0f442637; 2 tests added) | 2026-07-15 | 2026-07-15 |
-| Phase 4: Test sharding | not started | | |
+| Phase 4: Test sharding | IMPLEMENTED (draft PR #1967 off release/v0.26.0) | 2026-07-15 | |
 | Phase 4 QA | not started | | |
 | Phase 5: TypeScript 7 flip | not started | | |
 | Phase 5 QA (closes packet) | not started | | |
@@ -112,15 +112,36 @@
 
 ## Phase 4 deliverables
 
-- [ ] The vitest "setup" timing bucket explained and the shard count confirmed against
-      a measured prototype run (default N=4)
-- [ ] tests/vale_cup.test.ts split into 2 to 3 files along describe boundaries (pure
-      move, no logic changes)
-- [ ] pr-gate converted to a shard matrix (npm test -- --shard=i/N; job id stays
-      pr-gate; no I18N_RELEASE_TIER string in the job)
-- [ ] release-gate given the same matrix (I18N_RELEASE_TIER kept);
-      tests/ci_workflow.test.ts pins updated
-- [ ] Recorded: PR gate wall time over 3 consecutive runs (target at or under 4 minutes)
+- [x] The vitest "setup" timing bucket explained and the shard count confirmed against
+      a measured prototype run (default N=4). Explained (full record: state.md OPEN
+      item 1): the svelteTesting() plugin injects the @testing-library/svelte
+      auto-cleanup module into test.setupFiles at config-resolve time, so the bucket is
+      that setup file run once per test file per fork, summed across files by the
+      reporter (364.26s on the CI sample, about 320ms per file); per-file parallel work
+      that partitions cleanly under sharding, NOT a per-shard fixed cost. Probe shards
+      on the pre-split tree (local, 12 workers, sequential): 1/4 26s, 2/4 26s, 3/4 30s,
+      4/4 28s, all green, zero isolation failures, file counts 282+282+282+281 = 1127 =
+      the single-run count. The worst-shard model held (shard 3 carried vale_cup and
+      was slowest); N=4 confirmed, N=3 rejected (models at the 4-minute line with no
+      headroom), N=5 unnecessary (D7 note has the numbers)
+- [x] tests/vale_cup.test.ts split into 3 files along describe boundaries (pure move,
+      byte-identical test bodies, 64 tests before and after): vale_cup_bots (showcase +
+      backfill/practice), vale_cup_match (possession, queue guards, matchmaking,
+      lifecycle, sport moves, desertion, closed pitch), vale_cup_meta (betting, kit
+      swap, determinism, parallel practice, guild banners); shared helpers moved
+      verbatim to tests/vale_cup_util.ts. The sha1 simulation over measured per-file
+      timings places the three names in three different quarters, flattening the worst
+      N=4 shard from 252.5s to 230.0s aggregate local cost
+- [x] pr-gate converted to a shard matrix (npm test -- --shard=${{ matrix.shard }}/4;
+      job id stays pr-gate; if-conditions verbatim; no I18N_RELEASE_TIER string in the
+      job; fail-fast off; full checkout + setup-node + npm ci per shard; pretest per
+      shard by design)
+- [x] release-gate given the same matrix (I18N_RELEASE_TIER kept); its eight serialized
+      non-test steps gated to if: matrix.shard == 1; tests/ci_workflow.test.ts pins
+      updated in the same commit as ci.yml (pin-rides-with-surface), with both red
+      paths proven locally before commit
+- [x] Recorded: PR gate wall time over 3 consecutive runs (target at or under 4
+      minutes): see the Phase 4 note below (all three runs under the target)
 
 ## Phase 5 deliverables
 
@@ -279,6 +300,67 @@ tests added, dead code removed, deferrals.
   at the known environmental armory_mobile_layout pixel assertion (reproduces on
   the untouched release tip; PR CI is the arbiter); typecheck and the env,
   server, and client builds green.
+
+- Phase 4 (2026-07-15): implemented as draft PR #1967 off release/v0.26.0. Worktree cut
+  at 2d85c9939 (the tip moved from fecfce196 between session start and worktree
+  creation, and again to 9d6d1e4c0 mid-phase: PR #1947, README-only, merged per the
+  packet rule as 99e0873a9 with a clean regen and a 0-finding release-merge-audit).
+  Deliverable 1 measurements (OPEN item 1 settled BEFORE committing to N, full
+  mechanism record in state.md): the "setup" bucket is the svelteTesting-injected
+  auto-cleanup setup file, per-file parallel work that partitions under sharding; the
+  instrumented local full run (custom reporter dumping per-file diagnostics, 12
+  workers) measured 1127 files / 14,278 tests / 90s wall pre-split, buckets transform
+  67.8s, setup 281.5s, import 298.4s, tests 275.5s, environment 17.3s, against the CI
+  sample (run 29415139204) of 501.29s wall, setup 364.26s, import 296.22s, tests
+  600.08s. The sha1 shard simulation (exact BaseSequencer replica over measured
+  per-file costs) chose the split names by placement; the live run 1 per-shard file
+  counts matched the simulation exactly (283/282/282/282). Pre-split probe shards all
+  green with zero isolation failures (the phase's stopping rule stayed dormant).
+  The three consecutive PR-tier runs against the 4-minute (240s) target, whole-run
+  wall = run createdAt to last job completion, all green:
+  - Run 1, 29419165704 (pull_request, the PR-open run, head 99e0873a9): wall 184s.
+    Shard job walls 182/175/159/181s (vitest step inside: 139.3/125.3/109.3/131.6s),
+    pr-checks 106s, browser 66s, lint 106s. Shard-completeness: per-shard test-file
+    counts 283+282+282+282 = 1129 = the fresh post-split single-run count from the
+    same-day full gate run (1127 passed + 2 skipped), no file lost or duplicated.
+  - Run 2, 29419432376 (workflow_dispatch on head 99e0873a9): wall 194s. Shard job
+    walls 173/179/179/186s (vitest step 131.1/125.4/134.1/135.8s), pr-checks 94s,
+    browser 113s, lint 96s. Completeness: 283+282+282+282 = 1129.
+  - Run 3, 29419765243 (pull_request on head 0e78e1147, the pin-fix push): wall 188s.
+    Shard job walls 176/174/175/185s (vitest step 133.6/128.1/123.6/135.0s),
+    pr-checks 93s, browser 68s, lint 90s. Completeness: 283+282+282+282 = 1129.
+  All three runs green at 184s / 194s / 188s wall against the 240s target, with the
+  per-shard test-file counts summing exactly to the fresh post-split single-run count
+  in every run (the shard hash dropped and duplicated nothing, three times over).
+  Release-gate matrix arm verified LIVE (not deferred): scratch branch
+  release/v0.26.0-shard-probe pushed at 0e78e1147, run 29419856005 fully green at
+  258s wall with I18N_RELEASE_TIER end to end on all four shards (shard 1, carrying
+  the eight serialized checks and builds plus its test quarter, was the designed
+  long pole at 255s; shards 2 to 4 at 169/179/172s; completeness 283+282+282+282 =
+  1129 under the release tier too; release-version-gate green, confirming the
+  slug-tolerant version inference on release/v0.26.0-shard-probe; pr-gate and
+  pr-checks correctly skipped on the release push). Scratch branch deleted after
+  observation and confirmed gone.
+  privacy-security-review PASS (0 CRITICAL; the matrix.shard interpolation verified
+  to source only from the static [1..4] lists, so no injection path; job-level
+  if-conditions byte-identical to base; the malware gate proven to run exactly once
+  per release run on the always-present shard 1; its one SHOULD-FIX is the
+  operational branch-protection check-name drift, recorded at state.md OPEN item 4;
+  re-reviewed and re-affirmed at the extended range including the base merge and
+  the pin-fix commit).
+  Versus the pre-shard baseline: 547 to 564s wall on the two post-merge Phase 3
+  samples, so the PR tier now completes in roughly a third of the wall time.
+  Reviews (all COVERAGE-prompted): test-coverage-auditor PASS (0 BLOCKING, 0
+  SHOULD-FIX; its NICE-TO-HAVE, no pin on the local gate staying unsharded, closed by
+  the gate --shard absence pin in tests/ci_workflow.test.ts; its stale-anchor NIT on
+  docs/prd/vale-cup.md fixed in the docs commit; byte-verified the pure move: 0
+  body-line mismatches, 64 tests before and after, and re-derived both count pins
+  against the real ci.yml); privacy-security-review and qa-checklist verdicts recorded
+  below. Gate record (Node 24, no ffmpeg shim): steps 1 to 6 green including the full
+  post-split suite (1129 files, 14,257 passed + 22 skipped; the +1 vs pre-split is the
+  new ci_workflow pin test), browser red only at the known environmental
+  armory_mobile_layout assertion (this PR's CI browser-gate green on the same
+  content), typecheck and the env/server/client builds green via the manual tail.
 
 - Phase 3 (2026-07-14): implemented as draft PR #1945 off release/v0.26.0 tip
   812e4b223, three commits plus this docs commit. Go/no-go GO (see the checked
