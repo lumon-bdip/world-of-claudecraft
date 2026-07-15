@@ -6629,6 +6629,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required': 'Hãy bắt đầu thiết lập xác thực hai yếu tố trước.',
   'apiError.validation.failed': 'Một số trường không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.',
   'download.linuxCta': 'Tải xuống cho Linux',
+  'download.windowsCta': 'Tải xuống cho Windows',
   'download.linuxHint': 'AppImage: làm cho nó có thể thực thi được rồi chạy nó. Không cần cài đặt.',
   'loading.reconnecting': 'Mất kết nối. Đang kết nối lại...',
   'guide.nav.settings': 'Cài đặt & Hiệu suất',

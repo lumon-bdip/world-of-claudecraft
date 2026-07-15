@@ -6607,6 +6607,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required': 'Önce iki adımlı doğrulama kurulumunu başlatın.',
   'apiError.validation.failed': 'Bazı alanlar geçersiz. Formu kontrol edip tekrar deneyin.',
   'download.linuxCta': 'Linux için indirin',
+  'download.windowsCta': 'Windows için indirin',
   'download.linuxHint':
     'AppImage: yürütülebilir hale getirin ve ardından çalıştırın. Kurulum gerekmez.',
   'loading.reconnecting': 'Bağlantı kesildi. Yeniden bağlanılıyor...',

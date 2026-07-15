@@ -6598,6 +6598,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'apiError.validation.failed':
     'Niektóre pola są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.',
   'download.linuxCta': 'Pobierz dla Linuksa',
+  'download.windowsCta': 'Pobierz dla Windows',
   'download.linuxHint':
     'AppImage: uczyń go wykonywalnym, a następnie uruchom. Nie wymaga instalacji.',
   'loading.reconnecting': 'Połączenie utracone. Ponowne łączenie...',

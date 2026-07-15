@@ -459,6 +459,7 @@ export type TranslationKeyFlat =
   | 'download.linuxHint'
   | 'download.macCta'
   | 'download.title'
+  | 'download.windowsCta'
   | 'download.windowsPending'
   | 'editor.a11y.dialog'
   | 'editor.a11y.stage'

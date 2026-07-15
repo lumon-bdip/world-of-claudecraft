@@ -6691,6 +6691,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required': 'Mulai penyiapan autentikasi dua-faktor terlebih dahulu.',
   'apiError.validation.failed': 'Beberapa kolom tidak valid. Periksa formulir lalu coba lagi.',
   'download.linuxCta': 'Unduh untuk Linux',
+  'download.windowsCta': 'Unduh untuk Windows',
   'download.linuxHint':
     'AppImage: membuatnya dapat dieksekusi, lalu jalankan. Tidak perlu instalasi.',
   'loading.reconnecting': 'Koneksi terputus. Menyambungkan kembali...',

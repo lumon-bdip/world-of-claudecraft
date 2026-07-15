@@ -570,6 +570,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'a11y.toggleMenu': 'Přepnout menu',
   'download.desc': 'Získej samostatný launcher pro optimalizovaný výkon a hraní na celé obrazovce.',
   'download.linuxCta': 'Stáhnout pro Linux',
+  'download.windowsCta': 'Stáhnout pro Windows',
   'download.linuxHint':
     'AppImage: nastav soubor jako spustitelný a spusť ho. Instalace není potřeba.',
   'download.macCta': 'Stáhnout pro macOS',

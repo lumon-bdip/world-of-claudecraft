@@ -3713,6 +3713,7 @@ export const cs_CZ: EnTranslations = {
     "title": "Stáhnout desktopový launcher",
     "desc": "Získej samostatný launcher pro optimalizovaný výkon a hraní na celé obrazovce.",
     "macCta": "Stáhnout pro macOS",
+    "windowsCta": "Stáhnout pro Windows",
     "linuxCta": "Stáhnout pro Linux",
     "linuxHint": "AppImage: nastav soubor jako spustitelný a spusť ho. Instalace není potřeba.",
     "windowsPending": "Sestavení pro Windows se připravuje."

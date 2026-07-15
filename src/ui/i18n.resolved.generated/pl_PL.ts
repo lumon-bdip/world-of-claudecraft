@@ -3713,6 +3713,7 @@ export const pl_PL: EnTranslations = {
     "title": "Pobierz launcher na komputer",
     "desc": "Pobierz samodzielny launcher dla zoptymalizowanej wydajności i gry na pełnym ekranie.",
     "macCta": "Pobierz dla macOS",
+    "windowsCta": "Pobierz dla Windows",
     "linuxCta": "Pobierz dla Linuksa",
     "linuxHint": "AppImage: uczyń go wykonywalnym, a następnie uruchom. Nie wymaga instalacji.",
     "windowsPending": "Build Windows w przygotowaniu."

@@ -3713,6 +3713,7 @@ export const de_DE: EnTranslations = {
     "title": "Desktop-Launcher herunterladen",
     "desc": "Hol dir den eigenständigen Launcher für optimierte Leistung und Vollbildspiel.",
     "macCta": "Download fuer macOS",
+    "windowsCta": "Für Windows herunterladen",
     "linuxCta": "Für Linux herunterladen",
     "linuxHint": "AppImage: Machen Sie es ausführbar und führen Sie es dann aus. Keine Installation erforderlich.",
     "windowsPending": "Windows-Build ausstehend."

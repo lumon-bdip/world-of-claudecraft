@@ -3713,6 +3713,7 @@ export const fr_CA: EnTranslations = {
     "title": "Télécharger le lanceur de bureau",
     "desc": "Obtenez le lanceur autonome pour des performances optimisées et un jeu en plein écran.",
     "macCta": "Telecharger la version macOS",
+    "windowsCta": "Télécharger pour Windows",
     "linuxCta": "Télécharger pour Linux",
     "linuxHint": "AppImage$1 rendez-le exécutable, puis exécutez-le. Aucune installation nécessaire.",
     "windowsPending": "Version Windows a venir."

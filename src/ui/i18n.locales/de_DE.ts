@@ -6703,6 +6703,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'apiError.validation.failed':
     'Einige Felder sind ungültig. Prüfe das Formular und versuche es erneut.',
   'download.linuxCta': 'Für Linux herunterladen',
+  'download.windowsCta': 'Für Windows herunterladen',
   'download.linuxHint':
     'AppImage: Machen Sie es ausführbar und führen Sie es dann aus. Keine Installation erforderlich.',
   'loading.reconnecting': 'Verbindung verloren. Verbindung wird wieder hergestellt...',
