@@ -2,6 +2,19 @@
 
 ## Current phase
 
+PACKET COMPLETE (2026-07-15): Phase 5 QA PASSED and the whole-packet integration
+matrix is all green (13 of 13 rows, verdicts recorded in qa-checklist.md).
+PR #1976 marked ready for review off release/v0.27.0; merge timing
+owner-scheduled. QA-time additions: the two toolchain pins in
+tests/server/new_endpoint.test.ts (the tsc bin pinned to major 7 and the
+typescript alias pinned to the 6.x API with ts.sys, both red paths proven by
+mutation), and the release/v0.27.0 SFX merge 1d2943a19 taken mid-QA under the
+e07b4aaeb rule and cleared by the release-merge-audit skill. The durable
+end-state (the dual alias, the artifact policy, the CI shape, the re-evaluation
+triggers) lives in CONTRIBUTING.md and the issue #1868 summary; this directory
+is planning scaffolding whose teardown was offered at packet close. Phase 5 QA
+notes below; the implementation record follows.
+
 Phase 5 (TypeScript 7 flip): IMPLEMENTED 2026-07-15 on feature/typescript-7 off
 release/v0.27.0 (worktree cut at 6f5976dda, the Phase 4 merge; the base did not
 move during the phase), draft PR #1976. OPEN item 5 settled first: typescript
@@ -602,6 +615,28 @@ Phase 3 (phase-03-ci-parallel-checks-ffmpeg.md).
   browser-gate green on the same content is the arbiter). The QA probe
   commit was built in a detached temp worktree and pushed by sha, so the
   main worktree never left the QA head during the audit.
+
+## Phase 5 QA notes (2026-07-15)
+
+- Verdict PASS, packet closed. 0 BLOCKING; 1 SHOULD-FIX found and fixed (the
+  unpinned typescript-alias arm, closed by the symmetric 6.x API pin); the
+  implementation's handoff item (pin the active tsc bin to major 7) delivered
+  as the primary QA work item. Full narrative in the progress.md Phase 5 QA
+  checklist entry; row-by-row matrix verdicts in qa-checklist.md.
+- The two pins live beside the golden child in tests/server/new_endpoint.test.ts
+  because it already resolves the repo TSC path; both majors type-check the repo
+  clean, so these pins are the ONLY tests that go red on a silent alias revert
+  or takeover in either direction.
+- Deferrals carried out of the packet: the pre-push floor does not assert the
+  tsc major (deliberate: the floor stays minimal, CI's sharded suite carries the
+  pin); the gitignored src/ui/i18n.status.json staleness-across-branch-switches
+  hazard (trips the universe-coverage test until the next regen; gate and CI
+  self-heal by regenerating first); CONTRIBUTING.md's "Node.js 22+" wording can
+  steer a contributor onto Node 25 and the known jsdom failures (pre-existing);
+  OPEN item 8's same-as-English inversion (the durable pending.ts fix) remains a
+  standalone follow-up PR with its spike record below; the svelte-check --tsgo
+  adoption and the dual-alias collapse wait on the CONTRIBUTING.md triggers;
+  Phase 4's slow-test optimization candidates remain optional.
 
 ## Locked design decisions (record once, reference forever)
 

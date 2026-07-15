@@ -12,8 +12,8 @@
 | Phase 3 QA | complete: PASS (0 BLOCKING; 8 SHOULD-FIX found and resolved; release base merged in as e0f442637; 2 tests added) | 2026-07-15 | 2026-07-15 |
 | Phase 4: Test sharding | MERGED into release/v0.27.0 (PR #1967, merge 6f5976dda) | 2026-07-15 | 2026-07-15 |
 | Phase 4 QA | complete: PASS (0 BLOCKING; 4 SHOULD-FIX found and resolved; 2 pin NICE-TO-HAVEs closed; independent re-derivation, stability runs, and the red-path probe all clean) | 2026-07-15 | 2026-07-15 |
-| Phase 5: TypeScript 7 flip | IMPLEMENTED: draft PR #1976 off release/v0.27.0 (Phase 5 QA next) | 2026-07-15 | 2026-07-15 |
-| Phase 5 QA (closes packet) | not started | | |
+| Phase 5: TypeScript 7 flip | QA PASSED: PR #1976 off release/v0.27.0 marked ready for review (merge timing owner-scheduled) | 2026-07-15 | 2026-07-15 |
+| Phase 5 QA (closes packet) | complete: PASS (0 BLOCKING; 1 SHOULD-FIX found and fixed: the unpinned typescript-alias arm; the handoff tsc-major pin delivered; whole-packet matrix all 13 rows green, verdicts in qa-checklist.md) | 2026-07-15 | 2026-07-15 |
 
 ## Phase 1 deliverables
 
@@ -349,7 +349,46 @@ tests added, dead code removed, deferrals.
   OPEN item 4 check-name owner action). Tests added: 0 files (five new pins
   plus one strengthened in tests/ci_workflow.test.ts). Dead code removed:
   none. PR #1967 marked ready for review; merge timing owner-scheduled.
-- Phase 5 QA (includes the packet-teardown offer):
+- Phase 5 QA (2026-07-15, includes the packet-teardown offer): 0 BLOCKING found.
+  1 SHOULD-FIX found and fixed (the test-coverage audit's second-arm gap: nothing
+  pinned require('typescript') to the 6.x API svelte-check needs, so a 7.x takeover
+  of that alias would have surfaced only as a cryptic svelte-check crash or passed
+  silently; closed by the symmetric alias pin). The implementation's handoff item
+  (nothing pins the ACTIVE node_modules/.bin/tsc to major 7) was delivered first as
+  the primary QA work item: the toolchain pin beside the golden child in
+  tests/server/new_endpoint.test.ts asserts tsc --version matches /^Version 7\./.
+  Both pins had their red paths proven by mutation before commit (the tsc pin
+  against the tsc6 bin, Version 6.0.3; the alias pin against @typescript/native,
+  7.0.2 with no ts.sys). Tests added: 2 (the two toolchain pins). Dead code
+  removed: none. Base movement: release/v0.27.0 moved during QA (the PR 1974 SFX
+  achievement chime); merged in as 1d2943a19 under the e07b4aaeb rule (i18n:gen was
+  a no-op) and cleared by the release-merge-audit skill (empty intersection with
+  branch-owned files, no trap patterns, touched suites and typecheck green on the
+  merged tree). Every whole-packet matrix row was re-measured on the post-merge tip
+  rather than inherited from pre-merge records; the filled verdicts live in
+  qa-checklist.md (all 13 rows PASS). Verification fan-out: a clean-install
+  toolchain audit (versions, timings, the execution-probe simulation against both a
+  missing and a present-but-broken binary, the consumer inventory, the entry-level
+  lockfile audit), a fresh-clone docs audit (CONTRIBUTING.md followed literally, all
+  claims verified by execution, triggers drift-free), the Phase 1
+  conflict-elimination experiment re-run (phase artifacts conflict-free; only the
+  known deferred pending.ts pairwise class, which reconverged under the documented
+  recipe), the perturbed-env determinism suite (47 passed), the release-tier gate on
+  release/v0.27.0 in a dedicated worktree (full suite green, pending=0, no
+  version-gate step locally), the branch-tip gate (steps 1 to 6 green, 14,258
+  passed; the known environmental armory red only, manual tail green), a fresh
+  qa-checklist run (verdict READY), and a test-coverage audit of the new pins
+  (decisive across all four flip scenarios, no vacuous-pass path). Deferrals:
+  the pre-push floor probes tsc by execution but does not assert the major (CI is
+  the arbiter; an optional one-line grep hardening was declined to keep the floor
+  minimal); the toolchain pins live in new_endpoint.test.ts for resolver reuse (a
+  discoverability note, mirroring Phase 4's co-located pins); CONTRIBUTING.md says
+  "Node.js 22+" which can steer a new contributor onto Node 25 and the known jsdom
+  suite failures (pre-existing, out of packet scope); the gitignored
+  src/ui/i18n.status.json can go stale across branch switches and trip the
+  universe-coverage test until the next regen (self-healing under gate and CI,
+  which regenerate first). Final QA-head CI run recorded below in the Phase 5 QA
+  note; the trailing docs stamp rides after it per the packet convention.
 
 ## Notes per phase
 
