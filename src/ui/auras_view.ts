@@ -72,6 +72,7 @@ const TOGGLE_KINDS: ReadonlySet<AuraKind> = new Set([
   'form_bear',
   'form_cat',
   'form_travel',
+  'form_fireball',
   'defensive_stance',
 ]);
 // Ghost Wolf toggles too, but its aura rides the generic buff_speed kind (which

@@ -160,7 +160,12 @@ export function abilityOverTimeEffect(
  *  the player actually knows. Null when the ability has none. */
 export function abilityBuffValue(res: ResolvedAbility): number | null {
   for (const eff of res.effects) {
-    if (eff.type === 'selfBuff' || eff.type === 'buffTarget') return eff.value;
+    if (eff.type === 'selfBuff' || eff.type === 'buffTarget') {
+      // form_fireball carries a 1+fraction speed multiplier; the tooltip's $b%
+      // wants the whole-percent bonus (1.4 -> 40).
+      if (eff.kind === 'form_fireball') return (eff.value - 1) * 100;
+      return eff.value;
+    }
     if (eff.type === 'aoeAttackPower') return eff.amount;
   }
   return null;

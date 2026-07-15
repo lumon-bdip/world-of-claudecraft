@@ -1575,6 +1575,7 @@ export const cs_CZ: EnTranslations = {
       "formBear": "Medvědí podoba: zvýšené zdraví a brnění",
       "formCat": "Vlčí podoba: poškození na blízko a energie",
       "formTravel": "Cestovní podoba: rychlost pohybu zvýšena o {pct} %",
+      "formFireball": "Ember Form: movement speed increased by {pct}%; attacks and spells are disabled",
       "defensiveStance": "Obranný postoj: nižší obdržené poškození, větší hrozba",
       "righteousFury": "Hořící přísaha: výrazně zvýšená hrozba ze svatého poškození",
       "scale": "Velikost zvýšena o {pct} %",
@@ -2817,6 +2818,7 @@ export const cs_CZ: EnTranslations = {
       "lightning_shield": "Nabije tě, takže útočníci dostanou přírodní poškození, když tě zasáhnou.",
       "flame_shock": "Okamžité spálení, které zasáhne hned a dál pálí v čase.",
       "fireball": "Tvoje hlavní ohnivá rána, zasáhne a nechá cíl hořet.",
+      "fireball_form": "Become a living ember to cross open ground at high speed.",
       "frost_armor": "Trvalý self-buff, který před bojem zpevní tvoji zbroj.",
       "arcane_intellect": "Zvedne intelekt a prohloubí spojenci zásobu many, sesílej před pullem.",
       "frostbolt": "Zasáhne z dálky a zpomalí cíl, aby se k tobě nedostal.",
@@ -6059,6 +6061,10 @@ export const cs_CZ: EnTranslations = {
       "fireball": {
         "name": "Škvárový šíp",
         "description": "Vrhe ohnivou kouli, která způsobí {damage} ohnivého poškození plus další poškození v čase."
+      },
+      "fireball_form": {
+        "name": "Ember Form",
+        "description": "Transform into a blazing ember, increasing movement speed by {buff}%. You cannot attack or cast spells while transformed. Recast to return to your normal form."
       },
       "frost_armor": {
         "name": "Plášť jinovatky",

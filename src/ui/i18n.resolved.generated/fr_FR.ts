@@ -1575,6 +1575,7 @@ export const fr_FR: EnTranslations = {
       "formBear": "Forme de Bruin : points de vie et armure augmentés",
       "formCat": "Forme de félin : dégâts de mêlée et énergie",
       "formTravel": "Forme de Fleet : vitesse de déplacement augmentée de {pct}%",
+      "formFireball": "Ember Form: movement speed increased by {pct}%; attacks and spells are disabled",
       "defensiveStance": "Posture de garde : dégâts subis réduits, menace accrue",
       "righteousFury": "Serment ardent : menace des dégâts Sacré fortement augmentée",
       "scale": "Taille augmentée de {pct}%",
@@ -2817,6 +2818,7 @@ export const fr_FR: EnTranslations = {
       "lightning_shield": "Vous charge pour que les attaquants subissent des dégâts de Nature quand ils vous frappent.",
       "flame_shock": "Une brûlure instantanée qui frappe d'emblée et continue de consumer dans la durée.",
       "fireball": "Votre frappe de feu principale: elle inflige un coup et laisse la cible en flammes.",
+      "fireball_form": "Become a living ember to cross open ground at high speed.",
       "frost_armor": "Une amélioration personnelle durable qui renforce votre armure avant un combat.",
       "arcane_intellect": "Augmente l'Intelligence pour agrandir la réserve de mana d'un allié, à lancer avant d'engager.",
       "frostbolt": "Frappe à distance et ralentit la cible pour qu'elle ne puisse pas vous rejoindre.",
@@ -6059,6 +6061,10 @@ export const fr_FR: EnTranslations = {
       "fireball": {
         "name": "Cinderbolt",
         "description": "Lance une boule enflammée qui inflige {damage} points de dégâts de Feu plus des dégâts supplémentaires sur la durée."
+      },
+      "fireball_form": {
+        "name": "Ember Form",
+        "description": "Transform into a blazing ember, increasing movement speed by {buff}%. You cannot attack or cast spells while transformed. Recast to return to your normal form."
       },
       "frost_armor": {
         "name": "Manteau de givre",

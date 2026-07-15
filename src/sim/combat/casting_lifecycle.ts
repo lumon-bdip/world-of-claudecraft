@@ -62,6 +62,7 @@ import {
   hasScopedNextCastInstant,
   nextCastCheapMultiplier,
 } from './empower_next';
+import { isActionLockingFormAuraKind, isFormAuraKind } from './forms';
 import {
   hasCastShield,
   noteSpellHit,
@@ -86,15 +87,7 @@ export const COLOSSAL_MIGHT_COOLDOWNS = new Set([
 ]);
 
 function isFormToggle(ability: AbilityDef): boolean {
-  return ability.effects.some(
-    (e) =>
-      e.type === 'selfBuff' &&
-      (e.kind === 'form_bear' ||
-        e.kind === 'form_cat' ||
-        e.kind === 'form_travel' ||
-        e.kind === 'form_moonkin' ||
-        e.kind === 'form_shadow'),
-  );
+  return ability.effects.some((e) => e.type === 'selfBuff' && isFormAuraKind(e.kind));
 }
 
 // Forms, stances and stealth are toggles: re-casting cancels the aura, and
@@ -104,13 +97,7 @@ function isToggleBuff(ability: AbilityDef): boolean {
   return ability.effects.some(
     (e) =>
       e.type === 'selfBuff' &&
-      (e.kind === 'form_bear' ||
-        e.kind === 'form_cat' ||
-        e.kind === 'form_travel' ||
-        e.kind === 'form_moonkin' ||
-        e.kind === 'form_shadow' ||
-        e.kind === 'defensive_stance' ||
-        e.kind === 'stealth'),
+      (isFormAuraKind(e.kind) || e.kind === 'defensive_stance' || e.kind === 'stealth'),
   );
 }
 
@@ -364,11 +351,9 @@ export function castAbility(
     ctx.error(p.id, 'That ability requires combo points.');
     return;
   }
-  // druid forms gate their kit both ways: form abilities need the form, and
-  // everything else (the caster kit) is locked while shapeshifted
-  const form = p.auras.find(
-    (a) => a.kind === 'form_bear' || a.kind === 'form_cat' || a.kind === 'form_travel',
-  );
+  // Action-locking forms gate their kit both ways: Druid form abilities need
+  // their form, while travel forms lock the normal kit until toggled off.
+  const form = p.auras.find((a) => isActionLockingFormAuraKind(a.kind));
   if (ability.requiresForm) {
     const need = ability.requiresForm === 'bear' ? 'form_bear' : 'form_cat';
     if (!form || form.kind !== need) {
@@ -649,10 +634,7 @@ export function spendResource(p: Entity, cost: number): void {
 function formShiftKind(p: Entity, ability: AbilityDef): 'off' | 'cross' | null {
   if (!isFormToggle(ability)) return null;
   if (p.auras.some((a) => a.id === ability.id)) return 'off';
-  if (
-    p.auras.some((a) => a.kind === 'form_bear' || a.kind === 'form_cat' || a.kind === 'form_travel')
-  )
-    return 'cross';
+  if (p.auras.some((a) => isFormAuraKind(a.kind))) return 'cross';
   return null;
 }
 

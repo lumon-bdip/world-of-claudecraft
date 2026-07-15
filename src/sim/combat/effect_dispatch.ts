@@ -57,6 +57,7 @@ import { extendOwnedDot } from './dot_mutation';
 import { consumeAuraKind, consumeNextAttackCrit } from './empower_next';
 import { runWeaponProcs } from './equip_procs';
 import { exclusiveAuraConflicts } from './exclusive_aura';
+import { isFormAuraKind, isTravelFormAuraKind } from './forms';
 import { armHeroicLeap, relocateSwept } from './heroic_leap';
 import { hasCastShield, noteSpellHit, spellDamageMultFromAuras } from './spell_combat';
 import { consumeSureCritCharge, hasSureCritAura } from './sure_crit';
@@ -1568,12 +1569,7 @@ export function runEffects(
       }
       case 'selfBuff': {
         // forms, stances and stealth are toggles: casting again cancels
-        const isFormKind =
-          eff.kind === 'form_bear' ||
-          eff.kind === 'form_cat' ||
-          eff.kind === 'form_travel' ||
-          eff.kind === 'form_moonkin' ||
-          eff.kind === 'form_shadow';
+        const isFormKind = isFormAuraKind(eff.kind);
         const isToggle =
           isFormKind ||
           eff.kind === 'defensive_stance' ||
@@ -1595,7 +1591,7 @@ export function runEffects(
             break;
           }
         }
-        if (eff.kind === 'stasis') {
+        if (eff.kind === 'stasis' || isTravelFormAuraKind(eff.kind)) {
           if (p.castingAbility) ctx.cancelCast(p);
           p.autoAttack = false;
         }

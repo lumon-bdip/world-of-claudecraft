@@ -1575,6 +1575,7 @@ export const tr_TR: EnTranslations = {
       "formBear": "Bruin Formu: can ve zırh artışı",
       "formCat": "Forma felina: daño cuerpo a cuerpo y energía",
       "formTravel": "Fleet Formu: hareket hızı %{pct} artar",
+      "formFireball": "Ember Form: movement speed increased by {pct}%; attacks and spells are disabled",
       "defensiveStance": "Korumali Durus: alınan hasar azalır, daha fazla tehdit",
       "righteousFury": "Yanan Yemin: Kutsal hasardan gelen tehdit büyük ölçüde artar",
       "scale": "Tamaño aumentado un {pct}%",
@@ -2817,6 +2818,7 @@ export const tr_TR: EnTranslations = {
       "lightning_shield": "Seni yükler, böylece sana vuran saldırganlar Doğa hasarı alır.",
       "flame_shock": "Önden vuran ve zamanla yakmayı sürdüren ani bir yanış.",
       "fireball": "Ana ateş bombası; bir darbe indirir ve hedefi yanar halde bırakır.",
+      "fireball_form": "Become a living ember to cross open ground at high speed.",
       "frost_armor": "Dövüşten önce zırhını sertleştiren kalıcı bir öz güçlendirmesi.",
       "arcane_intellect": "Zekayı yükselterek bir dostun mana havuzunu derinleştirir, akına girmeden önce kullan.",
       "frostbolt": "Menzilden vurur ve hedefi yavaşlatır, böylece sana yaklaşamaz.",
@@ -6059,6 +6061,10 @@ export const tr_TR: EnTranslations = {
       "fireball": {
         "name": "Köz Oku",
         "description": "Ateşli bir top fırlatarak {damage} Ateş hasarı ve ek olarak zamana yayılı hasar verir."
+      },
+      "fireball_form": {
+        "name": "Ember Form",
+        "description": "Transform into a blazing ember, increasing movement speed by {buff}%. You cannot attack or cast spells while transformed. Recast to return to your normal form."
       },
       "frost_armor": {
         "name": "Kırağı Pelerini",

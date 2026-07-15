@@ -71,6 +71,7 @@ import { buildDoorBody } from './door_portal';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
 import { objectDisplayName } from './entity_labels';
 import { advanceSelfFacing, releaseSelfFacing } from './facing_smooth';
+import { type FireballTravelVisual, syncFireballTravelVisual } from './fireball_travel_visual';
 import { buildFish, type FishView } from './fish';
 import {
   buildFoliage,
@@ -548,6 +549,7 @@ export interface EntityView {
   bearVisual: CharacterVisual | null; // druid bear form, built lazily
   catVisual: CharacterVisual | null; // druid cat form, built lazily
   travelVisual: CharacterVisual | null; // druid travel form (chicken-cow), built lazily
+  fireballTravelVisual: FireballTravelVisual | null; // Mage travel form, built lazily
   skin: number; // last-rendered appearance skin — diffed each frame for live swaps
   mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
   offhandItemId: string | null; // last-rendered shield/second weapon, independent of mainhand skins
@@ -3649,6 +3651,7 @@ export class Renderer {
       bearVisual: null,
       catVisual: null,
       travelVisual: null,
+      fireballTravelVisual: null,
       height,
       clickTarget,
       nameplate: np,
@@ -4187,6 +4190,7 @@ export class Renderer {
       v.bearVisual?.dispose();
       v.catVisual?.dispose();
       v.travelVisual?.dispose();
+      v.fireballTravelVisual?.dispose();
     } else {
       if (v.objectPoolKey && v.objectMesh instanceof THREE.Group) {
         this.storePooledObject(v.objectPoolKey, { group: v.objectMesh, height: v.height });
@@ -4382,6 +4386,7 @@ export class Renderer {
       let hasGhostWolf = false;
       let hasCatForm = false;
       let hasTravelForm = false;
+      let hasFireballForm = false;
       let hasStealth = false;
       let hasShadowform = false;
       let hasMoonkin = false;
@@ -4392,6 +4397,7 @@ export class Renderer {
         if (a.id === 'ghost_wolf') hasGhostWolf = true;
         if (a.kind === 'form_cat') hasCatForm = true;
         if (a.kind === 'form_travel') hasTravelForm = true;
+        if (a.kind === 'form_fireball') hasFireballForm = true;
         if (a.kind === 'stealth') hasStealth = true;
         if (a.kind === 'form_shadow') hasShadowform = true;
         if (a.kind === 'form_moonkin') hasMoonkin = true;
@@ -4402,6 +4408,7 @@ export class Renderer {
       const ghostWolf = !polyed && !bear && hasGhostWolf;
       const cat = !polyed && !bear && (ghostWolf || hasCatForm);
       const travel = !polyed && !bear && !cat && hasTravelForm;
+      const fireballForm = !polyed && !bear && !cat && !travel && hasFireballForm;
       const _stealthed = hasStealth;
       // distance cull: far rigs are invisible specks but cost real draw calls
       const cdx = e.pos.x - p.pos.x,
@@ -4449,7 +4456,7 @@ export class Renderer {
           // past the articulated gate the static-pose proxy carries the
           // shadow; an active form's own rig keeps casting instead
           v.visual.setProxyShadow(
-            !wantShadow && inProxyBand && !polyed && !bear && !cat && !travel,
+            !wantShadow && inProxyBand && !polyed && !bear && !cat && !travel && !fireballForm,
           );
           // sheep/forms keep articulated shadows through the whole proxy band —
           // a frozen humanoid proxy silhouette would be wrong under a form
@@ -4676,9 +4683,9 @@ export class Renderer {
       active.setShadowform(hasShadowform);
       active.setMoonkin(hasMoonkin);
       active.setMetamorph(hasMetamorph);
-      v.visual.root.visible = active === v.visual;
+      v.visual.root.visible = active === v.visual && !fireballForm;
       // distant rigs swap to the single-draw baked idle-pose mesh
-      v.visual.setFar(v.isFar && active === v.visual);
+      v.visual.setFar(v.isFar && active === v.visual && !fireballForm);
 
       // animation state machine inputs, derived from render-space motion with
       // hysteresis so a one-frame speed dip can't reset the walk clip.
@@ -4702,6 +4709,14 @@ export class Renderer {
       v.lastZ = az;
       const loco = updateLocomotion(v.loco, vx, vz, facing, dt);
       const moving = loco.moving;
+      v.fireballTravelVisual = syncFireballTravelVisual(
+        v.fireballTravelVisual,
+        v.group,
+        fireballForm && charOnScreen,
+        dt,
+        THREE.MathUtils.clamp(loco.speed / 9.8, 0, 1),
+        isSelf || !v.isFar,
+      );
       // A released spirit is `dead` but should stand and run, not lie prone, so it
       // animates as a living figure (only its translucent ghost material marks it).
       const visuallyDead = isVisuallyDead(e) && !e.ghost;

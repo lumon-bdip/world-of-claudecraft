@@ -1575,6 +1575,7 @@ export const en: EnTranslations = {
       "formBear": "Bruin Form: increased health and armor",
       "formCat": "Cat Form: melee damage and energy",
       "formTravel": "Fleet Form: movement speed increased by {pct}%",
+      "formFireball": "Ember Form: movement speed increased by {pct}%; attacks and spells are disabled",
       "defensiveStance": "Guarded Stance: reduced damage taken, more threat",
       "righteousFury": "Burning Oath: greatly increased threat from Holy damage",
       "scale": "Size increased by {pct}%",
@@ -2817,6 +2818,7 @@ export const en: EnTranslations = {
       "lightning_shield": "Charges you so attackers take Nature damage when they hit you.",
       "flame_shock": "An instant burn that hits up front and keeps searing over time.",
       "fireball": "Your main fire nuke, lands a hit and leaves the target burning.",
+      "fireball_form": "Become a living ember to cross open ground at high speed.",
       "frost_armor": "A lasting self-buff that hardens your armor before a fight.",
       "arcane_intellect": "Raises Intellect to deepen an ally's mana pool, cast it before the pull.",
       "frostbolt": "Strikes from range and slows the target so it cannot close on you.",
@@ -6059,6 +6061,10 @@ export const en: EnTranslations = {
       "fireball": {
         "name": "Cinderbolt",
         "description": "Hurls a fiery ball that causes {damage} Fire damage plus additional damage over time."
+      },
+      "fireball_form": {
+        "name": "Ember Form",
+        "description": "Transform into a blazing ember, increasing movement speed by {buff}%. You cannot attack or cast spells while transformed. Recast to return to your normal form."
       },
       "frost_armor": {
         "name": "Hoarfrost Mantle",

@@ -56,6 +56,7 @@ describe('isDebuffAura', () => {
       'thorns',
       'form_bear',
       'form_cat',
+      'form_fireball',
       'stealth',
       'defensive_stance',
       'righteous_fury',

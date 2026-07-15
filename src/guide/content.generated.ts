@@ -999,6 +999,10 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
         "name": "Breadbind"
       },
       {
+        "id": "counterspell",
+        "name": "Spellbreak"
+      },
+      {
         "id": "fire_blast",
         "name": "Cinderfall"
       },
@@ -1037,6 +1041,10 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       {
         "id": "counterspell",
         "name": "Spellbreak"
+      },
+      {
+        "id": "fireball_form",
+        "name": "Ember Form"
       }
     ],
     "model": "player_mage",
