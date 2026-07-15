@@ -35,9 +35,19 @@ verdict PASS (0 BLOCKING; 4 SHOULD-FIX found, 4 resolved: three pin-coverage
 gaps closed by test(ci) 5cbb96d4c and the vale_cup_meta PRD prose by
 docs(prd) cee777149; two pin NICE-TO-HAVEs closed in the same commit; full
 record in the Phase 4 QA notes below). The 4-shard design is LOCKED (D7
-note). PR #1967 marked ready for review; merge timing stays owner-scheduled.
-Next: Phase 5 (phase-05-typescript-7-flip.md) off release/v0.27.0 once PR
-#1967 merges.
+note). PR #1967 marked ready for review and MERGED into release/v0.27.0 by
+the owner the same day (merge 6f5976dda). The merge push ran the first
+ORGANIC release-tier pass of the sharded release-gate (run 29426343146: all
+four Release gate shards green with I18N_RELEASE_TIER, browser and lint
+green; the run's only red is the Release version gate, see the new-cycle
+note). NEW-CYCLE NOTE for later phases: pushes to release/v0.27.0
+red the Release version gate until the owner bumps the version surfaces to
+0.27.0 (the branch-cut run 29420652196 failed exactly there with everything
+else green); that red is the expected mid-cycle state, not a regression, and
+pending.ts may legitimately regrow as v0.27.0 features land (empty as of the
+retarget). Next: Phase 5 (phase-05-typescript-7-flip.md) off release/v0.27.0
+or newer; its PR carries these merge stamps into the release-side packet per
+the established cadence.
 Phase 4 execution notes for later phases are below.
 
 Phase 3 (CI parallel checks job + FFmpeg from npm static binaries): IMPLEMENTED

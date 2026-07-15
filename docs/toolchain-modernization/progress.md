@@ -10,7 +10,7 @@
 | Phase 2 QA | complete: PASS (0 BLOCKING; 2 SHOULD-FIX found and resolved: the committed teeth successor test + the recorded cadence deviation; 7 doc corrections) | 2026-07-14 | 2026-07-14 |
 | Phase 3: CI parallel checks + FFmpeg | MERGED into release/v0.26.0 (PR #1945, merge fecfce196) | 2026-07-14 | 2026-07-15 |
 | Phase 3 QA | complete: PASS (0 BLOCKING; 8 SHOULD-FIX found and resolved; release base merged in as e0f442637; 2 tests added) | 2026-07-15 | 2026-07-15 |
-| Phase 4: Test sharding | QA PASSED; PR #1967 READY FOR REVIEW (merge owner-scheduled) | 2026-07-15 | 2026-07-15 |
+| Phase 4: Test sharding | MERGED into release/v0.27.0 (PR #1967, merge 6f5976dda) | 2026-07-15 | 2026-07-15 |
 | Phase 4 QA | complete: PASS (0 BLOCKING; 4 SHOULD-FIX found and resolved; 2 pin NICE-TO-HAVEs closed; independent re-derivation, stability runs, and the red-path probe all clean) | 2026-07-15 | 2026-07-15 |
 | Phase 5: TypeScript 7 flip | not started | | |
 | Phase 5 QA (closes packet) | not started | | |
