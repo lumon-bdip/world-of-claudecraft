@@ -111,7 +111,7 @@ const results = await page
 await browser.close();
 
 let failed = pageErrors.length > 0;
-for (const e of pageErrors) console.log(`❌ page error: ${e}`);
+for (const e of pageErrors) console.log(`[ERROR] page error: ${e}`);
 for (const m of results) {
   const empty = m.count < 500;
   const clipTop = m.top <= 0;
@@ -130,10 +130,10 @@ for (const m of results) {
         : tooSmall
           ? `TOO SMALL (fillH=${(fillH * 100) | 0}% fillW=${(fillW * 100) | 0}%)`
           : `topMargin=${m.top} botMargin=${m.H - 1 - m.bottom} fillH=${(fillH * 100) | 0}%`;
-  console.log(`${ok ? '✅' : '❌'} ${m.cls}/${m.pose}: ${note}`);
+  console.log(`[${ok ? 'PASS' : 'FAIL'}] ${m.cls}/${m.pose}: ${note}`);
 }
 if (!results.length && !pageErrors.length) {
-  console.log('❌ no captures produced');
+  console.log('[FAIL] no captures produced');
   failed = true;
 }
 console.log(
