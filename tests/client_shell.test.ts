@@ -91,6 +91,10 @@ const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8')
   /\r\n/g,
   '\n',
 );
+const playerCardControllerTs = readFileSync(
+  new URL('../src/ui/hud/player_card/player_card_controller.ts', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
 const actionBarControllerTs = readFileSync(
   new URL('../src/ui/hud/action_bar/action_bar_controller.ts', import.meta.url),
   'utf8',
@@ -1040,14 +1044,17 @@ describe('client HTML shell', () => {
   });
 
   it('wires player card pose clicks before loading card metadata', () => {
-    const methodStart = hudTs.indexOf('private async openPlayerCard');
-    const listener = hudTs.indexOf('poseButtons.forEach((b, i) =>', methodStart);
-    const metadataAwait = hudTs.indexOf(
+    const methodStart = playerCardControllerTs.indexOf('async open(): Promise<void>');
+    const listener = playerCardControllerTs.indexOf(
+      'poseButtons.forEach((button, index) =>',
+      methodStart,
+    );
+    const metadataAwait = playerCardControllerTs.indexOf(
       '[referral, standing] = await Promise.all([fetchReferralInfo(), fetchStanding()]);',
       methodStart,
     );
-    const actionWiring = hudTs.indexOf(
-      'this.wireCardActions(back, state, setStatus);',
+    const actionWiring = playerCardControllerTs.indexOf(
+      'this.wireActions(backdrop, state, setStatus);',
       methodStart,
     );
 
@@ -1056,11 +1063,11 @@ describe('client HTML shell', () => {
     expect(metadataAwait).toBeGreaterThan(listener);
     expect(actionWiring).toBeGreaterThan(metadataAwait);
 
-    const listenerBlock = hudTs.slice(listener, metadataAwait);
+    const listenerBlock = playerCardControllerTs.slice(listener, metadataAwait);
     expect(listenerBlock).toContain('if (!metadataReady) {');
-    expect(listenerBlock).toContain('selectPose(i);');
+    expect(listenerBlock).toContain('selectPose(index);');
     expect(listenerBlock).toContain('return;');
-    expect(hudTs.slice(metadataAwait, actionWiring)).toContain(
+    expect(playerCardControllerTs.slice(metadataAwait, actionWiring)).toContain(
       'await compose(requestedPoseIndex);',
     );
   });
