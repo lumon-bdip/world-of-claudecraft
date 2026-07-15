@@ -1810,7 +1810,7 @@ export const ko_KR: EnTranslations = {
       "mining": "채광",
       "logging": "벌목",
       "herbalism": "약초학",
-      "notReady": "This resource node has not respawned for you yet."
+      "notReady": "이 자원 채집지는 아직 당신을 위해 재생성되지 않았습니다."
     },
     "archetypeTitle": {
       "label": "칭호",

@@ -774,23 +774,19 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "zh_CN": [
     "hudChrome.discord.roleTag.legend",
-    "hudChrome.discord.roleTag.shill",
-    "hudChrome.gathering.notReady"
+    "hudChrome.discord.roleTag.shill"
   ],
   "zh_TW": [
     "hudChrome.discord.roleTag.legend",
-    "hudChrome.discord.roleTag.shill",
-    "hudChrome.gathering.notReady"
+    "hudChrome.discord.roleTag.shill"
   ],
   "ko_KR": [
     "hudChrome.discord.roleTag.legend",
-    "hudChrome.discord.roleTag.shill",
-    "hudChrome.gathering.notReady"
+    "hudChrome.discord.roleTag.shill"
   ],
   "ja_JP": [
     "hudChrome.discord.roleTag.legend",
-    "hudChrome.discord.roleTag.shill",
-    "hudChrome.gathering.notReady"
+    "hudChrome.discord.roleTag.shill"
   ],
   "pt_BR": [
     "guide.family.reptile.desc",
@@ -921,8 +917,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "ru_RU": [
     "hudChrome.discord.roleTag.legend",
-    "hudChrome.discord.roleTag.shill",
-    "hudChrome.gathering.notReady"
+    "hudChrome.discord.roleTag.shill"
   ],
   "cs_CZ": [
     "guide.family.reptile.desc",
