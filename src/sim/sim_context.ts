@@ -252,6 +252,7 @@ export interface SimContextCallbacks {
   enterDungeon(dungeonId: string, pid?: number): void;
   leaveDungeon(pid?: number): void;
   resetDungeonInstances(pid?: number): void;
+  inheritDungeonResetLocks(pid: number): void;
   dungeonDifficulty(pid?: number): DungeonDifficulty;
   setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void;
   awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void;
@@ -965,6 +966,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     enterDungeon: host.enterDungeon,
     leaveDungeon: host.leaveDungeon,
     resetDungeonInstances: host.resetDungeonInstances,
+    inheritDungeonResetLocks: host.inheritDungeonResetLocks,
     dungeonDifficulty: host.dungeonDifficulty,
     setDungeonDifficulty: host.setDungeonDifficulty,
     awardHeroicMarks: host.awardHeroicMarks,

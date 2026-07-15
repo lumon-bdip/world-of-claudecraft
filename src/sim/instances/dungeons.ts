@@ -79,6 +79,28 @@ function activeResetLock(
   return lock;
 }
 
+// Joining a party during a reset cooldown inherits that party's active dungeon
+// locks. Otherwise fresh characters could take over the replacement claim, rotate
+// the ephemeral party id, and open another run before the five-minute boundary.
+export function inheritDungeonResetLocks(ctx: SimContext, pid: number): void {
+  const party = ctx.partyOf(pid);
+  if (!party) return;
+  const partyKey = `party:${party.id}`;
+  for (const inst of ctx.instances) {
+    if (RAID_ALLOWED_DUNGEON_IDS.has(inst.dungeonId)) continue;
+    const claimLock =
+      inst.partyKey === partyKey && inst.resetAvailableAt > ctx.time && inst.exitId !== null
+        ? { availableAt: inst.resetAvailableAt, claimId: inst.exitId }
+        : null;
+    const ownerLock = party.members
+      .filter((ownerPid) => ownerPid !== pid)
+      .map((ownerPid) => activeResetLock(ctx, ownerPid, inst.dungeonId))
+      .find((lock) => lock !== null);
+    const inherited = claimLock ?? ownerLock;
+    if (inherited) ctx.dungeonResetLocks.set(resetCooldownKey(ctx, pid, inst.dungeonId), inherited);
+  }
+}
+
 export function instanceOriginOf(inst: InstanceSlot): { x: number; z: number } {
   return instanceOrigin(DUNGEONS[inst.dungeonId].index, inst.slot);
 }
@@ -496,6 +518,7 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
   inst.objectIds = [];
   inst.exitId = null;
   inst.emptyFor = 0;
+  inst.resetAvailableAt = 0;
   inst.claimedAt = undefined;
   inst.clearedBy = new Set();
 }
@@ -534,8 +557,10 @@ export function resetDungeonInstances(ctx: SimContext, pid?: number): void {
   }
   const ownerPids = resetOwnerPids(ctx, r.meta.entityId);
   if (
-    resettable.some((inst) =>
-      ownerPids.some((ownerPid) => activeResetLock(ctx, ownerPid, inst.dungeonId) !== null),
+    resettable.some(
+      (inst) =>
+        inst.resetAvailableAt > ctx.time ||
+        ownerPids.some((ownerPid) => activeResetLock(ctx, ownerPid, inst.dungeonId) !== null),
     )
   ) {
     ctx.error(r.meta.entityId, 'Instances can only be reset once every 5 minutes.');
@@ -584,9 +609,10 @@ export function resetDungeonInstances(ctx: SimContext, pid?: number): void {
     freeInstance(ctx, inst);
     claimInstance(ctx, inst, key, claimDifficultyForDungeon(inst.dungeonId, selected));
     if (inst.exitId === null) throw new Error('Dungeon reset replacement claim has no identity.');
+    inst.resetAvailableAt = ctx.time + INSTANCE_EMPTY_TIMEOUT;
     for (const ownerPid of ownerPids) {
       ctx.dungeonResetLocks.set(resetCooldownKey(ctx, ownerPid, inst.dungeonId), {
-        availableAt: ctx.time + INSTANCE_EMPTY_TIMEOUT,
+        availableAt: inst.resetAvailableAt,
         claimId: inst.exitId,
       });
     }

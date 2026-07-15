@@ -190,6 +190,7 @@ export class PartyMachine {
     party.members.push(r.meta.entityId);
     party.raidGroups.set(r.meta.entityId, raidGroup);
     this.partyByPid.set(r.meta.entityId, party.id);
+    this.ctx.inheritDungeonResetLocks(r.meta.entityId);
     // Forming the party is the inviter's join too; the accepter counts on
     // every successful join.
     if (created) this.ctx.bumpDeedStat(leaderMeta, 'partiesJoined', 1);

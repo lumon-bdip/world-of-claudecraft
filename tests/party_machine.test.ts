@@ -51,6 +51,7 @@ function makeCtx() {
       errors.push({ pid, text });
     },
     bumpDeedStat() {},
+    inheritDungeonResetLocks() {},
     emit(ev: SimEvent) {
       events.push(ev);
     },
