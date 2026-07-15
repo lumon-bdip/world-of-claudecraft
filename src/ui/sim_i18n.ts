@@ -6433,8 +6433,12 @@ const RULES: Rule[] = [
     build: () => t('hudChrome.dungeonDifficulty.resetOccupied'),
   },
   {
-    re: /^Change dungeon difficulty before resetting these instances\.$/,
+    re: /^Change dungeon difficulty before resetting these instances\. Empty instances reset on their own after 5 minutes\.$/,
     build: () => t('hudChrome.dungeonDifficulty.resetSameDifficulty'),
+  },
+  {
+    re: /^Use \/dungeon reset to abandon your empty instances after changing difficulty\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.resetUsage'),
   },
   {
     re: /^You cannot reset instances while loot remains inside\.$/,
@@ -6443,6 +6447,14 @@ const RULES: Rule[] = [
   {
     re: /^Instances can only be reset once every 5 minutes\.$/,
     build: () => t('hudChrome.dungeonDifficulty.resetCooldown'),
+  },
+  {
+    re: /^This instance is set to Normal difficulty\. Use Reset All Instances to start a fresh Heroic run\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.entryMismatchNormal'),
+  },
+  {
+    re: /^This instance is set to Heroic difficulty\. Use Reset All Instances to start a fresh Normal run\.$/,
+    build: () => t('hudChrome.dungeonDifficulty.entryMismatchHeroic'),
   },
   {
     re: /^You pass through the tombstone into (.+)\.$/,

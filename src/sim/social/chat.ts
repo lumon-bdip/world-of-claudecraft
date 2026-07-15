@@ -584,6 +584,10 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         ? 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.'
         : 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
     );
+    ctx.error(
+      r.meta.entityId,
+      'Use /dungeon reset to abandon your empty instances after changing difficulty.',
+    );
     return null;
   }
   if (/^\/(?:consider|con|difficulty)(?:\s|$)/i.test(raw)) {

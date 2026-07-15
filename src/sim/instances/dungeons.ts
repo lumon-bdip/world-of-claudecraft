@@ -97,7 +97,14 @@ export function inheritDungeonResetLocks(ctx: SimContext, pid: number): void {
       .map((ownerPid) => activeResetLock(ctx, ownerPid, inst.dungeonId))
       .find((lock) => lock !== null);
     const inherited = claimLock ?? ownerLock;
-    if (inherited) ctx.dungeonResetLocks.set(resetCooldownKey(ctx, pid, inst.dungeonId), inherited);
+    // Inheritance may only ever EXTEND the joiner's lock. Replacing an existing
+    // lock with a nearer-expiry one would let a mid-cooldown farmer launder the
+    // remainder away through a brief join, and rebinding its claimId would lock
+    // the joiner out of their own replacement claim.
+    const existing = activeResetLock(ctx, pid, inst.dungeonId);
+    if (inherited && (existing === null || inherited.availableAt > existing.availableAt)) {
+      ctx.dungeonResetLocks.set(resetCooldownKey(ctx, pid, inst.dungeonId), inherited);
+    }
   }
 }
 
@@ -266,15 +273,31 @@ export function enterDungeon(
   // owner may re-enter only the exact replacement claim created by that reset.
   // Reforming the group or joining a friend's pre-created claim cannot rotate the
   // ownership key into an immediate fresh run.
-  const conflictingResetLock = !raidAllowed
-    ? resetOwnerPids(ctx, r.meta.entityId)
-        .map((ownerPid) => activeResetLock(ctx, ownerPid, dungeonId))
-        .find((lock) => lock !== null && lock.claimId !== inst?.exitId)
-    : undefined;
+  // A ghost whose corpse is bound to this exact live claim is recovering its
+  // body, never minting a fresh run, so a partymate's unrelated reset lock must
+  // not strand the spirit at the door.
+  const corpseBoundToClaim =
+    r.e.ghost && inst !== undefined && r.e.corpseInstanceId === inst.exitId;
+  const conflictingResetLock =
+    !raidAllowed && !corpseBoundToClaim
+      ? resetOwnerPids(ctx, r.meta.entityId)
+          .map((ownerPid) => activeResetLock(ctx, ownerPid, dungeonId))
+          .find((lock) => lock !== null && lock.claimId !== inst?.exitId)
+      : undefined;
   if (conflictingResetLock) {
     ctx.error(r.meta.entityId, 'Instances can only be reset once every 5 minutes.');
     return;
   }
+  // The claim-wins rule above is silent, and silence is exactly the reported
+  // confusion: a player who toggled the selection and walked back in landed in
+  // the old-difficulty run with no explanation. A living player rejoining a
+  // standard claim whose difficulty differs from their selection is told, and
+  // pointed at the reset path. Ghosts are corpse-running back to the run they
+  // already know; raid claims are excluded from Reset All, so no advice there.
+  const mismatchedClaimDifficulty =
+    !raidAllowed && !r.e.ghost && inst !== undefined && inst.difficulty !== difficulty
+      ? inst.difficulty
+      : null;
   if (!inst) {
     // Heroic five-mans lock on the KILL: a locked player can still corpse-run
     // back into a cleared live claim (gated on the boss being down, above), but
@@ -290,6 +313,17 @@ export function enterDungeon(
       return;
     }
     claimInstance(ctx, inst, key, difficulty);
+  }
+  if (mismatchedClaimDifficulty !== null) {
+    ctx.emit({
+      type: 'log',
+      text:
+        mismatchedClaimDifficulty === 'heroic'
+          ? 'This instance is set to Heroic difficulty. Use Reset All Instances to start a fresh Normal run.'
+          : 'This instance is set to Normal difficulty. Use Reset All Instances to start a fresh Heroic run.',
+      color: '#f96',
+      pid: r.meta.entityId,
+    });
   }
   if (!party || party.members.length < dungeon.suggestedPlayers) {
     ctx.emit({
@@ -550,9 +584,17 @@ export function resetDungeonInstances(ctx: SimContext, pid?: number): void {
   // bosses; require the player to select the other difficulty before abandoning the
   // old claims so Reset All cannot recreate that exploit with one extra click.
   const selected = ctx.dungeonDifficulty(r.meta.entityId);
-  const resettable = owned.filter((inst) => inst.difficulty !== selected);
+  // Compare against the per-dungeon CLAMPED difficulty (what the replacement
+  // claim below would actually use), so a dungeon without a heroic mode can
+  // never pass the transition guard and loop same-difficulty resets.
+  const resettable = owned.filter(
+    (inst) => inst.difficulty !== claimDifficultyForDungeon(inst.dungeonId, selected),
+  );
   if (resettable.length === 0) {
-    ctx.error(r.meta.entityId, 'Change dungeon difficulty before resetting these instances.');
+    ctx.error(
+      r.meta.entityId,
+      'Change dungeon difficulty before resetting these instances. Empty instances reset on their own after 5 minutes.',
+    );
     return;
   }
   const ownerPids = resetOwnerPids(ctx, r.meta.entityId);

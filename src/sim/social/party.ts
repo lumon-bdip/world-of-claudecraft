@@ -478,6 +478,10 @@ export class PartyMachine {
         party.members.push(pid);
         party.raidGroups.set(pid, raidGroup);
         this.partyByPid.set(pid, party.id);
+        // A finder merge is a join like any other: without this, a
+        // finder-formed member escapes the reset-cooldown inheritance the
+        // invite path (acceptInvite above) enforces.
+        this.ctx.inheritDungeonResetLocks(pid);
         const meta = this.ctx.players.get(pid);
         if (meta) this.ctx.bumpDeedStat(meta, 'partiesJoined', 1);
       }

@@ -10,6 +10,8 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -19,9 +21,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "es_ES": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -31,9 +36,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "fr_FR": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -43,9 +51,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "fr_CA": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -55,10 +66,13 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "en_CA": [],
   "it_IT": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -68,9 +82,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "de_DE": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -80,13 +97,16 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -96,10 +116,13 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "ru_RU": [],
   "cs_CZ": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -109,9 +132,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "nl_NL": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -121,9 +147,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "pl_PL": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -133,9 +162,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "id_ID": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -145,9 +177,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "tr_TR": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -157,9 +192,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "sv_SE": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -169,9 +207,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "vi_VN": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -181,9 +222,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ],
   "da_DK": [
+    "hudChrome.dungeonDifficulty.entryMismatchHeroic",
+    "hudChrome.dungeonDifficulty.entryMismatchNormal",
     "hudChrome.dungeonDifficulty.resetAll",
     "hudChrome.dungeonDifficulty.resetConfirm",
     "hudChrome.dungeonDifficulty.resetConfirmBody",
@@ -193,6 +237,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.dungeonDifficulty.resetLoot",
     "hudChrome.dungeonDifficulty.resetNone",
     "hudChrome.dungeonDifficulty.resetOccupied",
-    "hudChrome.dungeonDifficulty.resetSameDifficulty"
+    "hudChrome.dungeonDifficulty.resetSameDifficulty",
+    "hudChrome.dungeonDifficulty.resetUsage"
   ]
 };

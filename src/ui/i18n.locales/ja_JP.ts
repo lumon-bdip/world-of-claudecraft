@@ -513,7 +513,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dungeonDifficulty.resetOccupied':
     '中にプレイヤーがいる間はインスタンスをリセットできません。',
   'hudChrome.dungeonDifficulty.resetSameDifficulty':
-    'インスタンスをリセットする前にダンジョン難易度を変更してください。',
+    'インスタンスをリセットする前にダンジョン難易度を変更してください。空のインスタンスは5分後に自動的にリセットされます。',
+  'hudChrome.dungeonDifficulty.resetUsage':
+    '難易度を変更した後、/dungeon reset で空のインスタンスを放棄できます。',
   'hudChrome.dungeonDifficulty.resetLoot':
     '中に戦利品が残っている間はインスタンスをリセットできません。',
   'hudChrome.dungeonDifficulty.resetConfirmTitle': 'すべてのインスタンスをリセットしますか？',
@@ -521,6 +523,10 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '以前選択していた難易度の空のインスタンスを放棄します。未取得の戦利品がある場合はリセットできません。',
   'hudChrome.dungeonDifficulty.resetConfirm': 'インスタンスをリセット',
   'hudChrome.dungeonDifficulty.resetCooldown': 'インスタンスをリセットできるのは5分に1回だけです。',
+  'hudChrome.dungeonDifficulty.entryMismatchNormal':
+    'このインスタンスはノーマル難易度に設定されています。ヒロイックで新しく始めるには「すべてのインスタンスをリセット」を使用してください。',
+  'hudChrome.dungeonDifficulty.entryMismatchHeroic':
+    'このインスタンスはヒロイック難易度に設定されています。ノーマルで新しく始めるには「すべてのインスタンスをリセット」を使用してください。',
   'hudChrome.lootSettings.method': '分配方式',
   'hudChrome.lootSettings.rollThreshold': 'ロールしきい値',
   'hudChrome.lootSettings.groupLoot': 'グループルート',
