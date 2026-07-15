@@ -145,6 +145,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -284,6 +286,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -423,6 +427,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -562,6 +568,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -702,6 +710,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -841,6 +851,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -996,6 +1008,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -1139,6 +1153,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -1278,6 +1294,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -1417,6 +1435,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -1556,6 +1576,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -1695,6 +1717,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -1834,6 +1858,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -1973,6 +1999,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ],
@@ -2112,6 +2140,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.plurals.finderPartySize.many",
     "hudChrome.plurals.finderPartySize.one",
     "hudChrome.plurals.finderPartySize.other",
+    "hudChrome.statInfo.desc.hitRating",
+    "hudChrome.statInfo.names.hitRating",
     "loading.realmFull",
     "loading.tooManyConnections"
   ]

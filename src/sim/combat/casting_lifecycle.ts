@@ -850,7 +850,7 @@ function applyAbility(ctx: SimContext, p: Entity, meta: PlayerMeta, res: Resolve
     // Goad / Menace already never roll, since they resolve instantly below).
     const isTaunt = res.effects.some((eff) => eff.type === 'taunt');
     scheduleProjectile(ctx, p, target, (src, tgt) => {
-      if (isSpell && !isTaunt && isSpellResisted(ctx.rng, src.level, tgt.level)) {
+      if (isSpell && !isTaunt && isSpellResisted(ctx.rng, src.level, tgt.level, src.hitBonus)) {
         ctx.emit({
           type: 'damage',
           sourceId: src.id,
