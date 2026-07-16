@@ -8413,7 +8413,12 @@ function wireStartScreens(): void {
       // reload, and refreshCharacters consumes the pending intent.
       markResumeAttempt();
       pendingResume = { characterId: resume.characterId, realm: resume.realm };
-      localStorage.setItem(LAST_REALM_KEY, resume.realm);
+      try {
+        localStorage.setItem(LAST_REALM_KEY, resume.realm);
+      } catch {
+        // fail-soft like the resume_play wrappers: a blocked write only loses
+        // the realm auto-pick, the resume then falls to the realm list.
+      }
       goToLoggedInPlay();
     });
     // Re-bind the account's linked wallet on a restored session (not just on fresh

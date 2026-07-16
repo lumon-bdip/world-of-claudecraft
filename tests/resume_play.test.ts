@@ -229,21 +229,41 @@ describe('main.ts resume wiring', () => {
   });
 
   it('clears the marker beside every clearSession-style logout site', () => {
-    // deliberate in-game logout, account logout, session expiry, deactivate,
-    // recovery-email hatch, and the boot auth failure all clear the marker.
+    // Exact count: in-game logout, account logout, session expiry, deactivate,
+    // recovery-email hatch, boot auth failure, roster mismatch, fatalOverlay,
+    // and the boot dead-marker clear. A new terminal site must bump this; a
+    // silently deleted one fails it.
     const clears = mainTs.match(/clearPlayMarker\(\);/g) ?? [];
-    expect(clears.length).toBeGreaterThanOrEqual(7);
+    expect(clears.length).toBe(9);
     expect(mainTs).toContain('api.clearSession();\n    clearPlayMarker();');
   });
 
-  it('boot resume counts an attempt, restores the realm, and is desktop-guarded', () => {
+  it('boot resume counts an attempt, restores the realm, and is guarded', () => {
     expect(mainTs).toContain('markResumeAttempt();');
     expect(mainTs).toContain('localStorage.setItem(LAST_REALM_KEY, resume.realm);');
     expect(mainTs).toContain('if (isDesktopLoginPage()) return;');
+    // the Discord-onboarding arm enters play itself; resume must not double-enter
+    expect(mainTs).toContain('if (discordOnboarding) return;');
+    // a marker that no longer resumes (stale or spent) is cleared, not kept
+    expect(mainTs).toContain('if (marker) clearPlayMarker();');
+  });
+
+  it('drops the pending intent on every non-entry landing', () => {
+    // the realm list (no remembered realm) and a failed roster load both disarm
+    expect(mainTs).toContain("pendingResume = null;\n  show('#realm-panel');");
+    expect(mainTs).toContain(
+      'pendingResume = null;\n    listEl.innerHTML = `<li class="char-list-message char-list-error">',
+    );
   });
 
   it('the roster consume gate requires the marker realm to match the api realm', () => {
-    expect(mainTs).toContain('resume.realm === api.realm');
+    expect(mainTs).toContain(
+      'resume.realm === api.realm ? chars.find((c) => c.id === resume.characterId) : undefined',
+    );
+    // a missing character or realm mismatch clears the persisted marker
+    expect(mainTs).toContain(
+      'if (target) {\n        void enterWorld(target);\n        return;\n      }\n      clearPlayMarker();',
+    );
   });
 
   it('re-stamps on hide and pagehide via the freshness-gated refresh', () => {
