@@ -6728,17 +6728,14 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mobileCameraJoystick': 'Joystick aparatu',
   'hudChrome.options.mobileLeftHanded': 'Układ leworęczny',
   'entities.quests.q_archetype_acceptance.title': 'Rzemiosło, które możesz nazwać własnym',
-  'entities.quests.q_archetype_acceptance.text':
-    'Każdy rzemieślnik z Eastbrook ostatecznie decyduje się na jedno rzemiosło, które nazywa swoim własnym. Wykaż się jednym czynem, {playerName}, i zadeklaruj swoją ścieżkę.',
-  'entities.quests.q_archetype_acceptance.completion':
-    'Twoja ścieżka została wybrana; chodź dobrze.',
-  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Leśny Wilk zabity',
   'entities.quests.q_prof_make_amends.title': 'Zadośćuczynienie',
-  'entities.quests.q_prof_make_amends.text':
-    'Aby odłożyć jeden statek na drugi, rzemieślnik musi najpierw zadośćuczynić za ścieżkę, którą nie przeszedł, {playerName}.',
-  'entities.quests.q_prof_make_amends.completion':
-    'Poprawki dokonane; otwiera się przed tobą nowa droga.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Leśny Wilk zabity',
+  'entities.quests.q_prof_hobby_switch.title': 'Inne zajęcie',
+  'entities.quests.q_prof_hobby_switch.text':
+    'Główne rzemiosła wymagają przysięgi. Hobby pyta tylko, dokąd prowadzi twoja ciekawość, {playerName}. Zbierz kilka ziół i zdecyduj, które rzemiosło przeciwne twoim głównym specjalizacjom chcesz rozwijać.',
+  'entities.quests.q_prof_hobby_switch.completion':
+    'Lżejszy wybór, ale pożyteczny. Podążaj za ciekawością tak daleko, jak zaprowadzi cię rzadka praca.',
+  'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Zebrano stanowisko ziół',
   'entities.npcs.bursar_aldous_crane.greeting':
     'Każda skrzynia, kufer i błyskotka są bezpieczne w Złoconej Szkatule.',
   'entities.npcs.bursar_aldous_crane.name': 'Skarbnik Aldous Crane',
@@ -6996,11 +6993,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.steam.title': 'Steam',
   'hudChrome.steam.unlink': 'Odłącz Steam',
   'entities.items.chunk_of_ore.name': 'Kawałek rudy',
-  'entities.quests.q_prof_intro.completion':
-    'Widzisz? Ruda w torbie i odciski na dłoniach. Dalej zajmuj się górnictwem, wyrębem i zielarstwem podczas wędrówek, a gdy wrócisz do miasta, pamiętaj o tablicy Priorytetów miasta przy targu i pobliskim stole rzemieślniczym. Na tym wszystkim można uczciwie zarobić, jeśli zechcesz.',
-  'entities.quests.q_prof_intro.objectives.0.label': 'Kawałek rudy',
-  'entities.quests.q_prof_intro.text':
-    'Każdy w Eastbrook para się jakimś fachem oprócz władania mieczem, {playerName}. Wokół miasta pełno żył rudy, więc chwyć za kilof i przynieś mi 5 kawałków. Wydobądź je własnoręcznie; poznam różnicę.',
   'entities.quests.q_prof_intro.title': 'Fach dla każdej dłoni',
   'hudChrome.auth.appleChoiceExpired':
     'To logowanie przez Apple wygasło. Zaloguj się ponownie przez Apple.',

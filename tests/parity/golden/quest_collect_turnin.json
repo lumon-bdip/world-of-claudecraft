@@ -131,7 +131,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "2ce1b790",
+      "state": "bce66db3",
       "events": "11e0c53a",
       "rng": {
         "draws": 0,
@@ -191,6 +191,9 @@
                   0
                 ],
                 "questId": "q_boars",
+                "resolvedCounts": [
+                  5
+                ],
                 "state": "active"
               }
             ]
@@ -258,8 +261,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "cc655682",
-      "events": "ddaa436f",
+      "state": "c6b31f89",
+      "events": "a7d970ca",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -325,6 +328,9 @@
                   5
                 ],
                 "questId": "q_boars",
+                "resolvedCounts": [
+                  5
+                ],
                 "state": "ready"
               }
             ]
@@ -392,8 +398,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "9a18562b",
-      "events": "6a2eee27",
+      "state": "98b5b6ae",
+      "events": "7adb50f1",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -459,6 +465,9 @@
                   4
                 ],
                 "questId": "q_boars",
+                "resolvedCounts": [
+                  5
+                ],
                 "state": "active"
               }
             ]
@@ -526,8 +535,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "b68e5541",
-      "events": "82536917",
+      "state": "e496c01c",
+      "events": "aff72cae",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -593,6 +602,9 @@
                   5
                 ],
                 "questId": "q_boars",
+                "resolvedCounts": [
+                  5
+                ],
                 "state": "ready"
               }
             ]
@@ -661,7 +673,7 @@
       "time": 0,
       "nextId": 409,
       "state": "b2e82dc2",
-      "events": "dcefb227",
+      "events": "1f9f1669",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"

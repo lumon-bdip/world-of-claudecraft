@@ -2454,6 +2454,15 @@
     max-height: none;
     overflow: hidden;
   }
+  body.mobile-touch .profession-skill-row {
+    grid-template-columns: minmax(82px, 1fr) 34px minmax(68px, auto);
+  }
+  body.mobile-touch .profession-skill-row > :last-child {
+    grid-column: 1 / -1;
+  }
+  body.mobile-touch .qd-profession-choice select {
+    min-height: 40px;
+  }
   body.mobile-touch .dev-command-header {
     padding: 10px 54px 9px 12px;
   }

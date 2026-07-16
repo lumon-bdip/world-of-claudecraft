@@ -4355,6 +4355,90 @@
     font-family: var(--title-font);
     font-size: 12px;
   }
+  .qd-profession-choice {
+    display: grid;
+    gap: 4px;
+    margin: 10px 0 6px;
+    color: var(--gold);
+    font-family: var(--title-font);
+    font-size: 12px;
+  }
+  .qd-profession-choice select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 4px;
+    background: var(--color-bg-input);
+    color: var(--color-text-light);
+    font-family: var(--ui-font);
+  }
+  .qd-profession-preview {
+    margin-bottom: 8px;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .profession-identity-card {
+    margin: 8px 0 10px;
+    padding: 10px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 4px;
+    background: var(--color-bg-input);
+  }
+  .profession-identity-card h3 {
+    margin: 0 0 8px;
+    color: var(--gold);
+    font-family: var(--title-font);
+    font-size: 13px;
+  }
+  .profession-identity-summary {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 3px 8px;
+    margin: 0 0 8px;
+    font-size: 11px;
+  }
+  .profession-identity-summary dt {
+    color: var(--color-text-muted);
+  }
+  .profession-identity-summary dd {
+    margin: 0;
+  }
+  .profession-skill-list,
+  .profession-identity-nudges {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .profession-skill-row {
+    display: grid;
+    grid-template-columns: minmax(90px, 1fr) 38px minmax(72px, auto) minmax(88px, auto);
+    gap: 6px;
+    padding: 3px 0;
+    font-size: 10px;
+  }
+  .profession-skill-row.role-dormant {
+    opacity: 0.72;
+  }
+  .profession-identity-tutorial,
+  .profession-identity-nudges {
+    color: var(--color-text-muted);
+    font-size: 10px;
+    line-height: 1.35;
+  }
+  .crafting-recipe-item {
+    flex-wrap: wrap;
+  }
+  .crafting-recipe-item > .vendor-item {
+    flex: 1 0 100%;
+  }
+  .crafting-recipe-item > .crafting-combo-requirement {
+    flex: 1 0 100%;
+    margin-top: 3px;
+    color: var(--color-text-muted);
+    font-size: 10px;
+    line-height: 1.35;
+  }
   .vendor-empty {
     padding: 5px;
     font-size: 11px;

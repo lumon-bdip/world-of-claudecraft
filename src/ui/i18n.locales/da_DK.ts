@@ -6671,16 +6671,14 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mobileCameraJoystick': 'Kamera joystick',
   'hudChrome.options.mobileLeftHanded': 'Venstrehånds layout',
   'entities.quests.q_archetype_acceptance.title': 'Et håndværk at kalde dit eget',
-  'entities.quests.q_archetype_acceptance.text':
-    'Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.',
-  'entities.quests.q_archetype_acceptance.completion': 'Din vej er valgt; gå det godt.',
-  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Skovulv dræbt',
   'entities.quests.q_prof_make_amends.title': 'Gøre bod',
-  'entities.quests.q_prof_make_amends.text':
-    'For at afsætte et håndværk til et andet, skal en håndværker først råde bod på stien, der ikke er gået, {playerName}.',
-  'entities.quests.q_prof_make_amends.completion':
-    'Foretagne ændringer; en ny vej er åben for dig.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Skovulv dræbt',
+  'entities.quests.q_prof_hobby_switch.title': 'En anden fritidsinteresse',
+  'entities.quests.q_prof_hobby_switch.text':
+    'Hovedfag kræver et løfte. En hobby spørger kun, hvor din nysgerrighed fører dig hen, {playerName}. Saml nogle urter, og vælg hvilket fag over for dine hovedfag du vil dyrke.',
+  'entities.quests.q_prof_hobby_switch.completion':
+    'Et lettere valg, men et nyttigt et. Følg din nysgerrighed så langt, som sjældent arbejde kan føre dig.',
+  'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Urteområde høstet',
   'entities.npcs.bursar_aldous_crane.greeting':
     'Hver kasse, hvert skrin og hvert smykke er i sikkerhed hos Det Forgyldte Pengeskrin.',
   'entities.npcs.bursar_aldous_crane.name': 'Skatmester Aldous Crane',
@@ -6939,11 +6937,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.steam.title': 'Steam',
   'hudChrome.steam.unlink': 'Fjern Steam-tilknytning',
   'entities.items.chunk_of_ore.name': 'Malmklump',
-  'entities.quests.q_prof_intro.completion':
-    'Kan du se? Malm i din taske og hård hud på dine hænder. Fortsæt med minedrift, skovhugst og urtesamling, mens du rejser ad vejene. Når du er tilbage i byen, så husk Byfokus-tavlen ved markedet og arbejdsbænken i nærheden. Der er et hæderligt levebrød i det alt sammen, hvis du ønsker det.',
-  'entities.quests.q_prof_intro.objectives.0.label': 'Malmklump',
-  'entities.quests.q_prof_intro.text':
-    'Alle i Østbæk har et håndværk ved siden af sværdet, {playerName}. Der ligger malmårer rundt om byen, så sving en hakke og bring mig 5 klumper. Bryd dem selv, vel at mærke; jeg kan kende forskel.',
   'entities.quests.q_prof_intro.title': 'Et håndværk til hver hånd',
   'hudChrome.auth.appleChoiceExpired': 'Dette Apple-login er udløbet. Log ind med Apple igen.',
   'hudChrome.auth.appleChoiceIntro':

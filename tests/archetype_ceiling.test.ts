@@ -96,10 +96,9 @@ describe('meetsComboRequirement composes the archetype ceiling (#1132 combo gate
   };
   const recipe = { comboRequirement: combo } as unknown as ProfessionRecipeRecord;
 
-  it('defaults activeArchetype/pairedMajor to null (uncapped-to-rare), unchanged for existing raw-skills callers', () => {
+  it('denies an unattuned raw-skills caller even when both craft tiers are high', () => {
     const skills = { ...emptyCraftSkills(), [ARMOR]: 25, [PAIRED_MAJOR]: 25 };
-    // Both crafts individually reach tier 1 with no archetype context passed at all.
-    expect(meetsComboRequirement(skills, recipe)).toBe(true);
+    expect(meetsComboRequirement(skills, recipe)).toBe(false);
   });
 
   it('an attuned specialist meets a minTier-1 combo over their OWN adjacent pair once both reach tier 1 (#1638 review)', () => {
@@ -117,11 +116,11 @@ describe('meetsComboRequirement composes the archetype ceiling (#1132 combo gate
     expect(meetsComboRequirement(skills, otherRecipe, ARMOR, PAIRED_MAJOR)).toBe(false);
   });
 
-  it('the hobby craft can still meet a minTier-1 (below the rare ceiling) combo requirement', () => {
+  it('a major plus hobby never substitutes for the exact active pair', () => {
     const hobbyCombo = { craftA: ARMOR, craftB: COOKING, minTier: 1 };
     const skills = { ...emptyCraftSkills(), [ARMOR]: 25, [COOKING]: 25 };
     const hobbyRecipe = { comboRequirement: hobbyCombo } as unknown as ProfessionRecipeRecord;
-    expect(meetsComboRequirement(skills, hobbyRecipe, ARMOR, PAIRED_MAJOR)).toBe(true);
+    expect(meetsComboRequirement(skills, hobbyRecipe, ARMOR, PAIRED_MAJOR, COOKING)).toBe(false);
   });
 
   it('every real content combo stays craftable after attuning to EITHER of its two crafts (#1638 review round 2)', () => {

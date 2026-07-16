@@ -2037,6 +2037,37 @@ export const nl_NL: EnTranslations = {
       "insufficientMaterials": "Daar heb je de materialen niet voor.",
       "unknownRecipe": "Dat recept bestaat niet.",
       "comboRequirementUnmet": "Je hebt niet beide vereiste ambachten op het vereiste niveau voor dat recept.",
+      "comboRequires": "Attunement: {craftA} + {craftB}, tier {tier}.",
+      "comboMet": "Ready.",
+      "comboSyncing": "Checking realm attunement.",
+      "comboNotAttuned": "Choose an archetype pair first.",
+      "comboWrongPair": "Activate this exact pair to craft it.",
+      "comboTierUnmet": "Raise both major crafts to the required tier.",
+      "professionChoice": "Profession choice",
+      "noProfessionChoice": "No valid profession choice is currently available.",
+      "attunementPreview": "Result: {title} title; {majorA} and {majorB} become uncapped majors; {hobby} becomes the rare-capped hobby; all other skill knowledge is retained but capped at common while dormant.",
+      "hobbyPreview": "Result: {hobby} becomes the rare-capped hobby. Both majors and all retained skill values stay unchanged.",
+      "identity": {
+        "title": "Crafting Identity",
+        "syncing": "Waiting for your crafting identity from the realm.",
+        "unattuned": "No archetype pair is active. Your knowledge is retained, but combo recipes require an attuned pair.",
+        "titleLabel": "Title",
+        "majorsLabel": "Majors",
+        "hobbyLabel": "Hobby",
+        "historyLabel": "History",
+        "history": "{pairs} pairs discovered, {returns} returns completed",
+        "roleMajor": "Major",
+        "roleHobby": "Hobby",
+        "roleDormant": "Dormant knowledge",
+        "roleUnattuned": "Unattuned",
+        "ceilingUnlimited": "No empowerment cap",
+        "ceilingRare": "Rare cap",
+        "ceilingCommon": "Common cap",
+        "skillAria": "{craft}, skill {skill}, tier {tier}, {role}, {ceiling}",
+        "tutorial": "First tier: reach skill {skill} in a craft. Successful recipes raise that craft without erasing knowledge elsewhere.",
+        "nearTier": "{craft} is {points} skill from its next tier.",
+        "dormantKnowledge": "{craft} knowledge is retained but dormant until its pair or hobby is active."
+      },
       "notAtHub": "Je moet bij de werkbank zijn, op het vereiste niveau, om dat te maken.",
       "throttled": "Je maakt te snel. Wacht even en probeer het opnieuw.",
       "recipeNotLearned": "Je hebt dat recept nog niet geleerd."
@@ -8740,11 +8771,11 @@ export const nl_NL: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Een ambacht voor iedere hand",
-        "text": "Iedereen in Oostbeek beoefent naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad, dus zwaai met een pikhouweel en breng me 5 brokken. Delf ze zelf, hoor; ik merk het verschil.",
-        "completion": "Zie je? Erts in je tas en eelt op je handen. Blijf mijnen, houthakken en kruiden plukken terwijl je over de wegen reist. Wanneer je terug in de stad bent, kijk dan naar het bord met de Stadsfocus bij de markt en de werkbank ernaast. Er valt met alles een eerlijke boterham te verdienen, als je dat wilt.",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There are ore veins in the rocks around the Copper Dig, southwest of town. Go swing a pick and work 5 of them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore gathered and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
         "objectives": {
           "0": {
-            "label": "Brok erts"
+            "label": "Ore vein harvested"
           }
         }
       },
@@ -9532,21 +9563,31 @@ export const nl_NL: EnTranslations = {
       },
       "q_archetype_acceptance": {
         "title": "Een ambacht dat u het uwe kunt noemen",
-        "text": "Elke ambachtsman van Eastbrook kiest uiteindelijk voor één ambacht dat hij zijn eigen ambacht noemt. Bewijs jezelf met één enkele daad, {playerName}, en geef je pad aan.",
-        "completion": "Jouw pad is gekozen; loop er goed mee.",
+        "text": "Skill is knowledge, {playerName}, but attunement is a promise. Choose two neighboring crafts whose methods you will carry as your majors, then bring me ore worked from the Vale with your own hands.",
+        "completion": "The promise holds. These two crafts are now your majors, and the knowledge opposite them becomes your hobby.",
+        "objectives": {
+          "0": {
+            "label": "Ore vein harvested"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Het goedmaken",
+        "text": "You have carried that pair before, {playerName}. Returning is no fresh vow. Help keep the Vale road clear, and the work will remind your hands what they once knew.",
+        "completion": "The old rhythm returns. Your former pair is active once more.",
         "objectives": {
           "0": {
             "label": "Boswolf gedood"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Het goedmaken",
-        "text": "Om het ene vaartuig voor het andere opzij te zetten, moet een ambachtsman eerst het niet bewandelde pad goedmaken, {playerName}.",
-        "completion": "Wijzigingen aangebracht; er ligt een nieuw pad voor je open.",
+      "q_prof_hobby_switch": {
+        "title": "Een andere liefhebberij",
+        "text": "Hoofdambachten vragen om een gelofte. Een hobby vraagt alleen waar je nieuwsgierigheid heen dwaalt, {playerName}. Verzamel wat kruiden en kies welk ambacht tegenover je hoofdambachten je wilt beoefenen.",
+        "completion": "Een lichtere keuze, maar wel een nuttige. Volg die nieuwsgierigheid zo ver als zeldzaam werk je brengt.",
         "objectives": {
           "0": {
-            "label": "Boswolf gedood"
+            "label": "Kruidenveld geoogst"
           }
         }
       },

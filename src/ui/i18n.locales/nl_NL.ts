@@ -6774,16 +6774,14 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mobileCameraJoystick': 'Camerajoystick',
   'hudChrome.options.mobileLeftHanded': 'Linkshandige indeling',
   'entities.quests.q_archetype_acceptance.title': 'Een ambacht dat u het uwe kunt noemen',
-  'entities.quests.q_archetype_acceptance.text':
-    'Elke ambachtsman van Eastbrook kiest uiteindelijk voor één ambacht dat hij zijn eigen ambacht noemt. Bewijs jezelf met één enkele daad, {playerName}, en geef je pad aan.',
-  'entities.quests.q_archetype_acceptance.completion': 'Jouw pad is gekozen; loop er goed mee.',
-  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Boswolf gedood',
   'entities.quests.q_prof_make_amends.title': 'Het goedmaken',
-  'entities.quests.q_prof_make_amends.text':
-    'Om het ene vaartuig voor het andere opzij te zetten, moet een ambachtsman eerst het niet bewandelde pad goedmaken, {playerName}.',
-  'entities.quests.q_prof_make_amends.completion':
-    'Wijzigingen aangebracht; er ligt een nieuw pad voor je open.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Boswolf gedood',
+  'entities.quests.q_prof_hobby_switch.title': 'Een andere liefhebberij',
+  'entities.quests.q_prof_hobby_switch.text':
+    'Hoofdambachten vragen om een gelofte. Een hobby vraagt alleen waar je nieuwsgierigheid heen dwaalt, {playerName}. Verzamel wat kruiden en kies welk ambacht tegenover je hoofdambachten je wilt beoefenen.',
+  'entities.quests.q_prof_hobby_switch.completion':
+    'Een lichtere keuze, maar wel een nuttige. Volg die nieuwsgierigheid zo ver als zeldzaam werk je brengt.',
+  'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Kruidenveld geoogst',
   'entities.npcs.bursar_aldous_crane.greeting':
     'Elke kist, koffer en snuisterij is veilig bij de Vergulde Geldkist.',
   'entities.npcs.bursar_aldous_crane.name': 'Thesaurier Aldous Crane',
@@ -7043,11 +7041,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.steam.title': 'Steam',
   'hudChrome.steam.unlink': 'Steam ontkoppelen',
   'entities.items.chunk_of_ore.name': 'Brok erts',
-  'entities.quests.q_prof_intro.completion':
-    'Zie je? Erts in je tas en eelt op je handen. Blijf mijnen, houthakken en kruiden plukken terwijl je over de wegen reist. Wanneer je terug in de stad bent, kijk dan naar het bord met de Stadsfocus bij de markt en de werkbank ernaast. Er valt met alles een eerlijke boterham te verdienen, als je dat wilt.',
-  'entities.quests.q_prof_intro.objectives.0.label': 'Brok erts',
-  'entities.quests.q_prof_intro.text':
-    'Iedereen in Oostbeek beoefent naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad, dus zwaai met een pikhouweel en breng me 5 brokken. Delf ze zelf, hoor; ik merk het verschil.',
   'entities.quests.q_prof_intro.title': 'Een ambacht voor iedere hand',
   'hudChrome.auth.appleChoiceExpired':
     'Deze aanmelding bij Apple is verlopen. Meld je opnieuw aan met Apple.',

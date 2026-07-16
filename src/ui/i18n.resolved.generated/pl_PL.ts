@@ -2037,6 +2037,37 @@ export const pl_PL: EnTranslations = {
       "insufficientMaterials": "Nie masz na to materiałów.",
       "unknownRecipe": "Ten przepis nie istnieje.",
       "comboRequirementUnmet": "Nie masz obu wymaganych rzemiosł na wymaganym poziomie dla tego przepisu.",
+      "comboRequires": "Attunement: {craftA} + {craftB}, tier {tier}.",
+      "comboMet": "Ready.",
+      "comboSyncing": "Checking realm attunement.",
+      "comboNotAttuned": "Choose an archetype pair first.",
+      "comboWrongPair": "Activate this exact pair to craft it.",
+      "comboTierUnmet": "Raise both major crafts to the required tier.",
+      "professionChoice": "Profession choice",
+      "noProfessionChoice": "No valid profession choice is currently available.",
+      "attunementPreview": "Result: {title} title; {majorA} and {majorB} become uncapped majors; {hobby} becomes the rare-capped hobby; all other skill knowledge is retained but capped at common while dormant.",
+      "hobbyPreview": "Result: {hobby} becomes the rare-capped hobby. Both majors and all retained skill values stay unchanged.",
+      "identity": {
+        "title": "Crafting Identity",
+        "syncing": "Waiting for your crafting identity from the realm.",
+        "unattuned": "No archetype pair is active. Your knowledge is retained, but combo recipes require an attuned pair.",
+        "titleLabel": "Title",
+        "majorsLabel": "Majors",
+        "hobbyLabel": "Hobby",
+        "historyLabel": "History",
+        "history": "{pairs} pairs discovered, {returns} returns completed",
+        "roleMajor": "Major",
+        "roleHobby": "Hobby",
+        "roleDormant": "Dormant knowledge",
+        "roleUnattuned": "Unattuned",
+        "ceilingUnlimited": "No empowerment cap",
+        "ceilingRare": "Rare cap",
+        "ceilingCommon": "Common cap",
+        "skillAria": "{craft}, skill {skill}, tier {tier}, {role}, {ceiling}",
+        "tutorial": "First tier: reach skill {skill} in a craft. Successful recipes raise that craft without erasing knowledge elsewhere.",
+        "nearTier": "{craft} is {points} skill from its next tier.",
+        "dormantKnowledge": "{craft} knowledge is retained but dormant until its pair or hobby is active."
+      },
       "notAtHub": "Musisz być w warsztacie rzemieślniczym i mieć wymagany poziom, aby to wytworzyć.",
       "throttled": "Wytwarzasz zbyt szybko. Zaczekaj chwilę i spróbuj ponownie.",
       "recipeNotLearned": "Nie nauczyłeś się jeszcze tego przepisu."
@@ -8740,11 +8771,11 @@ export const pl_PL: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Fach dla każdej dłoni",
-        "text": "Każdy w Eastbrook para się jakimś fachem oprócz władania mieczem, {playerName}. Wokół miasta pełno żył rudy, więc chwyć za kilof i przynieś mi 5 kawałków. Wydobądź je własnoręcznie; poznam różnicę.",
-        "completion": "Widzisz? Ruda w torbie i odciski na dłoniach. Dalej zajmuj się górnictwem, wyrębem i zielarstwem podczas wędrówek, a gdy wrócisz do miasta, pamiętaj o tablicy Priorytetów miasta przy targu i pobliskim stole rzemieślniczym. Na tym wszystkim można uczciwie zarobić, jeśli zechcesz.",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There are ore veins in the rocks around the Copper Dig, southwest of town. Go swing a pick and work 5 of them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore gathered and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
         "objectives": {
           "0": {
-            "label": "Kawałek rudy"
+            "label": "Ore vein harvested"
           }
         }
       },
@@ -9532,21 +9563,31 @@ export const pl_PL: EnTranslations = {
       },
       "q_archetype_acceptance": {
         "title": "Rzemiosło, które możesz nazwać własnym",
-        "text": "Każdy rzemieślnik z Eastbrook ostatecznie decyduje się na jedno rzemiosło, które nazywa swoim własnym. Wykaż się jednym czynem, {playerName}, i zadeklaruj swoją ścieżkę.",
-        "completion": "Twoja ścieżka została wybrana; chodź dobrze.",
+        "text": "Skill is knowledge, {playerName}, but attunement is a promise. Choose two neighboring crafts whose methods you will carry as your majors, then bring me ore worked from the Vale with your own hands.",
+        "completion": "The promise holds. These two crafts are now your majors, and the knowledge opposite them becomes your hobby.",
+        "objectives": {
+          "0": {
+            "label": "Ore vein harvested"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Zadośćuczynienie",
+        "text": "You have carried that pair before, {playerName}. Returning is no fresh vow. Help keep the Vale road clear, and the work will remind your hands what they once knew.",
+        "completion": "The old rhythm returns. Your former pair is active once more.",
         "objectives": {
           "0": {
             "label": "Leśny Wilk zabity"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Zadośćuczynienie",
-        "text": "Aby odłożyć jeden statek na drugi, rzemieślnik musi najpierw zadośćuczynić za ścieżkę, którą nie przeszedł, {playerName}.",
-        "completion": "Poprawki dokonane; otwiera się przed tobą nowa droga.",
+      "q_prof_hobby_switch": {
+        "title": "Inne zajęcie",
+        "text": "Główne rzemiosła wymagają przysięgi. Hobby pyta tylko, dokąd prowadzi twoja ciekawość, {playerName}. Zbierz kilka ziół i zdecyduj, które rzemiosło przeciwne twoim głównym specjalizacjom chcesz rozwijać.",
+        "completion": "Lżejszy wybór, ale pożyteczny. Podążaj za ciekawością tak daleko, jak zaprowadzi cię rzadka praca.",
         "objectives": {
           "0": {
-            "label": "Leśny Wilk zabity"
+            "label": "Zebrano stanowisko ziół"
           }
         }
       },

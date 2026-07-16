@@ -11,6 +11,8 @@ import { itemDisplayName } from './entity_i18n';
 import { esc } from './esc';
 import { formatNumber, t } from './i18n';
 import type { PainterHostPresentation } from './painter_host';
+import { renderProfessionIdentityCard } from './profession_identity_card';
+import type { ProfessionIdentityModel } from './profession_identity_view';
 import { svgIcon } from './ui_icons';
 
 export interface CraftingWindowDeps extends PainterHostPresentation {
@@ -24,10 +26,13 @@ export function renderCraftingWindow(
   el: HTMLElement,
   view: CraftingView,
   deps: CraftingWindowDeps,
+  identity?: ProfessionIdentityModel,
 ): void {
   deps.hideTooltip();
   const scrollTop = el.scrollTop;
   el.innerHTML = `<div class="panel-title"><span>${esc(t('hudChrome.crafting.title'))}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('hudChrome.crafting.close'))}">${svgIcon('close')}</button></div>`;
+
+  if (identity) renderProfessionIdentityCard(el, identity);
 
   if (view.recipes.length === 0) {
     const empty = document.createElement('div');
@@ -63,7 +68,7 @@ export function renderCraftingWindow(
 
     for (const row of rows) {
       const item = document.createElement('div');
-      item.className = 'vendor-item';
+      item.className = 'vendor-item crafting-recipe-item';
       const resultName = row.result ? itemDisplayName(row.result) : row.resultItemId;
       const reagentLines = row.reagents
         .map((r) =>
@@ -74,6 +79,27 @@ export function renderCraftingWindow(
           }),
         )
         .join(', ');
+      const comboLine = row.comboRequirement
+        ? t('hudChrome.crafting.comboRequires', {
+            craftA: archetypeTitleText(row.comboRequirement.craftA),
+            craftB: archetypeTitleText(row.comboRequirement.craftB),
+            tier: formatNumber(row.comboRequirement.minTier, { maximumFractionDigits: 0 }),
+          })
+        : '';
+      const comboStatus = row.comboRequirement
+        ? t(
+            row.comboRequirement.reason === null
+              ? 'hudChrome.crafting.comboMet'
+              : row.comboRequirement.reason === 'syncing'
+                ? 'hudChrome.crafting.comboSyncing'
+                : row.comboRequirement.reason === 'not_attuned'
+                  ? 'hudChrome.crafting.comboNotAttuned'
+                  : row.comboRequirement.reason === 'wrong_pair'
+                    ? 'hudChrome.crafting.comboWrongPair'
+                    : 'hudChrome.crafting.comboTierUnmet',
+          )
+        : '';
+      const comboAccessible = comboLine ? `. ${comboLine} ${comboStatus}` : '';
 
       const icon = row.result ? deps.itemIcon(row.result) : '';
       const craftBtn = document.createElement('button');
@@ -84,7 +110,7 @@ export function renderCraftingWindow(
       // tooltip, which keyboard, screen-reader, and mobile no-hover users never reach).
       craftBtn.setAttribute(
         'aria-label',
-        `${t('hudChrome.crafting.resultAria', { name: resultName })}. ${t('hudChrome.crafting.reagentsNeeded')} ${reagentLines}`,
+        `${t('hudChrome.crafting.resultAria', { name: resultName })}. ${t('hudChrome.crafting.reagentsNeeded')} ${reagentLines}${comboAccessible}`,
       );
       const resultCountSuffix =
         row.resultCount > 1
@@ -101,9 +127,18 @@ export function renderCraftingWindow(
       deps.attachTooltip(
         craftBtn,
         () =>
-          `${row.result ? deps.itemTooltip(row.result) : ''}<div class="tt-sub">${esc(t('hudChrome.crafting.reagentsNeeded'))} ${esc(reagentLines)}</div>`,
+          `${row.result ? deps.itemTooltip(row.result) : ''}<div class="tt-sub">${esc(t('hudChrome.crafting.reagentsNeeded'))} ${esc(reagentLines)}</div>${comboLine ? `<div class="tt-sub">${esc(comboLine)} ${esc(comboStatus)}</div>` : ''}`,
       );
       item.appendChild(craftBtn);
+      if (comboLine) {
+        // Keep the reason outside the disabled button's whole-element opacity so
+        // unattuned/wrong-pair/tier guidance retains readable contrast.
+        const comboNote = document.createElement('div');
+        comboNote.className = 'crafting-combo-requirement';
+        comboNote.setAttribute('aria-hidden', 'true');
+        comboNote.textContent = `${comboLine} ${comboStatus}`;
+        item.appendChild(comboNote);
+      }
       el.appendChild(item);
     }
   }

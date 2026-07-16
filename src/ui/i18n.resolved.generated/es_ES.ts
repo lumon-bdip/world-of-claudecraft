@@ -2037,6 +2037,37 @@ export const es_ES: EnTranslations = {
       "insufficientMaterials": "No tienes los materiales para eso.",
       "unknownRecipe": "Esa receta no existe.",
       "comboRequirementUnmet": "No tienes las dos profesiones requeridas al nivel necesario para esa receta.",
+      "comboRequires": "Attunement: {craftA} + {craftB}, tier {tier}.",
+      "comboMet": "Ready.",
+      "comboSyncing": "Checking realm attunement.",
+      "comboNotAttuned": "Choose an archetype pair first.",
+      "comboWrongPair": "Activate this exact pair to craft it.",
+      "comboTierUnmet": "Raise both major crafts to the required tier.",
+      "professionChoice": "Profession choice",
+      "noProfessionChoice": "No valid profession choice is currently available.",
+      "attunementPreview": "Result: {title} title; {majorA} and {majorB} become uncapped majors; {hobby} becomes the rare-capped hobby; all other skill knowledge is retained but capped at common while dormant.",
+      "hobbyPreview": "Result: {hobby} becomes the rare-capped hobby. Both majors and all retained skill values stay unchanged.",
+      "identity": {
+        "title": "Crafting Identity",
+        "syncing": "Waiting for your crafting identity from the realm.",
+        "unattuned": "No archetype pair is active. Your knowledge is retained, but combo recipes require an attuned pair.",
+        "titleLabel": "Title",
+        "majorsLabel": "Majors",
+        "hobbyLabel": "Hobby",
+        "historyLabel": "History",
+        "history": "{pairs} pairs discovered, {returns} returns completed",
+        "roleMajor": "Major",
+        "roleHobby": "Hobby",
+        "roleDormant": "Dormant knowledge",
+        "roleUnattuned": "Unattuned",
+        "ceilingUnlimited": "No empowerment cap",
+        "ceilingRare": "Rare cap",
+        "ceilingCommon": "Common cap",
+        "skillAria": "{craft}, skill {skill}, tier {tier}, {role}, {ceiling}",
+        "tutorial": "First tier: reach skill {skill} in a craft. Successful recipes raise that craft without erasing knowledge elsewhere.",
+        "nearTier": "{craft} is {points} skill from its next tier.",
+        "dormantKnowledge": "{craft} knowledge is retained but dormant until its pair or hobby is active."
+      },
       "notAtHub": "Debes estar en el centro de elaboración, con el nivel requerido, para elaborar eso.",
       "throttled": "Estás elaborando demasiado rápido. Espera un momento e inténtalo de nuevo.",
       "recipeNotLearned": "Aún no has aprendido esa receta."
@@ -8740,11 +8771,11 @@ export const es_ES: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Un oficio para cada mano",
-        "text": "Cada habitante de Eastbrook ejerce un oficio además de la espada, {playerName}. Hay vetas de mineral dispersas por el pueblo, así que toma un pico y tráeme 5 trozos. Extráelos tú mismo, ¿eh? Sabré si no lo haces.",
-        "completion": "¿Lo ves? Mineral en la mochila y callos en las manos. Sigue minando, talando y recogiendo hierbas mientras recorres los caminos. Cuando vuelvas al pueblo, no pierdas de vista el tablón de Enfoque del pueblo junto al mercado ni el banco de artesanía cercano. En esos oficios te espera una vida honrada, si la quieres.",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There are ore veins in the rocks around the Copper Dig, southwest of town. Go swing a pick and work 5 of them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore gathered and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
         "objectives": {
           "0": {
-            "label": "Trozo de mineral"
+            "label": "Ore vein harvested"
           }
         }
       },
@@ -9532,21 +9563,31 @@ export const es_ES: EnTranslations = {
       },
       "q_archetype_acceptance": {
         "title": "Un oficio que puedes llamar tuyo",
-        "text": "Cada artesano de Eastbrook finalmente se decide por un oficio que puede considerar suyo. Ponte a prueba con una sola acción, {playerName}, y declara tu camino.",
-        "completion": "Tu camino está elegido; caminarlo bien.",
+        "text": "Skill is knowledge, {playerName}, but attunement is a promise. Choose two neighboring crafts whose methods you will carry as your majors, then bring me ore worked from the Vale with your own hands.",
+        "completion": "The promise holds. These two crafts are now your majors, and the knowledge opposite them becomes your hobby.",
+        "objectives": {
+          "0": {
+            "label": "Ore vein harvested"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Hacer las paces",
+        "text": "You have carried that pair before, {playerName}. Returning is no fresh vow. Help keep the Vale road clear, and the work will remind your hands what they once knew.",
+        "completion": "The old rhythm returns. Your former pair is active once more.",
         "objectives": {
           "0": {
             "label": "Lobo del bosque matado"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Hacer las paces",
-        "text": "Para dejar de lado un oficio para otro, un artesano primero debe enmendar el camino no recorrido, {playerName}.",
-        "completion": "Enmiendas hechas; un nuevo camino está abierto para ti.",
+      "q_prof_hobby_switch": {
+        "title": "Un pasatiempo diferente",
+        "text": "Los oficios principales exigen un juramento. Un pasatiempo solo pregunta adónde te lleva la curiosidad, {playerName}. Reúne algunas hierbas y decide qué oficio opuesto a tus especialidades quieres practicar.",
+        "completion": "Una elección más ligera, pero útil. Sigue esa curiosidad hasta donde te lleve el trabajo de calidad rara.",
         "objectives": {
           "0": {
-            "label": "Lobo del bosque matado"
+            "label": "Parcela de hierbas recolectada"
           }
         }
       },

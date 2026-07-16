@@ -2037,6 +2037,37 @@ export const da_DK: EnTranslations = {
       "insufficientMaterials": "Det har du ikke materialerne til.",
       "unknownRecipe": "Den opskrift findes ikke.",
       "comboRequirementUnmet": "Du har ikke begge de krævede håndværk på det krævede niveau til den opskrift.",
+      "comboRequires": "Attunement: {craftA} + {craftB}, tier {tier}.",
+      "comboMet": "Ready.",
+      "comboSyncing": "Checking realm attunement.",
+      "comboNotAttuned": "Choose an archetype pair first.",
+      "comboWrongPair": "Activate this exact pair to craft it.",
+      "comboTierUnmet": "Raise both major crafts to the required tier.",
+      "professionChoice": "Profession choice",
+      "noProfessionChoice": "No valid profession choice is currently available.",
+      "attunementPreview": "Result: {title} title; {majorA} and {majorB} become uncapped majors; {hobby} becomes the rare-capped hobby; all other skill knowledge is retained but capped at common while dormant.",
+      "hobbyPreview": "Result: {hobby} becomes the rare-capped hobby. Both majors and all retained skill values stay unchanged.",
+      "identity": {
+        "title": "Crafting Identity",
+        "syncing": "Waiting for your crafting identity from the realm.",
+        "unattuned": "No archetype pair is active. Your knowledge is retained, but combo recipes require an attuned pair.",
+        "titleLabel": "Title",
+        "majorsLabel": "Majors",
+        "hobbyLabel": "Hobby",
+        "historyLabel": "History",
+        "history": "{pairs} pairs discovered, {returns} returns completed",
+        "roleMajor": "Major",
+        "roleHobby": "Hobby",
+        "roleDormant": "Dormant knowledge",
+        "roleUnattuned": "Unattuned",
+        "ceilingUnlimited": "No empowerment cap",
+        "ceilingRare": "Rare cap",
+        "ceilingCommon": "Common cap",
+        "skillAria": "{craft}, skill {skill}, tier {tier}, {role}, {ceiling}",
+        "tutorial": "First tier: reach skill {skill} in a craft. Successful recipes raise that craft without erasing knowledge elsewhere.",
+        "nearTier": "{craft} is {points} skill from its next tier.",
+        "dormantKnowledge": "{craft} knowledge is retained but dormant until its pair or hobby is active."
+      },
       "notAtHub": "Du skal være ved håndværksstationen og på det krævede niveau for at lave det.",
       "throttled": "Du laver ting for hurtigt. Vent et øjeblik, og prøv igen.",
       "recipeNotLearned": "Du har ikke lært den opskrift endnu."
@@ -8740,11 +8771,11 @@ export const da_DK: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Et håndværk til hver hånd",
-        "text": "Alle i Østbæk har et håndværk ved siden af sværdet, {playerName}. Der ligger malmårer rundt om byen, så sving en hakke og bring mig 5 klumper. Bryd dem selv, vel at mærke; jeg kan kende forskel.",
-        "completion": "Kan du se? Malm i din taske og hård hud på dine hænder. Fortsæt med minedrift, skovhugst og urtesamling, mens du rejser ad vejene. Når du er tilbage i byen, så husk Byfokus-tavlen ved markedet og arbejdsbænken i nærheden. Der er et hæderligt levebrød i det alt sammen, hvis du ønsker det.",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There are ore veins in the rocks around the Copper Dig, southwest of town. Go swing a pick and work 5 of them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore gathered and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
         "objectives": {
           "0": {
-            "label": "Malmklump"
+            "label": "Ore vein harvested"
           }
         }
       },
@@ -9532,21 +9563,31 @@ export const da_DK: EnTranslations = {
       },
       "q_archetype_acceptance": {
         "title": "Et håndværk at kalde dit eget",
-        "text": "Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.",
-        "completion": "Din vej er valgt; gå det godt.",
+        "text": "Skill is knowledge, {playerName}, but attunement is a promise. Choose two neighboring crafts whose methods you will carry as your majors, then bring me ore worked from the Vale with your own hands.",
+        "completion": "The promise holds. These two crafts are now your majors, and the knowledge opposite them becomes your hobby.",
+        "objectives": {
+          "0": {
+            "label": "Ore vein harvested"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Gøre bod",
+        "text": "You have carried that pair before, {playerName}. Returning is no fresh vow. Help keep the Vale road clear, and the work will remind your hands what they once knew.",
+        "completion": "The old rhythm returns. Your former pair is active once more.",
         "objectives": {
           "0": {
             "label": "Skovulv dræbt"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Gøre bod",
-        "text": "For at afsætte et håndværk til et andet, skal en håndværker først råde bod på stien, der ikke er gået, {playerName}.",
-        "completion": "Foretagne ændringer; en ny vej er åben for dig.",
+      "q_prof_hobby_switch": {
+        "title": "En anden fritidsinteresse",
+        "text": "Hovedfag kræver et løfte. En hobby spørger kun, hvor din nysgerrighed fører dig hen, {playerName}. Saml nogle urter, og vælg hvilket fag over for dine hovedfag du vil dyrke.",
+        "completion": "Et lettere valg, men et nyttigt et. Følg din nysgerrighed så langt, som sjældent arbejde kan føre dig.",
         "objectives": {
           "0": {
-            "label": "Skovulv dræbt"
+            "label": "Urteområde høstet"
           }
         }
       },

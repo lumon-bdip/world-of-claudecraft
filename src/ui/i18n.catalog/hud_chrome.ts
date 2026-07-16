@@ -2113,6 +2113,42 @@ export const hudChromeStrings = {
     unknownRecipe: 'That recipe does not exist.',
     comboRequirementUnmet:
       'You do not have both required crafts at the required tier for that recipe.',
+    comboRequires: 'Attunement: {craftA} + {craftB}, tier {tier}.',
+    comboMet: 'Ready.',
+    comboSyncing: 'Checking realm attunement.',
+    comboNotAttuned: 'Choose an archetype pair first.',
+    comboWrongPair: 'Activate this exact pair to craft it.',
+    comboTierUnmet: 'Raise both major crafts to the required tier.',
+    professionChoice: 'Profession choice',
+    noProfessionChoice: 'No valid profession choice is currently available.',
+    attunementPreview:
+      'Result: {title} title; {majorA} and {majorB} become uncapped majors; {hobby} becomes the rare-capped hobby; all other skill knowledge is retained but capped at common while dormant.',
+    hobbyPreview:
+      'Result: {hobby} becomes the rare-capped hobby. Both majors and all retained skill values stay unchanged.',
+    identity: {
+      title: 'Crafting Identity',
+      syncing: 'Waiting for your crafting identity from the realm.',
+      unattuned:
+        'No archetype pair is active. Your knowledge is retained, but combo recipes require an attuned pair.',
+      titleLabel: 'Title',
+      majorsLabel: 'Majors',
+      hobbyLabel: 'Hobby',
+      historyLabel: 'History',
+      history: '{pairs} pairs discovered, {returns} returns completed',
+      roleMajor: 'Major',
+      roleHobby: 'Hobby',
+      roleDormant: 'Dormant knowledge',
+      roleUnattuned: 'Unattuned',
+      ceilingUnlimited: 'No empowerment cap',
+      ceilingRare: 'Rare cap',
+      ceilingCommon: 'Common cap',
+      skillAria: '{craft}, skill {skill}, tier {tier}, {role}, {ceiling}',
+      tutorial:
+        'First tier: reach skill {skill} in a craft. Successful recipes raise that craft without erasing knowledge elsewhere.',
+      nearTier: '{craft} is {points} skill from its next tier.',
+      dormantKnowledge:
+        '{craft} knowledge is retained but dormant until its pair or hobby is active.',
+    },
     // #1297: denied because the recipe is station-bound (the level-20
     // crafting hub) and the player is either not there or not high enough
     // level.

@@ -2037,6 +2037,37 @@ export const vi_VN: EnTranslations = {
       "insufficientMaterials": "Bạn không có tài liệu cho việc đó.",
       "unknownRecipe": "Công thức đó không tồn tại.",
       "comboRequirementUnmet": "Bạn chưa có cả hai nghề chế tạo cần thiết ở bậc yêu cầu cho công thức đó.",
+      "comboRequires": "Attunement: {craftA} + {craftB}, tier {tier}.",
+      "comboMet": "Ready.",
+      "comboSyncing": "Checking realm attunement.",
+      "comboNotAttuned": "Choose an archetype pair first.",
+      "comboWrongPair": "Activate this exact pair to craft it.",
+      "comboTierUnmet": "Raise both major crafts to the required tier.",
+      "professionChoice": "Profession choice",
+      "noProfessionChoice": "No valid profession choice is currently available.",
+      "attunementPreview": "Result: {title} title; {majorA} and {majorB} become uncapped majors; {hobby} becomes the rare-capped hobby; all other skill knowledge is retained but capped at common while dormant.",
+      "hobbyPreview": "Result: {hobby} becomes the rare-capped hobby. Both majors and all retained skill values stay unchanged.",
+      "identity": {
+        "title": "Crafting Identity",
+        "syncing": "Waiting for your crafting identity from the realm.",
+        "unattuned": "No archetype pair is active. Your knowledge is retained, but combo recipes require an attuned pair.",
+        "titleLabel": "Title",
+        "majorsLabel": "Majors",
+        "hobbyLabel": "Hobby",
+        "historyLabel": "History",
+        "history": "{pairs} pairs discovered, {returns} returns completed",
+        "roleMajor": "Major",
+        "roleHobby": "Hobby",
+        "roleDormant": "Dormant knowledge",
+        "roleUnattuned": "Unattuned",
+        "ceilingUnlimited": "No empowerment cap",
+        "ceilingRare": "Rare cap",
+        "ceilingCommon": "Common cap",
+        "skillAria": "{craft}, skill {skill}, tier {tier}, {role}, {ceiling}",
+        "tutorial": "First tier: reach skill {skill} in a craft. Successful recipes raise that craft without erasing knowledge elsewhere.",
+        "nearTier": "{craft} is {points} skill from its next tier.",
+        "dormantKnowledge": "{craft} knowledge is retained but dormant until its pair or hobby is active."
+      },
       "notAtHub": "Bạn phải ở trung tâm chế tác, đạt cấp yêu cầu, mới chế tạo được thứ đó.",
       "throttled": "Bạn đang chế tạo quá nhanh. Hãy chờ một lát rồi thử lại.",
       "recipeNotLearned": "Bạn chưa học công thức đó."
@@ -8740,11 +8771,11 @@ export const vi_VN: EnTranslations = {
     "quests": {
       "q_prof_intro": {
         "title": "Nghề Cho Mọi Đôi Tay",
-        "text": "Mọi người ở Đông Khê đều làm một nghề bên cạnh việc cầm kiếm, {playerName}. Các mạch quặng nằm rải rác quanh thị trấn, nên hãy vung cuốc và mang về cho ta 5 khối. Tự tay khai thác nhé, ta sẽ biết nếu không phải vậy.",
-        "completion": "Thấy chưa? Quặng trong túi, chai sạn trên tay. Cứ tiếp tục khai khoáng, đốn gỗ và hái thảo dược dọc đường. Khi về thị trấn, nhớ ghé bảng Trọng Tâm Thị Trấn cạnh chợ và bàn chế tác gần đó. Nếu muốn, mọi việc ấy đều có thể thành một nghề kiếm sống đàng hoàng.",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There are ore veins in the rocks around the Copper Dig, southwest of town. Go swing a pick and work 5 of them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore gathered and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
         "objectives": {
           "0": {
-            "label": "Khối Quặng"
+            "label": "Ore vein harvested"
           }
         }
       },
@@ -9532,21 +9563,31 @@ export const vi_VN: EnTranslations = {
       },
       "q_archetype_acceptance": {
         "title": "Một nghề để gọi riêng của bạn",
-        "text": "Mỗi nghệ nhân của Eastbrook cuối cùng đều định cư trên một nghề thủ công riêng của họ. Hãy chứng tỏ bản thân bằng một hành động duy nhất, {playerName}, và tuyên bố con đường của bạn.",
-        "completion": "Con đường của bạn đã được chọn; đi bộ tốt.",
+        "text": "Skill is knowledge, {playerName}, but attunement is a promise. Choose two neighboring crafts whose methods you will carry as your majors, then bring me ore worked from the Vale with your own hands.",
+        "completion": "The promise holds. These two crafts are now your majors, and the knowledge opposite them becomes your hobby.",
+        "objectives": {
+          "0": {
+            "label": "Ore vein harvested"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Sửa đổi",
+        "text": "You have carried that pair before, {playerName}. Returning is no fresh vow. Help keep the Vale road clear, and the work will remind your hands what they once knew.",
+        "completion": "The old rhythm returns. Your former pair is active once more.",
         "objectives": {
           "0": {
             "label": "Sói rừng bị giết"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Sửa đổi",
-        "text": "Để dành một nghề cho một nghề khác, trước tiên một nghệ nhân phải sửa đổi con đường đã không đi, {playerName}.",
-        "completion": "Đã thực hiện sửa đổi; một con đường mới đang mở ra cho bạn.",
+      "q_prof_hobby_switch": {
+        "title": "Một thú vui khác",
+        "text": "Nghề chính đòi hỏi lời thề. Thú vui chỉ hỏi sự tò mò dẫn bạn đến đâu, {playerName}. Hãy thu thập vài cây thảo dược và chọn nghề đối diện với hai nghề chính mà bạn muốn theo đuổi.",
+        "completion": "Một lựa chọn nhẹ nhàng hơn, nhưng hữu ích. Hãy theo sự tò mò ấy đến tận giới hạn của công việc phẩm chất hiếm.",
         "objectives": {
           "0": {
-            "label": "Sói rừng bị giết"
+            "label": "Đã thu hoạch bãi thảo dược"
           }
         }
       },

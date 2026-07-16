@@ -173,11 +173,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'loading.tips.talents':
     'Kiat: kamu dapat mengatur ulang talenta kapan saja saat tidak bertarung, jadi pilihan awal tidak akan menjadi jebakan.',
   'entities.items.chunk_of_ore.name': 'Bongkahan Bijih',
-  'entities.quests.q_prof_intro.completion':
-    'Lihat? Bijih di tasmu dan kapalan di tanganmu. Teruslah menambang, menebang, dan memetik herba selama menjelajahi jalanan. Saat kembali ke kota, perhatikan papan Fokus Kota di dekat pasar dan bangku kerajinan di sebelahnya. Semua itu bisa menjadi mata pencaharian yang layak, jika kamu menginginkannya.',
-  'entities.quests.q_prof_intro.objectives.0.label': 'Bongkahan Bijih',
-  'entities.quests.q_prof_intro.text':
-    'Setiap orang di Eastbrook menekuni pekerjaan selain mengayunkan pedang, {playerName}. Urat bijih tersebar di sekitar kota, jadi ayunkan beliung dan bawakan aku 5 bongkahan. Tambang sendiri, ingat, aku tahu bedanya.',
   'entities.quests.q_prof_intro.title': 'Pekerjaan untuk Setiap Tangan',
   'hudChrome.auth.appleChoiceExpired':
     'Sesi masuk dengan Apple itu telah kedaluwarsa. Silakan masuk lagi dengan Apple.',
@@ -6820,17 +6815,14 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mobileCameraJoystick': 'Joystick kamera',
   'hudChrome.options.mobileLeftHanded': 'Tata letak kidal',
   'entities.quests.q_archetype_acceptance.title': 'Sebuah Kerajinan untuk Disebut Milik Anda',
-  'entities.quests.q_archetype_acceptance.text':
-    'Setiap pengrajin di Eastbrook akhirnya memilih satu kerajinan yang bisa mereka jadikan milik mereka. Buktikan diri Anda dengan satu akta, {playerName}, dan nyatakan jalur Anda.',
-  'entities.quests.q_archetype_acceptance.completion':
-    'Jalan Anda telah dipilih; berjalan dengan baik.',
-  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Serigala Hutan dibunuh',
   'entities.quests.q_prof_make_amends.title': 'Membuat Perubahan',
-  'entities.quests.q_prof_make_amends.text':
-    'Untuk menyisihkan satu kerajinan untuk kerajinan lainnya, seorang pengrajin harus terlebih dahulu memperbaiki jalur yang belum dilalui, {playerName}.',
-  'entities.quests.q_prof_make_amends.completion':
-    'Perubahan dilakukan; jalan baru terbuka untuk Anda.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Serigala Hutan dibunuh',
+  'entities.quests.q_prof_hobby_switch.title': 'Kegemaran yang Berbeda',
+  'entities.quests.q_prof_hobby_switch.text':
+    'Keahlian utama menuntut sumpah. Hobi hanya bertanya ke mana rasa ingin tahumu mengembara, {playerName}. Kumpulkan beberapa herba dan tentukan keahlian di seberang keahlian utamamu yang ingin kamu tekuni.',
+  'entities.quests.q_prof_hobby_switch.completion':
+    'Pilihan yang lebih ringan, tetapi berguna. Ikuti rasa ingin tahu itu sejauh karya langka dapat membawamu.',
+  'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Petak herba dipanen',
   'entities.npcs.bursar_aldous_crane.name': 'Bendahara Aldous Crane',
   'entities.npcs.bursar_aldous_crane.title': 'Brankas Bersepuh Emas',
   'entities.npcs.bursar_aldous_crane.greeting':

@@ -6816,16 +6816,14 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mobileCameraJoystick': 'Palanca de mando de la cámara',
   'hudChrome.options.mobileLeftHanded': 'Diseño para zurdos',
   'entities.quests.q_archetype_acceptance.title': 'Un oficio que puedes llamar tuyo',
-  'entities.quests.q_archetype_acceptance.text':
-    'Cada artesano de Eastbrook finalmente se decide por un oficio que puede considerar suyo. Ponte a prueba con una sola acción, {playerName}, y declara tu camino.',
-  'entities.quests.q_archetype_acceptance.completion': 'Tu camino está elegido; caminarlo bien.',
-  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Lobo del bosque matado',
   'entities.quests.q_prof_make_amends.title': 'Hacer las paces',
-  'entities.quests.q_prof_make_amends.text':
-    'Para dejar de lado un oficio para otro, un artesano primero debe enmendar el camino no recorrido, {playerName}.',
-  'entities.quests.q_prof_make_amends.completion':
-    'Enmiendas hechas; un nuevo camino está abierto para ti.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Lobo del bosque matado',
+  'entities.quests.q_prof_hobby_switch.title': 'Un pasatiempo diferente',
+  'entities.quests.q_prof_hobby_switch.text':
+    'Los oficios principales exigen un juramento. Un pasatiempo solo pregunta adónde te lleva la curiosidad, {playerName}. Reúne algunas hierbas y decide qué oficio opuesto a tus especialidades quieres practicar.',
+  'entities.quests.q_prof_hobby_switch.completion':
+    'Una elección más ligera, pero útil. Sigue esa curiosidad hasta donde te lleve el trabajo de calidad rara.',
+  'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Parcela de hierbas recolectada',
   'entities.npcs.bursar_aldous_crane.greeting':
     'Cada cajón, cofre y baratija está a salvo en el Arca Dorada.',
   'entities.npcs.bursar_aldous_crane.name': 'Tesorero Aldous Crane',
@@ -7106,11 +7104,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.items.arcane_essence.name': 'Esencia arcana',
   'entities.items.arcane_shard.name': 'Fragmento arcano',
   'entities.items.chunk_of_ore.name': 'Trozo de mineral',
-  'entities.quests.q_prof_intro.completion':
-    '¿Lo ves? Mineral en la mochila y callos en las manos. Sigue minando, talando y recogiendo hierbas mientras recorres los caminos. Cuando vuelvas al pueblo, no pierdas de vista el tablón de Enfoque del pueblo junto al mercado ni el banco de artesanía cercano. En esos oficios te espera una vida honrada, si la quieres.',
-  'entities.quests.q_prof_intro.objectives.0.label': 'Trozo de mineral',
-  'entities.quests.q_prof_intro.text':
-    'Cada habitante de Eastbrook ejerce un oficio además de la espada, {playerName}. Hay vetas de mineral dispersas por el pueblo, así que toma un pico y tráeme 5 trozos. Extráelos tú mismo, ¿eh? Sabré si no lo haces.',
   'entities.quests.q_prof_intro.title': 'Un oficio para cada mano',
   'hudChrome.auth.appleChoiceExpired':
     'Ese inicio de sesión con Apple ha caducado. Vuelve a iniciar sesión con Apple.',

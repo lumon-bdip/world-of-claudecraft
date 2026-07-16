@@ -6832,16 +6832,14 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mobileCameraJoystick': 'Kamera-Joystick',
   'hudChrome.options.mobileLeftHanded': 'Linkshänder-Layout',
   'entities.quests.q_archetype_acceptance.title': 'Ein Handwerk, das Sie Ihr Eigen nennen können',
-  'entities.quests.q_archetype_acceptance.text':
-    'Jeder Kunsthandwerker aus Eastbrook entscheidet sich schließlich für ein Handwerk, das er sein Eigen nennen kann. Beweisen Sie sich mit einer einzigen Tat, {playerName}, und erklären Sie Ihren Weg.',
-  'entities.quests.q_archetype_acceptance.completion': 'Dein Weg ist gewählt; geh gut damit.',
-  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Waldwolf getötet',
   'entities.quests.q_prof_make_amends.title': 'Wiedergutmachung leisten',
-  'entities.quests.q_prof_make_amends.text':
-    'Um ein Handwerk einem anderen zu überlassen, muss ein Handwerker zunächst den nicht gegangenen Weg wiedergutmachen, {playerName}.',
-  'entities.quests.q_prof_make_amends.completion':
-    'Änderungen vorgenommen; ein neuer Weg steht dir offen.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Waldwolf getötet',
+  'entities.quests.q_prof_hobby_switch.title': 'Ein anderes Steckenpferd',
+  'entities.quests.q_prof_hobby_switch.text':
+    'Hauptberufe verlangen ein Gelübde. Ein Hobby fragt nur, wohin deine Neugier wandert, {playerName}. Sammle ein paar Kräuter und entscheide, welches Handwerk gegenüber deinen Hauptberufen du verfolgen möchtest.',
+  'entities.quests.q_prof_hobby_switch.completion':
+    'Eine leichtere Wahl, aber eine nützliche. Folge deiner Neugier, so weit seltene Arbeit dich trägt.',
+  'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Kräuterstelle geerntet',
   'entities.npcs.bursar_aldous_crane.greeting':
     'Jede Kiste, jede Truhe und jedes Kleinod ist bei der Vergoldeten Schatulle sicher.',
   'entities.npcs.bursar_aldous_crane.name': 'Kämmerer Aldous Crane',
@@ -7109,11 +7107,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.items.arcane_essence.name': 'Arkanessenz',
   'entities.items.arcane_shard.name': 'Arkansplitter',
   'entities.items.chunk_of_ore.name': 'Erzbrocken',
-  'entities.quests.q_prof_intro.completion':
-    'Siehst du? Erz in deinem Rucksack und Schwielen an deinen Händen. Bleib beim Bergbau, Holzfällen und Kräutersammeln, während du die Straßen bereist. Wenn du wieder in der Stadt bist, wirf einen Blick auf die Stadtfokus-Tafel am Markt und die Werkbank in der Nähe. In all dem wartet ein ehrlicher Verdienst, wenn du ihn willst.',
-  'entities.quests.q_prof_intro.objectives.0.label': 'Erzbrocken',
-  'entities.quests.q_prof_intro.text':
-    'Jeder in Eastbrook übt neben dem Schwert ein Handwerk aus, {playerName}. Rund um die Stadt gibt es Erzadern, also schwing die Spitzhacke und bring mir 5 Brocken. Bau sie selbst ab, wohlgemerkt; ich werde den Unterschied erkennen.',
   'entities.quests.q_prof_intro.title': 'Ein Handwerk für jede Hand',
   'hudChrome.auth.appleChoiceExpired':
     'Diese Apple-Anmeldung ist abgelaufen. Melde dich bitte erneut mit Apple an.',

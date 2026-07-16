@@ -132,7 +132,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "071e6604",
+      "state": "5098f1fa",
       "events": "89f30ebf",
       "rng": {
         "draws": 0,
@@ -194,6 +194,9 @@
                   0
                 ],
                 "questId": "q_wolves",
+                "resolvedCounts": [
+                  8
+                ],
                 "state": "active"
               }
             ]
@@ -261,8 +264,8 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 417,
-      "state": "9ef81b67",
-      "events": "dcf84fee",
+      "state": "45d17809",
+      "events": "7a25be0a",
       "rng": {
         "draws": 40,
         "digest": "0e96c13c"
@@ -352,6 +355,9 @@
                   8
                 ],
                 "questId": "q_wolves",
+                "resolvedCounts": [
+                  8
+                ],
                 "state": "ready"
               }
             ]

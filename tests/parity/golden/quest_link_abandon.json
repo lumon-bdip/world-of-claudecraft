@@ -693,7 +693,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "918da515",
+      "state": "4148a041",
       "events": "e8ec1d46",
       "rng": {
         "draws": 0,
@@ -812,6 +812,9 @@
                   0
                 ],
                 "questId": "q_wolves",
+                "resolvedCounts": [
+                  8
+                ],
                 "state": "active"
               }
             ]

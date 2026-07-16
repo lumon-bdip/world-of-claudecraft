@@ -6799,16 +6799,14 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mobileCameraJoystick': 'Joystick della fotocamera',
   'hudChrome.options.mobileLeftHanded': 'Disposizione per mancini',
   'entities.quests.q_archetype_acceptance.title': 'Un mestiere da chiamare tuo',
-  'entities.quests.q_archetype_acceptance.text':
-    'Ogni artigiano di Eastbrook alla fine sceglie un mestiere da considerare proprio. Mettiti alla prova con una sola azione, {playerName}, e dichiara il tuo percorso.',
-  'entities.quests.q_archetype_acceptance.completion': 'Il tuo percorso è scelto; cammina bene.',
-  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Lupo della Foresta ucciso',
   'entities.quests.q_prof_make_amends.title': 'Fare ammenda',
-  'entities.quests.q_prof_make_amends.text':
-    'Per mettere da parte un mestiere per un altro, un artigiano deve prima fare ammenda per il percorso non percorso, {playerName}.',
-  'entities.quests.q_prof_make_amends.completion':
-    'Modifiche apportate; una nuova strada è aperta per te.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Lupo della Foresta ucciso',
+  'entities.quests.q_prof_hobby_switch.title': 'Un passatempo diverso',
+  'entities.quests.q_prof_hobby_switch.text':
+    'I mestieri principali esigono un voto. Un passatempo chiede solo dove vaga la tua curiosità, {playerName}. Raccogli alcune erbe e scegli quale mestiere opposto ai tuoi principali vuoi coltivare.',
+  'entities.quests.q_prof_hobby_switch.completion':
+    'Una scelta più leggera, ma utile. Segui quella curiosità fin dove il lavoro raro potrà portarti.',
+  'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Zona di erbe raccolta',
   'entities.npcs.bursar_aldous_crane.name': 'Economo Aldous Crane',
   'entities.npcs.bursar_aldous_crane.title': 'Il Forziere Dorato',
   'entities.npcs.bursar_aldous_crane.greeting':
@@ -7089,11 +7087,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.items.arcane_essence.name': 'Essenza Arcana',
   'entities.items.arcane_shard.name': 'Frammento Arcano',
   'entities.items.chunk_of_ore.name': 'Pezzo di Minerale',
-  'entities.quests.q_prof_intro.completion':
-    'Vedi? Minerale nello zaino e calli sulle mani. Continua a estrarre minerali, tagliare legna e raccogliere erbe mentre percorri le strade. Quando torni in città, tieni d’occhio il tabellone delle Priorità della città vicino al mercato e il banco da lavoro lì accanto. C’è un mestiere onesto in tutto questo, se ti interessa.',
-  'entities.quests.q_prof_intro.objectives.0.label': 'Pezzo di Minerale',
-  'entities.quests.q_prof_intro.text':
-    'A Eastbrook ogni anima pratica un mestiere oltre all’arte della spada, {playerName}. Ci sono vene di minerale sparse intorno alla città, quindi impugna un piccone e portami 5 pezzi. Estraili tu, bada bene, saprò riconoscere la differenza.',
   'entities.quests.q_prof_intro.title': 'Un mestiere per ogni mano',
   'hudChrome.auth.appleChoiceExpired':
     'Questo accesso con Apple è scaduto. Accedi di nuovo con Apple.',
