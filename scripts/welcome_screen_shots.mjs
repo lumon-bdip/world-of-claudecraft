@@ -256,8 +256,8 @@ await shot(desktop, 'chest-not-ready-desktop.png');
 
 await mountState(desktop, {
   ready: true,
-  armory: false,
-  chest: false,
+  armory: true,
+  chest: true,
   discordHidden: false,
 });
 await shot(desktop, 'daily-chest-tile-desktop.png');

@@ -10255,7 +10255,7 @@
     color: var(--gold-dim);
     text-transform: uppercase;
     opacity: 0.85;
-    margin-bottom: 4px;
+    margin-bottom: 14px;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
   }
   .ws-header {
@@ -10278,7 +10278,7 @@
   }
   .ws-body {
     display: flex;
-    gap: 20px;
+    gap: 18px;
     flex: 1;
     min-height: 0;
     width: 100%;
@@ -10322,6 +10322,8 @@
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    mask-image: linear-gradient(180deg, #000 0%, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 88%, transparent 100%);
   }
   /* Older releases (the latest stays a full .news-item article): a native
      <details>/<summary> disclosure so expand-in-place needs no JS wiring,
@@ -10403,8 +10405,8 @@
     flex: none;
     border-radius: 10px;
     background:
-      radial-gradient(circle at 34% 46%, #fff 3.2px, transparent 4px),
-      radial-gradient(circle at 66% 46%, #fff 3.2px, transparent 4px), #5865f2;
+      radial-gradient(circle at 34% 46%, #fff 3.6px, transparent 4.4px),
+      radial-gradient(circle at 66% 46%, #fff 3.6px, transparent 4.4px), #5865f2;
     box-shadow: 0 3px 12px rgba(88, 101, 242, 0.4);
   }
   .ws-discord-copy {
@@ -10435,7 +10437,7 @@
   }
   .ws-rail {
     flex: 1;
-    max-width: 340px;
+    max-width: 372px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -10653,7 +10655,8 @@
   .ws-version {
     flex: 1;
     text-align: right;
-    font-size: 12px;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
     color: var(--color-text-muted);
   }
   @media (max-width: 860px), (pointer: coarse) {
