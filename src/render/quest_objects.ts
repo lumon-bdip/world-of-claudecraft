@@ -177,6 +177,27 @@ function convertMaterial(src: THREE.Material, itemId: string): THREE.Material {
   });
 }
 
+// The ritual circle's procedural template is a flat, wide set piece (altar +
+// pillar ring), not a tall-and-thin prop, so normalizing by max(x, y, z) like
+// every other quest object would shrink the whole scene to the 1.65 nameplate
+// height instead of the ~8.2-unit footprint it actually needs to read at.
+const RITUAL_CIRCLE_FOOTPRINT = 8.2;
+
+function normalizeRootByFootprint(root: THREE.Object3D, targetWidth: number): void {
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(root);
+  const size = box.getSize(new THREE.Vector3());
+  const width = Math.max(size.x, size.z, 0.001);
+  root.scale.setScalar(targetWidth / width);
+  root.updateMatrixWorld(true);
+  box.setFromObject(root);
+  const center = box.getCenter(new THREE.Vector3());
+  root.position.x -= center.x;
+  root.position.z -= center.z;
+  root.position.y -= box.min.y;
+  root.updateMatrixWorld(true);
+}
+
 function normalizeRoot(root: THREE.Object3D, targetHeight = TARGET_HEIGHT): number {
   root.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(root);
@@ -306,7 +327,11 @@ function prepareItem(itemId: string): THREE.Group | null {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
-  normalizeRoot(root, QUEST_OBJECT_HEIGHTS[itemId] ?? TARGET_HEIGHT);
+  if (itemId === 'crypt_ritual_circle') {
+    normalizeRootByFootprint(root, RITUAL_CIRCLE_FOOTPRINT);
+  } else {
+    normalizeRoot(root, QUEST_OBJECT_HEIGHTS[itemId] ?? TARGET_HEIGHT);
+  }
   if (SCROLL_ITEM_IDS.has(itemId)) decorateScroll(root, itemId);
   preparedByItem.set(itemId, root);
   return root;

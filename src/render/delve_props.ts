@@ -221,7 +221,8 @@ function buildLockedDoor(): { group: THREE.Group; height: number } {
 }
 
 // ---------------------------------------------------------------------------
-// delve_pressure_plate, flush stone floor plate, low profile
+// delve_pressure_plate, floor plate (flush when procedural, ankle-to-knee
+// high when the fitted GLB wins the load race)
 // ---------------------------------------------------------------------------
 const PRESSURE_PLATE_WIDTH = 3.2;
 
@@ -238,6 +239,12 @@ function buildPressurePlate(
   // Deterministic small rotation using entityId.
   const rotY = ((entityId * 17) % 6) * 0.1 - 0.3;
 
+  // Top surface the triggered-state overlay seats on: the old procedural
+  // slab was 0.12 thick (top at 0.12), but the GLB path can stand taller
+  // (e.g. 0.495 for a fitted 3.2-wide plate), so measure the real top
+  // instead of reusing the procedural slab's hardcoded height.
+  let plateTopY = 0.12;
+
   const glb = buildStandaloneGlbFitWidth('pressurePlate', PRESSURE_PLATE_WIDTH);
   if (glb) {
     glb.rotation.y = rotY;
@@ -248,6 +255,8 @@ function buildPressurePlate(
       });
     }
     group.add(glb);
+    glb.updateMatrixWorld(true);
+    plateTopY = new THREE.Box3().setFromObject(glb).max.y;
   } else {
     const slabMat = stoneMat(triggered ? 0x3a4830 : 0x6a6460);
     const rimMat = stoneMat(triggered ? 0x505c3a : 0x504c48);
@@ -268,10 +277,12 @@ function buildPressurePlate(
   }
 
   if (triggered) {
-    // Green glow inset when triggered.
+    // Green glow inset when triggered, seated just above the plate's real top
+    // (GLB or procedural) so it is never occluded by the mesh beneath it.
+    const overlayY = plateTopY + 0.02;
     const glowPlane = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), glowMat(0x22aa44, 0.32));
     glowPlane.rotation.x = -Math.PI / 2;
-    glowPlane.position.y = 0.14;
+    glowPlane.position.y = overlayY;
     glowPlane.rotation.z = rotY;
     group.add(glowPlane);
 
@@ -289,7 +300,7 @@ function buildPressurePlate(
         new THREE.BoxGeometry(ri === 0 ? 1.8 : 0.08, 0.025, ri === 0 ? 0.08 : 1.8),
         runeMat,
       );
-      rune.position.y = 0.135;
+      rune.position.y = overlayY - 0.005;
       rune.rotation.y = rotY;
       group.add(rune);
     }
