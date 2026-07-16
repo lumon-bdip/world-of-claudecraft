@@ -10246,18 +10246,6 @@
     opacity: 0.8;
     pointer-events: none;
   }
-  .ws-wordmark {
-    text-align: center;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.34em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    opacity: 0.85;
-    margin-bottom: 14px;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
-  }
   .ws-header {
     width: 100%;
     max-width: 1100px;
@@ -10671,10 +10659,6 @@
     }
     .ws-stars {
       display: none;
-    }
-    .ws-wordmark {
-      font-size: 11px;
-      margin-bottom: 0;
     }
     .ws-header {
       text-align: center;
