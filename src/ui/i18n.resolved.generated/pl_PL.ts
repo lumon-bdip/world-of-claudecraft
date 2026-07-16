@@ -315,6 +315,9 @@ export const pl_PL: EnTranslations = {
       "resurrectAtHealer": "Blady Strażnik (Myto Strażnika)",
       "spiritHealerAlive": "Blady Strażnik czuwa nad umarłymi. Ty wciąż jesteś wśród żywych."
     },
+    "fct": {
+      "cheap": "Taniej!"
+    },
     "emotes": {
       "wave": "Pomachaj",
       "laugh": "Hehe",
@@ -5722,6 +5725,7 @@ export const pl_PL: EnTranslations = {
     },
     "slots": {
       "mainhand": "Główna ręka",
+      "twoHand": "Dwuręczna",
       "offhand": "Druga ręka",
       "helmet": "Hełm",
       "neck": "Szyja",
@@ -8407,6 +8411,18 @@ export const pl_PL: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Naramienniki Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Wielki miecz Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Wielkie ostrze Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bastion Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Kula Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Nieznana obca broń"

@@ -315,6 +315,9 @@ export const es: EnTranslations = {
       "resurrectAtHealer": "El Guardián Pálido (Tañido del Guardián)",
       "spiritHealerAlive": "El Guardián Pálido vela por los muertos. Tú aún estás entre los vivos."
     },
+    "fct": {
+      "cheap": "¡Coste reducido!"
+    },
     "emotes": {
       "wave": "Saludar",
       "laugh": "Reír",
@@ -5722,6 +5725,7 @@ export const es: EnTranslations = {
     },
     "slots": {
       "mainhand": "Mano principal",
+      "twoHand": "Dos manos",
       "offhand": "Mano secundaria",
       "helmet": "Cabeza",
       "neck": "Cuello",
@@ -8407,6 +8411,18 @@ export const es: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Bufas de Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Espadón Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Gran hoja Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Baluarte Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Orbe Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Armamento alienígena desconocido"

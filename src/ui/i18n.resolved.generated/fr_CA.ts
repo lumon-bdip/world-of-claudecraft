@@ -315,6 +315,9 @@ export const fr_CA: EnTranslations = {
       "resurrectAtHealer": "Le Veilleur pâle (Glas du Veilleur)",
       "spiritHealerAlive": "Le Veilleur pâle veille sur les morts. Vous êtes encore parmi les vivants."
     },
+    "fct": {
+      "cheap": "Coût réduit !"
+    },
     "emotes": {
       "wave": "Saluer de la main",
       "laugh": "MDR",
@@ -5722,6 +5725,7 @@ export const fr_CA: EnTranslations = {
     },
     "slots": {
       "mainhand": "Main droite",
+      "twoHand": "Deux mains",
       "offhand": "Main gauche",
       "helmet": "Tête",
       "neck": "Cou",
@@ -8407,6 +8411,18 @@ export const fr_CA: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Spallières de Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Espadon Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Grande lame de Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Rempart Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Orbe Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Armement alien inconnu"

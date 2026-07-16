@@ -183,6 +183,7 @@ const UI_PURE_CORES = [
   'src/ui/questlog_view.ts',
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
+  'src/ui/stance_bar_view.ts',
   'src/ui/action_bar_view.ts',
   'src/ui/mobile_action_page_view.ts',
   'src/ui/consumable_bar_view.ts',

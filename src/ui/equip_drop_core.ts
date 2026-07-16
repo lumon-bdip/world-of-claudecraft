@@ -52,7 +52,6 @@ export function dropRequiredLevel(item: ItemDef): number {
  *  socket is still paperdollDropAction's call. */
 export function isPaperdollDraggable(item: ItemDef): boolean {
   return (
-    (item.kind === 'weapon' || item.kind === 'armor' || item.kind === 'held_offhand') &&
-    !!item.slot
+    (item.kind === 'weapon' || item.kind === 'armor' || item.kind === 'held_offhand') && !!item.slot
   );
 }

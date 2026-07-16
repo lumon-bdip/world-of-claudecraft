@@ -315,6 +315,9 @@ export const en_XA: EnTranslations = {
       "resurrectAtHealer": "[Ţĥé Þáļé Ķééþéŕ (Ķééþéŕ'š Ţóļļ)]",
       "spiritHealerAlive": "[Ţĥé Þáļé Ķééþéŕ ŵáţçĥéš óʋéŕ ţĥé ðéáð. Ýóú áŕé šţíļļ áɱóñĝ ţĥé ļíʋíñĝ.]"
     },
+    "fct": {
+      "cheap": "[Çĥéáþ!]"
+    },
     "emotes": {
       "wave": "[Ŵáʋé]",
       "laugh": "[ĻÓĻ]",
@@ -5722,6 +5725,7 @@ export const en_XA: EnTranslations = {
     },
     "slots": {
       "mainhand": "[Ɱáíñ Ĥáñð]",
+      "twoHand": "[Ţŵó-Ĥáñð]",
       "offhand": "[Óƒƒ Ĥáñð]",
       "helmet": "[Ĥéļɱéţ]",
       "neck": "[Ñéçķ]",
@@ -8407,6 +8411,18 @@ export const en_XA: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "[Ĝáļéçáļļ Šþáúļðéŕš]"
+      },
+      "bonewrought_greatsword": {
+        "name": "[Ɓóñéŵŕóúĝĥţ Ĝŕéáţšŵóŕð]"
+      },
+      "direfang_greatblade": {
+        "name": "[Ðíŕéƒáñĝ Ĝŕéáţƀļáðé]"
+      },
+      "bonewrought_bulwark": {
+        "name": "[Ɓóñéŵŕóúĝĥţ Ɓúļŵáŕķ]"
+      },
+      "wraithfire_orb": {
+        "name": "[Ŵŕáíţĥƒíŕé Óŕƀ]"
       },
       "unknown_alien_weaponry": {
         "name": "[Úñķñóŵñ Áļíéñ Ŵéáþóñŕý]"

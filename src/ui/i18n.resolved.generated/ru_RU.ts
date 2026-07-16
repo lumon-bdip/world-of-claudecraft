@@ -315,6 +315,9 @@ export const ru_RU: EnTranslations = {
       "resurrectAtHealer": "Целитель душ (болезнь воскрешения)",
       "spiritHealerAlive": "Целитель душ оберегает мёртвых. Вы всё ещё среди живых."
     },
+    "fct": {
+      "cheap": "Дешевле!"
+    },
     "emotes": {
       "wave": "Помахать",
       "laugh": "Смех",
@@ -5722,6 +5725,7 @@ export const ru_RU: EnTranslations = {
     },
     "slots": {
       "mainhand": "Правая рука",
+      "twoHand": "Двуручное",
       "offhand": "Левая рука",
       "helmet": "Голова",
       "neck": "Шея",
@@ -8407,6 +8411,18 @@ export const ru_RU: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Наплечники Зова Бури"
+      },
+      "bonewrought_greatsword": {
+        "name": "Костокованый двуручный меч"
+      },
+      "direfang_greatblade": {
+        "name": "Великий клинок Лютого Клыка"
+      },
+      "bonewrought_bulwark": {
+        "name": "Костокованый бастион"
+      },
+      "wraithfire_orb": {
+        "name": "Сфера Призрачного пламени"
       },
       "unknown_alien_weaponry": {
         "name": "Неизвестное инопланетное вооружение"

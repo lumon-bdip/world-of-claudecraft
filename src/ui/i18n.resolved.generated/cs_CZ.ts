@@ -315,6 +315,9 @@ export const cs_CZ: EnTranslations = {
       "resurrectAtHealer": "Bledý strážce (Strážcovo mýto)",
       "spiritHealerAlive": "Bledý strážce dohlíží na mrtvé. Ty jsi stále mezi živými."
     },
+    "fct": {
+      "cheap": "Levnější!"
+    },
     "emotes": {
       "wave": "Zamávání",
       "laugh": "Smích",
@@ -5722,6 +5725,7 @@ export const cs_CZ: EnTranslations = {
     },
     "slots": {
       "mainhand": "Hlavní ruka",
+      "twoHand": "Obouruční",
       "offhand": "Vedlejší ruka",
       "helmet": "Helma",
       "neck": "Krk",
@@ -8407,6 +8411,18 @@ export const cs_CZ: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Nárameníky volání vichru"
+      },
+      "bonewrought_greatsword": {
+        "name": "Obouruční meč z kosti"
+      },
+      "direfang_greatblade": {
+        "name": "Velká čepel děsivého tesáku"
+      },
+      "bonewrought_bulwark": {
+        "name": "Hradba z kosti"
+      },
+      "wraithfire_orb": {
+        "name": "Koule přízračného ohně"
       },
       "unknown_alien_weaponry": {
         "name": "Neznámé mimozemské zbraně"

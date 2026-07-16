@@ -71,7 +71,7 @@ import {
 } from '../sim/data';
 import { CHRONICLER_TEMPLATE_IDS } from '../sim/deeds';
 import { specialRoleColor } from '../sim/discord_roles';
-import { canEquipItem } from '../sim/equipment_rules';
+import { canEquipItem, weaponHand } from '../sim/equipment_rules';
 import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
 import { requiredLevelFor } from '../sim/item_level_req';
 import type { Ante, PickAction } from '../sim/lockpick';
@@ -81,6 +81,7 @@ import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targ
 import type { ResolvedAbility } from '../sim/sim';
 import type {
   AbilityDef,
+  AuraKind,
   CalendarResultCode,
   EquipSlot,
   HonorReason,
@@ -150,6 +151,7 @@ import {
   deferAutoAttackUntilCastEnd,
   hasAutoAttackTarget,
 } from './attack_on_ability';
+import { auraDisplayNameFromSource } from './aura_display_name';
 import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
@@ -416,6 +418,7 @@ import {
 } from './player_context_menu';
 import { playerStealthed } from './player_stealthed';
 import { hydratePortraits, portraitChipHtml } from './portrait_chip';
+import { procAuraConsumeSelfNoteText, procAuraGainSelfNoteText } from './proc_fct_notes';
 import { maskProfanity } from './profanity';
 import { encodeItemLink, encodeQuestLink, parseChatSegments } from './quest_link';
 import { QuestProgressBanner } from './quest_progress_banner';
@@ -429,6 +432,7 @@ import { localizeServerText } from './server_i18n';
 import { localizeSimAuraName, localizeSimText } from './sim_i18n';
 import { SocialWindow } from './social_window';
 import { SpellbookWindow } from './spellbook_window';
+import { stanceBarView, WARRIOR_STANCE_GROUP } from './stance_bar_view';
 import {
   type BuffStatSource,
   buildStatTooltip,
@@ -451,7 +455,7 @@ import {
 import { nearestSubzone } from './subzone';
 import { swingTimerState } from './swing_timer';
 import { SwingTimerPainter } from './swing_timer_painter';
-import { localizeTalentTitle, roleLabel, tTalent } from './talent_i18n';
+import { roleLabel, tTalent } from './talent_i18n';
 import { TalentsWindow } from './talents_window';
 import { targetPortraitUrl } from './target_portrait_view';
 import { targetRankView, targetUsesEliteFrame } from './target_rank_view';
@@ -796,6 +800,7 @@ const ITEM_QUALITY_LABEL_KEYS: Record<ItemQuality, TranslationKey> = {
 const ITEM_KIND_LABEL_KEYS: Record<ItemDef['kind'], TranslationKey> = {
   weapon: 'itemUi.kind.weapon',
   armor: 'itemUi.kind.armor',
+  held_offhand: 'itemUi.kind.armor',
   quest: 'itemUi.kind.quest',
   junk: 'itemUi.kind.junk',
   food: 'itemUi.kind.food',
@@ -1473,6 +1478,11 @@ export class Hud {
   // top-band layout reads body.mobile-pet-active to yield the top-centre line to the
   // pet bar (the sideways consumables row and the Vale Cup indicator drop a band).
   private lastPetPresent = false;
+  private lastStanceBarSig = '';
+  // Proc auras whose gain event arrived before the aura itself appeared in the
+  // mirrored aura list (online: the event can beat the snapshot). Retried each
+  // frame until the aura shows, then flushed as an FCT self-note.
+  private readonly pendingProcAuraNotes = new Set<string>();
   // Ravenpost envelope indicator (slow-band, value-diffed; see updateMailIndicator).
   private mailIndicatorEl: HTMLElement | null = null;
   private lastMailUnread = -1;
@@ -4747,14 +4757,20 @@ export class Hud {
     if (item.slot) {
       // Classic layout: slot name on the left, armor subtype (Cloth/Leather/Mail)
       // right-aligned on the same line so it is clear which classes the gear suits.
+      // A two-handed weapon reads "Two-Hand" (the classic label), not its
+      // mainhand slot: the hand, not the paperdoll cell, is what the player needs.
+      const slotName =
+        item.kind === 'weapon' && weaponHand(item) === 'twohand'
+          ? t('itemUi.slots.twoHand')
+          : itemSlotName(item.slot);
       const armorTypeKey = itemArmorTypeLabelKey(item);
       if (armorTypeKey) {
         // Red armor type = the viewing player's class cannot wear this armor weight
         // (e.g. a mage hovering Mail), so they know it is not for them at a glance.
         const badClass = canEquipItem(this.sim.cfg.playerClass, item) ? '' : ' tt-armor-bad';
-        html += `<div class="tt-sub tt-row"><span>${esc(itemSlotName(item.slot))}</span><span class="tt-armor${badClass}">${esc(t(armorTypeKey))}</span></div>`;
+        html += `<div class="tt-sub tt-row"><span>${esc(slotName)}</span><span class="tt-armor${badClass}">${esc(t(armorTypeKey))}</span></div>`;
       } else {
-        html += `<div class="tt-sub">${esc(itemSlotName(item.slot))}</div>`;
+        html += `<div class="tt-sub">${esc(slotName)}</div>`;
       }
     }
     // Optional item-level readout (off by default; src/sim/item_level.ts derives it
@@ -5495,6 +5511,9 @@ export class Hud {
     // Only auto-place abilities that belong on the active form's bar, so newly
     // learned form abilities land on their form bar and not the caster bar.
     const consider = (id: string) => {
+      // Warrior stances live on the dedicated #stancebar, never the action bar,
+      // so learning one on level-up must not consume an action slot.
+      if (ABILITIES[id]?.exclusiveGroup === WARRIOR_STANCE_GROUP) return;
       if (this.shouldAutoPlaceOnForm(id, this.activeHotbarForm)) autoPlaceAbilityIds.add(id);
     };
     if (this.knownAbilityIdsAtLastSlotSync === null) {
@@ -6759,6 +6778,65 @@ export class Hud {
     return null;
   }
 
+  // The warrior stance bar: a small row of stance toggles stacked above the
+  // action bars, shown only for warriors and only for the stances valid for the
+  // current spec (Battle + Guarded for Arms/Prot, Berserker for Fury, Battle only
+  // for no spec). Rebuilds only when the known-stance set or the active stance
+  // changes (sig elision, like the pet bar).
+  private renderStanceBar(): void {
+    const bar = $('#stancebar') as HTMLElement;
+    const isWarrior = this.sim.cfg.playerClass === 'warrior';
+    const knownStances = isWarrior
+      ? this.sim.known.filter((k) => k.def.exclusiveGroup === WARRIOR_STANCE_GROUP)
+      : [];
+    const knownIds = knownStances.map((k) => k.def.id);
+    const knownSet = new Set(knownIds);
+    const activeAura = this.sim.player.auras.find((a) => knownSet.has(a.id));
+    const model = stanceBarView(isWarrior, knownIds, activeAura ? activeAura.id : null);
+    if (!model.visible) {
+      bar.style.display = 'none';
+      if (this.lastStanceBarSig !== '') {
+        bar.innerHTML = '';
+        this.lastStanceBarSig = '';
+      }
+      return;
+    }
+    bar.style.display = 'flex';
+    if (model.sig === this.lastStanceBarSig) return;
+    this.lastStanceBarSig = model.sig;
+    bar.innerHTML = '';
+    const group = document.createElement('div');
+    group.className = 'stancebar-group';
+    bar.appendChild(group);
+    for (const slot of model.slots) {
+      const known = knownStances.find((k) => k.def.id === slot.id);
+      if (!known) continue;
+      const name = abilityDisplayName(known.def);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'stance-btn';
+      if (slot.active) btn.classList.add('active');
+      btn.setAttribute('aria-pressed', slot.active ? 'true' : 'false');
+      btn.title = name;
+      btn.setAttribute('aria-label', name);
+      const icon = document.createElement('span');
+      icon.className = 'icon-label';
+      icon.style.backgroundImage = `url(${iconDataUrl('ability', slot.iconKey)})`;
+      btn.appendChild(icon);
+      btn.addEventListener('click', () => {
+        if (this.peekGuard.consume()) {
+          this.hideTooltip();
+          btn.blur();
+          return;
+        }
+        audio.click();
+        this.sim.castAbility(slot.id);
+      });
+      this.attachTooltip(btn, () => this.abilityTooltip(known));
+      group.appendChild(btn);
+    }
+  }
+
   private renderPetBar(): void {
     const bar = $('#petbar') as HTMLElement;
     const pet = this.ownPet();
@@ -7495,6 +7573,8 @@ export class Hud {
     // below (desktop bar, mobile ring, consumables quick bar).
     const abPlayer = { ...p, stealthed: playerStealthed(p.auras) };
     this.renderPetBar();
+    this.renderStanceBar();
+    this.flushPendingProcAuraNotes();
     if (this.spellbookWindow.isOpen) this.spellbookWindow.tickOpen();
     this.actionBarPainter.paint(
       this.actionBarView.tick({
@@ -10413,6 +10493,8 @@ export class Hud {
           const auraName = auraDisplayNameFromSource(ev.name);
           if (ev.name === 'Polymorph' && ev.gained) audio.sheep();
           if (ev.targetId === sim.playerId) {
+            if (ev.gained) this.noteProcAuraGain(ev.name);
+            else this.noteProcAuraConsume(ev.auraKind);
             this.combatLog(
               t(ev.gained ? 'hud.combat.auraGain' : 'hud.combat.auraFade', { name: auraName }),
               '#d8a0d8',
@@ -10464,6 +10546,33 @@ export class Hud {
 
   log(text: string, color = '#ccc'): void {
     this.appendLog(this.chatLogEl, text, color, true, 'system');
+  }
+
+  private noteProcAuraGain(name: string): void {
+    const aura = this.sim.player.auras.find((a) => a.name === name);
+    if (aura) {
+      const text = procAuraGainSelfNoteText(name, aura.kind);
+      if (text) this.showSelfNote(text);
+      return;
+    }
+    if (this.pendingProcAuraNotes.size > 16) this.pendingProcAuraNotes.clear();
+    this.pendingProcAuraNotes.add(name);
+  }
+
+  private flushPendingProcAuraNotes(): void {
+    if (this.pendingProcAuraNotes.size === 0) return;
+    for (const name of Array.from(this.pendingProcAuraNotes)) {
+      const aura = this.sim.player.auras.find((a) => a.name === name);
+      if (!aura) continue;
+      this.pendingProcAuraNotes.delete(name);
+      const text = procAuraGainSelfNoteText(name, aura.kind);
+      if (text) this.showSelfNote(text);
+    }
+  }
+
+  private noteProcAuraConsume(kind: AuraKind | undefined): void {
+    const text = procAuraConsumeSelfNoteText(kind);
+    if (text) this.showSelfNote(text);
   }
 
   // Prepend a dim bracketed wall-clock prefix to a chat line when the "Show
@@ -15676,16 +15785,6 @@ function abilityDisplayNameFromSource(name: string): string {
   if (ability) return abilityDisplayName(ability);
   // Boss/mob mechanic names (War Stomp, etc.) surface as a damage-log ability label but
   // are not in ABILITIES; route them through the shared sim aura/mechanic localizer.
-  return localizeSimAuraName(name) ?? name;
-}
-
-// Localize an aura/buff name that surfaces by its raw English name (buff frame tooltip,
-// combat-log gain/fade). Most auras are granted by an ability or talent and have a
-// localized title already; a few are pure flavor (e.g. a hunter's "Tamed" pet buff) and
-// live in sim_i18n. Falls back to the English name only if nothing matches.
-function auraDisplayNameFromSource(name: string): string {
-  const viaTitle = localizeTalentTitle(name);
-  if (viaTitle !== name) return viaTitle;
   return localizeSimAuraName(name) ?? name;
 }
 

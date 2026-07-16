@@ -31,6 +31,10 @@ export const hudChromeStrings = {
     resurrectAtHealer: "The Pale Keeper (Keeper's Toll)",
     spiritHealerAlive: 'The Pale Keeper watches over the dead. You are still among the living.',
   },
+  // Floating combat text self-notes (proc consume labels).
+  fct: {
+    cheap: 'Cheap!',
+  },
   // Overhead emote display names (wheel tooltips/labels, editor items, overhead
   // bubble text). Source ids/order mirror OVERHEAD_EMOTES in world_api.ts.
   emotes: {

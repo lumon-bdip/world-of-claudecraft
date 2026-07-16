@@ -315,6 +315,9 @@ export const vi_VN: EnTranslations = {
       "resurrectAtHealer": "Người Canh Giữ Nhợt Nhạt (Cái Giá của Người Canh Giữ)",
       "spiritHealerAlive": "Người Canh Giữ Nhợt Nhạt trông nom kẻ chết. Bạn vẫn còn ở giữa cõi sống."
     },
+    "fct": {
+      "cheap": "Giảm chi phí!"
+    },
     "emotes": {
       "wave": "Vẫy Tay",
       "laugh": "Cười Lớn",
@@ -5722,6 +5725,7 @@ export const vi_VN: EnTranslations = {
     },
     "slots": {
       "mainhand": "Tay Chính",
+      "twoHand": "Hai Tay",
       "offhand": "Tay Phụ",
       "helmet": "Mũ Giáp",
       "neck": "Cổ",
@@ -8407,6 +8411,18 @@ export const vi_VN: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Giáp Vai Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Đại Kiếm Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Đại Đao Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Khiên Lũy Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Quả Cầu Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Vũ Khí Ngoài Hành Tinh Bí Ẩn"

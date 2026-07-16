@@ -315,6 +315,9 @@ export const nl_NL: EnTranslations = {
       "resurrectAtHealer": "De Bleke Hoeder (Tol van de Hoeder)",
       "spiritHealerAlive": "De Bleke Hoeder waakt over de doden. Jij bent nog onder de levenden."
     },
+    "fct": {
+      "cheap": "Goedkoper!"
+    },
     "emotes": {
       "wave": "Zwaaien",
       "laugh": "LOL",
@@ -5722,6 +5725,7 @@ export const nl_NL: EnTranslations = {
     },
     "slots": {
       "mainhand": "Hoofdhand",
+      "twoHand": "Tweehandig",
       "offhand": "Bijhand",
       "helmet": "Helm",
       "neck": "Hals",
@@ -8407,6 +8411,18 @@ export const nl_NL: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Galecall-Schouderstukken"
+      },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought-Grootzwaard"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang-Grootkling"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought-Bolwerk"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire-Orb"
       },
       "unknown_alien_weaponry": {
         "name": "Onbekende Buitenaardse Wapens"

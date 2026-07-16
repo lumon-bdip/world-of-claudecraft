@@ -315,6 +315,9 @@ export const zh_TW: EnTranslations = {
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
       "spiritHealerAlive": "靈魂醫者只看護逝者。你仍是生者。"
     },
+    "fct": {
+      "cheap": "費用降低!"
+    },
     "emotes": {
       "wave": "揮手",
       "laugh": "大笑",
@@ -5722,6 +5725,7 @@ export const zh_TW: EnTranslations = {
     },
     "slots": {
       "mainhand": "主手",
+      "twoHand": "雙手",
       "offhand": "副手",
       "helmet": "頭部",
       "neck": "頸部",
@@ -8407,6 +8411,18 @@ export const zh_TW: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "喚風肩甲"
+      },
+      "bonewrought_greatsword": {
+        "name": "骨鑄巨劍"
+      },
+      "direfang_greatblade": {
+        "name": "厲牙巨刃"
+      },
+      "bonewrought_bulwark": {
+        "name": "骨鑄壁壘"
+      },
+      "wraithfire_orb": {
+        "name": "怨焰寶珠"
       },
       "unknown_alien_weaponry": {
         "name": "未知異星武器"

@@ -315,6 +315,9 @@ export const ja_JP: EnTranslations = {
       "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
       "spiritHealerAlive": "霊魂の癒し手は死者を見守っている。あなたはまだ生者だ。"
     },
+    "fct": {
+      "cheap": "低コスト!"
+    },
     "emotes": {
       "wave": "手を振る",
       "laugh": "大笑い",
@@ -5722,6 +5725,7 @@ export const ja_JP: EnTranslations = {
     },
     "slots": {
       "mainhand": "メインハンド",
+      "twoHand": "両手",
       "offhand": "オフハンド",
       "helmet": "頭",
       "neck": "首",
@@ -8407,6 +8411,18 @@ export const ja_JP: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "ゲイルコールの肩当て"
+      },
+      "bonewrought_greatsword": {
+        "name": "ボーンロートの大剣"
+      },
+      "direfang_greatblade": {
+        "name": "ダイアファングの大刀"
+      },
+      "bonewrought_bulwark": {
+        "name": "ボーンロートの大盾"
+      },
+      "wraithfire_orb": {
+        "name": "レイスファイアのオーブ"
       },
       "unknown_alien_weaponry": {
         "name": "未知の異星武装"

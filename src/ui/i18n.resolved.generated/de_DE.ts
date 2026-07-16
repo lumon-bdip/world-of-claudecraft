@@ -315,6 +315,9 @@ export const de_DE: EnTranslations = {
       "resurrectAtHealer": "Der Bleiche Hüter (Zoll des Hüters)",
       "spiritHealerAlive": "Der Bleiche Hüter wacht über die Toten. Du weilst noch unter den Lebenden."
     },
+    "fct": {
+      "cheap": "Günstiger!"
+    },
     "emotes": {
       "wave": "Winken",
       "laugh": "Lachen",
@@ -5722,6 +5725,7 @@ export const de_DE: EnTranslations = {
     },
     "slots": {
       "mainhand": "Waffenhand",
+      "twoHand": "Zweihändig",
       "offhand": "Nebenhand",
       "helmet": "Kopf",
       "neck": "Hals",
@@ -8407,6 +8411,18 @@ export const de_DE: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Galecall-Schulterplatten"
+      },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought-Großschwert"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang-Großklinge"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought-Bollwerk"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire-Kugel"
       },
       "unknown_alien_weaponry": {
         "name": "Unbekannte Alien-Waffen"

@@ -315,6 +315,9 @@ export const it_IT: EnTranslations = {
       "resurrectAtHealer": "Il Custode Pallido (Mal di resurrezione)",
       "spiritHealerAlive": "Il Custode Pallido veglia sui morti. Tu sei ancora tra i vivi."
     },
+    "fct": {
+      "cheap": "Costo ridotto!"
+    },
     "emotes": {
       "wave": "Saluta",
       "laugh": "Ridi",
@@ -5722,6 +5725,7 @@ export const it_IT: EnTranslations = {
     },
     "slots": {
       "mainhand": "Mano principale",
+      "twoHand": "Due mani",
       "offhand": "Mano secondaria",
       "helmet": "Testa",
       "neck": "Collo",
@@ -8407,6 +8411,18 @@ export const it_IT: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Spallacci Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Spadone Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Gran lama Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Baluardo Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Sfera Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Armamento alieno sconosciuto"

@@ -315,6 +315,9 @@ export const da_DK: EnTranslations = {
       "resurrectAtHealer": "Den Blege Vogter (Vogterens Klokke)",
       "spiritHealerAlive": "Den Blege Vogter våger over de døde. Du er stadig blandt de levende."
     },
+    "fct": {
+      "cheap": "Billigere!"
+    },
     "emotes": {
       "wave": "Vink",
       "laugh": "LOL",
@@ -5722,6 +5725,7 @@ export const da_DK: EnTranslations = {
     },
     "slots": {
       "mainhand": "Hovedhånd",
+      "twoHand": "Tohåndsvåben",
       "offhand": "Sekundær hånd",
       "helmet": "Hjelm",
       "neck": "Hals",
@@ -8407,6 +8411,18 @@ export const da_DK: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Galecall-Skulderplader"
+      },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought-Storsværd"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang-Storklinge"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought-Bolværk"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire-Kugle"
       },
       "unknown_alien_weaponry": {
         "name": "Ukendt Fremmedartet Våben"

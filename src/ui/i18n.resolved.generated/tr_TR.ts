@@ -315,6 +315,9 @@ export const tr_TR: EnTranslations = {
       "resurrectAtHealer": "Solgun Bekçi (Bekçinin Bedeli)",
       "spiritHealerAlive": "Solgun Bekçi ölüleri gözetir. Sen hâlâ yaşayanlar arasındasın."
     },
+    "fct": {
+      "cheap": "Daha ucuz!"
+    },
     "emotes": {
       "wave": "El Salla",
       "laugh": "LOL",
@@ -5722,6 +5725,7 @@ export const tr_TR: EnTranslations = {
     },
     "slots": {
       "mainhand": "Ana El",
+      "twoHand": "Çift El",
       "offhand": "Yardımcı El",
       "helmet": "Miğfer",
       "neck": "Boyun",
@@ -8407,6 +8411,18 @@ export const tr_TR: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Galecall Omuzlukları"
+      },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought Büyük Kılıcı"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang Palası"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought Siperi"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire Küresi"
       },
       "unknown_alien_weaponry": {
         "name": "Bilinmeyen Uzaylı Silahı"

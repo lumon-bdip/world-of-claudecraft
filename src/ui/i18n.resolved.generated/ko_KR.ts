@@ -315,6 +315,9 @@ export const ko_KR: EnTranslations = {
       "resurrectAtHealer": "영혼 치유사 (부활의 후유증)",
       "spiritHealerAlive": "영혼 치유사는 죽은 자를 지킵니다. 당신은 아직 산 자입니다."
     },
+    "fct": {
+      "cheap": "비용 감소!"
+    },
     "emotes": {
       "wave": "손인사",
       "laugh": "ㅋㅋ",
@@ -5722,6 +5725,7 @@ export const ko_KR: EnTranslations = {
     },
     "slots": {
       "mainhand": "주장비",
+      "twoHand": "양손",
       "offhand": "보조장비",
       "helmet": "머리",
       "neck": "목",
@@ -8407,6 +8411,18 @@ export const ko_KR: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "강풍부름 어깨갑옷"
+      },
+      "bonewrought_greatsword": {
+        "name": "뼈벼림 대검"
+      },
+      "direfang_greatblade": {
+        "name": "흉포송곳니 대도"
+      },
+      "bonewrought_bulwark": {
+        "name": "뼈벼림 방벽"
+      },
+      "wraithfire_orb": {
+        "name": "망령불꽃 보주"
       },
       "unknown_alien_weaponry": {
         "name": "알 수 없는 외계 무기"

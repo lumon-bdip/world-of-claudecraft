@@ -315,6 +315,9 @@ export const sv_SE: EnTranslations = {
       "resurrectAtHealer": "Den bleka väktaren (Väktartullen)",
       "spiritHealerAlive": "Den bleka väktaren vakar över de döda. Du är fortfarande bland de levande."
     },
+    "fct": {
+      "cheap": "Billigare!"
+    },
     "emotes": {
       "wave": "Vinka",
       "laugh": "LOL",
@@ -5722,6 +5725,7 @@ export const sv_SE: EnTranslations = {
     },
     "slots": {
       "mainhand": "Främre hand",
+      "twoHand": "Tvåhänt",
       "offhand": "Andra hand",
       "helmet": "Hjälm",
       "neck": "Hals",
@@ -8407,6 +8411,18 @@ export const sv_SE: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Galecall-axelskydd"
+      },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought storsvärd"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang-storklinga"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought bålverk"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire-sfär"
       },
       "unknown_alien_weaponry": {
         "name": "Okänd främmande vapenutrustning"

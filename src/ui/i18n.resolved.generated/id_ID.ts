@@ -315,6 +315,9 @@ export const id_ID: EnTranslations = {
       "resurrectAtHealer": "Sang Penjaga Pucat (Upeti Sang Penjaga)",
       "spiritHealerAlive": "Sang Penjaga Pucat mengawasi para mati. Kamu masih termasuk yang hidup."
     },
+    "fct": {
+      "cheap": "Lebih murah!"
+    },
     "emotes": {
       "wave": "Melambai",
       "laugh": "LOL",
@@ -5722,6 +5725,7 @@ export const id_ID: EnTranslations = {
     },
     "slots": {
       "mainhand": "Tangan Utama",
+      "twoHand": "Dua Tangan",
       "offhand": "Tangan Sekunder",
       "helmet": "Helm",
       "neck": "Leher",
@@ -8407,6 +8411,18 @@ export const id_ID: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Pelindung Bahu Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Pedang Besar Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Bilah Besar Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Perisai Benteng Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Orb Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Persenjataan Alien Tak Dikenal"

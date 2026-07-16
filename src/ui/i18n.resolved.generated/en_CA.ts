@@ -315,6 +315,9 @@ export const en_CA: EnTranslations = {
       "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
       "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
     },
+    "fct": {
+      "cheap": "Cheap!"
+    },
     "emotes": {
       "wave": "Wave",
       "laugh": "LOL",
@@ -5722,6 +5725,7 @@ export const en_CA: EnTranslations = {
     },
     "slots": {
       "mainhand": "Main Hand",
+      "twoHand": "Two-Hand",
       "offhand": "Off Hand",
       "helmet": "Helmet",
       "neck": "Neck",
@@ -8407,6 +8411,18 @@ export const en_CA: EnTranslations = {
       },
       "stormcallers_spaulders": {
         "name": "Galecall Spaulders"
+      },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought Greatsword"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang Greatblade"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought Bulwark"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire Orb"
       },
       "unknown_alien_weaponry": {
         "name": "Unknown Alien Weaponry"

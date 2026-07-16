@@ -92,6 +92,7 @@ import {
 import { buildImpactSite, type ImpactSiteView } from './impact_site';
 import { ensureDelveInteriorKit } from './interior_kit';
 import { buildJailScene } from './jail_scene';
+import { LightPulses } from './light_pulses';
 import { type LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import { buildMailboxPillar } from './mailbox';
 import { buildMotes, type MotesView } from './motes';
@@ -972,6 +973,10 @@ export class Renderer {
   // gate a freshly-streamed view's draw on readiness instead of stalling the frame.
   private asyncCompileSupported = false;
   vfx: Vfx;
+  private lightPulses: LightPulses;
+  // Flash a pooled talent-moment point light at an entity's feet (see
+  // light_pulses.ts); bound once in the constructor over the views map.
+  private pulseAt: (id: number, school: string, intensity: number, duration: number) => void;
   private weather: Weather;
   private weatherOn = true;
   private audioSink: SpatialAudioSink | null = null;
@@ -1531,6 +1536,7 @@ export class Renderer {
     }
 
     // particle system: projectiles, impacts, heal glows, ambience
+    this.lightPulses = new LightPulses(this.scene);
     this.vfx = new Vfx(this.scene, (id, frac) => {
       const v = this.views.get(id);
       if (!v) return null;
@@ -1539,6 +1545,11 @@ export class Renderer {
       return new THREE.Vector3(v.group.position.x, v.group.position.y + h, v.group.position.z);
     });
     this.vfx.setViewportScale(this.webgl.domElement.clientHeight * this.webgl.getPixelRatio(), 60);
+    this.pulseAt = (id, school, intensity, duration) => {
+      const v = this.views.get(id);
+      if (!v) return;
+      this.lightPulses.pulse(v.group.position, school, intensity, duration);
+    };
 
     // ambient precipitation: biome-driven snow/rain that rides with the camera
     this.weather = new Weather(this.scene, this.lowGfx);
@@ -2194,6 +2205,7 @@ export class Renderer {
     );
     this.fish.update(p.pos.x, p.pos.z, dt);
     this.vfx.update(dt);
+    this.lightPulses.update(dt);
     const pv = this.views.get(p.id);
     if (pv) {
       const pp = pv.group.position;
@@ -2970,7 +2982,19 @@ export class Renderer {
         if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'beam') this.vfx.beam(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'chainHeal') this.vfx.chainHealArc(ev.sourceId, ev.targetId);
-        else if (ev.fx === 'lightning') this.vfx.lightningProjectile(ev.sourceId, ev.targetId);
+        else if (ev.fx === 'procSurge') {
+          this.vfx.procSurge(ev.targetId, ev.school);
+          this.pulseAt(ev.targetId, ev.school, 5, 0.4);
+        } else if (ev.fx === 'wardBloom') {
+          this.vfx.wardBloom(ev.targetId, ev.school);
+          this.pulseAt(ev.targetId, ev.school, 7, 0.55);
+        } else if (ev.fx === 'echoBurst') {
+          this.vfx.echoBurst(ev.targetId, ev.school);
+          this.pulseAt(ev.targetId, 'nature', 6, 0.5);
+        } else if (ev.fx === 'detonate') {
+          this.vfx.detonate(ev.targetId, ev.school);
+          this.pulseAt(ev.targetId, ev.school, 9, 0.5);
+        } else if (ev.fx === 'lightning') this.vfx.lightningProjectile(ev.sourceId, ev.targetId);
         else if (ev.fx === 'tick') this.vfx.tick(ev.targetId, ev.school);
         else this.vfx.nova(ev.targetId, ev.school);
         // A mob that hurls an instant bolt with NO windup (the warlock
@@ -5013,6 +5037,7 @@ export class Renderer {
     this.waterView.update(this.time);
     worldStart = markWorldPhase('water', worldStart);
     this.vfx.update(dt);
+    this.lightPulses.update(dt);
     this.updateFiestaRing(dt);
     this.updateFiestaPowerups(dt);
     this.tickFiestaGlows(dt);
