@@ -117,53 +117,70 @@ describe('canonical Talent V2 live mutations', () => {
     expect(rogue.selectTalentRow(11, 'rog_r11_endurance')).toBe(true);
     rogue.castAbility('sprint');
     rogue.castAbility('sprint');
-    expect(rogue.player.charges?.get('sprint')?.spent).toBe(2);
+    expect(rogue.player.abilityCharges?.sprint?.charges).toBe(0); // both stored uses spent
+    expect(rogue.player.abilityCharges?.sprint?.maxCharges).toBe(2);
 
+    // Clearing the row collapses the cap to 1: the pool bookkeeping drops and
+    // the still-owed recharge keeps running as a plain cooldown (no free reset).
     expect(rogue.selectTalentRow(11, null)).toBe(true);
     expect(rogue.resolvedAbility('sprint')?.charges).toBeUndefined();
-    expect(rogue.player.charges?.get('sprint')?.spent).toBe(1);
+    expect(rogue.player.abilityCharges?.sprint).toBeUndefined();
+    expect(rogue.player.cooldowns.has('sprint')).toBe(true);
     for (let tick = 0; tick < 6_001; tick++) updateTimers(rogue.player);
-    expect(rogue.player.charges?.has('sprint')).toBe(false);
     expect(rogue.player.cooldowns.has('sprint')).toBe(false);
 
+    // Picking the row while the ability sits on a plain cooldown converts that
+    // cooldown into a recharge with ONE use spent: the new extra use is stored
+    // and castable, the running timer is neither wiped nor reset.
     const adding = new Sim({ seed: 75, playerClass: 'rogue', autoEquip: false });
     adding.setPlayerLevel(20);
     adding.castAbility('sprint');
     expect(adding.player.cooldowns.has('sprint')).toBe(true);
-    expect(adding.player.charges).toBeUndefined();
+    expect(adding.player.abilityCharges).toBeUndefined();
     expect(adding.selectTalentRow(11, 'rog_r11_endurance')).toBe(true);
-    expect(adding.player.charges?.get('sprint')?.spent).toBe(1);
+    expect(adding.player.abilityCharges?.sprint?.charges).toBe(1);
+    expect(adding.player.abilityCharges?.sprint?.maxCharges).toBe(2);
+    expect(adding.player.cooldowns.has('sprint')).toBe(false); // a use is stored, pool open
     adding.castAbility('sprint');
-    adding.castAbility('sprint');
-    expect(adding.player.charges?.get('sprint')?.spent).toBe(2);
+    adding.castAbility('sprint'); // blocked: the pool is empty
+    expect(adding.player.abilityCharges?.sprint?.charges).toBe(0);
 
+    // An unrelated row pick leaves a native charge-limited pool (Twinstrike) alone.
     const warrior = maxLevelWarrior();
     expect(warrior.setSpec('fury')).toBe(true);
-    warrior.player.charges = new Map([['raging_gale', { spent: 2, cdMax: 8 }]]);
+    warrior.player.abilityCharges = {
+      raging_gale: { charges: 0, maxCharges: 2, recharge: 8, rechargeLength: 8 },
+    };
     warrior.player.cooldowns.set('raging_gale', 8);
     expect(warrior.selectTalentRow(5, 'war_row_pursuit')).toBe(true);
     expect(warrior.resolvedAbility('raging_gale')?.charges).toBe(2);
-    expect(warrior.player.charges.get('raging_gale')?.spent).toBe(2);
+    expect(warrior.player.abilityCharges?.raging_gale).toEqual({
+      charges: 0,
+      maxCharges: 2,
+      recharge: 8,
+      rechargeLength: 8,
+    });
+    expect(warrior.player.cooldowns.get('raging_gale')).toBe(8);
   });
 
   it('cleans removed proc payoffs and partial counters at the recompute choke point', () => {
-    const mage = new Sim({ seed: 74, playerClass: 'mage', autoEquip: false });
-    mage.setPlayerLevel(20);
-    expect(mage.selectTalentRow(8, 'mag_r8_ice_nova')).toBe(true);
-    onCastCompleted(mage.ctx, mage.player, 'frost_nova', mage.player);
-    expect(mage.player.auras.some((aura) => aura.id === 'mag_rime_ambush')).toBe(true);
-    mage.player.procState!.icds.mag_rime_ambush = 5;
+    const rogue = new Sim({ seed: 74, playerClass: 'rogue', autoEquip: false });
+    rogue.setPlayerLevel(20);
+    expect(rogue.selectTalentRow(8, 'rog_r8_improved_gouge')).toBe(true);
+    onCastCompleted(rogue.ctx, rogue.player, 'gouge', rogue.player);
+    expect(rogue.player.auras.some((aura) => aura.id === 'rog_blindside_opening')).toBe(true);
+    rogue.player.procState!.icds.rog_blindside_opening = 5;
 
-    expect(mage.selectTalentRow(8, 'mag_r8_spellsteal')).toBe(true);
-    expect(mage.player.auras.some((aura) => aura.id === 'mag_rime_ambush')).toBe(false);
-    expect(mage.player.procState?.counters.mag_rime_ambush).toBeUndefined();
-    expect(mage.player.procState?.icds.mag_rime_ambush).toBeUndefined();
+    expect(rogue.selectTalentRow(8, 'rog_r8_smoke_screen')).toBe(true);
+    expect(rogue.player.auras.some((aura) => aura.id === 'rog_blindside_opening')).toBe(false);
+    expect(rogue.player.procState?.counters.rog_blindside_opening).toBeUndefined();
+    expect(rogue.player.procState?.icds.rog_blindside_opening).toBeUndefined();
 
-    expect(mage.selectTalentRow(5, 'mag_r5_firestarter')).toBe(true);
-    onCastCompleted(mage.ctx, mage.player, 'fireball');
-    onCastCompleted(mage.ctx, mage.player, 'fireball');
-    expect(mage.player.procState?.counters.mag_firestarter).toBe(2);
-    expect(mage.selectTalentRow(5, 'mag_r5_impulse')).toBe(true);
-    expect(mage.player.procState?.counters.mag_firestarter).toBeUndefined();
+    expect(rogue.selectTalentRow(5, 'rog_r5_relentless_strikes')).toBe(true);
+    onCastCompleted(rogue.ctx, rogue.player, 'sinister_strike');
+    onCastCompleted(rogue.ctx, rogue.player, 'sinister_strike');
+    expect(rogue.player.procState?.counters.rog_ceaseless_cuts).toBe(2);
+    expect(rogue.selectTalentRow(5, 'rog_r5_opportunist')).toBe(true);
+    expect(rogue.player.procState?.counters.rog_ceaseless_cuts).toBeUndefined();
   });
 });

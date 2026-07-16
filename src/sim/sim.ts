@@ -109,7 +109,12 @@ import {
   withWeaponSkinApplied,
 } from './content/weapon_skin_rules';
 import { WEAPON_SKINS } from './content/weapon_skins';
-import { applyCooldowns, type SavedCooldowns, serializeCooldowns } from './cooldown_persist';
+import {
+  type AbilityChargeState,
+  applyCooldowns,
+  type SavedCooldowns,
+  serializeCooldowns,
+} from './cooldown_persist';
 import type { DelveShopGate, DelveShopOffer } from './data';
 import {
   ALL_RECIPES,
@@ -716,7 +721,7 @@ export interface ArenaReturnPools {
   hp: number;
   resource: number;
   cooldowns: Map<string, number>;
-  charges: Map<string, { spent: number; cdMax: number }>;
+  abilityCharges: Record<string, AbilityChargeState>;
   ccDr: Map<CrowdControlDrCategory, CrowdControlDrState>;
 }
 
@@ -2222,15 +2227,28 @@ export class Sim {
     }
     player.swingTimer = 0;
     // Restore ability/potion cooldowns so a relog cannot reset them (see
-    // cooldown_persist.ts). Re-anchored to this sim's clock; a fresh character has none.
-    const restoredCharges = new Map<string, { spent: number; cdMax: number }>();
+    // cooldown_persist.ts). Re-anchored to this sim's clock; a fresh character has
+    // none. Charge-limited pools (abilityCharges) restore whole; a legacy save's
+    // {spent, cdMax} entries convert against the CURRENT resolved caps from
+    // meta.known (refreshed above).
+    const restoredAbilityCharges: Record<string, AbilityChargeState> = {};
+    const legacyChargeCaps = new Map<string, { maxCharges: number; cooldown: number }>();
+    for (const known of meta.known) {
+      const cap = known.charges ?? 1;
+      if (cap > 1 && known.cooldown > 0) {
+        legacyChargeCaps.set(known.def.id, { maxCharges: cap, cooldown: known.cooldown });
+      }
+    }
     player.potionCooldownUntil = applyCooldowns(
       savedState?.cooldowns,
       player.cooldowns,
       this.time,
-      restoredCharges,
+      restoredAbilityCharges,
+      legacyChargeCaps,
     );
-    if (restoredCharges.size > 0) player.charges = restoredCharges;
+    if (Object.keys(restoredAbilityCharges).length > 0) {
+      player.abilityCharges = restoredAbilityCharges;
+    }
     // Re-derive the display copy from the restored authority; otherwise a relog inside
     // the shared potion cooldown paints the action bar as READY (no swipe) while the
     // use-gate (which reads potionCooldownUntil) still rejects the quaff.
@@ -2758,7 +2776,12 @@ export class Sim {
         [...meta.raidLockouts].filter(([, until]) => until > this.lockoutNowMs()),
       ),
       pet: petCommands.isDemonPetState(petSnapshot) ? null : petSnapshot,
-      cooldowns: serializeCooldowns(e.cooldowns, e.potionCooldownUntil, this.time, e.charges),
+      cooldowns: serializeCooldowns(
+        e.cooldowns,
+        e.potionCooldownUntil,
+        this.time,
+        e.abilityCharges,
+      ),
       skin: meta.skin,
       skinCatalog: meta.skinCatalog,
       pendingSkinRank: meta.pendingSkinRank,

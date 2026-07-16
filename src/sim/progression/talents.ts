@@ -95,6 +95,13 @@ function cleanRemovedProcState(
   }
 }
 
+// Reconcile the abilityCharges recharge pools with the freshly resolved caps.
+// A cap that just rose above 1 while the ability sat on a plain cooldown turns
+// that running cooldown into a recharge with ONE use spent (the respec neither
+// wipes the timer nor grants a free reset); an existing pool keeps its SPENT
+// count under the new cap, so shrinking the cap never refunds uses early. The
+// plain `cooldowns` entry mirrors the recharge only while the pool is empty
+// (the updateTimers/cast-gate contract).
 function normalizeAbilityCharges(
   player: Entity,
   meta: PlayerMeta,
@@ -107,29 +114,47 @@ function normalizeAbilityCharges(
       nextCap > 1 &&
       previousCap <= 1 &&
       player.cooldowns.has(ability.def.id) &&
-      !player.charges?.has(ability.def.id)
+      !player.abilityCharges?.[ability.def.id]
     ) {
-      player.charges ??= new Map();
-      player.charges.set(ability.def.id, { spent: 1, cdMax: ability.cooldown });
+      player.abilityCharges ??= {};
+      player.abilityCharges[ability.def.id] = {
+        charges: nextCap - 1,
+        maxCharges: nextCap,
+        recharge: player.cooldowns.get(ability.def.id) ?? ability.cooldown,
+        rechargeLength: ability.cooldown,
+      };
+      player.cooldowns.delete(ability.def.id); // uses are stored, so the pool is open
     }
   }
-  if (!player.charges) return;
-  for (const [abilityId, state] of player.charges) {
+  if (!player.abilityCharges) return;
+  for (const [abilityId, state] of Object.entries(player.abilityCharges)) {
     const ability = meta.known.find((known) => known.def.id === abilityId);
     if (!ability || ability.cooldown <= 0) {
-      player.charges.delete(abilityId);
+      delete player.abilityCharges[abilityId];
       player.cooldowns.delete(abilityId);
       continue;
     }
     const maxCharges = ability.charges ?? 1;
-    state.spent = Math.min(state.spent, maxCharges);
-    state.cdMax = ability.cooldown;
-    if (state.spent <= 0) {
-      player.charges.delete(abilityId);
+    const spent = Math.min(Math.max(0, state.maxCharges - state.charges), maxCharges);
+    if (maxCharges <= 1) {
+      // The cap collapsed to a plain cooldown: keep the running recharge as the
+      // ordinary cooldown entry and drop the pool bookkeeping entirely.
+      if (spent > 0 && state.recharge > 0) player.cooldowns.set(abilityId, state.recharge);
+      else player.cooldowns.delete(abilityId);
+      delete player.abilityCharges[abilityId];
+      continue;
+    }
+    state.maxCharges = maxCharges;
+    state.rechargeLength = ability.cooldown;
+    state.charges = maxCharges - spent;
+    if (spent <= 0) {
+      state.recharge = 0;
+      player.cooldowns.delete(abilityId);
+    } else if (state.charges > 0) {
       player.cooldowns.delete(abilityId);
     }
   }
-  if (player.charges.size === 0) player.charges = undefined;
+  if (Object.keys(player.abilityCharges).length === 0) player.abilityCharges = undefined;
 }
 
 // The ONLY place a talent tree is walked. Re-resolves the flat modifier struct and

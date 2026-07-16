@@ -131,15 +131,8 @@ export function updateTimers(p: Entity): void {
   p.combatTimer += DT;
   for (const [k, v] of p.cooldowns) {
     const nv = v - temporalHourglassCooldownDelta(p, k);
-    if (nv <= 0) {
-      p.cooldowns.delete(k);
-      const chargeState = p.charges?.get(k);
-      if (chargeState) {
-        chargeState.spent -= 1;
-        if (chargeState.spent > 0) p.cooldowns.set(k, chargeState.cdMax);
-        else p.charges?.delete(k);
-      }
-    } else p.cooldowns.set(k, nv);
+    if (nv <= 0) p.cooldowns.delete(k);
+    else p.cooldowns.set(k, nv);
   }
   if (p.abilityCharges) {
     for (const [abilityId, state] of Object.entries(p.abilityCharges)) {

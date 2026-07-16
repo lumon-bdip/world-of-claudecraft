@@ -2596,7 +2596,7 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 47 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 46 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
 // 47th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
@@ -2607,7 +2607,6 @@ const ALL_DELTA_KEYS = [
   'bank',
   'buyback',
   'cds',
-  'chg',
   'corpse',
   'cosmetics',
   'dclears',
@@ -2817,7 +2816,6 @@ function dirtyEveryDeltaField(): {
 
   // Player Entity fields.
   p.cooldowns.set('heroic_strike', 5);
-  p.charges = new Map([['charge', { spent: 1, cdMax: 15 }]]);
   p.abilityCharges = {
     ice_block: { charges: 1, maxCharges: 2, recharge: 10, rechargeLength: 240 },
   };
@@ -2874,7 +2872,6 @@ describe('full self-state snapshot delta fixture', () => {
 
     // --- fields that decode onto the player ENTITY (client.player), not the client ---
     expect(client.player.cooldowns.get('heroic_strike')).toBe(5); // cds -> e.cooldowns
-    expect(client.player.charges?.get('charge')?.spent).toBe(1); // chg -> e.charges
     expect(client.player.abilityCharges?.ice_block?.charges).toBe(1); // achg -> e.abilityCharges
     expect(client.player.stats).toMatchObject({
       str: 12345,
@@ -3045,9 +3042,9 @@ describe('gather node cooldown wire round trip (ncd)', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 47 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(47);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(47);
+  it('ALL_DELTA_KEYS contains exactly 46 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(46);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(46);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -3059,7 +3056,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(47);
+    expect(scraped.size).toBe(46);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

@@ -159,11 +159,9 @@ export interface ActionBarPlayerInput {
    *  next_cast_free) that drives the slot glow and usable state, the kill-window
    *  gate, and the next-cast empowerment read. Both worlds expose the live aura
    *  list. */
-  /** Charge-limited abilities' spent counts (Double Charge); the recharge
-   *  timer itself rides `cooldowns`. Optional: absent when nothing is spent. */
-  charges?: { get(id: string): { spent: number } | undefined };
-  /** Live charges on the abilityCharges recharge model (Frost's second Ice Block):
-   *  the current count per ability id. Optional: absent when nothing uses it. */
+  /** Live charge counts on the abilityCharges recharge model (Twinstrike, Double
+   *  Charge, Frost's second Ice Block): the current count per ability id.
+   *  Optional: absent when no charge-limited ability has been cast yet. */
   abilityCharges?: { [id: string]: { charges: number } | undefined };
   /** Whether the player currently carries a `kind:'stealth'` aura (Stealth or
    *  Vanish). Gates a `requiresStealth` ability's usable state (issue #1890):
@@ -432,24 +430,20 @@ export function createActionBarView(
               )
             : 0;
         slot.cdText = cd > COOLDOWN_TEXT_THRESHOLD ? deps.formatCount(Math.ceil(cd)) : '';
-        // Charge-limited (Double Charge): the running cooldown is only the
-        // RECHARGE timer; the badge shows the stored uses left and the slot
-        // stays usable while any remain.
-        // Two stored-use systems (mutually exclusive per ability, casting_lifecycle):
-        // the Double Charge Map (ability.charges + player.charges.spent) and the
-        // abilityCharges recharge model (1 + bonusCharges, live count in
-        // player.abilityCharges). Read whichever the ability uses so the badge shows
-        // for both (e.g. Frost's second Ice Block rode the recharge model, unbadged).
-        const rechargeMax = 1 + (ability.bonusCharges ?? 0);
-        const maxCharges = rechargeMax > 1 ? rechargeMax : (ability.charges ?? 1);
+        // Charge-limited (the abilityCharges recharge model: Twinstrike, Double
+        // Charge, Frost's second Ice Block): the running cooldown is only the
+        // empty-pool RECHARGE timer; the badge shows the stored uses left and
+        // the slot stays usable while any remain. The resolved max is
+        // 1 + bonusCharges (ability.charges mirrors it for authored maxCharges);
+        // the live count comes from player.abilityCharges, full until the first
+        // spend creates the pool.
+        const maxCharges = Math.max(1 + (ability.bonusCharges ?? 0), ability.charges ?? 1);
         const chargesLeft =
-          rechargeMax > 1
+          maxCharges > 1
             ? (player.abilityCharges?.[def.id]?.charges ?? maxCharges)
-            : maxCharges > 1
-              ? maxCharges - (player.charges?.get(def.id)?.spent ?? 0)
-              : cd > 0
-                ? 0
-                : 1;
+            : cd > 0
+              ? 0
+              : 1;
         slot.count = maxCharges > 1 ? deps.formatCount(chargesLeft) : '';
         // A free-cost proc (Battle Trance / next_cast_free) covers the cost:
         // the slot is usable at any resource and glows (the sim predicate is

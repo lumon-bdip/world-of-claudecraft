@@ -199,10 +199,18 @@ describe('Talents V2 movement and control primitives', () => {
     rogue.player.cooldowns.set('evasion', 40);
     rogue.player.cooldowns.set('vanish', 50);
     rogue.player.cooldowns.set('kick', 10);
-    rogue.player.charges = new Map([['sprint', { spent: 2, cdMax: 30 }]]);
+    rogue.player.abilityCharges = {
+      sprint: { charges: 1, maxCharges: 3, recharge: 30, rechargeLength: 30 },
+    };
     runAbilityEffect(rogue, null, 'preparation');
     expect([...rogue.player.cooldowns.keys()]).toEqual(['kick']);
-    expect(rogue.player.charges.has('sprint')).toBe(false);
+    // Preparation resets the charge pool to full alongside the plain cooldowns.
+    expect(rogue.player.abilityCharges.sprint).toEqual({
+      charges: 3,
+      maxCharges: 3,
+      recharge: 0,
+      rechargeLength: 30,
+    });
 
     const mage = new Sim({ seed: 8, playerClass: 'mage', autoEquip: true });
     mage.ctx.applyAura(mage.player, aura(mage.player, 'test_root', 'root', 0, 'nature'));
@@ -224,10 +232,11 @@ describe('Talents V2 movement and control primitives', () => {
 });
 
 describe('Talents V2 stasis and resource-sap primitives', () => {
-  it('Ice Block stops actions and auto attacks, absorbs damage, and recasts to cancel both auras', () => {
+  it('Ice Block stops actions and auto attacks, and recasts to cancel the stasis', () => {
+    // Cold Coffin is mage base kit now (learnLevel 12, stasis + cleanseSelf; the
+    // old row-granted absorb shield died with the mage rework).
     const sim = new Sim({ seed: 9, playerClass: 'mage', autoEquip: true });
     sim.setPlayerLevel(20);
-    expect(sim.applyTalents({ spec: null, rows: { 17: 'mag_r17_ice_block' } })).toBe(true);
     const enemy = addHostile(sim);
     sim.targetEntity(enemy.id);
     sim.startAutoAttack();
@@ -237,16 +246,15 @@ describe('Talents V2 stasis and resource-sap primitives', () => {
     expect(
       sim.player.auras.some((entry) => entry.id === 'ice_block' && entry.kind === 'stasis'),
     ).toBe(true);
-    expect(sim.player.auras.find((entry) => entry.id === 'ice_block_absorb')?.value).toBe(600);
     expect(sim.player.autoAttack).toBe(false);
 
     sim.player.gcdRemaining = 0;
     sim.castAbility('fireball');
     expect(sim.player.castingAbility).toBeNull();
 
+    sim.player.gcdRemaining = 0;
     sim.castAbility('ice_block');
     expect(sim.player.auras.some((entry) => entry.id === 'ice_block')).toBe(false);
-    expect(sim.player.auras.some((entry) => entry.id === 'ice_block_absorb')).toBe(false);
   });
 
   it('Lifesap ticks the current resource every two seconds and is stilled by hard control', () => {

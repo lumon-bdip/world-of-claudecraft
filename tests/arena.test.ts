@@ -646,7 +646,16 @@ describe('arena: class ability target filters', () => {
         expect(sim.setSpec('prot', pid)).toBe(true);
       },
     },
-    { cls: 'mage', ability: 'arcane_explosion', level: 20 },
+    {
+      cls: 'mage',
+      ability: 'arcane_explosion',
+      level: 20,
+      // Aetherburst is arcane-spec kit now (the mage rework spec-gated it).
+      beforeQueue: (sim, pid) => {
+        sim.setPlayerLevel(20, pid);
+        expect(sim.setSpec('arcane', pid)).toBe(true);
+      },
+    },
     { cls: 'paladin', ability: 'consecration', level: 20 },
     {
       cls: 'druid',

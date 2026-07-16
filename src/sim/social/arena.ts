@@ -50,11 +50,11 @@ function cloneCcDr(
   return out;
 }
 
-function cloneAbilityCharges(
-  src: ReadonlyMap<string, { spent: number; cdMax: number }> | undefined,
-): Map<string, { spent: number; cdMax: number }> {
-  const out = new Map<string, { spent: number; cdMax: number }>();
-  if (src) for (const [id, state] of src) out.set(id, { ...state });
+// Deep-copy the recharge-model charge pools (Entity.abilityCharges) so a
+// snapshot never shares mutable state objects with the live entity.
+function cloneAbilityCharges(src: Entity['abilityCharges']): ArenaReturnPools['abilityCharges'] {
+  const out: ArenaReturnPools['abilityCharges'] = {};
+  if (src) for (const [id, state] of Object.entries(src)) out[id] = { ...state };
   return out;
 }
 
@@ -63,7 +63,7 @@ export function snapshotArenaReturnPools(e: Entity): ArenaReturnPools {
     hp: e.hp,
     resource: e.resource,
     cooldowns: new Map(e.cooldowns),
-    charges: cloneAbilityCharges(e.charges),
+    abilityCharges: cloneAbilityCharges(e.abilityCharges),
     ccDr: cloneCcDr(e.ccDr),
   };
 }
@@ -892,7 +892,7 @@ export function readyArenaFighter(ctx: SimContext, e: Entity, opts: { clearPrep:
     // never carries into a normalized match.
     e.auras = [];
     e.cooldowns.clear();
-    e.charges = undefined;
+    e.abilityCharges = undefined; // charge pools refill (recreated lazily at full)
     e.ccDr.clear();
   }
   const meta = ctx.players.get(e.id);
@@ -1084,7 +1084,10 @@ export function returnFromArena(ctx: SimContext, match: ArenaMatch): void {
     const pools = match.preMatchPools?.get(pid);
     if (pools) {
       e.cooldowns = new Map(pools.cooldowns);
-      e.charges = pools.charges.size > 0 ? cloneAbilityCharges(pools.charges) : undefined;
+      e.abilityCharges =
+        Object.keys(pools.abilityCharges).length > 0
+          ? cloneAbilityCharges(pools.abilityCharges)
+          : undefined;
       e.ccDr = cloneCcDr(pools.ccDr);
       e.hp = Math.max(0, Math.min(pools.hp, e.maxHp));
       e.resource = Math.max(0, Math.min(pools.resource, e.maxResource));

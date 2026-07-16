@@ -2147,13 +2147,6 @@ export class ClientWorld implements IWorld {
       if (s.ncd !== undefined) {
         this.nodeCooldowns = new Map(Object.entries(s.ncd).map(([k, v]) => [k, Number(v)]));
       }
-      if (s.chg !== undefined) {
-        // Charge-limited stored-use counts (Double Charge). cdMax is a
-        // server-side recharge detail; the mirror only displays spent counts.
-        if (!e.charges) e.charges = new Map();
-        e.charges.clear();
-        for (const k in s.chg) e.charges.set(k, { spent: Number(s.chg[k]), cdMax: 0 });
-      }
       if (s.achg !== undefined) {
         // Recharge-model live counts (Frost's second Ice Block). Only the count is
         // displayed; max/recharge are server-side details the mirror zero-fills.

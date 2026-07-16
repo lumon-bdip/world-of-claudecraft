@@ -180,15 +180,18 @@ describe('retained v0.26 all-class Talents V2 semantics', () => {
     expect(after.weaponMult).toBeCloseTo((before.weaponMult ?? 1) * 1.2);
   });
 
-  it('keeps native charges distinct from talent-added bonus charges', () => {
+  it('resolves native and talent-added stored uses onto the one recharge model', () => {
+    // Unified charge model: a def's native maxCharges resolves exactly like the
+    // Double Charge talent's bonusCharges (charges = 1 + bonusCharges), so the
+    // cast gate, recharge, wire, and persistence share a single path.
     const twinstrike = resolved('warrior', 'raging_gale', {}, 'fury');
-    expect(twinstrike).toMatchObject({ charges: 2, bonusCharges: 0 });
+    expect(twinstrike).toMatchObject({ charges: 2, bonusCharges: 1 });
 
     const doubleCharge = resolved('warrior', 'charge', { 5: 'war_row_double_charge' }, 'arms');
     expect(doubleCharge).toMatchObject({ charges: 2, bonusCharges: 1 });
 
-    const mageImpulse = resolved('mage', 'fire_blast', { 5: 'mag_r5_impulse' });
-    expect(mageImpulse).toMatchObject({ charges: 2, bonusCharges: 1 });
+    const doubleBlink = resolved('mage', 'blink', { 5: 'mag_r5_double_blink' });
+    expect(doubleBlink).toMatchObject({ charges: 2, bonusCharges: 1 });
   });
 
   it('Calloused Hide makes only its scoped physical Long Draw cast instant', () => {

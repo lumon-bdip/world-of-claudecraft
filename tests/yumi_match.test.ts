@@ -493,13 +493,20 @@ describe('yumi: win and cleanup', () => {
     tracked.hp = Math.floor(tracked.maxHp * 0.4);
     tracked.resource = Math.floor(tracked.maxResource * 0.3);
     tracked.cooldowns.set('fireball', 7);
-    tracked.charges = new Map([['arcane_missiles', { spent: 1, cdMax: 8 }]]);
+    tracked.abilityCharges = {
+      arcane_missiles: { charges: 1, maxCharges: 2, recharge: 8, rechargeLength: 8 },
+    };
     tracked.ccDr.set('openerStun', { stage: 2, resetAt: 123.5 });
     const expected = {
       hp: tracked.hp,
       resource: tracked.resource,
       cooldowns: new Map(tracked.cooldowns),
-      charges: new Map([...tracked.charges].map(([abilityId, state]) => [abilityId, { ...state }])),
+      abilityCharges: Object.fromEntries(
+        Object.entries(tracked.abilityCharges).map(([abilityId, state]) => [
+          abilityId,
+          { ...state },
+        ]),
+      ),
       ccDr: new Map([...tracked.ccDr].map(([category, state]) => [category, { ...state }])),
     };
 
@@ -509,7 +516,7 @@ describe('yumi: win and cleanup', () => {
     expect(tracked.hp).toBe(tracked.maxHp);
     expect(tracked.resource).toBe(tracked.maxResource);
     expect(tracked.cooldowns.size).toBe(0);
-    expect(tracked.charges?.size ?? 0).toBe(0);
+    expect(tracked.abilityCharges).toBeUndefined();
     expect(tracked.ccDr.size).toBe(0);
 
     for (let i = 0; i < 200 && match.state !== 'active'; i++) updateArena(sim.ctx);
@@ -522,7 +529,7 @@ describe('yumi: win and cleanup', () => {
     expect(tracked.hp).toBe(expected.hp);
     expect(tracked.resource).toBe(expected.resource);
     expect(tracked.cooldowns).toEqual(expected.cooldowns);
-    expect(tracked.charges).toEqual(expected.charges);
+    expect(tracked.abilityCharges).toEqual(expected.abilityCharges);
     expect(tracked.ccDr).toEqual(expected.ccDr);
   });
 

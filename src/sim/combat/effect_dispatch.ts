@@ -208,14 +208,19 @@ export function runEffects(
   }
   const threatOpts = { flat: res.threatFlat, mult: res.threatMult };
 
+  // Cleaving Blows (Fury passive): Red Harvest refunds one stored Twinstrike
+  // use on the abilityCharges recharge model. A partial refund leaves the
+  // running recharge ticking for the next charge but re-opens the pool, so the
+  // empty-pool cooldown mirror goes either way (see updateTimers).
   if (
     ability.id === 'red_harvest' &&
     meta.known.some((known) => known.def.passive && known.def.id === 'cleaving_blows')
   ) {
-    const chargeState = p.charges?.get('raging_gale');
-    if (chargeState && chargeState.spent > 0) {
-      chargeState.spent -= 1;
-      if (chargeState.spent === 0) p.cooldowns.delete('raging_gale');
+    const chargeState = p.abilityCharges?.raging_gale;
+    if (chargeState && chargeState.charges < chargeState.maxCharges) {
+      chargeState.charges += 1;
+      if (chargeState.charges >= chargeState.maxCharges) chargeState.recharge = 0;
+      p.cooldowns.delete('raging_gale');
     }
   }
 
@@ -944,7 +949,12 @@ export function runEffects(
       case 'clearCooldowns': {
         for (const abilityId of eff.abilities) {
           p.cooldowns.delete(abilityId);
-          p.charges?.delete(abilityId);
+          // A charge-limited ability resets to a full pool (Preparation).
+          const chargeState = p.abilityCharges?.[abilityId];
+          if (chargeState) {
+            chargeState.charges = chargeState.maxCharges;
+            chargeState.recharge = 0;
+          }
         }
         break;
       }

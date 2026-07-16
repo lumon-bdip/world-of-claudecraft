@@ -5125,16 +5125,10 @@ export class GameServer {
           .map(([k, until]) => [k, round2(until - this.sim.time)]),
       ),
     );
-    // Charge-limited ability stored-use counts (Double Charge): {abilityId:
-    // spent}. The recharge timer itself rides `cds`; the client derives the
-    // max from its own talent rebake. Empty for everyone untalented.
-    maybe(
-      'chg',
-      p.charges ? Object.fromEntries([...p.charges.entries()].map(([k, v]) => [k, v.spent])) : {},
-    );
-    // Recharge-model live charge counts (abilityCharges: Frost's second Ice Block):
-    // {abilityId: charges}. The recharge timer itself rides `cds`; the client
-    // derives the max from its own known-list rebake (1 + bonusCharges).
+    // Charge-limited ability live counts (abilityCharges, the one recharge
+    // model: Twinstrike, Double Charge, Frost's second Ice Block): {abilityId:
+    // charges}. The empty-pool recharge timer rides `cds`; the client derives
+    // the max from its own known-list rebake (1 + bonusCharges).
     maybe(
       'achg',
       p.abilityCharges

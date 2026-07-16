@@ -2450,6 +2450,15 @@ export interface Entity {
   // Pure observation for the manual playtest readout: it is NEVER read by any
   // gameplay decision, never serialized, never wired, and is absent in production.
   cascadeDevStats?: CascadeDevStats;
+  // Charge-limited abilities (the recharge model: Twinstrike, Double Charge,
+  // Frost's second Ice Block): per-ability stored uses plus the one running
+  // recharge timer. While charges sit below max, `recharge` counts down
+  // (combat/auras.ts updateTimers); each expiry refunds one use and re-arms.
+  // The `cooldowns` entry mirrors `recharge` ONLY while the pool is empty (the
+  // cast gate + action bar read that mirror). Created lazily on the first
+  // charged cast (undefined = no charge bookkeeping), so entities without
+  // charge-limited abilities serialize/trace exactly as before. Persisted
+  // across logout via cooldown_persist.ts; wired as `achg` counts.
   abilityCharges?: Record<
     string,
     {
@@ -2459,12 +2468,6 @@ export interface Entity {
       rechargeLength: number;
     }
   >;
-  // Charge-limited abilities (Double Charge): per-ability spent count plus the
-  // full recharge duration. While spent > 0 the ability's cooldowns entry is
-  // the RECHARGE timer; expiry refunds one charge and re-arms (updateTimers).
-  // Created lazily on first charged cast (undefined = no charge bookkeeping),
-  // so entities without the talent serialize/trace exactly as before.
-  charges?: Map<string, { spent: number; cdMax: number }>;
   id: number;
   kind: EntityKind;
   templateId: string; // mob/npc template id, or class for player
