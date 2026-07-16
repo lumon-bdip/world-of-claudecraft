@@ -13,6 +13,7 @@ import {
   parseChatTabs,
   sentLineChannel,
   sentLineTarget,
+  sentLineTargetForHost,
   serializeChatTabs,
   WHISPER_TAB,
   WHISPER_TAB_LABEL_KEY,
@@ -311,5 +312,27 @@ describe('chat channel tabs — pure model', () => {
     expect(sentLineTarget('/1 hey')).toBe('general');
     expect(sentLineTarget('/p on my way')).toBe('party');
     expect(sentLineTarget('hello')).toBe('say');
+  });
+
+  describe('sentLineTargetForHost (host-aware sticky for the ambiguous /g alias)', () => {
+    it('sticks a bare /g send to guild online and general offline', () => {
+      // "/g" routes to GUILD online (the server intercepts it) but GENERAL offline
+      // (the sim), so the host-independent sentLineTarget leaves it null; the client
+      // knows its host and keeps the player in the channel they just spoke in.
+      expect(sentLineTargetForHost('/g raid tonight', { online: true })).toBe('guild');
+      expect(sentLineTargetForHost('/g raid tonight', { online: false })).toBe('general');
+    });
+
+    it('delegates every other line to the host-independent sentLineTarget', () => {
+      for (const online of [true, false]) {
+        expect(sentLineTargetForHost('/1 hey', { online })).toBe('general');
+        expect(sentLineTargetForHost('/general hey', { online })).toBe('general');
+        expect(sentLineTargetForHost('/gu ready', { online })).toBe('guild');
+        expect(sentLineTargetForHost('/p on my way', { online })).toBe('party');
+        expect(sentLineTargetForHost('/r sure', { online })).toBe(WHISPER_TAB);
+        expect(sentLineTargetForHost('hello', { online })).toBe('say');
+        expect(sentLineTargetForHost('/w Bob hi', { online })).toBeNull();
+      }
+    });
   });
 });

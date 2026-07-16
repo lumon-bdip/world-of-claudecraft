@@ -208,6 +208,22 @@ export function sentLineTarget(line: string): ChatInputTintTarget | null {
   return sentLineChannel(line);
 }
 
+// Host-aware sticky resolution for the ONE alias sentLineTarget cannot resolve on
+// its own: bare "/g". It routes to GUILD online (the server intercepts it, see
+// server/game.ts) but GENERAL offline (the sim router, src/sim/social/chat.ts), so
+// the host-independent map deliberately returns null for it. The client knows its
+// host, so it resolves "/g" here and keeps the player in the channel they just spoke
+// in (the reported bug: talking in guild via "/g" then reverting to General). Every
+// other line, including the unambiguous "/gu"/"/guild", falls through to
+// sentLineTarget unchanged.
+export function sentLineTargetForHost(
+  line: string,
+  opts: { online: boolean },
+): ChatInputTintTarget | null {
+  if (/^\/g\s/i.test(line.trim())) return opts.online ? 'guild' : 'general';
+  return sentLineTarget(line);
+}
+
 // Persistence: the ordered list of channel tabs the player has opened. The
 // built-in `all` / `combat` views are implicit and not stored. Parsing is
 // defensive: unknown, duplicate, or malformed entries are dropped so a corrupt
