@@ -20,6 +20,13 @@ const STANDALONE_PROP_URL = {
   crackedGrave: '/models/props/cracked_grave.glb',
   destructibleWall: '/models/props/destructible_wall.glb',
   fallbackCrate: '/models/props/fallback_crate.glb',
+  moduleExit: '/models/props/delve_module_exit.glb',
+  surfaceExit: '/models/props/delve_surface_exit.glb',
+  pressurePlate: '/models/props/delve_pressure_plate.glb',
+  riteShrineBell: '/models/props/delve_rite_shrine_bell.glb',
+  riteShrineCandle: '/models/props/delve_rite_shrine_candle.glb',
+  riteShrineReed: '/models/props/delve_rite_shrine_reed.glb',
+  riteShrineSkull: '/models/props/delve_rite_shrine_skull.glb',
 } as const;
 type StandalonePropKey = keyof typeof STANDALONE_PROP_URL;
 const loadedStandaloneProp = new Map<StandalonePropKey, THREE.Group>();
@@ -53,6 +60,32 @@ function buildStandaloneGlb(key: StandalonePropKey, targetHeight: number): THREE
   const size = new THREE.Vector3();
   new THREE.Box3().setFromObject(inst).getSize(size);
   if (size.y > 1e-3) inst.scale.setScalar(targetHeight / size.y);
+  const seated = new THREE.Box3().setFromObject(inst);
+  inst.position.y -= seated.min.y;
+  const group = new THREE.Group();
+  group.add(inst);
+  return group;
+}
+
+// Same contract as buildStandaloneGlb, but fits to a target world-unit WIDTH
+// (max of x/z) instead of height: for flat floor props (the pressure plate)
+// where the generated model's natural aspect ratio is not tall-and-thin, so
+// matching height alone would leave the footprint too small to read against
+// the collider it marks.
+function buildStandaloneGlbFitWidth(key: StandalonePropKey, targetWidth: number): THREE.Group | null {
+  const src = loadedStandaloneProp.get(key);
+  if (!src) return null;
+  const inst = src.clone(true);
+  inst.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+  const size = new THREE.Vector3();
+  new THREE.Box3().setFromObject(inst).getSize(size);
+  const width = Math.max(size.x, size.z);
+  if (width > 1e-3) inst.scale.setScalar(targetWidth / width);
   const seated = new THREE.Box3().setFromObject(inst);
   inst.position.y -= seated.min.y;
   const group = new THREE.Group();
@@ -187,6 +220,12 @@ function buildLockedDoor(): { group: THREE.Group; height: number } {
 // ---------------------------------------------------------------------------
 // delve_pressure_plate, flush stone floor plate, low profile
 // ---------------------------------------------------------------------------
+const PRESSURE_PLATE_WIDTH = 3.2;
+
+// The base slab+rim prefers the Tripo GLB (fit to the same 3.2-unit footprint
+// the procedural rim covered); the triggered-state glow/rune overlay stays
+// procedural and is layered on top either way, so the "triggered" gameplay
+// cue a player reacts to is never lost to the swap.
 function buildPressurePlate(
   triggered: boolean,
   entityId: number,
@@ -196,22 +235,34 @@ function buildPressurePlate(
   // Deterministic small rotation using entityId.
   const rotY = ((entityId * 17) % 6) * 0.1 - 0.3;
 
-  const slabMat = stoneMat(triggered ? 0x3a4830 : 0x6a6460);
-  const rimMat = stoneMat(triggered ? 0x505c3a : 0x504c48);
+  const glb = buildStandaloneGlbFitWidth('pressurePlate', PRESSURE_PLATE_WIDTH);
+  if (glb) {
+    glb.rotation.y = rotY;
+    if (triggered) {
+      const tint = stoneMat(0x2c3a24);
+      glb.traverse((child) => {
+        if (child instanceof THREE.Mesh) child.material = tint;
+      });
+    }
+    group.add(glb);
+  } else {
+    const slabMat = stoneMat(triggered ? 0x3a4830 : 0x6a6460);
+    const rimMat = stoneMat(triggered ? 0x505c3a : 0x504c48);
 
-  // Main slab, large, nearly flush with floor.
-  const slab = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.12, 2.8), slabMat);
-  slab.position.y = 0.06;
-  slab.rotation.y = rotY;
-  slab.receiveShadow = true;
-  group.add(slab);
+    // Main slab, large, nearly flush with floor.
+    const slab = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.12, 2.8), slabMat);
+    slab.position.y = 0.06;
+    slab.rotation.y = rotY;
+    slab.receiveShadow = true;
+    group.add(slab);
 
-  // Rim border (slightly lower).
-  const rim = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.07, 3.2), rimMat);
-  rim.position.y = 0.035;
-  rim.rotation.y = rotY;
-  rim.receiveShadow = true;
-  group.add(rim);
+    // Rim border (slightly lower).
+    const rim = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.07, 3.2), rimMat);
+    rim.position.y = 0.035;
+    rim.rotation.y = rotY;
+    rim.receiveShadow = true;
+    group.add(rim);
+  }
 
   if (triggered) {
     // Green glow inset when triggered.
@@ -318,7 +369,15 @@ function buildProceduralCrackedGrave(entityId: number): { group: THREE.Group; he
 // ---------------------------------------------------------------------------
 // delve_module_exit, sealed passage / rubble-blocked doorway
 // ---------------------------------------------------------------------------
+const MODULE_EXIT_TARGET_H = 5.5;
+
 function buildModuleExit(): { group: THREE.Group; height: number } {
+  const glb = buildStandaloneGlb('moduleExit', MODULE_EXIT_TARGET_H);
+  if (glb) return { group: glb, height: MODULE_EXIT_TARGET_H };
+  return buildProceduralModuleExit();
+}
+
+function buildProceduralModuleExit(): { group: THREE.Group; height: number } {
   const group = new THREE.Group();
 
   const archStone = stoneMat(0x6a6260);
@@ -556,7 +615,18 @@ function buildProceduralLockedChest(entityId: number): { group: THREE.Group; hei
 // ---------------------------------------------------------------------------
 // delve_surface_exit, ascending stairs / stairwell upward
 // ---------------------------------------------------------------------------
+const SURFACE_EXIT_TARGET_H = 5.0;
+
 function buildSurfaceExit(): { group: THREE.Group; height: number } {
+  const glb = buildStandaloneGlb('surfaceExit', SURFACE_EXIT_TARGET_H);
+  if (glb) {
+    glb.rotation.y = Math.PI;
+    return { group: glb, height: SURFACE_EXIT_TARGET_H };
+  }
+  return buildProceduralSurfaceExit();
+}
+
+function buildProceduralSurfaceExit(): { group: THREE.Group; height: number } {
   const group = new THREE.Group();
   group.rotation.y = Math.PI; // face the player as they enter (steps ascend toward them)
 
@@ -758,11 +828,31 @@ const RITE_SHRINE_ACCENT: Record<RiteShrineKind, number> = {
   skull: 0x9fb8c8,
 };
 
+const RITE_SHRINE_TARGET_H = 2.2;
+const RITE_SHRINE_STANDALONE_KEY: Record<RiteShrineKind, StandalonePropKey> = {
+  bell: 'riteShrineBell',
+  candle: 'riteShrineCandle',
+  reed: 'riteShrineReed',
+  skull: 'riteShrineSkull',
+};
+
 function buildRiteShrine(
   templateId: string,
   entityId: number,
 ): { group: THREE.Group; height: number } {
   const kind = (templateId.replace('delve_rite_shrine_', '') as RiteShrineKind) ?? 'bell';
+  const glb = buildStandaloneGlb(RITE_SHRINE_STANDALONE_KEY[kind] ?? 'riteShrineBell', RITE_SHRINE_TARGET_H);
+  if (glb) {
+    glb.rotation.y = ((entityId * 13) % 6) * 0.12 - 0.36;
+    return { group: glb, height: RITE_SHRINE_TARGET_H };
+  }
+  return buildProceduralRiteShrine(kind, entityId);
+}
+
+function buildProceduralRiteShrine(
+  kind: RiteShrineKind,
+  entityId: number,
+): { group: THREE.Group; height: number } {
   const accent = RITE_SHRINE_ACCENT[kind] ?? RITE_SHRINE_ACCENT.bell;
   const group = new THREE.Group();
   group.rotation.y = ((entityId * 13) % 6) * 0.12 - 0.36;

@@ -10,6 +10,7 @@ import { GFX, surfaceMat } from './gfx';
 const TARGET_HEIGHT = 1.35;
 
 const QUEST_OBJECT_URLS: Record<string, string> = {
+  crypt_ritual_circle: '/models/quest/crypt_ritual_circle.glb',
   supply_crate: '/models/quest/supply_crate.glb',
   lost_caravan_goods: '/models/quest/lost_caravan_goods.glb',
   gravecaller_sigil: '/models/quest/gravecaller_sigil.glb',
@@ -297,11 +298,10 @@ function buildRitualCircleTemplate(): THREE.Group {
 function prepareItem(itemId: string): THREE.Group | null {
   const cached = preparedByItem.get(itemId);
   if (cached) return cached;
-  if (itemId === 'crypt_ritual_circle') return buildRitualCircleTemplate();
   const url = QUEST_OBJECT_URLS[itemId];
   if (!url) return null;
   const gltf = gltfByUrl.get(url);
-  if (!gltf) return null;
+  if (!gltf) return itemId === 'crypt_ritual_circle' ? buildRitualCircleTemplate() : null;
 
   const root = gltf.scene.clone(true);
   root.traverse((o) => {
