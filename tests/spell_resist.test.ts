@@ -98,7 +98,10 @@ describe('spell_resist: cast outcome labeling', () => {
     const { sim, p, meta } = makeSim('warrior', 12);
     expect(sim.setSpec('prot', p.id)).toBe(true);
     const mob = spawnTarget(sim, p, 60, 2);
-    sim.rng.chance = () => true; // meleeMissChance roll -> miss
+    // meleeSwing draws avoidance from ONE rng.next() roll against stacked
+    // bands (miss first); pin the roll to 0 so it always lands in the miss
+    // band regardless of upstream draw-order changes.
+    sim.rng.next = () => 0;
 
     const events: any[] = [];
     sim.ctx.emit = (e: any) => events.push(e);

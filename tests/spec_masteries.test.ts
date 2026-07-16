@@ -124,6 +124,9 @@ describe('spec masteries', () => {
     });
     expect(TALENTS.druid?.specs.find((s) => s.id === 'feral')?.mastery.effect).toEqual({
       global: { meleeDmgPct: 0.15, dotDmgPct: 0.15, threatPct: 0.2 },
+      // The v0.27 Dire Bruin retune rides the mastery now that the old
+      // feral_choice_bear node is retired.
+      stats: { armorPct: 0.15 },
     });
     expect(TALENTS.warlock?.specs.find((s) => s.id === 'destruction')?.mastery.effect).toEqual({
       global: { critDmgSpellPct: 0.5 },
