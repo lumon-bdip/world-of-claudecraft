@@ -72,6 +72,20 @@ describe('every retained active row grant casts through the canonical Sim path',
             school: 'physical',
           } satisfies Aura);
         }
+        if (grant.abilityId === 'voidfeast') {
+          // The devour is gated on having something to eat now
+          // (requiresDispellable): feed the target a beneficial magic aura.
+          sim.ctx.applyAura(target, {
+            id: 'test_devour_food',
+            name: 'Test Blessing',
+            kind: 'buff_ap',
+            remaining: 30,
+            duration: 30,
+            value: 20,
+            sourceId: target.id,
+            school: 'holy',
+          } satisfies Aura);
+        }
         if (grant.abilityId === 'frenzied_regeneration') {
           sim.castAbility('bear_form');
           for (let index = 0; index < 3; index++) sim.tick();
@@ -88,7 +102,7 @@ describe('every retained active row grant casts through the canonical Sim path',
 
         const hardErrors = events.filter(
           (event): event is Extract<SimEvent, { type: 'error' }> =>
-            event.type === 'error' && !/nothing to (dispel|consume)/i.test(event.text),
+            event.type === 'error' && !/nothing to (dispel|consume|devour)/i.test(event.text),
         );
         expect(
           hardErrors,

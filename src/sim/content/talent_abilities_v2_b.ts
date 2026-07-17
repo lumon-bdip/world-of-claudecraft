@@ -30,11 +30,14 @@ export const TALENT_ABILITIES_V2_B = {
     school: 'shadow',
     requiresTarget: true,
     targetType: 'any',
-    // Balance pass: the heal is contingent on actually devouring something
-    // (was a separate unconditional selfHealPctMax rider).
-    effects: [{ type: 'dispel', count: 1, selfHealPctMaxOnDispel: 0.06 }],
+    // Balance pass: the heal is contingent on actually devouring something,
+    // and the CAST is refused outright when the target has nothing to eat
+    // (requiresDispellable, checked at the cast gate before billing).
+    effects: [
+      { type: 'dispel', count: 1, selfHealPctMaxOnDispel: 0.06, requiresDispellable: true },
+    ],
     description:
-      'Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally). A successful devour heals you for 6% of your maximum health.',
+      'Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health. Only usable when there is an effect to devour.',
   },
   howl_of_terror: {
     id: 'howl_of_terror',

@@ -15,7 +15,7 @@
 // `src/sim`-pure: no DOM/Three, no Math.random/Date.now; all randomness is the
 // shared `ctx.rng` stream, drawn in the exact pre-move order.
 
-import { isDebuffAura } from '../aura_classify';
+import { isDebuffAura, isDispellableAura } from '../aura_classify';
 import { ABILITIES, isDelvePos } from '../data';
 import { logCascadeCast, recordCascadeInitial } from '../dev/cascade_playtest';
 import { recalcPlayerStats } from '../entity';
@@ -884,9 +884,7 @@ export function runEffects(
         let dispelled = 0;
         for (let index = target.auras.length - 1; index >= 0 && dispelled < eff.count; index--) {
           const aura = target.auras[index];
-          if (aura.school === 'physical') continue;
-          const harmful = isDebuffAura(aura.kind, aura.value);
-          if (offensive ? harmful : !harmful) continue;
+          if (!isDispellableAura(aura, offensive)) continue;
           // Non-player stat auras are folded directly into the entity on apply;
           // removing one early must reverse that fold just as natural expiry does.
           ctx.applyNonPlayerStatAura(target, aura, -1);

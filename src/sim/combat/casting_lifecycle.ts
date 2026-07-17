@@ -27,6 +27,7 @@
 // DOM/Three/render/ui/game/net, no Math.random/Date.now), enforced by
 // tests/architecture.test.ts.
 
+import { isDispellableAura } from '../aura_classify';
 import { ITEMS, isDelvePos, MOBS } from '../data';
 import { recalcPlayerStats } from '../entity';
 import { isShieldItem } from '../equipment_rules';
@@ -743,6 +744,24 @@ export function castAbility(
     ctx.error(p.id, 'Not enough health.');
     return;
   }
+  // Voidfeast (requiresDispellable): the devour is only castable when the
+  // target actually carries something to eat, refused BEFORE billing mana or
+  // arming the cooldown (the no-Seal precedent). It sits AFTER the whole
+  // target-resolution chain because a targetType 'any' cast never walks the
+  // hostile-branch validation loop above. The eligibility rule is the shared
+  // one the dispel executor uses (aura_classify), so gate and executor agree.
+  if (target) {
+    for (const eff of res.effects) {
+      if (eff.type === 'dispel' && eff.requiresDispellable) {
+        const offensive = ctx.isHostileTo(p, target);
+        if (!target.auras.some((aura) => isDispellableAura(aura, offensive))) {
+          ctx.error(p.id, 'Nothing to devour.');
+          return;
+        }
+      }
+    }
+  }
+
   // Ground-targeted abilities aim at a world point instead of an entity. The
   // client proposes the point; the server clamps it to the ability's range from
   // the caster (authoritative) and the cast's area effects center on it.

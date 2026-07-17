@@ -44,6 +44,19 @@ export function isDebuffAura(kind: AuraKind, value: number): boolean {
   return DEBUFF_AURA_KINDS.has(kind) || (kind.startsWith('buff_') && value < 0);
 }
 
+// The dispel eligibility rule, shared by the dispel executor and the
+// requiresDispellable cast gate so the two can never drift: magic-school only,
+// and the cast's direction picks the polarity (an OFFENSIVE dispel strips a
+// benefit off an enemy; a friendly one strips a harmful effect off an ally).
+export function isDispellableAura(
+  aura: { kind: AuraKind; value: number; school: string },
+  offensive: boolean,
+): boolean {
+  if (aura.school === 'physical') return false;
+  const harmful = isDebuffAura(aura.kind, aura.value);
+  return offensive ? !harmful : harmful;
+}
+
 const PARTY_FRAME_HELPFUL_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
   'temporal_echo',
   'hot',

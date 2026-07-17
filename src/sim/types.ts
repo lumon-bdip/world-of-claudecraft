@@ -1700,7 +1700,16 @@ export type AbilityEffect =
   // stripped enemy benefit to the caster (Spellsteal). `selfHealPctMaxOnDispel`
   // heals the caster this fraction of max health ONLY when something was
   // actually devoured (Voidfeast: no free heal off an empty target).
-  | { type: 'dispel'; count: number; steal?: boolean; selfHealPctMaxOnDispel?: number }
+  // `requiresDispellable` refuses the CAST at the gate (before billing mana or
+  // cooldown) when the target carries nothing dispellable in the cast's
+  // direction; abilities without it keep the classic fire-anyway behavior.
+  | {
+      type: 'dispel';
+      count: number;
+      steal?: boolean;
+      selfHealPctMaxOnDispel?: number;
+      requiresDispellable?: boolean;
+    }
   | { type: 'silence'; duration: number }
   // `maxTargets` (Intimidating Shout) caps how many hostiles within radius are
   // feared; absent = fear every hostile in radius (the warlock-style AoE fear).
