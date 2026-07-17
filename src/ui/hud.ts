@@ -1,4 +1,5 @@
 import { audio } from '../game/audio';
+import { corpseLootAvailability } from '../game/corpse_loot_availability';
 import type { GamepadKind } from '../game/gamepad_map';
 import { InstanceMusicController } from '../game/instance_music';
 import { type Keybinds, keyCapLabel } from '../game/keybinds';
@@ -412,6 +413,9 @@ import { ValeCupWindow, vcupNationName } from './vale_cup_window';
 import { nextVoicedYell, type VoicedYellState, voicedYellGain } from './voice_events';
 import {
   onWalletUiChange,
+  verifiedWocBalance,
+  walletConnectionView,
+  walletDisplayAvailable,
   walletUiEnabled,
   wocBalance,
   wocBalanceVerified,
@@ -884,6 +888,10 @@ export class Hud {
   // that helper lives behind the game-layer seam). Null until wired; the
   // attack handler then falls back to the fixed attack control.
   onMobileAttackNearest: (() => void) | null = null;
+  // The healer button lives in the non-blocking ghost overlay, but successful
+  // resurrection must still flow through main.ts so authoritative outcomes can
+  // stop autorun without making Hud own Input or MobileControls.
+  onResurrectAtSpiritHealer: (() => void) | null = null;
   private readonly actionBarController: ActionBarController;
   private get hotbarActions(): HotbarAction[] {
     return this.actionBarController.actions;
@@ -1423,6 +1431,7 @@ export class Hud {
       element: $('#loot-window'),
       document,
       world: () => this.sim,
+      corpseAvailability: (mob) => corpseLootAvailability(mob, this.sim.playerId),
       closeTransient: () => this.closeOtherWindows('#loot-window'),
       hideTooltip: () => this.hideTooltip(),
       entityName: entityDisplayName,
@@ -1545,6 +1554,7 @@ export class Hud {
     onWalletUiChange(() => {
       if ($('#bags').style.display !== 'none') this.renderBags();
       this.playerCard.refresh();
+      this.claudiumWindow.onWalletChanged();
     });
     $('#pf-name').textContent = sim.player.name;
     this.drawPlayerFramePortrait();
@@ -1595,7 +1605,7 @@ export class Hud {
       this.sim.releaseSpirit();
     });
     bindTouchTap(this.resurrectCorpseBtnEl, () => this.sim.resurrectAtCorpse());
-    bindTouchTap(this.resurrectHealerBtnEl, () => this.sim.resurrectAtSpiritHealer());
+    bindTouchTap(this.resurrectHealerBtnEl, () => this.onResurrectAtSpiritHealer?.());
     document.addEventListener('pointerdown', (ev) => {
       const target = ev.target as Node | null;
       if (!target) return;
@@ -3314,6 +3324,7 @@ export class Hud {
     wocBalanceHtml: () => this.wocBalanceHtml(),
     claudiumLauncherHtml: () => this.claudiumLauncherHtml(),
     openClaudium: () => this.toggleClaudium(),
+    openWallet: () => window.dispatchEvent(new CustomEvent('woc:wallet-verify')),
     hideTooltip: () => this.hideTooltip(),
     consumePeek: () => this.peekGuard.consume(),
     cancelPetFeed: () => this.cancelPetFeed(),
@@ -3719,6 +3730,10 @@ export class Hud {
       return snapshot;
     },
     buy: (rail, sku) => this.claudiumHooks?.buy(rail, sku) ?? Promise.resolve(),
+    onWalletConnect: () => {
+      window.dispatchEvent(new CustomEvent('woc:wallet-verify'));
+    },
+    walletState: () => walletConnectionView(),
     ...this.windowFocus('#claudium-window'),
     onVisibilityChange: () => this.syncAnyWindowOpenState(),
   });
@@ -3749,6 +3764,10 @@ export class Hud {
     abilityIdByBarSlot: () =>
       this.hotbarActions.map((a) => (a && a.type === 'ability' ? a.id : null)),
     hasFreeSlot: () => this.actionBarController.hasFreeSlot(),
+    attackOnBar: () => this.attackSlotIsAttack(),
+    // Routes through the Interface showAttackButton setting, the same state the
+    // options window and the slot-0 right-click drive, so all three stay one.
+    setAttackOnBar: (on) => this.optionsHooks?.settings.set('showAttackButton', on),
     addToBar: (id) => this.addAbilityToHotbar(id),
     removeFromBar: (id) => this.removeAbilityFromHotbar(id),
     hasFormBars: () => this.classHasFormBars(),
@@ -3839,8 +3858,17 @@ export class Hud {
   // account-linked wallet and may drive public holder claims elsewhere.
   private wocBalanceHtml(): string {
     if (!walletUiEnabled()) return '';
+    const state = walletConnectionView();
     const bal = wocBalance();
-    if (bal === null) return '';
+    if (bal === null) {
+      const label =
+        state.kind === 'linked_disconnected'
+          ? t('wallet.bagReconnect')
+          : state.kind === 'connected_unlinked' || state.kind === 'mismatched'
+            ? t('wallet.bagLink')
+            : t('wallet.bagConnect');
+      return `<button type="button" class="woc-balance woc-wallet-action" data-wallet-action aria-label="${esc(label)}"><span class="woc-coin" aria-hidden="true"></span>${esc(label)}</button>`;
+    }
     const amount = formatNumber(bal, { maximumFractionDigits: 2 });
     const balance = t('wallet.balanceAmount', { amount });
     const verified = wocBalanceVerified();
@@ -3848,7 +3876,8 @@ export class Hud {
     const aria = verified
       ? t('wallet.balanceAria', { balance })
       : t('wallet.balancePreviewAria', { balance });
-    return `<span class="woc-balance ${verified ? 'is-verified' : 'is-preview'}" title="${esc(title)}" aria-label="${esc(aria)}"><span class="woc-coin" aria-hidden="true"></span>${esc(balance)}</span>`;
+    const tag = verified ? 'span' : 'button type="button" data-wallet-action';
+    return `<${tag} class="woc-balance ${verified ? 'is-verified' : 'is-preview'}" title="${esc(title)}" aria-label="${esc(aria)}"><span class="woc-coin" aria-hidden="true"></span>${esc(balance)}</${verified ? 'span' : 'button'}>`;
   }
 
   private claudiumLauncherHtml(): string {
@@ -7999,6 +8028,10 @@ export class Hud {
         }
         case 'honor': {
           const amount = formatNumber(ev.amount, { maximumFractionDigits: 0 });
+          const honorMessage = t('hudChrome.warfare.honorGain', {
+            amount,
+            reason: t(HONOR_REASON_KEYS[ev.reason]),
+          });
           const honorShape = fctSpawnShape({ type: 'honor' });
           if (honorShape) {
             this.fctPainter.spawn(
@@ -8010,13 +8043,16 @@ export class Hud {
               now,
             );
           }
-          this.combatLog(
-            t('hudChrome.warfare.honorGain', {
-              amount,
-              reason: t(HONOR_REASON_KEYS[ev.reason]),
-            }),
-            '#ffd100',
-          );
+          this.log(honorMessage, '#ffd100');
+          // Mirror to the combat pane as a SILENT visual line (appendLog, not
+          // combatLog): the log() line above already announces via #chat-live, so
+          // routing it through the combat announcer too would make a screen reader hear
+          // every Honor gain twice. This matches the xp-float precedent and the announce
+          // contract (see appendLog / showSelfNote).
+          this.appendLog(this.combatLogEl, honorMessage, '#ffd100');
+          // Keep the character sheet's Honor balance live if the sheet is open (spending
+          // already refreshes via the inventory path; an award landing did not).
+          this.renderCharIfOpen();
           break;
         }
         case 'levelup': {
@@ -8578,18 +8614,18 @@ export class Hud {
           const sign = delta >= 0 ? '+' : '';
           const ratingDelta = `${sign}${formatNumber(delta, { maximumFractionDigits: 0 })}`;
           const ratingAfter = formatNumber(ev.ratingAfter, { maximumFractionDigits: 0 });
+          let arenaResultLine: string;
+          let arenaResultColor: string;
           if (ev.draw) {
             this.showBanner(
               t('hud.system.arenaDrawBanner', { name: ev.oppName, delta: ratingDelta }),
             );
-            this.combatLog(
-              t('hud.system.arenaDrawLog', {
-                name: ev.oppName,
-                rating: ratingAfter,
-                delta: ratingDelta,
-              }),
-              '#fa6',
-            );
+            arenaResultLine = t('hud.system.arenaDrawLog', {
+              name: ev.oppName,
+              rating: ratingAfter,
+              delta: ratingDelta,
+            });
+            arenaResultColor = '#fa6';
           } else if (ev.won) {
             this.showBanner(
               t('hud.system.arenaVictoryBanner', {
@@ -8598,14 +8634,12 @@ export class Hud {
                 delta: ratingDelta,
               }),
             );
-            this.combatLog(
-              t('hud.system.arenaVictoryLog', {
-                name: ev.oppName,
-                rating: ratingAfter,
-                delta: ratingDelta,
-              }),
-              '#7fdc4f',
-            );
+            arenaResultLine = t('hud.system.arenaVictoryLog', {
+              name: ev.oppName,
+              rating: ratingAfter,
+              delta: ratingDelta,
+            });
+            arenaResultColor = '#7fdc4f';
             audio.duelEnd();
           } else {
             this.showBanner(
@@ -8615,16 +8649,18 @@ export class Hud {
                 delta: ratingDelta,
               }),
             );
-            this.combatLog(
-              t('hud.system.arenaDefeatLog', {
-                name: ev.oppName,
-                rating: ratingAfter,
-                delta: ratingDelta,
-              }),
-              '#ff7a6a',
-            );
+            arenaResultLine = t('hud.system.arenaDefeatLog', {
+              name: ev.oppName,
+              rating: ratingAfter,
+              delta: ratingDelta,
+            });
+            arenaResultColor = '#ff7a6a';
             audio.death();
           }
+          this.log(arenaResultLine, arenaResultColor);
+          // Combat-pane mirror without the announcer (log() above already announces the
+          // Arena result via #chat-live); see the Honor case and the announce contract.
+          this.appendLog(this.combatLogEl, arenaResultLine, arenaResultColor);
           break;
         }
         // The yumi events are personal per participant; offline the sim hands
