@@ -54,6 +54,7 @@ export interface QuestDialogControllerDeps {
   openMarket(): void;
   openDelveBoard(npcId: number): void;
   openValeCup(): void;
+  openCardDuel(): void;
   voice: {
     play(key: string): void;
     isPlaying(): boolean;
@@ -232,6 +233,7 @@ export class QuestDialogController {
       (delve) => delve.boardNpcId === npc.templateId,
     );
     const hasValeCup = npc.templateId === 'groundskeeper_bram';
+    const hasCardMaster = !!definition?.cardMaster;
     if (
       closeIfEmpty &&
       gossipMenuIsEmpty({
@@ -242,6 +244,7 @@ export class QuestDialogController {
         hasHeroicVendor,
         hasDelveBoard,
         hasVcup: hasValeCup,
+        hasCardMaster,
       })
     ) {
       this.close();
@@ -288,6 +291,9 @@ export class QuestDialogController {
     if (hasValeCup) {
       html += `<button type="button" class="qd-list-item" data-vcup="1" aria-label="${esc(t('hudChrome.vcup.gossipOpenAria'))}"><span class="gold">${svgIcon('ball')}</span> ${esc(t('hudChrome.vcup.gossipOpen'))}</button>`;
     }
+    if (hasCardMaster) {
+      html += `<button type="button" class="qd-list-item" data-card-duel="1" aria-label="${esc(t('cardDuel.title'))}"><span class="gold">&#9824;</span> ${esc(t('cardDuel.title'))}</button>`;
+    }
     this.deps.element.innerHTML = html;
     this.deps.element.querySelectorAll<HTMLElement>('[data-quest]').forEach((item) => {
       item.addEventListener('click', () => this.renderQuestDetail(npc, item.dataset.quest ?? ''));
@@ -305,6 +311,7 @@ export class QuestDialogController {
     this.bindRoute('[data-market]', this.deps.openMarket);
     this.bindRoute('[data-delve-board]', () => this.deps.openDelveBoard(npc.id));
     this.bindRoute('[data-vcup]', this.deps.openValeCup);
+    this.bindRoute('[data-card-duel]', this.deps.openCardDuel);
     this.bindClose();
     this.showAndFocus();
   }

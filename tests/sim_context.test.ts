@@ -262,6 +262,8 @@ function makeFakeHost() {
     dungeonResetLocks: new Map(),
     arenaMatches: new Map(),
     duels: new Map(),
+    cardDuelQueue: [],
+    cardDuels: new Map(),
     cfg: { seed: 1 } as unknown as SimContextHost['cfg'],
     trades: new Map(),
     arenaQueue1v1: [],

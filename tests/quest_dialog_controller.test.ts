@@ -80,6 +80,7 @@ function harness(entity = npc(10, ordinaryNpcId()), questState = 'available') {
   const openMarket = vi.fn();
   const openDelveBoard = vi.fn();
   const openValeCup = vi.fn();
+  const openCardDuel = vi.fn();
   const controller = new QuestDialogController({
     element,
     document,
@@ -111,6 +112,7 @@ function harness(entity = npc(10, ordinaryNpcId()), questState = 'available') {
     openMarket,
     openDelveBoard,
     openValeCup,
+    openCardDuel,
     voice,
   });
   return {
@@ -135,6 +137,7 @@ function harness(entity = npc(10, ordinaryNpcId()), questState = 'available') {
     openMarket,
     openDelveBoard,
     openValeCup,
+    openCardDuel,
   };
 }
 
@@ -291,6 +294,11 @@ describe('QuestDialogController', () => {
     valeCup.controller.open(44);
     valeCup.element.querySelector<HTMLButtonElement>('[data-vcup]')?.click();
     expect(valeCup.openValeCup).toHaveBeenCalledTimes(1);
+
+    const cardMaster = harness(npc(45, 'card_master'));
+    cardMaster.controller.open(45);
+    cardMaster.element.querySelector<HTMLButtonElement>('[data-card-duel]')?.click();
+    expect(cardMaster.openCardDuel).toHaveBeenCalledTimes(1);
   });
 
   it('closes stale gossip when the authoritative NPC disappears', () => {
