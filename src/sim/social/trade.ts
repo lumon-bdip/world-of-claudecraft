@@ -120,6 +120,21 @@ export function tradeSetOffer(
   session.acceptedB = false;
 }
 
+// Moves one side's offer, preserving each slot's ItemInstancePayload (enchants,
+// signed materials, rolled quality, boundTo) instead of re-granting plain copies.
+// removePreferFungible already reports exactly which consumed slots carried an
+// instance; this only had to route those payloads back in through addItemInstance
+// rather than discarding them, the same way sellItem/discardItem never needed to
+// because a sold/discarded item's payload does not need to reappear anywhere.
+function transferOffer(ctx: SimContext, items: InvSlot[], fromPid: number, toPid: number): void {
+  for (const s of items) {
+    const instances = removePreferFungible(ctx, s.itemId, s.count, fromPid);
+    const plainCount = s.count - instances.length;
+    if (plainCount > 0) ctx.addItem(s.itemId, plainCount, toPid);
+    for (const instance of instances) ctx.addItemInstance(s.itemId, instance, toPid);
+  }
+}
+
 export function tradeConfirm(ctx: SimContext, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;
@@ -166,14 +181,8 @@ export function tradeConfirm(ctx: SimContext, pid?: number): void {
   // swap
   metaA.copper = metaA.copper - session.offerA.copper + session.offerB.copper;
   metaB.copper = metaB.copper - session.offerB.copper + session.offerA.copper;
-  for (const s of session.offerA.items) {
-    removePreferFungible(ctx, s.itemId, s.count, session.a);
-    ctx.addItem(s.itemId, s.count, session.b);
-  }
-  for (const s of session.offerB.items) {
-    removePreferFungible(ctx, s.itemId, s.count, session.b);
-    ctx.addItem(s.itemId, s.count, session.a);
-  }
+  transferOffer(ctx, session.offerA.items, session.a, session.b);
+  transferOffer(ctx, session.offerB.items, session.b, session.a);
   for (const tPid of [session.a, session.b]) {
     ctx.emit({ type: 'log', text: 'Trade complete.', color: '#8df', pid: tPid });
     ctx.emit({ type: 'tradeDone', pid: tPid });

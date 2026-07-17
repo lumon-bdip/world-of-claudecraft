@@ -145,6 +145,91 @@ describe('trade module (direct, no Sim)', () => {
     );
   });
 
+  it('preserves an instanced item payload (enchant/signature/rolled quality) across a swap', () => {
+    // A dedicated fake ctx, not the shared makeTradeCtx bag store: this one models
+    // one instanced copy explicitly, mirroring how removePreferFungible/addItemInstance
+    // behave on the real Sim (src/sim/items.ts), so the trade payload-preservation fix
+    // (src/sim/social/trade.ts transferOffer) is exercised end to end.
+    const players = new Map<number, any>();
+    const entities = new Map<number, any>();
+    const trades = new Map<number, any>();
+    const tradeInvites = new Map<number, { fromPid: number; expires: number }>();
+    const partyInvites = new Map<number, { fromPid: number; expires: number }>();
+    const duelInvites = new Map<number, { fromPid: number; expires: number }>();
+    const events: any[] = [];
+    const instance = { signedBy: 'Ayla', rolled: { quality: 'epic' } };
+    // pid 1 holds exactly one instanced copy of 'wolf_fang' (no plain copies).
+    players.set(1, {
+      entityId: 1,
+      name: 'Ayla',
+      copper: 0,
+      inventory: [{ itemId: 'wolf_fang', count: 1, instance }],
+      bags: [null, null, null, null],
+    });
+    players.set(2, {
+      entityId: 2,
+      name: 'Borin',
+      copper: 0,
+      inventory: [],
+      bags: [null, null, null, null],
+    });
+    entities.set(1, { id: 1, pos: { x: 0, y: 0, z: 0 }, dead: false });
+    entities.set(2, { id: 2, pos: { x: 1, y: 0, z: 0 }, dead: false });
+    const ctx = {
+      time: 0,
+      players,
+      entities,
+      trades,
+      tradeInvites,
+      partyInvites,
+      duelInvites,
+      resolve: (pid?: number) => {
+        const meta = players.get(pid!);
+        const e = entities.get(pid!);
+        return meta && e ? { meta, e } : null;
+      },
+      error: (pid: number, text: string) => events.push({ type: 'error', pid, text }),
+      bumpDeedStat: () => {},
+      emit: (ev: any) => events.push(ev),
+      hasPendingSocialInvite: (tp: number) =>
+        partyInvites.has(tp) || tradeInvites.has(tp) || duelInvites.has(tp),
+      countItem: (itemId: string, pid?: number) =>
+        players.get(pid!).inventory.filter((s: any) => s.itemId === itemId).length,
+      countFungibleItem: (itemId: string, pid?: number) =>
+        players.get(pid!).inventory.filter((s: any) => s.itemId === itemId && !s.instance).length,
+      removeFungibleItem: () => {},
+      addItem: (itemId: string, count: number, pid?: number) => {
+        const inv = players.get(pid!).inventory;
+        for (let i = 0; i < count; i++) inv.push({ itemId, count: 1 });
+      },
+      addItemInstance: (itemId: string, inst: any, pid?: number) => {
+        players.get(pid!).inventory.push({ itemId, count: 1, instance: inst });
+      },
+      removeItem: (itemId: string, count: number, pid?: number) => {
+        const inv = players.get(pid!).inventory;
+        const removed: any[] = [];
+        for (let i = inv.length - 1; i >= 0 && removed.length < count; i--) {
+          if (inv[i].itemId !== itemId) continue;
+          removed.push(inv[i].instance);
+          inv.splice(i, 1);
+        }
+        return removed;
+      },
+    } as unknown as SimContext;
+
+    tradeMod.tradeRequest(ctx, 2, 1);
+    tradeMod.tradeAccept(ctx, 2);
+    tradeMod.tradeSetOffer(ctx, [{ itemId: 'wolf_fang', count: 1 }], 0, 1);
+    tradeMod.tradeConfirm(ctx, 1);
+    tradeMod.tradeConfirm(ctx, 2);
+
+    expect(players.get(1).inventory).toHaveLength(0);
+    expect(players.get(2).inventory).toHaveLength(1);
+    // The bug this pins: a naive removeItem+addItem swap re-grants a PLAIN copy
+    // and silently drops `instance`, destroying the enchant/signature/quality.
+    expect(players.get(2).inventory[0].instance).toEqual(instance);
+  });
+
   it('updateTradesAndInvites expires stale invites and cancels drifted trades', () => {
     const h = makeTradeCtx();
     h.addPlayer(1, 'Ayla', 0, 0);
