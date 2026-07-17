@@ -349,6 +349,116 @@ export const TARGETS = [
       return {};
     },
   },
+  {
+    key: 'renown-board',
+    label: 'High-score window: the Renown (deeds) board tab',
+    when: [
+      'src/ui/leaderboard_window.ts',
+      'src/ui/deeds_leaderboard_view.ts',
+      'src/world_api/deeds.ts',
+      'server/deeds_board.ts',
+    ],
+    variants: [
+      { key: 'desktop', charClass: 'warrior', charName: 'Chronicler' },
+      { key: 'mobile', charClass: 'warrior', charName: 'Chronicler', mobile: true },
+    ],
+    // The offline Sim resolves an EMPTY Renown board (a sandbox has no account
+    // population), so stub the IWorld read with a representative ranked page
+    // before opening: the real pure core + painter render it exactly as the
+    // live board would, self line and me-row highlight included.
+    async capture(page) {
+      // Dismiss the overlays that can outlive entry (camera-mode prompt,
+      // tutorial, the headless-swiftshader GPU notice), the same pre-shot
+      // sweep the tank target does. No Escape: that opens the game menu
+      // behind the window.
+      await page.evaluate(() => {
+        document.querySelector('.camera-prompt-confirm')?.click();
+        document.querySelector('.tut-skip')?.click();
+        document.querySelector('.gpu-notice-dismiss')?.click();
+      });
+      await wait(300);
+      await page.evaluate(() => {
+        const game = window.__game;
+        if (!game) return;
+        const fakePage = {
+          leaders: [
+            // deedCount rides the wire for stale clients (issue #2044); the
+            // pre-change painter renders it, the current one never reads it.
+            {
+              rank: 1,
+              name: 'Aldwin',
+              realm: 'Claudemoon',
+              cls: 'warrior',
+              level: 20,
+              renown: 1620,
+              deedCount: 129,
+              title: 'prog_veteran',
+            },
+            {
+              rank: 2,
+              name: 'Berrin',
+              realm: 'Duskhold',
+              cls: 'mage',
+              level: 20,
+              renown: 1490,
+              deedCount: 117,
+              title: null,
+            },
+            {
+              rank: 3,
+              name: 'Cifern',
+              realm: 'Claudemoon',
+              cls: 'priest',
+              level: 19,
+              renown: 1390,
+              deedCount: 112,
+              title: null,
+            },
+            {
+              rank: 4,
+              name: 'Doran',
+              realm: 'Claudemoon',
+              cls: 'rogue',
+              level: 20,
+              renown: 1350,
+              deedCount: 108,
+              title: 'prog_veteran',
+            },
+            {
+              rank: 5,
+              name: 'Elvane',
+              realm: 'Duskhold',
+              cls: 'druid',
+              level: 18,
+              renown: 1245,
+              deedCount: 97,
+              title: null,
+            },
+          ],
+          page: 0,
+          pageCount: 1,
+          total: 5,
+          pageSize: 50,
+          self: { rank: 1, topPercent: 1, renown: 1620 },
+        };
+        game.world.deedsLeaderboard = async () => fakePage;
+        game.hud.toggleLeaderboard();
+      });
+      let open = await pollForSize(page, '#leaderboard-window', 10, 300);
+      if (!open) throw new Error('leaderboard window did not open');
+      await page.evaluate(() => {
+        document.querySelector('button[data-leaderboard-tab="deeds"]')?.click();
+      });
+      open = await pollForSize(
+        page,
+        '#leaderboard-window .lb-row-deeds, #leaderboard-window .lb-self',
+        10,
+        300,
+      );
+      if (!open) throw new Error('Renown board rows did not render');
+      return { clip: '#leaderboard-window' };
+    },
+  },
 ];
 
 // Map a list of changed file paths to the targets they imply (deduped, registry order).
