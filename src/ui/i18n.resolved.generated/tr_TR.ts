@@ -2343,7 +2343,7 @@ export const tr_TR: EnTranslations = {
       "talents": "Yetenekler",
       "arena": "Arena ve PvP",
       "valeCup": "Vadi Kupası",
-      "deeds": "Book of Deeds",
+      "deeds": "Yiğitlikler Kitabı",
       "glossary": "Sözlük",
       "wishIKnew": "Keşke Bilseydim Dediklerim",
       "faq": "SSS",

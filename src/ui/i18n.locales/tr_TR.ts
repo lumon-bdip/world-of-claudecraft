@@ -6927,6 +6927,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.deedsPage.rewardsBody':
     "Ödüllerin hepsi gösteriş içindir ve mesele de zaten budur. Bazı yiğitlikler taşıyabileceğin bir unvan ya da adını kuşatan bir çerçeve verir; kahramanını güçlendiren hiçbir şey vermez. İstediğin unvanı Yiğitlikler Kitabı'ndan seç; o da isim levhanda, sohbette ve lider tablolarında herkesin göreceği biçimde seninle gezsin.",
   'guide.deedsPage.rewardsHeading': 'Unvanlar ve çerçeveler',
+  'guide.nav.deeds': 'Yiğitlikler Kitabı',
   'hudChrome.deeds.broadcastLine': '{name} bir yiğitliğe imza attı: {deed}',
   'hudChrome.deeds.broadcastsLabel': 'Kazanılan yiğitlikleri lonca ve arkadaşlarınla paylaş',
   'hudChrome.deeds.catChronicle': 'Vakayinameler',

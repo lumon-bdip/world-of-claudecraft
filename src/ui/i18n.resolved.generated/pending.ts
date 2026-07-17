@@ -34,9 +34,7 @@ export const pending: Record<string, readonly string[]> = {
     "gpuNotice.bodyWeb",
     "gpuNotice.dismiss",
     "guide.deedsPage.renownBody",
-    "guide.deedsPage.renownHeading",
     "guide.deedsPage.standingsNote",
-    "guide.nav.deeds",
     "hudChrome.deeds.lbScopeNote",
     "hudChrome.deeds.lbSelfAccount",
     "hudChrome.deeds.lbSelfRank"
@@ -46,9 +44,7 @@ export const pending: Record<string, readonly string[]> = {
     "gpuNotice.bodyWeb",
     "gpuNotice.dismiss",
     "guide.deedsPage.renownBody",
-    "guide.deedsPage.renownHeading",
     "guide.deedsPage.standingsNote",
-    "guide.nav.deeds",
     "hudChrome.deeds.lbScopeNote",
     "hudChrome.deeds.lbSelfAccount",
     "hudChrome.deeds.lbSelfRank"
@@ -59,7 +55,6 @@ export const pending: Record<string, readonly string[]> = {
     "gpuNotice.bodyWeb",
     "gpuNotice.dismiss",
     "guide.deedsPage.renownBody",
-    "guide.deedsPage.renownHeading",
     "guide.deedsPage.standingsNote",
     "hudChrome.deeds.lbScopeNote",
     "hudChrome.deeds.lbSelfAccount",
@@ -136,7 +131,6 @@ export const pending: Record<string, readonly string[]> = {
     "gpuNotice.dismiss",
     "guide.deedsPage.renownBody",
     "guide.deedsPage.standingsNote",
-    "guide.nav.deeds",
     "hudChrome.deeds.lbScopeNote",
     "hudChrome.deeds.lbSelfAccount",
     "hudChrome.deeds.lbSelfRank"

@@ -7408,10 +7408,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.deedsPage.howHeading': 'Comment fonctionnent les hauts faits',
   'guide.deedsPage.intro':
     "Le Livre des hauts faits est l'endroit où le monde tient le compte de tout ce que vous avez accompli, de vos premiers pas hors de la vallée de départ aux combats les plus rudes que le royaume puisse offrir. Obtenez des hauts faits au fil du jeu, portez les titres qu'ils confèrent et regardez votre Renommée grimper.",
+  'guide.deedsPage.renownHeading': 'Renommée',
   'guide.deedsPage.rewardBorder': 'Bordure',
   'guide.deedsPage.rewardsBody':
     "Les récompenses sont purement d'apparat, et c'est bien le but. Certains hauts faits confèrent un titre à porter ou une bordure pour encadrer votre nom, jamais rien qui rende votre héros plus fort. Choisissez le titre qui vous plaît dans le Livre des hauts faits: il vous accompagne sur votre plaque de nom, dans le chat et sur les classements, à la vue de tous.",
   'guide.deedsPage.rewardsHeading': 'Titres et bordures',
+  'guide.nav.deeds': 'Livre des hauts faits',
   'hudChrome.deeds.broadcastLine': '{name} a accompli un haut fait: {deed}',
   'hudChrome.deeds.broadcastsLabel':
     'Partager les hauts faits accomplis avec la guilde et les amis',
