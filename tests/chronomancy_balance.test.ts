@@ -208,7 +208,6 @@ describe('Chronomancy Phase 3 balance targets', () => {
       fmt('cryo frostbolt', cryo),
     ].join('\n');
     expect(lines.length).toBeGreaterThan(0);
-    // biome-ignore lint/suspicious/noConsole: intentional harness readout.
     console.log(`\n[chronomancy balance]\n${lines}\n`);
   });
 
@@ -354,7 +353,6 @@ describe('Chronomancy Phase 4 Cascada AoE scaling (owner harness)', () => {
       `enemies=${k.toString().padEnd(2)} marks=${m.marks} groupHeal/AoEcast=${m.healPerCast.toFixed(1)} perEnemy=${(m.healPerCast / k).toFixed(1)}`;
     const lines = [line(1, h1), line(3, h3), line(5, h5), line(10, h10)].join('\n');
     expect(lines.length).toBeGreaterThan(0);
-    // biome-ignore lint/suspicious/noConsole: intentional harness readout.
     console.log(`\n[chronomancy cascade AoE]\n${lines}\n`);
   });
 
