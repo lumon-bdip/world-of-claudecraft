@@ -7944,7 +7944,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.conjured_water4.name': '창조된 샘물',
   'entities.abilities.blazing_barrier.name': '이글거리는 방벽',
   'entities.abilities.blazing_barrier.description':
-    '자신을 불길로 감싸 130의 피해를 흡수합니다. 60초 동안 지속됩니다. (화염)',
+    '자신을 불길로 감싸 {damage}의 피해를 흡수합니다. 60초 동안 지속됩니다. (화염)',
   'entities.abilities.cold_snap.name': '겨울의 부름',
   'entities.abilities.cold_snap.description':
     '깜빡임 걸음, 서리장막 및 상급 투명화의 재사용 대기시간을 즉시 초기화합니다. (마법사 특성)',

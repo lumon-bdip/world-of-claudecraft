@@ -1856,6 +1856,11 @@ export const ABILITIES: Record<string, AbilityDef> = {
     description:
       'Transforms the enemy into a toad for up to $t sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only.',
   },
+  // One meaningful follow-up breaks Icebind, while tiny incidental ticks do not.
+  // The cap prevents high-health targets from gaining a stronger root.
+  // Frost Nova deals its own damage before applying the root, so that packet is excluded.
+  // Keep this data on every rank because resolved ranks replace the full effects array.
+  // Values are cumulative post-mitigation damage.
   frost_nova: {
     id: 'frost_nova',
     name: 'Icebind',
@@ -1867,13 +1872,31 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'frost',
     requiresTarget: false,
-    effects: [{ type: 'aoeRoot', duration: 8, radius: 10, min: 6, max: 7 }],
+    effects: [
+      {
+        type: 'aoeRoot',
+        duration: 8,
+        radius: 10,
+        min: 6,
+        max: 7,
+        breakOnDamage: { maxHpPct: 0.15, min: 20, max: 60 },
+      },
+    ],
     ranks: [
       {
         rank: 2,
         level: 16,
         cost: 50,
-        effects: [{ type: 'aoeRoot', duration: 8, radius: 10, min: 12, max: 14 }],
+        effects: [
+          {
+            type: 'aoeRoot',
+            duration: 8,
+            radius: 10,
+            min: 12,
+            max: 14,
+            breakOnDamage: { maxHpPct: 0.15, min: 20, max: 60 },
+          },
+        ],
       },
     ],
     description: 'Freezes all nearby enemies in place for up to 8 sec, dealing $d Frost damage.',
@@ -2398,13 +2421,19 @@ export const ABILITIES: Record<string, AbilityDef> = {
     name: 'Frostveil',
     class: 'mage',
     learnLevel: 5,
-    cost: 90,
+    cost: 45,
     castTime: 0,
     cooldown: 30,
     range: 0,
     school: 'frost',
     requiresTarget: false,
-    effects: [{ type: 'absorb', amount: 130, duration: 60 }],
+    // The original level-20 shield moved down to the spec pick at level 5.
+    // Rank it through the leveling curve instead of granting its cap value early.
+    effects: [{ type: 'absorb', amount: 50, duration: 60 }],
+    ranks: [
+      { rank: 2, level: 12, cost: 65, effects: [{ type: 'absorb', amount: 90, duration: 60 }] },
+      { rank: 3, level: 18, cost: 90, effects: [{ type: 'absorb', amount: 130, duration: 60 }] },
+    ],
     description: 'Shields you in ice, absorbing $d damage for 60 sec.',
   },
 
@@ -5928,7 +5957,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     class: 'mage',
     learnLevel: 5,
     specs: ['fire'],
-    cost: 90,
+    cost: 45,
     castTime: 0,
     cooldown: 30,
     range: 0,
@@ -5936,8 +5965,12 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     // The fire spec's PERSONAL BARRIER slot (Frost carries Frostveil): the
     // shared row talents hook either id via PERSONAL_BARRIER_IDS.
-    effects: [{ type: 'absorb', amount: 130, duration: 60 }],
-    description: 'Wreathe yourself in flame, absorbing 130 damage for 60 sec. (Fire)',
+    effects: [{ type: 'absorb', amount: 50, duration: 60 }],
+    ranks: [
+      { rank: 2, level: 12, cost: 65, effects: [{ type: 'absorb', amount: 90, duration: 60 }] },
+      { rank: 3, level: 18, cost: 90, effects: [{ type: 'absorb', amount: 130, duration: 60 }] },
+    ],
+    description: 'Wreathe yourself in flame, absorbing $d damage for 60 sec. (Fire)',
   },
   ignition: {
     id: 'ignition',

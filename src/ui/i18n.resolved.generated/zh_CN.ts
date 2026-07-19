@@ -6341,7 +6341,7 @@ export const zh_CN: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "炽热屏障",
-        "description": "以烈焰环绕自身，吸收 130 点伤害，持续 60 秒。（火焰）"
+        "description": "以烈焰环绕自身，吸收 {damage} 点伤害，持续 60 秒。（火焰）"
       },
       "cold_snap": {
         "name": "冬之召还",

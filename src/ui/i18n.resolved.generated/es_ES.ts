@@ -6341,7 +6341,7 @@ export const es_ES: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Barrera ardiente",
-        "description": "Rodéate de fuego para absorber 130 de daño durante 60 s. (Fuego)"
+        "description": "Rodéate de fuego para absorber {damage} de daño durante 60 s. (Fuego)"
       },
       "cold_snap": {
         "name": "Llamada invernal",

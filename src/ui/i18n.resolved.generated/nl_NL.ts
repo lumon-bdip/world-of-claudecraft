@@ -6341,7 +6341,7 @@ export const nl_NL: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Vlammende barrière",
-        "description": "Omhul jezelf met vlammen en absorbeer 130 schade gedurende 60 sec. (Vuur)"
+        "description": "Omhul jezelf met vlammen en absorbeer {damage} schade gedurende 60 sec. (Vuur)"
       },
       "cold_snap": {
         "name": "Roep van de winter",

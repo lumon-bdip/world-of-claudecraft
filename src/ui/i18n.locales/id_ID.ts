@@ -8085,7 +8085,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Terbuka pada level {level}',
   'entities.abilities.blazing_barrier.name': 'Penghalang Membara',
   'entities.abilities.blazing_barrier.description':
-    'Selimuti dirimu dengan api untuk menyerap 130 kerusakan selama 60 dtk. (Api)',
+    'Selimuti dirimu dengan api untuk menyerap {damage} kerusakan selama 60 dtk. (Api)',
   'entities.abilities.cold_snap.name': 'Panggilan Musim Dingin',
   'entities.abilities.cold_snap.description':
     'Mengakhiri waktu pemulihan Langkah Kedip, Selubung Beku, dan Ketaklihatan Agung. (talenta mage)',

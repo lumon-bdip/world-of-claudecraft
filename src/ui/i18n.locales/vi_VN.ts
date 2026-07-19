@@ -8018,7 +8018,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Mở khóa ở cấp {level}',
   'entities.abilities.blazing_barrier.name': 'Lá Chắn Rực Lửa',
   'entities.abilities.blazing_barrier.description':
-    'Bao bọc bản thân trong lửa, hấp thụ 130 sát thương trong 60 giây. (Lửa)',
+    'Bao bọc bản thân trong lửa, hấp thụ {damage} sát thương trong 60 giây. (Lửa)',
   'entities.abilities.cold_snap.name': 'Tiếng Gọi Mùa Đông',
   'entities.abilities.cold_snap.description':
     'Hoàn tất thời gian hồi của Bước Chớp, Màn Sương Giá và Tàng Hình Cao Cấp. (tài năng pháp sư)',

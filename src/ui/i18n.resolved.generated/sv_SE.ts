@@ -6341,7 +6341,7 @@ export const sv_SE: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Flammande barriär",
-        "description": "Svep in dig i lågor och absorbera 130 skada i 60 sek. (Eld)"
+        "description": "Svep in dig i lågor och absorbera {damage} skada i 60 sek. (Eld)"
       },
       "cold_snap": {
         "name": "Vinterns kallelse",

@@ -6341,7 +6341,7 @@ export const vi_VN: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Lá Chắn Rực Lửa",
-        "description": "Bao bọc bản thân trong lửa, hấp thụ 130 sát thương trong 60 giây. (Lửa)"
+        "description": "Bao bọc bản thân trong lửa, hấp thụ {damage} sát thương trong 60 giây. (Lửa)"
       },
       "cold_snap": {
         "name": "Tiếng Gọi Mùa Đông",

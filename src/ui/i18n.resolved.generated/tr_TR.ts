@@ -6341,7 +6341,7 @@ export const tr_TR: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Alevli Bariyer",
-        "description": "Kendini alevlerle sararak 60 sn. boyunca 130 hasarı soğurursun. (Ateş)"
+        "description": "Kendini alevlerle sararak 60 sn. boyunca {damage} hasarı soğurursun. (Ateş)"
       },
       "cold_snap": {
         "name": "Kışın Çağrısı",

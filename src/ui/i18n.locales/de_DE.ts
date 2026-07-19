@@ -3462,7 +3462,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Schleudert einen Frostblitz, verursacht {damage} Frostschaden und verlangsamt die Bewegung um 40%.',
   'entities.abilities.blazing_barrier.name': 'Flammende Barriere',
   'entities.abilities.blazing_barrier.description':
-    'Hüllt Euch in Flammen und absorbiert 60 Sek. lang 130 Schaden. (Feuer)',
+    'Hüllt Euch in Flammen und absorbiert 60 Sek. lang {damage} Schaden. (Feuer)',
   'entities.abilities.cold_snap.name': 'Ruf des Winters',
   'entities.abilities.cold_snap.description':
     'Beendet die Abklingzeit von Flimmerschritt, Frostschleier und Großer Unsichtbarkeit. (Magiertalent)',

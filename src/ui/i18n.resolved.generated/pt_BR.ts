@@ -6341,7 +6341,7 @@ export const pt_BR: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Barreira Flamejante",
-        "description": "Envolve você em chamas, absorvendo 130 de dano por 60 s. (Fogo)"
+        "description": "Envolve você em chamas, absorvendo {damage} de dano por 60 s. (Fogo)"
       },
       "cold_snap": {
         "name": "Chamado do Inverno",

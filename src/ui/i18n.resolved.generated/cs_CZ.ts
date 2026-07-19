@@ -6341,7 +6341,7 @@ export const cs_CZ: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Ohnivá bariéra",
-        "description": "Obklopíš se plameny a pohltíš 130 bodů poškození po dobu 60 s. (Oheň)"
+        "description": "Obklopíš se plameny a pohltíš {damage} bodů poškození po dobu 60 s. (Oheň)"
       },
       "cold_snap": {
         "name": "Volání zimy",

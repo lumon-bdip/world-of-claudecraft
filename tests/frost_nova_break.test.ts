@@ -1,0 +1,106 @@
+import { describe, expect, it } from 'vitest';
+import { MOBS } from '../src/sim/data';
+import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
+import type { Aura, Entity } from '../src/sim/types';
+
+function icebindRig(targetMaxHp: number, level = 7): { sim: Sim; target: Entity } {
+  const sim = new Sim({ seed: 811, playerClass: 'mage', autoEquip: true });
+  sim.setPlayerLevel(level);
+  expect(sim.setSpec('frost')).toBe(true);
+  sim.player.resource = sim.player.maxResource;
+
+  const target = createMob(98_811, MOBS.forest_wolf, level, {
+    x: sim.player.pos.x + 3,
+    y: sim.player.pos.y,
+    z: sim.player.pos.z,
+  });
+  target.hostile = true;
+  target.aiState = 'idle';
+  target.maxHp = target.hp = targetMaxHp;
+  (sim as unknown as { addEntity(entity: Entity): void }).addEntity(target);
+
+  sim.castAbility('frost_nova');
+  return { sim, target };
+}
+
+function icebindRoot(target: Entity): Aura | undefined {
+  return target.auras.find((aura) => aura.id === 'frost_nova_root' && aura.kind === 'root');
+}
+
+function dealDamage(sim: Sim, target: Entity, amount: number): void {
+  (
+    sim as unknown as {
+      ctx: {
+        dealDamage(
+          source: Entity | null,
+          target: Entity,
+          amount: number,
+          crit: boolean,
+          school: string,
+          ability: string | null,
+          kind: string,
+        ): void;
+      };
+    }
+  ).ctx.dealDamage(null, target, amount, false, 'physical', null, 'hit');
+}
+
+describe('Icebind damage break', () => {
+  it('breaks after cumulative damage equal to 15% max health', () => {
+    const { sim, target } = icebindRig(152);
+    const root = icebindRoot(target);
+
+    expect(root?.breaksOnDamage).toBe(true);
+    expect(root?.breakThreshold).toBe(23);
+    expect(target.hp).toBeLessThan(target.maxHp);
+
+    dealDamage(sim, target, 22);
+    expect(icebindRoot(target)?.breakThreshold).toBe(1);
+
+    dealDamage(sim, target, 1);
+    expect(icebindRoot(target)).toBeUndefined();
+  });
+
+  it('clamps the damage budget between 20 and 60', () => {
+    expect(icebindRoot(icebindRig(100).target)?.breakThreshold).toBe(20);
+    expect(icebindRoot(icebindRig(1_000).target)?.breakThreshold).toBe(60);
+  });
+
+  it('retains the same break rule on rank 2', () => {
+    expect(icebindRoot(icebindRig(152, 16).target)?.breakThreshold).toBe(23);
+  });
+
+  it('does not make other roots break on damage', () => {
+    const { sim, target } = icebindRig(152);
+    target.auras = [];
+    (
+      sim as unknown as {
+        ctx: {
+          applyRootAura(
+            source: Entity,
+            target: Entity,
+            name: string,
+            id: string,
+            duration: number,
+            school: 'nature',
+          ): void;
+        };
+      }
+    ).ctx.applyRootAura(
+      sim.player,
+      target,
+      'Gripping Roots',
+      'entangling_roots_root',
+      12,
+      'nature',
+    );
+    const root = target.auras.find((aura) => aura.kind === 'root');
+
+    expect(root).toBeDefined();
+    expect(root?.breaksOnDamage).not.toBe(true);
+
+    dealDamage(sim, target, 60);
+    expect(target.auras).toContain(root);
+  });
+});

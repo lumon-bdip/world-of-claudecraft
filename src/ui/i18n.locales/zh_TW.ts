@@ -7578,7 +7578,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.items.conjured_water4.name': '魔法泉水',
   'entities.abilities.blazing_barrier.name': '烈焰屏障',
   'entities.abilities.blazing_barrier.description':
-    '以烈焰環繞自身，吸收 130 點傷害，持續 60 秒。（火焰）',
+    '以烈焰環繞自身，吸收 {damage} 點傷害，持續 60 秒。（火焰）',
   'entities.abilities.cold_snap.name': '冬之召還',
   'entities.abilities.cold_snap.description':
     '立即結束閃爍步、霜幕與強效隱形術的冷卻時間。（法師天賦）',

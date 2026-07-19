@@ -8038,7 +8038,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Odblokowuje się na poziomie {level}',
   'entities.abilities.blazing_barrier.name': 'Płonąca bariera',
   'entities.abilities.blazing_barrier.description':
-    'Otaczasz się płomieniami, pochłaniając 130 obrażeń przez 60 sek. (Ogień)',
+    'Otaczasz się płomieniami, pochłaniając {damage} obrażeń przez 60 sek. (Ogień)',
   'entities.abilities.cold_snap.name': 'Zew zimy',
   'entities.abilities.cold_snap.description':
     'Kończy czas odnowienia Migotliwego kroku, Mroźnej zasłony i Większej niewidzialności. (talent maga)',

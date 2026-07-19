@@ -715,7 +715,7 @@ const classAbilityNamesEn = {
       [
         'blazing_barrier',
         'Blazing Barrier',
-        'Wreathe yourself in flame, absorbing 130 damage for 60 sec. (Fire)',
+        'Wreathe yourself in flame, absorbing {damage} damage for 60 sec. (Fire)',
       ],
       [
         'cold_snap',

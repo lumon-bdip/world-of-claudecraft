@@ -3843,7 +3843,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Lance un éclair de givre, inflige {damage} points de dégâts de Givre et ralentit le déplacement de 40%.',
   'entities.abilities.blazing_barrier.name': 'Barrière flamboyante',
   'entities.abilities.blazing_barrier.description':
-    'Vous enveloppe de flammes et absorbe 130 points de dégâts pendant 60 s. (Feu)',
+    'Vous enveloppe de flammes et absorbe {damage} points de dégâts pendant 60 s. (Feu)',
   'entities.abilities.cold_snap.name': "Rappel de l'hiver",
   'entities.abilities.cold_snap.description':
     'Met fin au temps de recharge de Pas scintillant, Voile de givre et Invisibilité supérieure. (Talent de mage)',

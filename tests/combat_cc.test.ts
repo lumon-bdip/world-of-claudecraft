@@ -7,6 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   blindMissBonus,
+  damageBreakThreshold,
   isDisarmed,
   isLockedOut,
   isRooted,
@@ -56,6 +57,16 @@ describe('cc: isRooted', () => {
   });
   it('is false with no root/stun-family aura', () => {
     expect(isRooted(withAuras(aura('silence')))).toBe(false);
+  });
+});
+
+describe('cc: damageBreakThreshold', () => {
+  const budget = { maxHpPct: 0.15, min: 20, max: 60 };
+
+  it('rounds the health fraction and clamps both ends', () => {
+    expect(damageBreakThreshold(100, budget)).toBe(20);
+    expect(damageBreakThreshold(152, budget)).toBe(23);
+    expect(damageBreakThreshold(1_000, budget)).toBe(60);
   });
 });
 

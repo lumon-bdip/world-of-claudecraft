@@ -6341,7 +6341,7 @@ export const ja_JP: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "ブレイジングバリア",
-        "description": "自身を炎で包み、130ダメージを吸収します。60秒間持続します。（火）"
+        "description": "自身を炎で包み、{damage}ダメージを吸収します。60秒間持続します。（火）"
       },
       "cold_snap": {
         "name": "冬の呼び戻し",

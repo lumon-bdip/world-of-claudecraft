@@ -6341,7 +6341,7 @@ export const id_ID: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Penghalang Membara",
-        "description": "Selimuti dirimu dengan api untuk menyerap 130 kerusakan selama 60 dtk. (Api)"
+        "description": "Selimuti dirimu dengan api untuk menyerap {damage} kerusakan selama 60 dtk. (Api)"
       },
       "cold_snap": {
         "name": "Panggilan Musim Dingin",

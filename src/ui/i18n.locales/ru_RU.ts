@@ -8104,7 +8104,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.conjured_water4.name': 'Сотворённая родниковая вода',
   'entities.abilities.blazing_barrier.name': 'Пылающая преграда',
   'entities.abilities.blazing_barrier.description':
-    'Окутывает вас пламенем, поглощая 130 ед. урона в течение 60 сек. (ветка «Огонь»)',
+    'Окутывает вас пламенем, поглощая {damage} ед. урона в течение 60 сек. (ветка «Огонь»)',
   'entities.abilities.cold_snap.name': 'Зов зимы',
   'entities.abilities.cold_snap.description':
     'Мгновенно завершает восстановление «Мерцающего шага», «Морозной завесы» и «Великой невидимости». (талант мага)',

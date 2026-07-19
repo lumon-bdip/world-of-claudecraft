@@ -54,7 +54,7 @@ import {
   hasSweepingStrikes,
   sweepStrikeDamage,
 } from './area_echo';
-import { isRootedOrChilled } from './cc';
+import { damageBreakThreshold, isRootedOrChilled } from './cc';
 import {
   ARCANE_SURGE_ID,
   aetherSurgeAddStack,
@@ -2096,6 +2096,7 @@ export function runEffects(
                 `${ability.id}_root`,
                 eff.duration,
                 ability.school,
+                eff.breakOnDamage ? damageBreakThreshold(m.maxHp, eff.breakOnDamage) : undefined,
               );
             }
           }

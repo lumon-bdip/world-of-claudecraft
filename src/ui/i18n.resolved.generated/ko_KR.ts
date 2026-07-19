@@ -6341,7 +6341,7 @@ export const ko_KR: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "이글거리는 방벽",
-        "description": "자신을 불길로 감싸 130의 피해를 흡수합니다. 60초 동안 지속됩니다. (화염)"
+        "description": "자신을 불길로 감싸 {damage}의 피해를 흡수합니다. 60초 동안 지속됩니다. (화염)"
       },
       "cold_snap": {
         "name": "겨울의 부름",

@@ -6341,7 +6341,7 @@ export const pl_PL: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Płonąca bariera",
-        "description": "Otaczasz się płomieniami, pochłaniając 130 obrażeń przez 60 sek. (Ogień)"
+        "description": "Otaczasz się płomieniami, pochłaniając {damage} obrażeń przez 60 sek. (Ogień)"
       },
       "cold_snap": {
         "name": "Zew zimy",

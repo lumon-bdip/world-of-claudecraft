@@ -3438,7 +3438,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'Lança uma seta de gelo, causando {damage} de dano de Gelo e reduzindo a velocidade de movimento em 40%.',
   'entities.abilities.blazing_barrier.name': 'Barreira Flamejante',
   'entities.abilities.blazing_barrier.description':
-    'Envolve você em chamas, absorvendo 130 de dano por 60 s. (Fogo)',
+    'Envolve você em chamas, absorvendo {damage} de dano por 60 s. (Fogo)',
   'entities.abilities.cold_snap.name': 'Chamado do Inverno',
   'entities.abilities.cold_snap.description':
     'Encerra o tempo de recarga de Passo Cintilante, Véu de Gelo e Invisibilidade Maior. (Talento de mago)',

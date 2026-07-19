@@ -6341,7 +6341,7 @@ export const es: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Barrera llameante",
-        "description": "Te envuelve en llamas y absorbe 130 de daño durante 60 s. (Fuego)"
+        "description": "Te envuelve en llamas y absorbe {damage} de daño durante 60 s. (Fuego)"
       },
       "cold_snap": {
         "name": "Llamada del invierno",

@@ -190,6 +190,7 @@ const PCT_FIELDS = new Set([
   'chance',
   // Phase-2 defensive pass: pct-of-max-health proc responses.
   'amountPctMaxHp',
+  'amountPctSourceMaxHp',
   'healPctMaxHp',
   // Thuggery mastery: the Sword Specialization extra-attack chance.
   'extraAttackPct',

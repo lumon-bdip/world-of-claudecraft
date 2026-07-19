@@ -7926,7 +7926,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.hamstring': 'Zmrzačí pohyb nepřítele, aby nemohl uniknout.',
   'entities.abilities.blazing_barrier.name': 'Ohnivá bariéra',
   'entities.abilities.blazing_barrier.description':
-    'Obklopíš se plameny a pohltíš 130 bodů poškození po dobu 60 s. (Oheň)',
+    'Obklopíš se plameny a pohltíš {damage} bodů poškození po dobu 60 s. (Oheň)',
   'entities.abilities.cold_snap.name': 'Volání zimy',
   'entities.abilities.cold_snap.description':
     'Okamžitě dokončí dobu obnovení Mžikového kroku, Mrazivého závoje a Dokonalé neviditelnosti. (mágovský talent)',

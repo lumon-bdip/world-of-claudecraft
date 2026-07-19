@@ -6341,7 +6341,7 @@ export const fr_CA: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Bouclier ardent",
-        "description": "Entoure-toi de feu et absorbe 130 points de dégâts pendant 60 s. (Feu)"
+        "description": "Entoure-toi de feu et absorbe {damage} points de dégâts pendant 60 s. (Feu)"
       },
       "cold_snap": {
         "name": "Rappel hivernal",

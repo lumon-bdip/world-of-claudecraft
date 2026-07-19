@@ -3450,7 +3450,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Lancia un dardo di gelo, infliggendo {damage} danni da Gelo e rallentando il movimento del 40%.',
   'entities.abilities.blazing_barrier.name': 'Barriera ardente',
   'entities.abilities.blazing_barrier.description':
-    'Ti avvolge nelle fiamme, assorbendo 130 danni per 60 s. (Fuoco)',
+    'Ti avvolge nelle fiamme, assorbendo {damage} danni per 60 s. (Fuoco)',
   'entities.abilities.cold_snap.name': "Richiamo dell'inverno",
   'entities.abilities.cold_snap.description':
     'Termina il tempo di recupero di Passo fulmineo, Velo di Gelo e Invisibilità superiore. (Talento del mago)',

@@ -3436,7 +3436,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Lanza una descarga de escarcha que causa {damage} de daño de Escarcha y reduce la velocidad de movimiento un 40%.',
   'entities.abilities.blazing_barrier.name': 'Barrera llameante',
   'entities.abilities.blazing_barrier.description':
-    'Te envuelve en llamas y absorbe 130 de daño durante 60 s. (Fuego)',
+    'Te envuelve en llamas y absorbe {damage} de daño durante 60 s. (Fuego)',
   'entities.abilities.cold_snap.name': 'Llamada del invierno',
   'entities.abilities.cold_snap.description':
     'Finaliza el tiempo de reutilización de Paso centelleante, Velo de Escarcha e Invisibilidad superior. (Talento de mago)',

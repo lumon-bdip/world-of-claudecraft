@@ -7977,7 +7977,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Låses op på niveau {level}',
   'entities.abilities.blazing_barrier.name': 'Flammende barriere',
   'entities.abilities.blazing_barrier.description':
-    'Indhyl dig i flammer og absorber 130 skade i 60 sek. (Ild)',
+    'Indhyl dig i flammer og absorber {damage} skade i 60 sek. (Ild)',
   'entities.abilities.cold_snap.name': 'Vinterens kalden',
   'entities.abilities.cold_snap.description':
     'Afslutter nedkølingen for Flimmertrin, Frostslør og Større usynlighed. (magikertalent)',

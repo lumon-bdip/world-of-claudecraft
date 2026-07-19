@@ -6341,7 +6341,7 @@ export const fr_FR: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Barrière flamboyante",
-        "description": "Vous enveloppe de flammes et absorbe 130 points de dégâts pendant 60 s. (Feu)"
+        "description": "Vous enveloppe de flammes et absorbe {damage} points de dégâts pendant 60 s. (Feu)"
       },
       "cold_snap": {
         "name": "Rappel de l'hiver",

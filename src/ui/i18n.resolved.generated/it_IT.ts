@@ -6341,7 +6341,7 @@ export const it_IT: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Barriera ardente",
-        "description": "Ti avvolge nelle fiamme, assorbendo 130 danni per 60 s. (Fuoco)"
+        "description": "Ti avvolge nelle fiamme, assorbendo {damage} danni per 60 s. (Fuoco)"
       },
       "cold_snap": {
         "name": "Richiamo dell'inverno",

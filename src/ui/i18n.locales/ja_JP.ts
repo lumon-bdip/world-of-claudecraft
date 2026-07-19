@@ -7960,7 +7960,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.conjured_water4.name': '魔法の湧き水',
   'entities.abilities.blazing_barrier.name': 'ブレイジングバリア',
   'entities.abilities.blazing_barrier.description':
-    '自身を炎で包み、130ダメージを吸収します。60秒間持続します。（火）',
+    '自身を炎で包み、{damage}ダメージを吸収します。60秒間持続します。（火）',
   'entities.abilities.cold_snap.name': '冬の呼び戻し',
   'entities.abilities.cold_snap.description':
     'フリッカーステップ、フロストヴェール、グレーターインビジビリティのクールダウンを完了させます。（メイジタレント）',

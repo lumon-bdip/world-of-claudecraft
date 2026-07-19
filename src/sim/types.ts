@@ -483,6 +483,12 @@ export interface Aura {
   temporalHealTicksRemaining?: number;
 }
 
+export interface DamageBreakBudget {
+  maxHpPct: number;
+  min: number;
+  max: number;
+}
+
 export type CrowdControlDrCategory =
   | 'root'
   | 'polymorph'
@@ -1930,6 +1936,7 @@ export type AbilityEffect =
       min: number;
       max: number;
       stun?: boolean;
+      breakOnDamage?: DamageBreakBudget;
       // Optional persistent annular trap. `duration` remains the root duration;
       // the nested duration is how long the ring can catch new enemies.
       ring?: { duration: number; innerRadius: number };

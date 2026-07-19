@@ -6341,7 +6341,7 @@ export const de_DE: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Flammende Barriere",
-        "description": "Hüllt Euch in Flammen und absorbiert 60 Sek. lang 130 Schaden. (Feuer)"
+        "description": "Hüllt Euch in Flammen und absorbiert 60 Sek. lang {damage} Schaden. (Feuer)"
       },
       "cold_snap": {
         "name": "Ruf des Winters",

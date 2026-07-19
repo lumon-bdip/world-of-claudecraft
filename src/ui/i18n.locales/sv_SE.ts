@@ -7991,7 +7991,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Låses upp på nivå {level}',
   'entities.abilities.blazing_barrier.name': 'Flammande barriär',
   'entities.abilities.blazing_barrier.description':
-    'Svep in dig i lågor och absorbera 130 skada i 60 sek. (Eld)',
+    'Svep in dig i lågor och absorbera {damage} skada i 60 sek. (Eld)',
   'entities.abilities.cold_snap.name': 'Vinterns kallelse',
   'entities.abilities.cold_snap.description':
     'Avslutar nedkylningen för Flimmersteg, Frostslöja och Förbättrad osynlighet. (magikertalang)',

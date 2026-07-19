@@ -7998,7 +7998,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': '{level}. seviyede açılır',
   'entities.abilities.blazing_barrier.name': 'Alevli Bariyer',
   'entities.abilities.blazing_barrier.description':
-    'Kendini alevlerle sararak 60 sn. boyunca 130 hasarı soğurursun. (Ateş)',
+    'Kendini alevlerle sararak 60 sn. boyunca {damage} hasarı soğurursun. (Ateş)',
   'entities.abilities.cold_snap.name': 'Kışın Çağrısı',
   'entities.abilities.cold_snap.description':
     'Titrek Adım, Ayaz Örtüsü ve Üstün Görünmezlik yeteneklerinin bekleme süresini bitirir. (büyücü yeteneği)',

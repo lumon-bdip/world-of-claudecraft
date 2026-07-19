@@ -6341,7 +6341,7 @@ export const en: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Blazing Barrier",
-        "description": "Wreathe yourself in flame, absorbing 130 damage for 60 sec. (Fire)"
+        "description": "Wreathe yourself in flame, absorbing {damage} damage for 60 sec. (Fire)"
       },
       "cold_snap": {
         "name": "Winter's Recall",

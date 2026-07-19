@@ -6341,7 +6341,7 @@ export const da_DK: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Flammende barriere",
-        "description": "Indhyl dig i flammer og absorber 130 skade i 60 sek. (Ild)"
+        "description": "Indhyl dig i flammer og absorber {damage} skade i 60 sek. (Ild)"
       },
       "cold_snap": {
         "name": "Vinterens kalden",

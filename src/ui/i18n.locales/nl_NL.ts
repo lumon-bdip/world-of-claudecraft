@@ -8086,7 +8086,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Wordt ontgrendeld op niveau {level}',
   'entities.abilities.blazing_barrier.name': 'Vlammende barrière',
   'entities.abilities.blazing_barrier.description':
-    'Omhul jezelf met vlammen en absorbeer 130 schade gedurende 60 sec. (Vuur)',
+    'Omhul jezelf met vlammen en absorbeer {damage} schade gedurende 60 sec. (Vuur)',
   'entities.abilities.cold_snap.name': 'Roep van de winter',
   'entities.abilities.cold_snap.description':
     'Voltooit de afkoeltijd van Flitsstap, Vorstsluier en Grotere onzichtbaarheid. (magiërstalent)',
