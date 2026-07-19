@@ -18,7 +18,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "es_ES": [
     "entities.items.copper_ore.name",
@@ -29,7 +30,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "fr_FR": [
     "entities.items.copper_ore.name",
@@ -40,7 +42,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "fr_CA": [
     "entities.items.copper_ore.name",
@@ -51,7 +54,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "en_CA": [],
   "it_IT": [
@@ -63,7 +67,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "de_DE": [
     "entities.items.copper_ore.name",
@@ -74,7 +79,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "zh_CN": [],
   "zh_TW": [],
@@ -89,7 +95,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "ru_RU": [],
   "cs_CZ": [
@@ -101,7 +108,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "nl_NL": [
     "entities.items.copper_ore.name",
@@ -112,7 +120,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "pl_PL": [
     "entities.items.copper_ore.name",
@@ -123,7 +132,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "id_ID": [
     "entities.items.copper_ore.name",
@@ -134,7 +144,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "tr_TR": [
     "entities.items.copper_ore.name",
@@ -145,7 +156,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "sv_SE": [
     "entities.items.copper_ore.name",
@@ -156,7 +168,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "vi_VN": [
     "entities.items.copper_ore.name",
@@ -167,7 +180,8 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ],
   "da_DK": [
     "entities.items.copper_ore.name",
@@ -178,6 +192,7 @@ export const pending: Record<string, readonly string[]> = {
     "gatherEvent.moonlitBloom",
     "gatherEvent.pristineVein",
     "hudChrome.gathering.gatherLine",
-    "hudChrome.gathering.gatherLineQty"
+    "hudChrome.gathering.gatherLineQty",
+    "itemUi.market.rarityLegendary"
   ]
 };

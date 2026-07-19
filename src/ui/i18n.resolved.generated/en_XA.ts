@@ -6090,6 +6090,7 @@ export const en_XA: EnTranslations = {
       "rarityUncommon": "[Úñçóɱɱóñ]",
       "rarityRare": "[Ŕáŕé]",
       "rarityEpic": "[Éþíç]",
+      "rarityLegendary": "[Ļéĝéñðáŕý]",
       "merchantStock": "[Ɱéŕçĥáñţ šţóçķ]",
       "stackCount": "[ẋ{count}]",
       "each": "[{money} éáçĥ]",
@@ -7014,7 +7015,7 @@ export const en_XA: EnTranslations = {
       },
       "raging_gale": {
         "name": "[Ţŵíñšţŕíķé]",
-        "description": "[Íñšţáñţļý šţŕíķé ŵíţĥ ýóúŕ ŵéáþóñ ţŵíçé, éáçĥ ĥíţ ðéáļíñĝ 40% ŵéáþóñ ðáɱáĝé þļúš {damage}, áñð ĝéñéŕáţé 8 ŕáĝé. Šţóŕéš úþ ţó 2 çĥáŕĝéš. (Ƒúŕý)]"
+        "description": "[Íñšţáñţļý šţŕíķé ŵíţĥ ýóúŕ ŵéáþóñ ţŵíçé, éáçĥ ĥíţ ðéáļíñĝ 40% ŵéáþóñ ðáɱáĝé þļúš {damage}, áñð ĝéñéŕáţé 4 ŕáĝé. Šţóŕéš úþ ţó 2 çĥáŕĝéš. (Ƒúŕý)]"
       },
       "red_harvest": {
         "name": "[Ŕéð Ĥáŕʋéšţ]",

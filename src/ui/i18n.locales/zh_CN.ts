@@ -80,7 +80,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '一声穿刺的呼喝，使 15 码内的所有敌人减速 50%，持续 8 秒。',
   'entities.abilities.piercing_howl.name': '穿刺怒吼',
   'entities.abilities.raging_gale.description':
-    '立即用武器攻击两次，每次命中造成 40% 武器伤害加 {damage}，并产生 8 点怒气。最多储存 2 次充能。（狂怒）',
+    '立即用武器攻击两次，每次命中造成 40% 武器伤害加 {damage}，并产生 4 点怒气。最多储存 2 次充能。（狂怒）',
   'entities.abilities.raging_gale.name': '双重打击',
   'entities.abilities.raised_guard.description':
     '举盾防身：你受到的物理伤害降低 50%，持续 6 秒。最多储存 2 次充能。（防护）',
@@ -2250,6 +2250,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'itemUi.market.rarityUncommon': '优秀',
   'itemUi.market.rarityRare': '稀有',
   'itemUi.market.rarityEpic': '史诗',
+  'itemUi.market.rarityLegendary': '传奇',
   'itemUi.market.merchantStock': '商人库存',
   'itemUi.market.stackCount': 'x{count}',
   'itemUi.market.each': '每个 {money}',

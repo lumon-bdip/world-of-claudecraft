@@ -6090,6 +6090,7 @@ export const en_CA: EnTranslations = {
       "rarityUncommon": "Uncommon",
       "rarityRare": "Rare",
       "rarityEpic": "Epic",
+      "rarityLegendary": "Legendary",
       "merchantStock": "Merchant stock",
       "stackCount": "x{count}",
       "each": "{money} each",
@@ -7014,7 +7015,7 @@ export const en_CA: EnTranslations = {
       },
       "raging_gale": {
         "name": "Twinstrike",
-        "description": "Instantly strike with your weapon twice, each hit dealing 40% weapon damage plus {damage}, and generate 8 rage. Stores up to 2 charges. (Fury)"
+        "description": "Instantly strike with your weapon twice, each hit dealing 40% weapon damage plus {damage}, and generate 4 rage. Stores up to 2 charges. (Fury)"
       },
       "red_harvest": {
         "name": "Red Harvest",
