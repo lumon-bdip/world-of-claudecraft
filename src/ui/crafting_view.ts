@@ -10,12 +10,11 @@
 //
 // DOM-free and i18n-free so tests/crafting_view.test.ts can drive it directly.
 
-import { archetypeCeilingFor } from '../sim/professions/archetype';
+import { craftSkillGainMultiplier } from '../sim/professions/archetype';
 import {
   type ComboEligibilityReason,
   comboEligibility,
 } from '../sim/professions/combo_eligibility';
-import { tierCapability, tierForSkill, tierProgressMultiplier } from '../sim/professions/wheel';
 import type { InvSlot, ItemDef } from '../sim/types';
 
 export interface RecipeDefLike {
@@ -151,25 +150,19 @@ export function buildCraftingView(
           unmetCrafts: eligibility?.unmetCrafts ?? [],
         }
       : undefined;
-    // Skill-gain difficulty: an exact mirror of the multiplier the sim
-    // computes at the gainCraftSkill call site (crafting.ts, #1129/#1148):
-    // the ARCHETYPE ceiling alone zeroes a recipe tier above it (never
-    // craftCeiling's min-with-raw-capability: a recipe above raw capability
-    // is the ordinary full-progress climb), else the ordinary curve off raw
-    // capability. Computed the same while identity is still syncing (empty
-    // pre-cprof skills, null archetype): presentation-neutral, and never a
-    // craftable gate either way.
-    const ceilingTier = archetypeCeilingFor(
+    // Skill-gain difficulty: the SAME shared craftSkillGainMultiplier the
+    // sim's gainCraftSkill site consumes (archetype.ts), so the label can
+    // never diverge from the authoritative grant. Computed the same while
+    // identity is still syncing (empty pre-cprof skills, null archetype):
+    // presentation-neutral, and never a craftable gate either way.
+    const multiplier = craftSkillGainMultiplier(
+      skills,
       identity.activeArchetype,
       identity.pairedMajor,
       recipe.professionId,
       identity.hobbyCraft,
+      recipe.skillReq,
     );
-    const recipeTier = tierForSkill(recipe.skillReq);
-    const multiplier =
-      recipeTier > ceilingTier
-        ? 0
-        : tierProgressMultiplier(tierCapability(skills, recipe.professionId), recipeTier);
     const difficulty: CraftDifficulty =
       multiplier === 0 ? 'none' : multiplier === 1 ? 'full' : 'reduced';
     const station = recipe.requiresHubStation ? { required: true, inRange: stationInRange } : null;

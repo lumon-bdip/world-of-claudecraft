@@ -1220,6 +1220,9 @@ export class Hud {
   // the first synced observation, which initializes silently (no toasts for
   // history on login/join).
   private prevCraftSkills: Record<string, number> | null = null;
+  // Drains left in the post-craftResult window during which the tier-up diff
+  // runs (0 = disarmed; see the handleEvents tail).
+  private craftTierUpDrains = 0;
   // The stationInRange value the open crafting window was last painted with;
   // the slowHud band repaints the cold window only when the live predicate
   // flips (walking into/out of the hub), since the server re-validates anyway.
@@ -8688,6 +8691,11 @@ export class Hud {
           break;
         }
         case 'craftResult': {
+          // Arm the tier-up state check below: skills only ever change on a
+          // craft, and online the cprof mirror can land a few snapshots after
+          // this event, so the diff stays armed for a bounded drain window
+          // instead of polling every frame.
+          this.craftTierUpDrains = 100;
           if (ev.ok && ev.itemId) {
             const item = ITEMS[ev.itemId];
             const name = item ? itemDisplayName(item) : ev.itemId;
@@ -9710,13 +9718,19 @@ export class Hud {
     if (deedUnlocks.length > 0) this.handleDeedUnlocks(deedUnlocks);
     // Craft tier crossings are STATE-driven, not event-driven: online the
     // cprof mirror can land a snapshot after (or without) this drain's
-    // events, so every drain diffs the live craftSkills against the kept
-    // snapshot. Guarded on the synced flag: the pre-cprof {} mirror must not
-    // register as a baseline, or the first real value would toast the
-    // player's whole history. The first synced observation initializes
-    // silently (null prev contract in computeCraftTierUps).
+    // events, so the diff reads the live craftSkills rather than an event
+    // payload. But skills only ever change on a craft, so the diff only runs
+    // inside a bounded post-craftResult drain window (armed in the arm above,
+    // disarmed the moment a change is observed or the window expires), never
+    // as a per-frame poll. Guarded on the synced flag: the pre-cprof {}
+    // mirror must not register as a baseline, or the first real value would
+    // toast the player's whole history. The first synced observation
+    // initializes silently (null prev contract in computeCraftTierUps).
     let tierUps: CraftTierUp[] = [];
-    if (sim.craftingIdentity.synced) {
+    if (
+      sim.craftingIdentity.synced &&
+      (this.prevCraftSkills === null || this.craftTierUpDrains > 0)
+    ) {
       const next = sim.craftSkills;
       const prev = this.prevCraftSkills;
       if (prev === null) {
@@ -9725,9 +9739,14 @@ export class Hud {
         tierUps = computeCraftTierUps(prev, next);
         // Carry values forward in place (skills only ever climb, keys never
         // leave), avoiding a per-drain snapshot allocation.
+        let changed = false;
         for (const craftId in next) {
-          if (prev[craftId] !== next[craftId]) prev[craftId] = next[craftId];
+          if (prev[craftId] !== next[craftId]) {
+            prev[craftId] = next[craftId];
+            changed = true;
+          }
         }
+        this.craftTierUpDrains = changed ? 0 : this.craftTierUpDrains - 1;
       }
     }
     if (masterworkItemId !== null || tierUps.length > 0)
@@ -9766,7 +9785,9 @@ export class Hud {
         plan.banner.kind === 'masterwork'
           ? masterworkText(plan.banner.itemId)
           : tierUpText(plan.banner);
-      this.showBanner(text);
+      // plan.motion trims the banner fade only; the announcer push below is
+      // the polite #combat-live ARIA region (accessibility, never gated).
+      this.showBanner(text, plan.motion);
       // The banner div carries no live semantics (the handleDeedUnlocks
       // precedent), so the polite #combat-live region carries the copy.
       this.combatAnnouncer.push(text, performance.now());
@@ -10477,8 +10498,12 @@ export class Hud {
     }
   }
 
-  showBanner(text: string): void {
+  showBanner(text: string, motion = true): void {
     this.bannerEl.textContent = text;
+    // Reduced-motion celebrations (craft plan.motion) show and hide the
+    // banner without the fade transition: identical text and duration, no
+    // animation. Motion-trimming only; information always survives.
+    this.bannerEl.classList.toggle('banner-no-motion', !motion);
     this.bannerEl.style.opacity = '1';
     clearTimeout(this.bannerTimer);
     this.bannerTimer = window.setTimeout(() => {

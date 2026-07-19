@@ -847,11 +847,22 @@ function identityFields(e: Entity): Record<string, unknown> {
     // `eq` above: players only, only when at least one worn piece carries a
     // payload, riding the identity record (wireCacheFor diffs the identity
     // JSON, so an equip/unequip of an instanced piece re-emits automatically).
-    const eqi = e.equippedInstances;
-    for (const _ in eqi) {
-      out.eqi = eqi;
-      break;
+    // Data minimization: only the cosmetic inspect fields (signer, enchant,
+    // rolled) leave the server; boundTo and charges are gameplay state no
+    // inspecting client needs and never ride this key.
+    let eqi: Record<string, unknown> | undefined;
+    for (const [slot, inst] of Object.entries(e.equippedInstances)) {
+      if (!inst) continue;
+      const pub: Record<string, unknown> = {};
+      if (inst.signer !== undefined) pub.signer = inst.signer;
+      if (inst.enchant !== undefined) pub.enchant = inst.enchant;
+      if (inst.rolled !== undefined) pub.rolled = inst.rolled;
+      for (const _ in pub) {
+        (eqi ??= {})[slot] = pub;
+        break;
+      }
     }
+    if (eqi) out.eqi = eqi;
   }
   if (e.holderTier) out.ht = e.holderTier; // $WOC holder-tier flair (cosmetic)
   if (e.holderBalance) out.hb = Math.round(e.holderBalance); // exact $WOC, for inspect

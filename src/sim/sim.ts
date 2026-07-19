@@ -286,7 +286,7 @@ import {
   isEnchantedInstance,
 } from './professions/enchanting';
 import * as professionsFocus from './professions/focus';
-import { emitToZonePlayers } from './professions/gather_events';
+import { announceMasterworkZone } from './professions/gather_events';
 import {
   drainGatheringGrants,
   emptyGatheringProficiency,
@@ -6804,26 +6804,10 @@ export class Sim {
       };
       meta.lastMasterwork = proc;
       this.emit({ type: 'masterwork', ...proc, pid: meta.entityId });
-      // Zone-wide celebration copy (Phase 6): one pid-scoped masterworkZone
-      // event per overworld player in the crafter's zone, the crafter
-      // included, via the shared gather-events fanout. Skipped entirely when
-      // the crafter is in instance space (instanced masterworks stay a
-      // personal toast, deliberately). Draws NO rng and runs AFTER the
-      // personal emit, keeping the craft path's pinned single-draw contract
-      // and event order intact.
-      const crafterE = this.entities.get(meta.entityId);
-      if (crafterE && crafterE.pos.x <= DUNGEON_X_THRESHOLD) {
-        const zoneId = zoneAt(crafterE.pos.z).id;
-        emitToZonePlayers(this.ctx, zoneId, (recipientPid) => ({
-          type: 'masterworkZone',
-          pid: recipientPid,
-          crafterPid: meta.entityId,
-          crafterName: meta.name,
-          itemId: proc.itemId,
-          recipeId: proc.recipeId,
-          zoneId,
-        }));
-      }
+      // Zone-wide celebration copy (Phase 6): the professions module owns the
+      // fanout and the instance-space exclusion; draws no rng, runs after the
+      // personal emit.
+      announceMasterworkZone(this.ctx, meta.entityId, meta.name, proc);
     }
   }
 

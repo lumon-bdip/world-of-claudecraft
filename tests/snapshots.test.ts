@@ -2490,6 +2490,32 @@ describe('equipped instance wire (eqi)', () => {
     expect(wireEntity(e).eqi).toBeUndefined();
   });
 
+  it('strips non-cosmetic instance fields from the wire payload (data minimization)', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Yrsa');
+    const e = sim.entities.get(pid)!;
+    sim.addItemInstance(
+      'eastbrook_ritual_vestments',
+      {
+        signer: 'Aldric',
+        rolled: { masterwork: true, stats: { int: 3 } },
+        boundTo: pid,
+        charges: { mend: 2 },
+      },
+      pid,
+    );
+    sim.equipItem('eastbrook_ritual_vestments', pid);
+    const wired = wireEntity(e).eqi as Record<string, Record<string, unknown>>;
+    // Only the cosmetic inspect fields (signer, enchant, rolled) leave the
+    // server; boundTo and charges are gameplay state no inspecting client
+    // needs and must never ride the identity wire.
+    expect(wired.chest.signer).toBe('Aldric');
+    expect(wired.chest.rolled).toEqual({ masterwork: true, stats: { int: 3 } });
+    expect(wired.chest.boundTo).toBeUndefined();
+    expect(wired.chest.charges).toBeUndefined();
+    expect(Object.keys(wired.chest).sort()).toEqual(['rolled', 'signer']);
+  });
+
   it('restores equippedInstances from a full record, deep-cloned; an eqi-less full record resets', () => {
     const client = bareClient(99);
     const base = {
