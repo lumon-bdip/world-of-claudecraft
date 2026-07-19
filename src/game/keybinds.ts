@@ -240,8 +240,8 @@ export const BIND_ACTIONS: BindAction[] = [
     defaults: ['Shift+KeyZ'],
   },
   // Professions parks on the shifted layer of KeyP like Deeds does on Z:
-  // every bare letter default is already taken, and the shifted mnemonic
-  // keeps the Spellbook's plain P untouched. Rebindable like any action.
+  // every bare letter default is already taken, and Shift+P keeps the
+  // Spellbook's plain P untouched. Rebindable like any action.
   {
     id: 'professions',
     label: 'Professions',
