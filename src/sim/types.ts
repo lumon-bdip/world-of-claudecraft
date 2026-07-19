@@ -2264,6 +2264,11 @@ export interface GroundObjectDef {
 // issue is content plus visibility only, no harvest logic (see G3).
 export type GatherNodeType = 'ore' | 'wood' | 'herb';
 
+// Rare gather event flavors (Professions 2.0 Phase 4), one per node family:
+// ore rolls pristine_vein, wood rolls ancient_heartwood, herb rolls
+// moonlit_bloom (professions/gather_events.ts gatherRareEventFlavor).
+export type GatherRareEventFlavor = 'pristine_vein' | 'ancient_heartwood' | 'moonlit_bloom';
+
 export interface GatherNodeDef {
   id: string;
   zoneId: string;
@@ -3500,6 +3505,27 @@ export type SimEvent = { pid?: number } & (
       professionId: GatheringProfessionId;
       itemId: string;
       rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+      // Units actually granted (Professions 2.0 Phase 4): the qtyByRarity
+      // yield, multiplied by GATHER_RARE_EVENT_YIELD_MULT on a rare event.
+      qty: number;
+      // The rare event this harvest rolled (resolveHarvest draw #2), or null.
+      rareEvent: GatherRareEventFlavor | null;
+    }
+  // Rare gather event (Professions 2.0 Phase 4): a harvest struck a pristine
+  // vein / ancient heartwood / moonlit bloom. Soft zone broadcast: one copy is
+  // emitted per player currently in the node's zone, `pid` being the RECIPIENT
+  // (the chat fanout idiom); finderPid/finderName identify the harvester. Ids
+  // plus values only, text-free on purpose: the client renders its own
+  // localized line off `flavor` (the gatherEvent.* keys).
+  | {
+      type: 'gatherRareEvent';
+      pid: number;
+      flavor: GatherRareEventFlavor;
+      finderName: string;
+      finderPid: number;
+      zoneId: string;
+      nodeType: GatherNodeType;
+      itemId: string;
     }
 );
 
