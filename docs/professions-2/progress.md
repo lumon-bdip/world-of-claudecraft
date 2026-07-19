@@ -272,7 +272,12 @@ defines no craft-side maximum and sim craft skill is uncapped;
 `data-icon="target"` is the accepted launcher glyph until designer crest
 art arrives; the `gather_fishing` icon ships ahead of its Phase 11 read,
 and the painter's gathering name map gains the fishing row plus its
-catalog key in Phase 11.
+catalog key in Phase 11. The minimap launcher is the rail's eighteenth
+micro-button, which broke the 1366x768 side-rail height budget; the
+short-viewport compaction gap tightened from 2px to 1px (652px of the
+660px budget) with the `crafting_launcher` guard re-pinned deliberately;
+the next button added must revisit the rail (DESIGN.md phase 3 replaces
+it with the launcher hub).
 
 ### Phase 6: Crafting window upgrades and celebrations
 - [ ] Recipe rows show profession + required skill + skill-gain difficulty tint (#2037)
