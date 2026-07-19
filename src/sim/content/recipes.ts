@@ -366,16 +366,18 @@ export const COMBO_RECIPES: ProfessionRecipeRecord[] = [
 ];
 
 // Phase 10 trained ladder set (Professions 2.0): the weaponcrafting,
-// armorcrafting, tailoring, and leatherworking recipe ladders, three rungs per
-// craft at skillReq 0/25/50, all trainer-taught and station-bound (forge for
-// the weapon/armor crafts, loom for tailoring at weaver_ottilie, tannery for
-// leatherworking at tanner_hesk). Outputs are the new crafted weapon/armor/bag
-// ItemDefs in content/profession_items.ts. Post-Phase-9 content, so every
-// record carries a non-empty `acquisition` list (never grandfathered). The two
-// scaffolding fields are normalized to one cross-craft convention shared by all
-// ladders (skillReq 0 -> 10/10, skillReq 25 -> 16/15, skillReq 50 -> 20/20); the
-// outputs' stats and values were budgeted against real comparables and are
-// authored unchanged in profession_items.ts.
+// armorcrafting, tailoring, leatherworking, cooking, and alchemy recipe
+// ladders, three rungs per craft at skillReq 0/25/50, all trainer-taught and
+// station-bound (forge for the weapon/armor crafts, loom for tailoring at
+// weaver_ottilie, tannery for leatherworking at tanner_hesk, kitchens for
+// cooking at cook_marlow, apothecary for alchemy at alchemist_verane). Outputs
+// are the new crafted weapon/armor/bag/food/potion/elixir ItemDefs in
+// content/profession_items.ts. Post-Phase-9 content, so every record carries a
+// non-empty `acquisition` list (never grandfathered). The two scaffolding
+// fields are normalized to one cross-craft convention shared by all ladders
+// (skillReq 0 -> 10/10, skillReq 25 -> 16/15, skillReq 50 -> 20/20); the outputs'
+// stats and values were budgeted against real comparables and are authored
+// unchanged in profession_items.ts.
 export const LADDER_RECIPES: ProfessionRecipeRecord[] = [
   // --- weaponcrafting ------------------------------------------------------
   {
@@ -962,6 +964,295 @@ export const LADDER_RECIPES: ProfessionRecipeRecord[] = [
     level: 20,
     acquisition: ['trainer'],
     stationType: 'tannery',
+  },
+  // --- cooking -------------------------------------------------------------
+  {
+    id: 'recipe_pan_seared_perch',
+    professionId: 'cooking',
+    resultItemId: 'pan_seared_perch',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'raw_river_perch', count: 2 },
+      { itemId: 'cooking_salt', count: 1 },
+    ],
+    skillReq: 0,
+    itemLevelBudget: 10,
+    level: 10,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_hunters_game_skewer',
+    professionId: 'cooking',
+    resultItemId: 'hunters_game_skewer',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'game_meat', count: 2 },
+      { itemId: 'cooking_salt', count: 1 },
+    ],
+    skillReq: 0,
+    itemLevelBudget: 10,
+    level: 10,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_herbed_marsh_pike',
+    professionId: 'cooking',
+    resultItemId: 'herbed_marsh_pike',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'raw_marsh_pike', count: 2 },
+      { itemId: 'silverleaf_herb', count: 1 },
+      { itemId: 'cooking_salt', count: 1 },
+    ],
+    skillReq: 0,
+    itemLevelBudget: 10,
+    level: 10,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_ashwood_smoked_eel',
+    professionId: 'cooking',
+    resultItemId: 'ashwood_smoked_eel',
+    resultCount: 2,
+    reagents: [
+      { itemId: 'raw_bog_eel', count: 2 },
+      { itemId: 'ashwood_log', count: 1 },
+      { itemId: 'cooking_salt', count: 1 },
+    ],
+    skillReq: 25,
+    itemLevelBudget: 16,
+    level: 15,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_goldleaf_game_stew',
+    professionId: 'cooking',
+    resultItemId: 'goldleaf_game_stew',
+    resultCount: 2,
+    reagents: [
+      { itemId: 'game_meat', count: 3 },
+      { itemId: 'goldleaf_herb', count: 1 },
+      { itemId: 'cooking_salt', count: 1 },
+    ],
+    skillReq: 25,
+    itemLevelBudget: 16,
+    level: 15,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_frostgill_chowder',
+    professionId: 'cooking',
+    resultItemId: 'frostgill_chowder',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'raw_frostgill_trout', count: 2 },
+      { itemId: 'silverleaf_herb', count: 2 },
+      { itemId: 'cooking_salt', count: 2 },
+    ],
+    skillReq: 25,
+    itemLevelBudget: 16,
+    level: 15,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_silvered_carp_supper',
+    professionId: 'cooking',
+    resultItemId: 'silvered_carp_supper',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'raw_stonescale_carp', count: 3 },
+      { itemId: 'raw_mirror_trout', count: 1 },
+      { itemId: 'goldleaf_herb', count: 1 },
+      { itemId: 'cooking_salt', count: 1 },
+    ],
+    skillReq: 50,
+    itemLevelBudget: 20,
+    level: 20,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_anglers_feast_platter',
+    professionId: 'cooking',
+    resultItemId: 'anglers_feast_platter',
+    resultCount: 3,
+    reagents: [
+      { itemId: 'raw_frostgill_trout', count: 2 },
+      { itemId: 'raw_bog_eel', count: 2 },
+      { itemId: 'sunpetal_herb', count: 1 },
+      { itemId: 'cooking_salt', count: 2 },
+    ],
+    skillReq: 50,
+    itemLevelBudget: 20,
+    level: 20,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  {
+    id: 'recipe_marlows_grand_roast',
+    professionId: 'cooking',
+    resultItemId: 'marlows_grand_roast',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'prime_cut', count: 1 },
+      { itemId: 'game_meat', count: 4 },
+      { itemId: 'sunpetal_herb', count: 1 },
+      { itemId: 'cooking_salt', count: 2 },
+    ],
+    skillReq: 50,
+    itemLevelBudget: 20,
+    level: 20,
+    acquisition: ['trainer'],
+    stationType: 'kitchens',
+  },
+  // --- alchemy -------------------------------------------------------------
+  {
+    id: 'recipe_silverleaf_healing_draught',
+    professionId: 'alchemy',
+    resultItemId: 'silverleaf_healing_draught',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'silverleaf_herb', count: 4 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 0,
+    itemLevelBudget: 10,
+    level: 10,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_silverleaf_mana_draught',
+    professionId: 'alchemy',
+    resultItemId: 'silverleaf_mana_draught',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'silverleaf_herb', count: 3 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 0,
+    itemLevelBudget: 10,
+    level: 10,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_elixir_of_thick_hide',
+    professionId: 'alchemy',
+    resultItemId: 'elixir_of_thick_hide',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'venom_gland', count: 2 },
+      { itemId: 'silverleaf_herb', count: 2 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 0,
+    itemLevelBudget: 10,
+    level: 10,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_goldleaf_healing_draught',
+    professionId: 'alchemy',
+    resultItemId: 'goldleaf_healing_draught',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'goldleaf_herb', count: 2 },
+      { itemId: 'silverleaf_herb', count: 2 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 25,
+    itemLevelBudget: 16,
+    level: 15,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_goldleaf_mana_draught',
+    professionId: 'alchemy',
+    resultItemId: 'goldleaf_mana_draught',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'goldleaf_herb', count: 2 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 25,
+    itemLevelBudget: 16,
+    level: 15,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_venomfire_elixir',
+    professionId: 'alchemy',
+    resultItemId: 'venomfire_elixir',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'venom_gland', count: 3 },
+      { itemId: 'goldleaf_herb', count: 1 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 25,
+    itemLevelBudget: 16,
+    level: 15,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_sunpetal_healing_draught',
+    professionId: 'alchemy',
+    resultItemId: 'sunpetal_healing_draught',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'sunpetal_herb', count: 2 },
+      { itemId: 'silverleaf_herb', count: 3 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 50,
+    itemLevelBudget: 20,
+    level: 20,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_sunpetal_mana_draught',
+    professionId: 'alchemy',
+    resultItemId: 'sunpetal_mana_draught',
+    resultCount: 1,
+    reagents: [
+      { itemId: 'sunpetal_herb', count: 2 },
+      { itemId: 'goldleaf_herb', count: 1 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 50,
+    itemLevelBudget: 20,
+    level: 20,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
+  },
+  {
+    id: 'recipe_elixir_of_the_serpent',
+    professionId: 'alchemy',
+    resultItemId: 'elixir_of_the_serpent',
+    resultCount: 2,
+    reagents: [
+      { itemId: 'pristine_venom_gland', count: 1 },
+      { itemId: 'venom_gland', count: 2 },
+      { itemId: 'sunpetal_herb', count: 1 },
+      { itemId: 'glass_vial', count: 1 },
+    ],
+    skillReq: 50,
+    itemLevelBudget: 20,
+    level: 20,
+    acquisition: ['trainer'],
+    stationType: 'apothecary',
   },
 ];
 

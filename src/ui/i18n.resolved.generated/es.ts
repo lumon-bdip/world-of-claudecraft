@@ -8394,6 +8394,60 @@ export const es: EnTranslations = {
       "mirewarden_treads": {
         "name": "Mirewarden Treads"
       },
+      "pan_seared_perch": {
+        "name": "Pan-Seared River Perch"
+      },
+      "hunters_game_skewer": {
+        "name": "Hunter's Game Skewer"
+      },
+      "herbed_marsh_pike": {
+        "name": "Herbed Marsh Pike"
+      },
+      "ashwood_smoked_eel": {
+        "name": "Ashwood Smoked Eel"
+      },
+      "goldleaf_game_stew": {
+        "name": "Goldleaf Game Stew"
+      },
+      "frostgill_chowder": {
+        "name": "Frostgill Chowder"
+      },
+      "silvered_carp_supper": {
+        "name": "Silvered Carp Supper"
+      },
+      "anglers_feast_platter": {
+        "name": "Angler's Feast Platter"
+      },
+      "marlows_grand_roast": {
+        "name": "Marlow's Grand Roast"
+      },
+      "silverleaf_healing_draught": {
+        "name": "Silverleaf Healing Draught"
+      },
+      "silverleaf_mana_draught": {
+        "name": "Silverleaf Mana Draught"
+      },
+      "elixir_of_thick_hide": {
+        "name": "Elixir of Thick Hide"
+      },
+      "goldleaf_healing_draught": {
+        "name": "Goldleaf Healing Draught"
+      },
+      "goldleaf_mana_draught": {
+        "name": "Goldleaf Mana Draught"
+      },
+      "venomfire_elixir": {
+        "name": "Venomfire Elixir"
+      },
+      "sunpetal_healing_draught": {
+        "name": "Sunpetal Healing Draught"
+      },
+      "sunpetal_mana_draught": {
+        "name": "Sunpetal Mana Draught"
+      },
+      "elixir_of_the_serpent": {
+        "name": "Elixir of the Serpent"
+      },
       "conjured_water4": {
         "name": "Agua de Manantial Conjurada"
       },

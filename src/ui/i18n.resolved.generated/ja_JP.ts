@@ -8394,6 +8394,60 @@ export const ja_JP: EnTranslations = {
       "mirewarden_treads": {
         "name": "泥沼の番人の足具"
       },
+      "pan_seared_perch": {
+        "name": "川スズキのソテー"
+      },
+      "hunters_game_skewer": {
+        "name": "狩人の野獣串"
+      },
+      "herbed_marsh_pike": {
+        "name": "沼カワカマスのハーブ焼き"
+      },
+      "ashwood_smoked_eel": {
+        "name": "アッシュウッドの燻製ウナギ"
+      },
+      "goldleaf_game_stew": {
+        "name": "ゴールドリーフの野獣シチュー"
+      },
+      "frostgill_chowder": {
+        "name": "霜エラマスのチャウダー"
+      },
+      "silvered_carp_supper": {
+        "name": "銀鯉の晩餐"
+      },
+      "anglers_feast_platter": {
+        "name": "釣り人の饗宴プレート"
+      },
+      "marlows_grand_roast": {
+        "name": "マーロウの豪華ロースト"
+      },
+      "silverleaf_healing_draught": {
+        "name": "シルバーリーフの治癒薬"
+      },
+      "silverleaf_mana_draught": {
+        "name": "シルバーリーフのマナ薬"
+      },
+      "elixir_of_thick_hide": {
+        "name": "厚皮のエリクサー"
+      },
+      "goldleaf_healing_draught": {
+        "name": "ゴールドリーフの治癒薬"
+      },
+      "goldleaf_mana_draught": {
+        "name": "ゴールドリーフのマナ薬"
+      },
+      "venomfire_elixir": {
+        "name": "毒炎のエリクサー"
+      },
+      "sunpetal_healing_draught": {
+        "name": "サンペタルの治癒薬"
+      },
+      "sunpetal_mana_draught": {
+        "name": "サンペタルのマナ薬"
+      },
+      "elixir_of_the_serpent": {
+        "name": "蛇のエリクサー"
+      },
       "conjured_water4": {
         "name": "魔法の湧き水"
       },

@@ -8394,6 +8394,60 @@ export const zh_TW: EnTranslations = {
       "mirewarden_treads": {
         "name": "泥沼守衛足墊"
       },
+      "pan_seared_perch": {
+        "name": "香煎河鱸魚"
+      },
+      "hunters_game_skewer": {
+        "name": "獵人野味串"
+      },
+      "herbed_marsh_pike": {
+        "name": "香草沼澤狗魚"
+      },
+      "ashwood_smoked_eel": {
+        "name": "灰木燻鰻魚"
+      },
+      "goldleaf_game_stew": {
+        "name": "金葉野味燉肉"
+      },
+      "frostgill_chowder": {
+        "name": "霜鰓濃湯"
+      },
+      "silvered_carp_supper": {
+        "name": "銀鯉晚宴"
+      },
+      "anglers_feast_platter": {
+        "name": "漁夫盛宴拼盤"
+      },
+      "marlows_grand_roast": {
+        "name": "馬洛的盛大烤肉"
+      },
+      "silverleaf_healing_draught": {
+        "name": "銀葉治療藥水"
+      },
+      "silverleaf_mana_draught": {
+        "name": "銀葉法力藥水"
+      },
+      "elixir_of_thick_hide": {
+        "name": "厚皮藥劑"
+      },
+      "goldleaf_healing_draught": {
+        "name": "金葉治療藥水"
+      },
+      "goldleaf_mana_draught": {
+        "name": "金葉法力藥水"
+      },
+      "venomfire_elixir": {
+        "name": "毒火藥劑"
+      },
+      "sunpetal_healing_draught": {
+        "name": "陽瓣治療藥水"
+      },
+      "sunpetal_mana_draught": {
+        "name": "陽瓣法力藥水"
+      },
+      "elixir_of_the_serpent": {
+        "name": "巨蛇藥劑"
+      },
       "conjured_water4": {
         "name": "魔法泉水"
       },

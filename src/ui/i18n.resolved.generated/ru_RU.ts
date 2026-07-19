@@ -8394,6 +8394,60 @@ export const ru_RU: EnTranslations = {
       "mirewarden_treads": {
         "name": "Поступь стража трясины"
       },
+      "pan_seared_perch": {
+        "name": "Обжаренный речной окунь"
+      },
+      "hunters_game_skewer": {
+        "name": "Охотничий шашлык из дичи"
+      },
+      "herbed_marsh_pike": {
+        "name": "Болотная щука с травами"
+      },
+      "ashwood_smoked_eel": {
+        "name": "Копчёный угорь на пепельном дереве"
+      },
+      "goldleaf_game_stew": {
+        "name": "Рагу из дичи с золотолистом"
+      },
+      "frostgill_chowder": {
+        "name": "Похлёбка из морозожаберной форели"
+      },
+      "silvered_carp_supper": {
+        "name": "Ужин из серебристого карпа"
+      },
+      "anglers_feast_platter": {
+        "name": "Пиршественное блюдо рыболова"
+      },
+      "marlows_grand_roast": {
+        "name": "Роскошное жаркое Марлоу"
+      },
+      "silverleaf_healing_draught": {
+        "name": "Целебный настой серебролиста"
+      },
+      "silverleaf_mana_draught": {
+        "name": "Настой маны серебролиста"
+      },
+      "elixir_of_thick_hide": {
+        "name": "Эликсир толстой шкуры"
+      },
+      "goldleaf_healing_draught": {
+        "name": "Целебный настой золотолиста"
+      },
+      "goldleaf_mana_draught": {
+        "name": "Настой маны золотолиста"
+      },
+      "venomfire_elixir": {
+        "name": "Эликсир ядопламени"
+      },
+      "sunpetal_healing_draught": {
+        "name": "Целебный настой солнцелепеста"
+      },
+      "sunpetal_mana_draught": {
+        "name": "Настой маны солнцелепеста"
+      },
+      "elixir_of_the_serpent": {
+        "name": "Эликсир змея"
+      },
       "conjured_water4": {
         "name": "Сотворённая родниковая вода"
       },

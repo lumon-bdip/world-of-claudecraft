@@ -8394,6 +8394,60 @@ export const en_XA: EnTranslations = {
       "mirewarden_treads": {
         "name": "[Ɱíŕéŵáŕðéñ Ţŕéáðš]"
       },
+      "pan_seared_perch": {
+        "name": "[Þáñ-Šéáŕéð Ŕíʋéŕ Þéŕçĥ]"
+      },
+      "hunters_game_skewer": {
+        "name": "[Ĥúñţéŕ'š Ĝáɱé Šķéŵéŕ]"
+      },
+      "herbed_marsh_pike": {
+        "name": "[Ĥéŕƀéð Ɱáŕšĥ Þíķé]"
+      },
+      "ashwood_smoked_eel": {
+        "name": "[Ášĥŵóóð Šɱóķéð Ééļ]"
+      },
+      "goldleaf_game_stew": {
+        "name": "[Ĝóļðļéáƒ Ĝáɱé Šţéŵ]"
+      },
+      "frostgill_chowder": {
+        "name": "[Ƒŕóšţĝíļļ Çĥóŵðéŕ]"
+      },
+      "silvered_carp_supper": {
+        "name": "[Šíļʋéŕéð Çáŕþ Šúþþéŕ]"
+      },
+      "anglers_feast_platter": {
+        "name": "[Áñĝļéŕ'š Ƒéášţ Þļáţţéŕ]"
+      },
+      "marlows_grand_roast": {
+        "name": "[Ɱáŕļóŵ'š Ĝŕáñð Ŕóášţ]"
+      },
+      "silverleaf_healing_draught": {
+        "name": "[Šíļʋéŕļéáƒ Ĥéáļíñĝ Ðŕáúĝĥţ]"
+      },
+      "silverleaf_mana_draught": {
+        "name": "[Šíļʋéŕļéáƒ Ɱáñá Ðŕáúĝĥţ]"
+      },
+      "elixir_of_thick_hide": {
+        "name": "[Éļíẋíŕ óƒ Ţĥíçķ Ĥíðé]"
+      },
+      "goldleaf_healing_draught": {
+        "name": "[Ĝóļðļéáƒ Ĥéáļíñĝ Ðŕáúĝĥţ]"
+      },
+      "goldleaf_mana_draught": {
+        "name": "[Ĝóļðļéáƒ Ɱáñá Ðŕáúĝĥţ]"
+      },
+      "venomfire_elixir": {
+        "name": "[Ʋéñóɱƒíŕé Éļíẋíŕ]"
+      },
+      "sunpetal_healing_draught": {
+        "name": "[Šúñþéţáļ Ĥéáļíñĝ Ðŕáúĝĥţ]"
+      },
+      "sunpetal_mana_draught": {
+        "name": "[Šúñþéţáļ Ɱáñá Ðŕáúĝĥţ]"
+      },
+      "elixir_of_the_serpent": {
+        "name": "[Éļíẋíŕ óƒ ţĥé Šéŕþéñţ]"
+      },
       "conjured_water4": {
         "name": "[Çóñĵúŕéð Šþŕíñĝŵáţéŕ]"
       },

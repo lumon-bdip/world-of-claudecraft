@@ -515,4 +515,167 @@ export const PROFESSION_ITEMS: Record<string, ItemDef> = {
     stats: { armor: 44, agi: 5, sta: 3 },
     sellValue: 78,
   },
+
+  // --- Phase 10 crafted cooking ladder (cooking) ---------------------------
+  // Trainer-taught outputs of LADDER_RECIPES (content/recipes.ts), three rungs
+  // at skillReq 0/25/50, kitchens-bound at cook_marlow. kind 'food' + foodHp
+  // (an 18s sit heal); no new effect machinery. Every foodHp/sellValue reuses
+  // an existing point on the vendor food curve (foodHp ceiling 980 =
+  // conjured_bread4, the top existing food). Never vendor-stocked (no buyValue);
+  // output quality matches the rung. Reagent economy clears strictly per rung.
+  pan_seared_perch: {
+    id: 'pan_seared_perch',
+    name: 'Pan-Seared River Perch',
+    kind: 'food',
+    quality: 'common',
+    foodHp: 90,
+    sellValue: 6,
+  },
+  hunters_game_skewer: {
+    id: 'hunters_game_skewer',
+    name: "Hunter's Game Skewer",
+    kind: 'food',
+    quality: 'common',
+    foodHp: 117,
+    sellValue: 12,
+  },
+  herbed_marsh_pike: {
+    id: 'herbed_marsh_pike',
+    name: 'Herbed Marsh Pike',
+    kind: 'food',
+    quality: 'common',
+    foodHp: 117,
+    sellValue: 12,
+  },
+  ashwood_smoked_eel: {
+    id: 'ashwood_smoked_eel',
+    name: 'Ashwood Smoked Eel',
+    kind: 'food',
+    quality: 'uncommon',
+    foodHp: 243,
+    sellValue: 25,
+  },
+  goldleaf_game_stew: {
+    id: 'goldleaf_game_stew',
+    name: 'Goldleaf Game Stew',
+    kind: 'food',
+    quality: 'uncommon',
+    foodHp: 243,
+    sellValue: 25,
+  },
+  frostgill_chowder: {
+    id: 'frostgill_chowder',
+    name: 'Frostgill Chowder',
+    kind: 'food',
+    quality: 'uncommon',
+    foodHp: 432,
+    sellValue: 40,
+  },
+  silvered_carp_supper: {
+    id: 'silvered_carp_supper',
+    name: 'Silvered Carp Supper',
+    kind: 'food',
+    quality: 'rare',
+    foodHp: 552,
+    sellValue: 75,
+  },
+  anglers_feast_platter: {
+    id: 'anglers_feast_platter',
+    name: "Angler's Feast Platter",
+    kind: 'food',
+    quality: 'rare',
+    foodHp: 552,
+    sellValue: 60,
+  },
+  marlows_grand_roast: {
+    id: 'marlows_grand_roast',
+    name: "Marlow's Grand Roast",
+    kind: 'food',
+    quality: 'rare',
+    foodHp: 980,
+    sellValue: 150,
+  },
+
+  // --- Phase 10 crafted alchemy ladder (alchemy) ---------------------------
+  // Trainer-taught outputs of LADDER_RECIPES (content/recipes.ts), three rungs
+  // at skillReq 0/25/50, apothecary-bound at alchemist_verane. Potions reuse the
+  // vendor potionHp/potionMana machinery (instant, in-combat, shared cooldown);
+  // elixirs reuse the elixir_of_the_bear shape (a temporary buff_sta aura on
+  // use). Every consumable sits inside the existing ceilings: heal <= 280
+  // (healing_potion), mana <= 360 (mana_potion), elixir buff_sta <= 12 for <=
+  // 900s (elixir_of_the_bear). The three elixir aura display names are localized
+  // client-side through the sim_i18n aura matcher (AURA_NAME_KEY), the same path
+  // as 'Might of the Bear'. Never vendor-stocked (no buyValue).
+  silverleaf_healing_draught: {
+    id: 'silverleaf_healing_draught',
+    name: 'Silverleaf Healing Draught',
+    kind: 'potion',
+    quality: 'common',
+    potionHp: 120,
+    sellValue: 12,
+  },
+  silverleaf_mana_draught: {
+    id: 'silverleaf_mana_draught',
+    name: 'Silverleaf Mana Draught',
+    kind: 'potion',
+    quality: 'common',
+    potionMana: 160,
+    sellValue: 12,
+  },
+  elixir_of_thick_hide: {
+    id: 'elixir_of_thick_hide',
+    name: 'Elixir of Thick Hide',
+    kind: 'elixir',
+    quality: 'common',
+    elixir: { aura: 'Thick Hide', kind: 'buff_sta', value: 6, duration: 600 },
+    sellValue: 10,
+  },
+  goldleaf_healing_draught: {
+    id: 'goldleaf_healing_draught',
+    name: 'Goldleaf Healing Draught',
+    kind: 'potion',
+    quality: 'uncommon',
+    potionHp: 200,
+    sellValue: 22,
+  },
+  goldleaf_mana_draught: {
+    id: 'goldleaf_mana_draught',
+    name: 'Goldleaf Mana Draught',
+    kind: 'potion',
+    quality: 'uncommon',
+    potionMana: 260,
+    sellValue: 22,
+  },
+  venomfire_elixir: {
+    id: 'venomfire_elixir',
+    name: 'Venomfire Elixir',
+    kind: 'elixir',
+    quality: 'uncommon',
+    elixir: { aura: 'Venomfire Vigor', kind: 'buff_sta', value: 9, duration: 900 },
+    sellValue: 15,
+  },
+  sunpetal_healing_draught: {
+    id: 'sunpetal_healing_draught',
+    name: 'Sunpetal Healing Draught',
+    kind: 'potion',
+    quality: 'rare',
+    potionHp: 280,
+    sellValue: 32,
+  },
+  sunpetal_mana_draught: {
+    id: 'sunpetal_mana_draught',
+    name: 'Sunpetal Mana Draught',
+    kind: 'potion',
+    quality: 'rare',
+    potionMana: 360,
+    sellValue: 32,
+  },
+  elixir_of_the_serpent: {
+    id: 'elixir_of_the_serpent',
+    name: 'Elixir of the Serpent',
+    kind: 'elixir',
+    quality: 'rare',
+    elixir: { aura: 'Might of the Serpent', kind: 'buff_sta', value: 12, duration: 900 },
+    sellValue: 20,
+  },
 };
