@@ -335,7 +335,12 @@ describe('signed Pristine specimens (#1145, Phase 10)', () => {
     // signable floor for a single focused component regardless of family
     // (the roll's draw position is identical).
     const families: { templateId: string; focus: string; plain: string; specimen: string }[] = [
-      { templateId: 'webwood_spider', focus: 'silk', plain: 'spider_silk', specimen: 'pristine_silk' },
+      {
+        templateId: 'webwood_spider',
+        focus: 'silk',
+        plain: 'spider_silk',
+        specimen: 'pristine_silk',
+      },
       {
         templateId: 'webwood_spider',
         focus: 'venomSac',
